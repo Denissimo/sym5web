@@ -9,7 +9,7 @@ use stdClass;
 
 class ContentController extends AbstractController
 {
-    public function buildContent(Request $request, $route)
+    public function buildContent(Request $request, ContentLoader $contentLoader, $route)
     {
         /** @var stdClass $carouselData */
 //        $carouselData = $contentLoader->getCarousel('/content/load/carousel');

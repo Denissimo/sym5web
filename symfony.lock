@@ -87,6 +87,9 @@
             "./src/Kernel.php"
         ]
     },
+    "symfony/http-client": {
+        "version": "v5.3.0"
+    },
     "symfony/http-client-contracts": {
         "version": "v2.4.0"
     },
