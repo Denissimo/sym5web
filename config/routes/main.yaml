@@ -2,8 +2,14 @@
 #    path: /
 #    controller: App\Controller\DefaultController::index
 
+test:
+  path: /test
+  controller: App\Controller\ContentController::buildTest
+
 content:
   path: /{route}
   controller: App\Controller\ContentController::buildContent
   requirements:
     route: '.*'
+
+

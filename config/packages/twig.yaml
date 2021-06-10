@@ -1,13 +1,10 @@
 twig:
     default_path: '%kernel.project_dir%/templates'
-    debug: '%kernel.debug%'
-    strict_variables: '%kernel.debug%'
-    exception_controller: null
-    form_themes:
-        - 'datepicker.html.twig'
-    paths:
-        '%kernel.project_dir%/src/Admin/Templates': sonata_templates
-        '%kernel.project_dir%/public': public
     globals:
-        carousel_show_path: '%env(carousel_images_show)%'
-        upload_show_path: '%env(upload_document_show)%'
+        test_data: '%env(test_data)%'
+        adm_img_carousel_path: '%env(ADM_IMG_CAROUSEL_PATH)%'
+        adm_url: '%env(ADM_URL)%'
+
+when@test:
+    twig:
+        strict_variables: true

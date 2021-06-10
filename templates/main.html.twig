@@ -15,7 +15,7 @@
     <body>
         {% block body %}
 {#            {{ dump(5+2) }}#}
-            <div class="container mt-2 p-2 bg-white rounded-3">
+            <div class="container bg-white rounded-3">
                 <!--    <div class="shadow p-3 mb-5 bg-body rounded">Regular shadow</div>-->
                 <div class="row">
                     <div class="col">
@@ -91,6 +91,25 @@
                 </nav>
                 <div class="row mt-2">
                     <div class="col bg-danger">
+                        danger {{ route }}
+                    </div>
+                    <div class="col bg-warning">
+                        danger {{ route }}
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col bg-success">
+                        danger {{ route }}
+                    </div>
+                    <div class="col bg-info">
+                        danger {{ route }}
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col bg-primary">
+                        danger {{ route }}
+                    </div>
+                    <div class="col bg-secondary">
                         danger {{ route }}
                     </div>
                 </div>

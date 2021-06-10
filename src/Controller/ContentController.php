@@ -9,7 +9,26 @@ use stdClass;
 
 class ContentController extends AbstractController
 {
-    public function buildContent(Request $request, ContentLoader $contentLoader, $route)
+    public function buildContent(Request $request, $route)
+    {
+        /** @var stdClass $carouselData */
+//        $carouselData = $contentLoader->getCarousel('/content/load/carousel');
+
+//        $carousel = new CarouselUnitList($carouselData->carouselUnits);
+
+        return $this->render('main.html.twig', [
+            'id' => 155,
+            'route' => $route,
+//            'carouselUnits' => $carousel->getCarouselUnits()
+        ]);
+    }
+
+    public function buildTest(Request $request)
+    {
+        return $this->render('base.html.twig');
+    }
+
+    public function buildContent2(Request $request, ContentLoader $contentLoader, $route)
     {
         /** @var stdClass $carouselData */
         $carouselData = $contentLoader->getCarousel('/content/load/carousel');
