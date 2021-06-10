@@ -11,15 +11,42 @@ class ContentController extends AbstractController
 {
     public function buildContent(Request $request, ContentLoader $contentLoader, $route)
     {
-        /** @var stdClass $carouselData */
-//        $carouselData = $contentLoader->getCarousel('/content/load/carousel');
-
-//        $carousel = new CarouselUnitList($carouselData->carouselUnits);
-
         return $this->render('main.html.twig', [
             'id' => 155,
             'route' => $route,
-//            'carouselUnits' => $carousel->getCarouselUnits()
+        ]);
+    }
+
+    public function buildLogin(Request $request, ContentLoader $contentLoader)
+    {
+        return $this->render('login.html.twig', [
+            'id' => 155,
+            'route' => 'Login',
+        ]);
+    }
+
+    public function buildIndex(Request $request, ContentLoader $contentLoader)
+    {
+        return $this->render('index.html.twig', [
+            'id' => 155,
+            'route' => 'Index',
+        ]);
+    }
+
+    public function buildUav(Request $request, ContentLoader $contentLoader)
+    {
+        return $this->render('uav.html.twig', [
+            'id' => 155,
+            'route' => 'UAV',
+        ]);
+    }
+
+
+    public function buildProfile(Request $request, ContentLoader $contentLoader)
+    {
+        return $this->render('profile.html.twig', [
+            'id' => 155,
+            'route' => 'Profile',
         ]);
     }
 

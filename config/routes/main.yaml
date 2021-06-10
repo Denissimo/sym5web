@@ -6,6 +6,22 @@ test:
   path: /test
   controller: App\Controller\ContentController::buildTest
 
+login:
+  path: /login
+  controller: App\Controller\ContentController::buildLogin
+
+index:
+  path: /index
+  controller: App\Controller\ContentController::buildIndex
+
+uav:
+  path: /uav
+  controller: App\Controller\ContentController::buildUav
+
+profile:
+  path: /login
+  controller: App\Controller\ContentController::buildProfile
+
 content:
   path: /{route}
   controller: App\Controller\ContentController::buildContent
