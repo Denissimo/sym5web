@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}ZZZ!{% endblock %}</title>
+
+        {% block stylesheets %}
+            {% include('stylesheets/default.html.twig') %}
+        {% endblock %}
+
+        {% block javascripts %}
+            {% include('scripts/default.html.twig') %}
+        {% endblock %}
+    </head>
+    <body>
+        {% block body %}
+{#            {{ dump(5+2) }}#}
+            <div class="container bg-white rounded-3">
+                <!--    <div class="shadow p-3 mb-5 bg-body rounded">Regular shadow</div>-->
+                <div class="row">
+                    <div class="col">
+                        <nav class="navbar navbar-light bg-info bg-gradient navbar-expand-lg rounded-3 shadow border">
+                            <div class="container-fluid">
+                                <a class="navbar-brand" href="#">
+                                    <img src="/images/coin4.png" class="logo"/>
+                                </a>
+                                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                                        aria-expanded="false" aria-label="Toggle navigation">
+                                    <span class="navbar-toggler-icon"></span>
+                                </button>
+                                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" aria-current="page" href="#">Главная</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="#">Интеграции</a>
+                                        </li>
+                                        <li class="nav-item dropdown">
+                                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                                               data-bs-toggle="dropdown" aria-expanded="false">
+                                                Продукты
+                                            </a>
+                                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                                <li><a class="dropdown-item" href="#">Мой офис стандартный</a></li>
+                                                <li><a class="dropdown-item" href="#">Мой офис служебный</a></li>
+                                                <li>
+                                                    <hr class="dropdown-divider">
+                                                </li>
+                                                <li><a class="dropdown-item" href="#">Сертификаты</a></li>
+                                            </ul>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="#">Карьера</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="#">О Компании</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" id="zz" href="#">
+                                                {% verbatim %}
+                                                    {{message}}
+                                                {% endverbatim %}
+                                            </a>
+                                        </li>
+                                    </ul>
+                                    <form class="d-flex">
+                                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                                        <button class="btn btn-outline-light" type="submit">Search</button>
+                                    </form>
+                                    <div class="ms-3">
+                                        <button type="button" class="btn btn-outline-light" data-bs-toggle="modal"
+                                                data-bs-target="#exampleModal">
+                                            <i class="fas fa-unlock-alt"></i>
+                                        </button>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </nav>
+                    </div>
+                </div>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-1">
+                        <li class="breadcrumb-item"><a href="#">Главная страница</a></li>
+                        <li class="breadcrumb-item"><a href="#">Наши продукты</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Мой офис</li>
+                    </ol>
+                </nav>
+                <div class="row mt-2">
+                    <div class="col bg-danger">
+                        danger {{ route }}
+                    </div>
+                    <div class="col bg-warning">
+                        warning {{ route }}
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col bg-success">
+                        success {{ route }}
+                    </div>
+                    <div class="col bg-info">
+                        info {{ route }}
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col bg-primary">
+                        primary {{ route }}
+                    </div>
+                    <div class="col bg-secondary">
+                        secondary {{ route }}
+                    </div>
+                </div>
+
+        {% endblock %}
+    </body>
+</html>
