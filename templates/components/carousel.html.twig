@@ -1,0 +1,45 @@
+<div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-indicators">
+        {% for carouselNumber, carousel in carouselUnits %}
+            <button type="button" data-bs-target="#carouselExampleCaptions"
+                    data-bs-slide-to="{{ carouselNumber }}"
+                    {% if carouselNumber==0 %}
+                        class="active"
+                    {% endif %}
+                    aria-current="true" aria-label="Slide {{ carouselNumber + 1 }}"></button>
+        {% endfor %}
+    </div>
+    <div class="carousel-inner">
+        {% for carouselNumber, carousel in carouselUnits %}
+            <div class="carousel-item {% if carouselNumber==0 %} active{% endif %}"
+                {% if carousel.timeout is defined and carousel.timeout is not empty %}
+                        data-bs-interval="{{ carousel.timeout }}"
+                {% endif %}>
+                {% if carousel.pictureType == 'video' %}
+                <video loop="loop" preload="auto" data-poster="{{ adm_url ~ adm_img_carousel_path ~ carousel.poster.imageName }}"
+                       muted autoplay {% if carousel.style is defined and carousel.style is not empty %} style="{{ carousel.style }}" {% endif %}>
+                    <source src="{{ adm_url ~ adm_img_carousel_path ~ carousel.picture.imageName }}" type='video/mp4'>
+                </video>
+                {% else %}
+                    <img src="{{ adm_url ~ adm_img_carousel_path ~ carousel.picture.imageName }}" class="d-block w-100"
+                            {% if carousel.style is defined and carousel.style is not empty %} style="{{ carousel.style }}" {% endif %} />
+                {% endif %}
+                <div class="carousel-caption d-none d-md-block">
+                    <h5>{{ carousel.header }}</h5>
+                    <p>{{ carousel.content }}</p>
+                </div>
+            </div>
+        {% endfor %}
+
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions"
+            data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions"
+            data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+</div>
