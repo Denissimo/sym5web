@@ -52,7 +52,6 @@ class ContentController extends AbstractController
         ]);
     }
 
-
     public function buildTest(Client $client)
     {
         $res = $client->sendJson(
@@ -64,6 +63,38 @@ class ContentController extends AbstractController
         return $this->render('base.html.twig', ['userdata' => $name]);
     }
 
+    public function buildAirSituation(Request $request, ContentLoader $contentLoader)
+    {
+        return $this->render('airsituation.html.twig', [
+            'id' => 155,
+            'route' => 'Airsituation',
+        ]);
+    }
+
+    public function buildRoutes(Request $request, ContentLoader $contentLoader)
+    {
+        return $this->render('routes.html.twig', [
+            'id' => 155,
+            'route' => 'Routes',
+        ]);
+    }
+
+    public function buildFlights(Request $request, ContentLoader $contentLoader)
+    {
+        return $this->render('flights.html.twig', [
+            'id' => 155,
+            'route' => 'Flights',
+        ]);
+    }
+
+
+    public function buildArchive(Request $request, ContentLoader $contentLoader)
+    {
+        return $this->render('archive.html.twig', [
+            'id' => 155,
+            'route' => 'Archive',
+        ]);
+    }
 
     public function buildTestUserData(Request $request,Client $client, string $tokenCookieName)
     {
