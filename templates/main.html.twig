@@ -5,7 +5,16 @@
 
 
 
+<div class="page-content">
+        <div class="container-fluid">
+                <div class="row">
+                        {% block mapcontent %}
+                          {% include('/components/tabs.html.twig') %}
+                        {% endblock %}
+                </div>
+        </div>
 
+</div>
 
 
 
