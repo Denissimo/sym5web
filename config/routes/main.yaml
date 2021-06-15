@@ -19,7 +19,7 @@ uav:
   controller: App\Controller\ContentController::buildUav
 
 profile:
-  path: /login
+  path: /profile
   controller: App\Controller\ContentController::buildProfile
 
 content:

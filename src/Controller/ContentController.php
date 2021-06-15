@@ -41,7 +41,6 @@ class ContentController extends AbstractController
         ]);
     }
 
-
     public function buildProfile(Request $request, ContentLoader $contentLoader)
     {
         return $this->render('profile.html.twig', [
@@ -50,6 +49,7 @@ class ContentController extends AbstractController
         ]);
     }
 
+ 
     public function buildTest(Request $request)
     {
         return $this->render('base.html.twig');

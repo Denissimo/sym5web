@@ -1,6 +1,17 @@
 
 
 
-     <script src="assets/js/bootstrap.bundle.min.js"></script>
+
+                        {% block mapcontent %}
+                        <div class="container">
+                          {% include('/components/modals.html.twig') %}
+                        </div>  
+                        {% endblock %}
+
+
+
+
+     <script src="../assets/js/bootstrap.bundle.min.js"></script>
+     <script src="../assets/js/vue.min.js"></script>
     </body>
 </html>
