@@ -6,6 +6,14 @@ test:
   path: /test
   controller: App\Controller\ContentController::buildTest
 
+test.auth:
+  path: /test_auth
+  controller: App\Controller\ContentController::testAuth
+
+test.userdata:
+  path: /test_userdata
+  controller: App\Controller\ContentController::buildTestUserData
+
 login:
   path: /login
   controller: App\Controller\ContentController::buildLogin

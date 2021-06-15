@@ -2,7 +2,10 @@
 
 namespace App\Controller;
 
+use App\Service\Client;
+use App\Service\ClientAuth;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use App\Service\ContentLoader;
 use stdClass;
@@ -49,10 +52,67 @@ class ContentController extends AbstractController
         ]);
     }
 
- 
-    public function buildTest(Request $request)
+
+    public function buildTest(Client $client)
     {
-        return $this->render('base.html.twig');
+        $res = $client->sendJson(
+            '/classifiers/aircraft_category/'
+        );
+
+        $name = $res->category[0]->name; //Категория А (открытая)
+
+        return $this->render('base.html.twig', ['userdata' => $name]);
+    }
+
+
+    public function buildTestUserData(Request $request,Client $client, string $tokenCookieName)
+    {
+        $token = $request->cookies->get($tokenCookieName);
+        $res = $client->sendJson(
+            '/my/userdata',
+            null,
+            'GET',
+            [
+                'Authorization' => sprintf(
+                    'Bearer %s',
+                    $token
+                )
+            ]
+        );
+
+
+        return $this->render('base.html.twig', ['userdata' => json_encode($res->user)]);
+    }
+
+    public function testAuth(Request $request, ClientAuth $client, string $tokenCookieName)
+    {
+        $result = $client->sendJson(
+            '/api/login_check',
+            json_encode(
+                [
+                    'username' => 'denis',
+                    'password' => '12345'
+                ]
+            ),
+            'POST'
+        );
+
+        $response = $this->render(
+            'token.html.twig',
+            [
+                'token' => $result->token
+            ]
+        );
+
+        $response->headers->setCookie(
+            new Cookie(
+                $tokenCookieName,
+                $result->token,
+                time() + 3600 * 24 * 7
+            )
+        );
+
+        return $response;
     }
 
     public function buildContent2(Request $request, ContentLoader $contentLoader, $route)
