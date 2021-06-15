@@ -13,6 +13,7 @@
 
 
     <header class="navbar">
+
       <div class="navbar-left">
       
         <a href="/" class="link">
@@ -23,19 +24,18 @@
           <span class="navbar-toggler-icon"></span>
         </button>
   
-
-        <ul class="nav nav-menu" role="tablist">
-          <li class="nav-menu-item" role="presentation">
-            <button class="nav-menu-link active" id="map-airsituation-tab" data-bs-toggle="tab" data-bs-target="#map-airsituation" type="button" role="tab" aria-controls="home" aria-selected="true">Воздушная обстановка</button>
+        <ul class="nav-menu">
+          <li class="nav-menu-item">
+            <a href="/airsituation/" class="nav-menu-link active">Воздушная обстановка</a>
           </li>
-          <li class="nav-menu-item" role="presentation">
-            <button class="nav-menu-link" id="map-routes-tab" data-bs-toggle="tab" data-bs-target="#map-routes" type="button" role="tab" aria-controls="profile" aria-selected="false">Маршруты</button>
+          <li class="nav-menu-item">
+            <a href="/routes/" class="nav-menu-link">Маршруты</a>
           </li>
-          <li class="nav-menu-item" role="presentation">
-            <button class="nav-menu-link" id="map-flights-tab" data-bs-toggle="tab" data-bs-target="#map-flights" type="button" role="tab" aria-controls="messages" aria-selected="false">Полеты</button>
+          <li class="nav-menu-item">
+            <a href="/flights/" class="nav-menu-link">Полеты</a>
           </li>
-          <li class="nav-menu-item" role="presentation">
-            <button class="nav-menu-link" id="map-archive-tab" data-bs-toggle="tab" data-bs-target="#map-archive" type="button" role="tab" aria-controls="settings" aria-selected="false">Архив</button>
+          <li class="nav-menu-item">
+            <a href="/archive/" class="nav-menu-link">Полеты</a>
           </li>
         </ul>
 
@@ -49,14 +49,14 @@
               <a href="#" class="nav-menu-link notification"><img src="/assets/images/icon__notification.svg" alt=""></a>
             </li>
             <li class="nav-menu-item">
-              <button class="nav-menu-link btn btn-outline btn-icon" data-bs-toggle="modal" data-bs-target="#uavMenu">
-                <img src="/assets/images/icon__control.svg" alt="" class="menu-item-icon">БВС
-              </button>
+              <a href="/uav/" class="nav-menu-link btn btn-outline btn-icon">БВС
+                <img src="/assets/images/icon__control.svg" alt="" class="menu-item-icon">
+              </a>
             </li>
             <li class="nav-menu-item">
-              <button class="nav-menu-link btn btn-outline btn-icon" data-bs-toggle="modal" data-bs-target="#profileMenu">
-                <img src="/assets/images/icon__control.svg" alt="" class="menu-item-icon">Профиль
-                </button>
+              <a href="/profile/" class="nav-menu-link btn btn-outline btn-icon">Профиль
+                <img src="/assets/images/icon__control.svg" alt="" class="menu-item-icon">
+              </a>
             </li>
             <li class="nav-menu-item">
               <a href="#" class="nav-menu-link btn btn-outline">Выйти</a>
