@@ -90,6 +90,7 @@ class ContentController extends AbstractController
 
     public function buildArchive(Request $request, ContentLoader $contentLoader)
     {
+ 
         return $this->render('archive.html.twig', [
             'id' => 155,
             'route' => 'Archive',
