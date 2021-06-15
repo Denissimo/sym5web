@@ -67,15 +67,15 @@ class ContentController extends AbstractController
     {
         return $this->render('airsituation.html.twig', [
             'id' => 155,
-            'route' => 'Airsituation',
+            'route' => 'AirSituation',
         ]);
     }
 
-    public function buildRoutes(Request $request, ContentLoader $contentLoader)
+    public function buildTracks(Request $request, ContentLoader $contentLoader)
     {
-        return $this->render('routes.html.twig', [
+        return $this->render('tracks.html.twig', [
             'id' => 155,
-            'route' => 'Routes',
+            'route' => 'Tracks',
         ]);
     }
 
