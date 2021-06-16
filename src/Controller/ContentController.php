@@ -72,8 +72,17 @@ class ContentController extends AbstractController
         ]);
     }
 
-    public function buildAirSituation(Request $request, ContentLoader $contentLoader)
+    public function buildAirSituation(Request $request, ContentLoader $contentLoader, string $tokenCookieName)
     {
+
+        $cookieChecker = $request->getCookie($tokenCookieName); 
+        var_dump ($cookieChecker);
+        die;
+
+        if (!$cookieChecker) {
+            return $this->redirectToRoute('login');
+        }
+
         return $this->render('airsituation.html.twig', [
             'id' => 155,
             'route' => 'AirSituation',
