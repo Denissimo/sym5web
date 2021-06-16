@@ -2,7 +2,11 @@
 
 namespace App\Service;
 
+use Symfony\Component\Finder\Exception\AccessDeniedException;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
+use Exception;
 
 class Client
 {
@@ -46,6 +50,27 @@ class Client
             $fullPath,
             $options
         );
+
+        switch (true) {
+            case $response->getStatusCode() == Response::HTTP_UNAUTHORIZED:
+            throw new AccessDeniedException('Unauthorized access denied', $response->getStatusCode());
+            break;
+
+            case $response->getStatusCode() == Response::HTTP_NOT_FOUND:
+            throw new BadRequestHttpException(
+                'Data not found',
+                null,
+                $response->getStatusCode()
+            );
+            break;
+
+            case $response->getStatusCode() != Response::HTTP_OK:
+                throw new Exception(
+                    'Unrecognized error',
+                    $response->getStatusCode()
+                );
+            break;
+        }
 
         return json_decode($response->getContent());
     }

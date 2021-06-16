@@ -5,10 +5,15 @@ namespace App\Controller;
 use App\Service\Client;
 use App\Service\ClientAuth;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Finder\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use App\Service\ContentLoader;
 use stdClass;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Throwable;
+use Exception;
 
 class ContentController extends AbstractController
 {
@@ -52,7 +57,6 @@ class ContentController extends AbstractController
         ]);
     }
 
-
     public function buildTest(Client $client)
     {
         $res = $client->sendJson(
@@ -61,27 +65,58 @@ class ContentController extends AbstractController
 
         $name = $res->category[0]->name; //Категория А (открытая)
 
-        return $this->render('base.html.twig', ['userdata' => $name]);
+        return $this->render('base.html.twig', [
+            'message' => '',
+            'code' => '',
+            'data' => $name
+        ]);
     }
 
-
-    public function buildTestUserData(Request $request,Client $client, string $tokenCookieName)
+    public function buildTestUserData(Request $request, Client $client, string $tokenCookieName): Response
     {
-        $token = $request->cookies->get($tokenCookieName);
-        $res = $client->sendJson(
-            '/my/userdata',
-            null,
-            'GET',
-            [
-                'Authorization' => sprintf(
-                    'Bearer %s',
-                    $token
-                )
-            ]
-        );
+        return $this->requestAuthorized($request, $client, $tokenCookieName, '/my/userdata');
+    }
 
+    private function requestAuthorized(
+        Request $request,
+        Client $client,
+        string $tokenCookieName,
+        $path,
+        $json = null,
+        $method = 'GET'
+    ): Response
+    {
+        try {
+            $token = $request->cookies->get($tokenCookieName);
+            $res = $client->sendJson(
+                $path,
+                $json,
+                $method,
+                [
+                    'Authorization' => sprintf(
+                        'Bearer %s',
+                        $token
+                    )
+                ]
+            );
 
-        return $this->render('base.html.twig', ['userdata' => json_encode($res->user)]);
+            return $this->render('base.html.twig', [
+                'data' => json_encode($res->user),
+                'message' => 'OK',
+                'code' => Response::HTTP_OK
+            ]);
+
+        } catch (AccessDeniedException $e) {
+//            return $this->redirectToRoute('login');
+
+            return $this->buildError($e);
+        } catch (BadRequestHttpException $e) {
+
+            return $this->buildError($e);
+        } catch (Exception $e) {
+
+            return $this->buildError($e);
+        }
     }
 
     public function testAuth(Request $request, ClientAuth $client, string $tokenCookieName)
@@ -127,5 +162,19 @@ class ContentController extends AbstractController
             'number' => $route,
 //            'carouselUnits' => $carousel->getCarouselUnits()
         ]);
+    }
+
+    private function buildError(Throwable $e)
+    {
+        $errorMessage = $e->getMessage();
+        $errorCode = $e->getCode();
+
+//            return $this->redirectToRoute('login');
+        return $this->render('base.html.twig', [
+                'data' => '',
+                'message' => $errorMessage,
+                'code' => $errorCode
+            ]
+        );
     }
 }
