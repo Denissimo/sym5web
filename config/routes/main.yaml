@@ -1,6 +1,6 @@
-#index:
-#    path: /
-#    controller: App\Controller\DefaultController::index
+index:
+   path: /
+   controller: App\Controller\ContentController::buildAirSituation
 
 test:
   path: /test
@@ -18,9 +18,9 @@ login:
   path: /login
   controller: App\Controller\ContentController::buildLogin
 
-index:
-  path: /index
-  controller: App\Controller\ContentController::buildIndex
+# index:
+#   path: /index
+#   controller: App\Controller\ContentController::buildIndex
 
 airsituation:
   path: /airsituation

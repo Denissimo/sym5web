@@ -12,7 +12,7 @@
                     </div>
                     <div class="card-body">
 
-                        <form action="/" class="form-login">
+                        <form action="/" class="form-login" id="form-login">
                             <div class="form-input">
                                 <label class="input-label" for="inputLogin">Логин</label>
                                 <input type="text" class="form-control" id="inputLogin">
@@ -24,12 +24,13 @@
                             </div>
                               
                             <div class="form-input">
-                                <button class="btn btn-green" type="button">Войти</button>
+                                <button type="submit" class="btn btn-green" type="button">Войти</button>
                             </div>
 
                              <div class="form-input">
                                  <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
                                  <label class="form-check-label" for="flexCheckDefault">Запомнить меня</label>
+                                 <a href="/forgotpassword/" class="registration-link">Забыли пароль?</a>
                             </div>
 
                         </form>
@@ -50,4 +51,7 @@
     {% block footer %}
             {% include('footer.html.twig') %}
     {% endblock %}
+
+
+
 
