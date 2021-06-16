@@ -22,6 +22,22 @@ index:
   path: /index
   controller: App\Controller\ContentController::buildIndex
 
+airsituation:
+  path: /airsituation
+  controller: App\Controller\ContentController::buildAirSituation
+
+routes:
+  path: /tracks
+  controller: App\Controller\ContentController::buildTracks
+  
+flights:
+  path: /flights
+  controller: App\Controller\ContentController::buildFlights
+
+archive:
+  path: /archive
+  controller: App\Controller\ContentController::buildArchive
+
 uav:
   path: /uav
   controller: App\Controller\ContentController::buildUav

@@ -72,6 +72,39 @@ class ContentController extends AbstractController
         ]);
     }
 
+    public function buildAirSituation(Request $request, ContentLoader $contentLoader)
+    {
+        return $this->render('airsituation.html.twig', [
+            'id' => 155,
+            'route' => 'AirSituation',
+        ]);
+    }
+
+    public function buildTracks(Request $request, ContentLoader $contentLoader)
+    {
+        return $this->render('tracks.html.twig', [
+            'id' => 155,
+            'route' => 'Tracks',
+        ]);
+    }
+
+    public function buildFlights(Request $request, ContentLoader $contentLoader)
+    {
+        return $this->render('flights.html.twig', [
+            'id' => 155,
+            'route' => 'Flights',
+        ]);
+    }
+
+
+    public function buildArchive(Request $request, ContentLoader $contentLoader)
+    {
+ 
+        return $this->render('archive.html.twig', [
+            'id' => 155,
+            'route' => 'Archive',
+        ]);
+    }
     public function buildTestUserData(Request $request, Client $client, string $tokenCookieName): Response
     {
         return $this->requestAuthorized($request, $client, $tokenCookieName, '/my/userdata');

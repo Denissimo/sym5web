@@ -4,68 +4,12 @@
     <head>
         <meta charset="UTF-8">
         <title>{% block title %}ZZZ!{% endblock %}</title>
-        <link href="/assets/css/bootstrap.min.css" rel="stylesheet">
-        <link href="/assets/css/app.css" rel="stylesheet">
+             {% block styles %}
+              {% include('components/styles.html.twig') %}
+            {% endblock %}
     </head>
 
     <body>
-
-
-
-    <header class="navbar">
-      <div class="navbar-left">
-      
-        <a href="/" class="link">
-          <img src="/assets/images/abrlogo.svg" alt="">
-        </a>
-
-        <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-  
-
-        <ul class="nav nav-menu" role="tablist">
-          <li class="nav-menu-item" role="presentation">
-            <button class="nav-menu-link active" id="map-airsituation-tab" data-bs-toggle="tab" data-bs-target="#map-airsituation" type="button" role="tab" aria-controls="home" aria-selected="true">Воздушная обстановка</button>
-          </li>
-          <li class="nav-menu-item" role="presentation">
-            <button class="nav-menu-link" id="map-routes-tab" data-bs-toggle="tab" data-bs-target="#map-routes" type="button" role="tab" aria-controls="profile" aria-selected="false">Маршруты</button>
-          </li>
-          <li class="nav-menu-item" role="presentation">
-            <button class="nav-menu-link" id="map-flights-tab" data-bs-toggle="tab" data-bs-target="#map-flights" type="button" role="tab" aria-controls="messages" aria-selected="false">Полеты</button>
-          </li>
-          <li class="nav-menu-item" role="presentation">
-            <button class="nav-menu-link" id="map-archive-tab" data-bs-toggle="tab" data-bs-target="#map-archive" type="button" role="tab" aria-controls="settings" aria-selected="false">Архив</button>
-          </li>
-        </ul>
-
-      </div>
-
-
-      <div class="navbar-right">
-
-          <ul class="nav-menu">
-            <li class="nav-menu-item">
-              <a href="#" class="nav-menu-link notification"><img src="/assets/images/icon__notification.svg" alt=""></a>
-            </li>
-            <li class="nav-menu-item">
-              <button class="nav-menu-link btn btn-outline btn-icon" data-bs-toggle="modal" data-bs-target="#uavMenu">
-                <img src="/assets/images/icon__control.svg" alt="" class="menu-item-icon">БВС
-              </button>
-            </li>
-            <li class="nav-menu-item">
-              <button class="nav-menu-link btn btn-outline btn-icon" data-bs-toggle="modal" data-bs-target="#profileMenu">
-                <img src="/assets/images/icon__control.svg" alt="" class="menu-item-icon">Профиль
-                </button>
-            </li>
-            <li class="nav-menu-item">
-              <a href="#" class="nav-menu-link btn btn-outline">Выйти</a>
-            </li>
-          </ul>
-
-      </div>
-
-    </header>
 
 
      

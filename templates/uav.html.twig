@@ -1,19 +1,145 @@
-     {% block header %}
+     {% block styles %}
             {% include('header.html.twig') %}
      {% endblock %}
+
+     {% block header %}
+            {% include('nav.html.twig') %}
+     {% endblock %}
+
 
         <div class="page-content"> 
 
             <div class="page-header">
                 <div class="container">
                     <div class="row">
-                        <h2 class="page-title">
-                            Мои БВС
-                        </h2>
+                        <div class="page-title">
+                            <h2 class="title">
+                                Мои БВС
+                            </h2>
+                            <button class="btn btn-green">Добавить БВС</button>
+                        </div> 
                     </div>
                 </div>
             </div>
             
+
+        <div class="page-body">
+            <div class="container">
+                <div class="row">
+                    <div class="card">
+                        <div class="card-header">
+                                 <div class="form-input">
+                                   <input placeholder="Поиск" type="text" id="firstname" class="form-control">
+                                  </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover table-centered mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>Название БВС</th>
+                                            <th>Регистрационный номер</th>
+                                            <th>Серийный номер</th>
+                                            <th>Категория БВС, кг</th>
+                                            <th>Статус регистрации</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <img src="/assets/images/icon__drone.svg" alt="">
+                                            </td>
+                                            <td>HawkEye</td>
+                                            <td>AZ 16177</td>
+                                            <td>TAE2XASOUPHAH4</td>
+                                            <td>До 25кг.</td>
+                                            <td>
+                                                <span class="badge badge-danger">Зарегистрирован</span>
+                                            </td>
+                                            <td>
+                                                <a href="/" class="btn btn-outline" id="btn-edit">редактировать</a>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <img src="/assets/images/icon__drone.svg" alt="">
+                                            </td>
+                                            <td>HawkEye</td>
+                                            <td>AZ 16177</td>
+                                            <td>TAE2XASOUPHAH4</td>
+                                            <td>До 25кг.</td>
+                                            <td>
+                                                <span class="badge badge-success">Зарегистрирован</span>
+                                            </td>
+                                            <td>
+                                                <a href="/" class="btn btn-outline" id="btn-edit">редактировать</a>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <img src="/assets/images/icon__drone.svg" alt="">
+                                            </td>
+                                            <td>HawkEye</td>
+                                            <td>AZ 16177</td>
+                                            <td>TAE2XASOUPHAH4</td>
+                                            <td>До 25кг.</td>
+                                            <td>
+                                                <span class="badge badge-attention">Зарегистрирован</span>
+                                            </td>
+                                            <td>
+                                                <a href="/" class="btn btn-outline" id="btn-edit">редактировать</a>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <img src="/assets/images/icon__drone.svg" alt="">
+                                            </td>
+                                            <td>HawkEye</td>
+                                            <td>AZ 16177</td>
+                                            <td>TAE2XASOUPHAH4</td>
+                                            <td>До 25кг.</td>
+                                            <td>
+                                                <span class="badge badge-outline">Зарегистрирован</span>
+                                            </td>
+                                            <td>
+                                                <a href="/" class="btn btn-outline" id="btn-edit">редактировать</a>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <img src="/assets/images/icon__drone.svg" alt="">
+                                            </td>
+                                            <td>HawkEye</td>
+                                            <td>AZ 16177</td>
+                                            <td>TAE2XASOUPHAH4</td>
+                                            <td>До 25кг.</td>
+                                            <td>
+                                                <span class="badge badge-info">Зарегистрирован</span>
+                                            </td>
+                                            <td>
+                                                <a href="/" class="btn btn-outline" id="btn-edit">редактировать</a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+
+                            <ul class="pagination">
+                                <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+                                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                            </ul>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
 
