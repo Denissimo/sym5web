@@ -1,6 +1,11 @@
-     {% block header %}
+     {% block styles %}
             {% include('header.html.twig') %}
      {% endblock %}
+
+     {% block header %}
+            {% include('nav.html.twig') %}
+     {% endblock %}
+
 
         <div class="page-content"> 
 
@@ -22,7 +27,11 @@
             <div class="container">
                 <div class="row">
                     <div class="card">
-                        <div class="card-header"></div>
+                        <div class="card-header">
+                                 <div class="form-input">
+                                   <input placeholder="Поиск" type="text" id="firstname" class="form-control">
+                                  </div>
+                        </div>
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table class="table table-hover table-centered mb-0">
@@ -47,7 +56,7 @@
                                             <td>TAE2XASOUPHAH4</td>
                                             <td>До 25кг.</td>
                                             <td>
-                                                <span class="badge badge-dots badge-dots-success">Зарегистрирован</span>
+                                                <span class="badge badge-danger">Зарегистрирован</span>
                                             </td>
                                             <td>
                                                 <a href="/" class="btn btn-outline" id="btn-edit">редактировать</a>
@@ -62,7 +71,7 @@
                                             <td>TAE2XASOUPHAH4</td>
                                             <td>До 25кг.</td>
                                             <td>
-                                                <span class="badge badge-dots badge-dots-success">Зарегистрирован</span>
+                                                <span class="badge badge-success">Зарегистрирован</span>
                                             </td>
                                             <td>
                                                 <a href="/" class="btn btn-outline" id="btn-edit">редактировать</a>
@@ -77,7 +86,7 @@
                                             <td>TAE2XASOUPHAH4</td>
                                             <td>До 25кг.</td>
                                             <td>
-                                                <span class="badge badge-dots badge-dots-success">Зарегистрирован</span>
+                                                <span class="badge badge-attention">Зарегистрирован</span>
                                             </td>
                                             <td>
                                                 <a href="/" class="btn btn-outline" id="btn-edit">редактировать</a>
@@ -92,7 +101,7 @@
                                             <td>TAE2XASOUPHAH4</td>
                                             <td>До 25кг.</td>
                                             <td>
-                                                <span class="badge badge-dots badge-dots-success">Зарегистрирован</span>
+                                                <span class="badge badge-outline">Зарегистрирован</span>
                                             </td>
                                             <td>
                                                 <a href="/" class="btn btn-outline" id="btn-edit">редактировать</a>
@@ -107,7 +116,7 @@
                                             <td>TAE2XASOUPHAH4</td>
                                             <td>До 25кг.</td>
                                             <td>
-                                                <span class="badge badge-dots badge-dots-success">Зарегистрирован</span>
+                                                <span class="badge badge-info">Зарегистрирован</span>
                                             </td>
                                             <td>
                                                 <a href="/" class="btn btn-outline" id="btn-edit">редактировать</a>

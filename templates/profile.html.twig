@@ -1,8 +1,12 @@
-     {% block header %}
+     {% block styles %}
             {% include('header.html.twig') %}
      {% endblock %}
 
-        <div class="page-content"> 
+     {% block header %}
+            {% include('nav.html.twig') %}
+     {% endblock %}
+
+        <div class="page page-profile"> 
 
             <div class="page-header">
                 <div class="container">
@@ -18,10 +22,20 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-4">
-                                image
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="card-profile-image">
+                                            <img src="assets/images/person.jpg" alt="" class="profile-image"> 
+                                        </div>
+                                    </div>
+                                </div>
                         </div>
                         <div class="col-8">
-                                form
+
+                            {% block profileFormPerson %}
+                              {% include('/components/profile-form-person.html.twig') %}
+                            {% endblock %}
+                                
                         </div>
                     </div>
                 </div>
