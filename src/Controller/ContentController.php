@@ -74,10 +74,9 @@ class ContentController extends AbstractController
 
     public function buildAirSituation(Request $request, ContentLoader $contentLoader, string $tokenCookieName)
     {
-
-        $cookieChecker = $request->getCookie($tokenCookieName); 
-        var_dump ($cookieChecker);
-        die;
+        $cookieChecker = $request->cookies->get($tokenCookieName);
+        // var_dump ($cookieChecker);
+        // die;
 
         if (!$cookieChecker) {
             return $this->redirectToRoute('login');

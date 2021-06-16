@@ -48,10 +48,10 @@ $(document).ready(function () {
         });
 
         // Cookie test
-        // $.ajax(settings).done(function (response) {
-        //     $.cookie('utm_auth_token', response.token)
-        //     console.log(response);
-        // });
+        $.ajax(settings).done(function (response) {
+            $.cookie('utmdata_token', response.token)
+            console.log(response);
+        });
 
       });
 
