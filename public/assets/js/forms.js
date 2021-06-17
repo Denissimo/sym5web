@@ -28,12 +28,10 @@ $(document).ready(function () {
                 var url = '/';
                 $(location).prop('href', url);
             },
-            error: function(){
-                console.log('Hui tam...');
-                alert('Пошёл на хуй');
+            error: function(response){
+                $(".form-alert").addClass("alert-danger");
+                $(".alert-message").html('Ошибка входа. Проверьте введенные данные.');
             },
-
-
         };
 
         event.preventDefault();
