@@ -17,18 +17,87 @@
   <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
 
 <div class="card-body">
-                                        <form action="/" class="form form-profile">
+
+
+<form action="/" class="form-individual" id="form-individual">
+
+                    <div class="form-row">            
+                        <div class="form-input">
+                            <label class="input-label" for="secondname">Фамилия</label>
+                            <input type="text" class="form-control" id="lastname" name="secondname">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                      <div class="form-input">
+                          <label class="input-label" for="firstname">Имя</label>
+                          <input type="text" class="form-control" id="firstname" name="firstname">
+                      </div>
+                          </div>
+
+
+                   <div class="form-row">
+                    <div class="form-input">
+                        <label class="input-label" for="middlename">Отчество</label>
+                        <input type="text" class="form-control" id="middlename" name="middlename">
+                    </div>
+                      
+                      </div>
+
+
+
+                   <div class="form-row">
+                    <div class="form-input">
+                        <label class="input-label" for="email">E-mail</label>
+                        <input type="text" class="form-control" id="email" name="email">
+                    </div>
+                      
+                      </div>
+
+
+                   <div class="form-row">
+                    <div class="form-input">
+                        <label class="input-label" for="email">Телефон</label>
+                        <input type="text" class="form-control" id="phone" name="phone">
+                    </div>
+                      
+                      </div>
+                
+
+                
+                    <div class="form-row">
+
+                    <div class="form-input">
+                        <button  type="submit" class="btn btn-green" id="inputSubmit">Сохранить</button>
+                    </div>
+                    </div>
+                  
+        
+
+
+                    <div class="form-row">
+                        <div class="form-alert">
+                            <span class="alert-message"></span>
+                        </div>
+                    </div>
+
+
+               
+
+                </form>
+
+
+                                        {# <form action="/" class="form form-profile" id="form-individual">
                                             <div class="form-input">
-                                              <label for="secondname" class="form-label">Фамилия *</label>
-                                              <input type="text" id="surname" class="form-control">
+                                              <label for="lastname" class="form-label">Фамилия *</label>
+                                              <input type="text" id="lastdname" class="form-control">
                                             </div>
                                             <div class="form-input">
                                               <label for="firstname" class="form-label">Имя *</label>
                                               <input type="text" id="firstname" class="form-control">
                                             </div>
                                             <div class="form-input">
-                                              <label for="thirdname" class="form-label">Отчество</label>
-                                              <input type="text" id="thirdname" class="form-control">
+                                              <label for="middlename" class="form-label">Отчество</label>
+                                              <input type="text" id="middlename" class="form-control">
                                             </div>
                                             <div class="form-input">
                                               <label for="email" class="form-label">E-mail</label>
@@ -38,24 +107,11 @@
                                               <label for="tel" class="form-label">Телефон</label>
                                               <input type="tel" id="tel" class="form-control">
                                             </div>
-                            
-                                            <div class="form-input">
-                                              <label for="role" class="form-label">Выберите роль</label>
-                                              <select type="role" id="tel" class="form-control">
-                                                <option selected value="person">Физическое лицо</option>
-                                                <option value="entrepreneur">Представитель ИП</option>
-                                                <option value="legal">Представитель юридиечского лица</option>
-                                                <option value="atm">Представитель ОРВД</option>
-                                                <option value="aerodrome">Представитель аэродрома (вертодрома)</option>
-                                                <option value="municipal">Представитель муниципальной администрации</option>
-                                              </select>
-                                            </div>
-                            
-                            
+                                                     
                                             <button type="submit" class="btn btn-outline">Сохранить</button>
                             
                                             </form>
-                                    </div>
+                                    </div> #}
   
   </div>
   <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">.ИП.</div>
