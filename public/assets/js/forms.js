@@ -99,64 +99,45 @@ $(document).ready(function () {
 
 
 
-// $(document).ready(function () {
-//   var token = $.cookie("utmdata_token");
+$("#form-individual").ready(function (event) {
+  var token = $.cookie("utmdata_token");
+  var data = {"user": "username"};
 
-//   var fd = new FormData(document.querySelector('#form-individual')) {
+  $(function () {
+    $.ajax({
+      url: 'https://dev-api.airchannel.net/my/userdata',
+      type: 'GET',
+      dataType: "json",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + token
+      },
 
-//     $.ajax({
-//       url: 'https://dev-api.airchannel.net/my/userdata',
-//       data: fd,
-//       headers: {
-//         "Content-Type": "application/json",
-//         Authorization: "Bearer " + token
-//       },
-//       processData: false,
-//       type: 'GET',
-//       success: function(data){
-//         alert(data);
-//       };
+      data: JSON.stringify({
+        firstname: firstname,
+        lastname: lastname,
+      }),
+ 
+      success: function(data){
+        console.log(data.user.user);
+        $("#firstname").val(data.user.user.firstname);
+        $("#middlename").val(data.user.user.middlename);
+        $("#lastname").val(data.user.user.lastname);
+        $("#phone").val(data.user.user.phone);
+        $("#email").val(data.user.user.email);
+      },
+
+      error: function(){
+        alert('error!');
+      }
   
-//     });
+    });
 
-
-//   });
  
 
+  });
+ 
 
-
-var myVariable;
-var token = $.cookie("utmdata_token");
-var jsonData = {"user": 'email'};
-
-$.ajax({
-    'type': "GET",
-    'global': false,
-    // 'dataType': 'JSON',
-    'headers': {
-      "Content-Type": "application/json",
-      "Authorization": "Bearer " + token
-    },
-    'url': "https://dev-api.airchannel.net/my/userdata",
-    'data': JSON.stringify(jsonData),
-    
-    // {
-
-  
-
-    //   // 'user': {
-    //   //   'lastname': '',
-    //   //   'firstname': '',
-    //   //   'middlename': '',
-    //   //   'email': '',
-    //   //   'phone': '',
-    //   // },
-      
-    // },
-      
-  
-
-    'success': function (data) {
-        myVariable = data;
-    }
 });
+
+

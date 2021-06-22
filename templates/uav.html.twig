@@ -16,7 +16,7 @@
                             <h2 class="title">
                                 Мои БВС
                             </h2>
-                            <button class="btn btn-green">Добавить БВС</button>
+                            <button class="btn btn-green" data-bs-toggle="modal" data-bs-target="#modalUav">Добавить БВС</button>
                         </div> 
                     </div>
                 </div>
@@ -141,6 +141,11 @@
                 </div>
             </div>
         </div>
+
+
+    {% block modals %}
+            {% include('components/modals.html.twig') %}
+    {% endblock %}    
 
 
     {% block footer %}
