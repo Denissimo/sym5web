@@ -33,6 +33,14 @@ class ContentController extends AbstractController
         ]);
     }
 
+    public function buildSignUp(Request $request, ContentLoader $contentLoader)
+    {
+        return $this->render('signup.html.twig', [
+            'id' => 155,
+            'route' => 'SignUp',
+        ]);
+    }
+
     public function buildIndex(Request $request, ContentLoader $contentLoader)
     {
         return $this->render('index.html.twig', [

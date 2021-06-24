@@ -18,6 +18,10 @@ login:
   path: /login
   controller: App\Controller\ContentController::buildLogin
 
+signup:
+  path: /signup
+  controller: App\Controller\ContentController::buildSignUp  
+
 # index:
 #   path: /index
 #   controller: App\Controller\ContentController::buildIndex
