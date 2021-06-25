@@ -1,130 +1,144 @@
 {% block header %}
-	{% include('header.html.twig') %}
+    {% include('header.html.twig') %}
 {% endblock %}
 
 <div class="page page-login page-signup">
 
 
-	<div class="login-card signup-card">
+    <div class="login-card signup-card">
 
-		<div class="login-card-header login-card-header-signup">
-			<p class="login-card-header-title">Регистрация</p>
-		</div>
-		<div class="login-card-body">
+        <div class="login-card-header login-card-header-signup">
+            <p class="login-card-header-title">Регистрация</p>
+        </div>
+        <div class="login-card-body">
 
-			<form action="/" class="form-login form-signup" id="form-signup">
+            <form action="/" class="form-login form-signup" id="form-signup"
+                  oninput='passwordRepeat.setCustomValidity(passwordRepeat.value != password.value ? "Passwords do not match." : "")'>
 
-				<div class="row">
-					<div class="form-row col-md-6">
-						<div class="form-input">
-							<label class="input-label" for="lastname">Фамилия</label>
-							<input type="text" class="form-control" id="lastname" name="lastname">
-						</div>
-					</div>
+                <div class="row">
+                    <div class="form-row col-md-6">
+                        <div class="form-input">
+                            <label class="input-label" for="lastname">Фамилия</label>
+                            <input type="text" class="form-control" id="lastname" name="lastname" required>
+                        </div>
+                    </div>
 
-					<div class="form-row col-md-6">
-						<div class="form-input">
-							<label class="input-label" for="fisrtname">Имя</label>
-							<input type="text" class="form-control" id="firstname" name="firstname">
-						</div>
-					</div>
-				</div>
+                    <div class="form-row col-md-6">
+                        <div class="form-input">
+                            <label class="input-label" for="fisrtname">Имя</label>
+                            <input type="text" class="form-control" id="firstname" name="firstname" required>
+                        </div>
+                    </div>
+                </div>
 
-				<div class="row">
-					<div class="form-row col-md-6">
-						<div class="form-input">
-							<label class="input-label" for="password">E-mail</label>
-							<input type="email" class="form-control" id="email" name="email">
-						</div>
-					</div>
+                <div class="row">
+                    <div class="form-row col-md-6">
+                        <div class="form-input">
+                            <label class="input-label" for="password">E-mail</label>
+                            <input type="email" class="form-control" id="email" name="email" required>
+                        </div>
+                    </div>
 
-					<div class="form-row col-md-6">
-						<div class="form-input">
-							<label class="input-label" for="phone">Телефон</label>
-							<input type="tel" class="form-control" id="phone" name="phone">
-						</div>
-					</div>
-				</div>
+                    <div class="form-row col-md-6">
+                        <div class="form-input">
+                            <label class="input-label" for="phone">Телефон</label>
+                            <input type="tel" class="form-control" id="phone" name="phone" required>
+                        </div>
+                    </div>
+                </div>
 
-				<div class="row">
-					<div class="form-row col-md-6">
-						<div class="form-input">
-							<label class="input-label" for="password">Пароль</label>
-							<input type="password" class="form-control" id="password" name="password">
-						</div>
-					</div>
-					<div class="form-row col-md-6">
-						<div class="form-input">
-							<label class="input-label" for="passwordRepeat">Повторите пароль</label>
-							<input type="password" class="form-control" id="passwordRepeat" name="passwordRepeat">
-						</div>
-					</div>
-				</div>
-
-
-				<div class="row">
-					<div class="form-row">
-						<div class="form-input">
-							<p class="form-input-title">Юридический статуc</p>
-							<p class="form-input-desc">Вы можете выбрать несколько пунктов</p>
-							<div class="btn-group" role="group">
-
-								<input type="checkbox" class="btn-check" id="btncheck1" autocomplete="off">
-								<label class="btn btn-outline-green" for="btncheck1">Физическое лицо</label>
-
-								<input type="checkbox" class="btn-check" id="btncheck2" autocomplete="off">
-								<label class="btn btn-outline-green" for="btncheck2">Глава ИП</label>
-
-								<input type="checkbox" class="btn-check" id="btncheck3" autocomplete="off">
-								<label class="btn btn-outline-green" for="btncheck3">Представитель ИП</label>
-
-								<input type="checkbox" class="btn-check" id="btncheck4" autocomplete="off">
-								<label class="btn btn-outline-green" for="btncheck4">Глава юр. лица</label>
-
-								<input type="checkbox" class="btn-check" id="btncheck5" autocomplete="off">
-								<label class="btn btn-outline-green" for="btncheck5">Представитель юр. лица</label>
-
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<div class="row">
-					<div class="form-row">
-						<div class="form-input">
-							<p class="form-input-title">Тип пользователя</p>
-							<p class="form-input-desc">Вы можете выбрать несколько пунктов</p>
-							<div class="btn-group" role="group">
-
-								<input type="checkbox" class="btn-check" id="btncheck6" autocomplete="off">
-								<label class="btn btn-outline-green" for="btncheck6">Владелец БВС</label>
-
-								<input type="checkbox" class="btn-check" id="btncheck7" autocomplete="off">
-								<label class="btn btn-outline-green" for="btncheck7">Эксплуатант</label>
-
-								<input type="checkbox" class="btn-check" id="btncheck8" autocomplete="off">
-								<label class="btn btn-outline-green" for="btncheck8">Пилот</label>
-
-							</div>
-						</div>
-					</div>
+                <div class="row">
+                    <div class="form-row col-md-6">
+                        <div class="form-input">
+                            <label class="input-label" for="password">Пароль</label>
+                            <input type="password" class="form-control" id="password" name="password" required>
+                        </div>
+                    </div>
+                    <div class="form-row col-md-6">
+                        <div class="form-input">
+                            <label class="input-label" for="passwordRepeat">Повторите пароль</label>
+                            <input type="password" class="form-control" id="passwordRepeat" name="passwordRepeat"
+                                   required>
+                        </div>
+                    </div>
+                </div>
 
 
-					<div class="form-row">
-						<div class="form-input form-input-signup">
-							<a href="/login/" class="btn btn-outline btn-outline-signup">Вернуться назад</a>
-							<button type="submit" class="btn btn-green btn-signup" id="submit">Зарегистрироваться</button>
-						</div>
-					</div>
+                <div class="row">
+                    <div class="form-row">
+                        <div class="form-input">
+                            <p class="form-input-title">Юридический статуc</p>
+                            <p class="form-input-desc">Вы можете выбрать несколько пунктов</p>
+                            <div class="btn-group" role="group">
 
-					<div class="form-row">
-						<div class="form-alert">
-							<span class="alert-message"></span>
-						</div>
-					</div>
+                                <input type="checkbox" class="btn-check legal_role" id="btncheck1" autocomplete="off"
+                                       name="ROLE_INDIVIDUAL">
+                                <label class="btn btn-outline-green" for="btncheck1">Физическое лицо</label>
 
-				</form>
+                                <input type="checkbox" class="btn-check legal_role" id="btncheck2" autocomplete="off"
+                                       name="ROLE_ENTREPRENEUR_HEAD">
+                                <label class="btn btn-outline-green" for="btncheck2">Глава ИП</label>
 
-			</div>
+                                <input type="checkbox" class="btn-check legal_role" id="btncheck3" autocomplete="off"
+                                       name="ROLE_ENTREPRENEUR_REPRESENTATIVE">
+                                <label class="btn btn-outline-green" for="btncheck3">Представитель ИП</label>
 
-		</div>
+                                <input type="checkbox" class="btn-check legal_role" id="btncheck4" autocomplete="off"
+                                       name="ROLE_LEGAL_ENTITY_HEAD">
+                                <label class="btn btn-outline-green" for="btncheck4">Глава юр. лица</label>
+
+                                <input type="checkbox" class="btn-check legal_role" id="btncheck5" autocomplete="off"
+                                       name="ROLE_LEGAL_ENTITY_REPRESENTATIVE">
+                                <label class="btn btn-outline-green" for="btncheck5">Представитель юр. лица</label>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-row">
+                        <div class="form-input">
+                            <p class="form-input-title">Тип пользователя</p>
+                            <p class="form-input-desc">Вы можете выбрать несколько пунктов</p>
+                            <div class="btn-group" role="group">
+
+                                <input type="checkbox" class="btn-check aircraft_role" id="btncheck6" autocomplete="off"
+                                       name="ROLE_OWNER">
+                                <label class="btn btn-outline-green" for="btncheck6">Владелец БВС</label>
+
+                                <input type="checkbox" class="btn-check aircraft_role" id="btncheck7" autocomplete="off"
+                                       name="ROLE_EXPLUATANT">
+                                <label class="btn btn-outline-green" for="btncheck7">Эксплуатант</label>
+
+                                <input type="checkbox" class="btn-check aircraft_role" id="btncheck8" autocomplete="off"
+                                       name="ROLE_PILOT">
+                                <label class="btn btn-outline-green" for="btncheck8">Пилот</label>
+
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="form-row">
+                        <div class="form-input form-input-signup">
+                            <a href="/login/" class="btn btn-outline btn-outline-signup">Вернуться назад</a>
+                            <button type="submit" class="btn btn-green btn-signup" id="submit">Зарегистрироваться
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-alert">
+                            <span class="alert-message"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="alert_place"></div>
+
+            </form>
+
+        </div>
+
+    </div>
+</div>

@@ -128,16 +128,56 @@ $(document).ready(function () {
   // Form -> Signup
 
   $("#form-signup").submit(function (event) {
-    var token = $.cookie("utmdata_token");
-    console.log(token);
+    event.preventDefault();
+
+    var legalRoles = [];
+    $(this).find('.legal_role').each(function() {
+      if ($(this).is(':checked')) {
+          legalRoles.unshift($(this).attr('name'));
+      }
+    });
+
+    var aircraftRoles = [];
+    $(this).find('.aircraft_role').each(function() {
+      if ($(this).is(':checked')) {
+        aircraftRoles.unshift($(this).attr('name'));
+      }
+    });
+
+    if (legalRoles.length < 1) {
+      console.log('L');
+      // $('.alert').toggleClass('show');
+      // $('.alert').alert('qwe');
+      $('.alert_place').html(
+          '<div class="alert alert-danger alert-dismissible fade show" role="alert">\n' +
+          '\t\t\t\t\tChoose at least one <strong id="b_role">legal role and aircraft role</strong>.\n' +
+          '\t\t\t\t\t<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>\n' +
+          '\t\t\t\t</div>'
+      );
+
+      return false;
+    }
+
+    if (aircraftRoles.length < 1) {
+      console.log('A');
+      $('.alert_place').html(
+          '<div class="alert alert-danger alert-dismissible fade show" role="alert">\n' +
+          '\t\t\t\t\tChoose at least one <strong id="b_role">legal role and aircraft role</strong>.\n' +
+          '\t\t\t\t\t<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>\n' +
+          '\t\t\t\t</div>'
+      );
+
+      return false;
+    }
+
+    console.log(legalRoles.length);
 
     var settings = {
       url: "https://dev-api.airchannel.net/register/user",
       method: "POST",
       timeout: 0,
       headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + token,
+        "Content-Type": "application/json"
       },
 
       data: JSON.stringify({
@@ -149,29 +189,30 @@ $(document).ready(function () {
           password: $("#password").val(),
         },
 
-        legalRoles: {
-          password: $("#btncheck1:checked").val(),
-          password: $("#btncheck2").val(),
-          password: $("#btncheck3").val(),
-          password: $("#btncheck4").val(),
-          password: $("#btncheck5").val(),
+        legalRoles: legalRoles,
 
-        },
-
-        aircraftRoles: {
-          password: $("#btncheck6").val(),
-          password: $("#btncheck7").val(),
-          password: $("#btncheck8").val(),
-        },
+        aircraftRoles: aircraftRoles,
       }),
 
       success: function (response) {
-        console.log("OK");
+        $('.alert_place').html(
+            '<div class="alert alert-success alert-dismissible fade show" role="alert">\n' +
+            '\t\t\t\t\tSuccess register\n' +
+            '\t\t\t\t\t<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>\n' +
+            '\t\t\t\t</div>'
+        );
+        setTimeout(function() {
+          $(location).prop("href", '/login');
+        }, 3000);
       },
 
       error: function (response) {
-        console.log("ПНХ");
-        console.log(response);
+        $('.alert_place').html(
+            '<div class="alert alert-danger alert-dismissible fade show" role="alert">\n' +
+            '\t\t\t\t\tServer error\n' +
+            '\t\t\t\t\t<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>\n' +
+            '\t\t\t\t</div>'
+        );
       },
     };
 
@@ -181,6 +222,6 @@ $(document).ready(function () {
       return response;
     });
 
-    event.preventDefault();
+
   });
 });
