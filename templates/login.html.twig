@@ -1,85 +1,74 @@
-    {% block header %}
-            {% include('header.html.twig') %}
-    {% endblock %}
+{% block header %}
+	{% include('header.html.twig') %}
+{% endblock %}
 
-    <div class="page page-login">
-
-
-        <div class="login-card">
-
-            <div class="login-card-header">
-                <img src="assets/images/abrlogologin.svg" alt="" class="login-card-logo">
-            </div>
-            <div class="login-card-body">
-
-                <form action="/" class="form-login" id="form-login">
-
-                    <div class="form-row">            
-                        <div class="form-input">
-                            <label class="input-label" for="inputLogin">Логин</label>
-                            <input type="text" class="form-control" id="inputLogin" name="login">
-                        </div>
-                    </div>
-                    <div class="form-row">
-
-                    <div class="form-input">
-                        <label class="input-label" for="inputLogin">Пароль</label>
-                        <input type="password" class="form-control" id="inputPassword" name="password">
-                    </div>
-                      
-                    </div>
-                    <div class="form-row">
-
-                    <div class="form-input">
-                        <button  type="submit" class="btn btn-green" id="inputSubmit">Войти</button>
-                    </div>
-                    </div>
-                  
-        
+<div class="page page-login">
 
 
-                    <div class="form-row">
+	<div class="login-card">
 
-                        <div class="form-input form-input-center">
-                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                            <label class="form-check-label" for="flexCheckDefault">Запомнить меня</label>
-                       </div>
+		<div class="login-card-header">
+			<img src="assets/images/abrlogologin.svg" alt="" class="login-card-logo">
+		</div>
+		<div class="login-card-body">
 
+			<form action="/" class="form-login" id="form-login">
 
+				<div class="form-row">
+					<div class="form-input">
+						<label class="input-label" for="inputLogin">Логин</label>
+						<input type="text" class="form-control" id="inputLogin" name="login">
+					</div>
+				</div>
+				<div class="form-row">
 
-                       <a href="/forgotpassword/" class="link link-simple">Забыли пароль?</a>
-                    </div>
+					<div class="form-input">
+						<label class="input-label" for="inputLogin">Пароль</label>
+						<input type="password" class="form-control" id="inputPassword" name="password">
+					</div>
 
-                    <div class="form-row">
-                        <div class="form-alert">
-                            <span class="alert-message"></span>
-                        </div>
-                    </div>
+				</div>
+				<div class="form-row">
 
-
-               
-
-                </form>
-
-
-            </div>
-            <div class="login-card-footer">
-                <div class="form-row">
-                    <p class="form-desc">У вас нет учетной записи?</p>
-                    <a href="/signup/" class="link link-simple">Зарегистрируйтесь</a>
-                </div>
-            </div>
-
-        </div>
+					<div class="form-input">
+						<button type="submit" class="btn btn-green" id="inputSubmit">Войти</button>
+					</div>
+				</div>
 
 
-                
+				<div class="form-row">
+
+					<div class="form-input form-input-center">
+						<input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+						<label class="form-check-label" for="flexCheckDefault">Запомнить меня</label>
+					</div>
 
 
-    {# {% block footer %}
-            {% include('footer.html.twig') %}
-    {% endblock %}
- #}
+					<a href="/forgotpassword/" class="link link-simple">Забыли пароль?</a>
+				</div>
+
+				<div class="form-row">
+					<div class="form-alert">
+						<span class="alert-message"></span>
+					</div>
+				</div>
 
 
+			</form>
 
+
+		</div>
+		<div class="login-card-footer">
+			<div class="form-row">
+				<p class="form-desc">У вас нет учетной записи?</p>
+				<a href="/signup/" class="link link-simple">Зарегистрируйтесь</a>
+			</div>
+		</div>
+
+	</div>
+
+
+	{# {% block footer %}
+	            {% include('footer.html.twig') %}
+	    {% endblock %}
+	 #}
