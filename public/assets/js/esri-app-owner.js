@@ -38,7 +38,6 @@ import {changeExtent,queryRoad} from './sub/app-owner-view.js';
 /*export*/ var prohLayer;
 /*export*/ var selectLayer;
 
-
 /*export*/ var markerSymbol;
 /*export*/ var markerSymbol2;
 /*export*/ var lineSymbol;
