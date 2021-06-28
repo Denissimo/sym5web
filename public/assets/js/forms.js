@@ -1,4 +1,11 @@
 $(document).ready(function () {
+  var currentPath = new URL($(location).prop("href")).pathname;
+  if ($.cookie("utmdata_token") === undefined && currentPath !== '/login') {
+    console.log(document.referrer.pathname);
+    var url = "/login";
+    $(location).prop("href", url);
+  }
+
   $("#form-login").submit(function (event) {
     var settings = {
       url: "https://dev-auth.airchannel.net/api/login_check",
@@ -12,8 +19,19 @@ $(document).ready(function () {
         password: $("#inputPassword").val(),
       }),
       success: function (response) {
-        console.log("OK");
-        var url = "/";
+        if (document.referrer) {
+          console.log('referrer exists');
+          var referer = new URL(document.referrer);
+          var refererPath = referer.pathname;
+          console.log(refererPath);
+        }
+        var url;
+        if (refererPath !== undefined && refererPath !== '/login') {
+          url = refererPath;
+        } else {
+          url = "/";
+        }
+        console.log(url);
         $(location).prop("href", url);
       },
       error: function (response) {
@@ -25,7 +43,7 @@ $(document).ready(function () {
     event.preventDefault();
 
     // Forms dumps
-    console.log($(this).serialize());
+    // console.log($(this).serialize());
 
     // Token Response
     $.ajax(settings).done(function (response) {
@@ -35,14 +53,14 @@ $(document).ready(function () {
 
     // Cookie test
     $.ajax(settings).done(function (response) {
-      $.cookie("utmdata_token", response.token);
+      $.cookie("utmdata_token", response.token, { expires: 10/24, path: '/' });
       console.log(response);
     });
   });
 
   // Form - Profile -> GET information
 
-  if (window.location.pathname == "/profile") {
+  if (window.location.pathname === "/profile") {
     $("#form-individual").ready(function (event) {
       var token = $.cookie("utmdata_token");
 
@@ -173,7 +191,7 @@ $(document).ready(function () {
     console.log(legalRoles.length);
 
     var settings = {
-      url: "http://sym4swg/register/user",
+      url: "https://dev-api.airchannel.net/register/user",
       method: "POST",
       timeout: 0,
       headers: {
