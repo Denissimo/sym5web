@@ -1,50 +1,297 @@
-
-
-
-
 <!-- Modal UAV -->
 <div class="modal fade" id="modalUav" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="staticBackdropLabel">Регистрация нового БВС</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
- 
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+
+			<div class="modal-header">
+				<h5 class="modal-title" id="staticBackdropLabel">Добавление БВС</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
 
 
-          <form action="/" class="form-uav" id="form-uav">
-            <div class="container-fluid">
-              <div class="row">
-                <div class="col-md-6">
-                  <div class="form-row">            
-                     <div class="form-input">
-                      <label class="input-label" for="secondname">Фамилия</label>
-                      <input type="text" class="form-control" id="1" name="secondname">
-                  </div>
-                </div>
-              </div>
-            <div class="col-md-6">
-        <div class="form-row">            
-          <div class="form-input">
-              <label class="input-label" for="secondname">Фамилия</label>
-              <input type="text" class="form-control" id="1" name="secondname">
-          </div>
-      </div>
-    </div>
-          </div>
+				<form action="/" class="form-uav" id="form-uav">
+					<div class="container-fluid">
 
-        </div>
+						<div class="row">
+							<div class="col-md-6">
+								<div class="form-row">
+									<div class="form-input">
+										<label class="input-label" for="nameUav">Название БВС *</label>
+										<input type="text" class="form-control" id="nameUav" name="nameUav">
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-row">
+									<div class="form-input">
+										<label class="input-label" for="serialUav">Серийный номер *</label>
+										<input type="text" class="form-control" id="serialUav" name="serialUav">
+									</div>
+								</div>
+							</div>
+						</div>
 
-          </form>
+						<div class="row">
+							<div class="col-md-6">
+								<div class="form-row">
+									<div class="form-input">
+										<label class="input-label" for="manufacturer">Изготовитель БВС *</label>
+										<input type="text" class="form-control" id="manufacturer" name="manufacturer">
+										<p class="form-desc">Для самостоятельно собранных БВС, указывается «собственная сборка»</p>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-row">
+									<div class="form-input">
+										<label class="input-label" for="serialUav">Марка, модель БВС</label>
+										<input type="text" class="form-control" id="serialUav" name="serialUav">
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="row">
 
 
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-outline" data-bs-dismiss="modal">Отмена</button>
-        <button type="button" class="btn btn-green">Сохранить</button>
-      </div>
-    </div>
-  </div>
+
+
+
+
+                						<h6 class="form-title">
+  Тип двигателей и их количество
+							</h6>
+
+									<div class="col-md-4">
+										<div class="form-row">
+											<div class="form-input">
+												<label class="input-label" for="categoryUav">Двигатель внутреннего сгорания</label>
+												<input type="number" class="form-control" id="engineGas" name="engineGas" placeholder="0">
+											</div>
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="form-row">
+											<div class="form-input">
+												<label class="input-label" for="categoryUav">Электродвигатель</label>
+												<input type="number" class="form-control form-control-small" id="engineElectric" name="engineElectric" placeholder="0">
+											</div>
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="form-row">
+											<div class="form-input">
+												<label class="input-label" for="categoryUav">Гибридный</label>
+												<input type="number" class="form-control" id="engineHybrid" name="engineHybrid" placeholder="0">
+											</div>
+										</div>
+									</div>
+
+
+
+
+						</div>
+
+
+						<div class="row">
+
+							<div class="col-md-6">
+								<div class="form-row">
+									<div class="form-input">
+										<label class="input-label" for="maxWeight">Максимальная взлетная масса, кг</label>
+										<input type="text" class="form-control" id="maxWeight" name="maxWeight">
+									</div>
+								</div>
+							</div>
+
+
+							<div class="col-md-6">
+								<div class="form-row form-column">
+									<div class="form-input">
+										<label class="input-label" for="maxWeight">Категория БВС (Масса)</label>
+									</div>
+
+
+									<div class="form-check-group">
+
+										<div class="form-check">
+											<input class="form-check-input" type="radio" name="exampleRadios" id="categoryUav250" value="250" checked>
+											<label class="form-check-label" for="exampleRadios1">
+												До 250 г.
+											</label>
+										</div>
+
+										<div class="form-check">
+											<input class="form-check-input" type="radio" name="exampleRadios" id="categoryUav250-30" value="250-30">
+											<label class="form-check-label" for="exampleRadios1">
+												от 250 г. до 30 кг.
+											</label>
+										</div>
+
+										<div class="form-check">
+											<input class="form-check-input" type="radio" name="exampleRadios" id="categoryUav30+" value="30+">
+											<label class="form-check-label" for="exampleRadios1">
+												свыше 30 кг.
+											</label>
+										</div>
+
+									</div>
+								</div>
+							</div>
+						</div>
+
+
+						<div class="row">
+
+							<div class="col-md-6">
+								<div class="form-row form-column">
+									<div class="form-input">
+										<label class="input-label" for="categoryUav">Тип каналов связи/управления</label>
+									</div>
+
+									<div class="form-check-group">
+										<div class="form-check">
+											<input class="form-check-input" type="checkbox" value="250" id="categoryUav250" name="categoryUav">
+											<label class="form-check-label" for="flexCheckIndeterminate">
+												Радиоканал
+											</label>
+										</div>
+
+										<div class="form-check">
+											<input class="form-check-input" type="checkbox" value="250-30" id="categoryUav250-30" name="categoryUav">
+											<label class="form-check-label" for="flexCheckIndeterminate">
+												GSM - 2G/3G/4G/5G
+											</label>
+										</div>
+
+										<div class="form-check">
+											<input class="form-check-input" type="checkbox" value="30+" id="categoryUav30+" name="categoryUav">
+											<label class="form-check-label" for="flexCheckIndeterminate">
+												Wi - Fi
+											</label>
+										</div>
+
+									</div>
+
+
+								</div>
+							</div>
+
+							<div class="col-md-6">
+								<div class="form-row form-column">
+									<div class="form-input">
+										<label class="input-label" for="categoryUav">Транспондер</label>
+									</div>
+
+
+									<div class="form-check-group">
+										<div class="form-check">
+											<input class="form-check-input" type="checkbox" value="250" id="categoryUav250" name="categoryUav">
+											<label class="form-check-label" for="flexCheckIndeterminate">
+												ADS-B (out, in/out)
+											</label>
+										</div>
+
+										<div class="form-check">
+											<input class="form-check-input" type="checkbox" value="250-30" id="categoryUav250-30" name="categoryUav">
+											<label class="form-check-label" for="flexCheckIndeterminate">
+												Режим S
+											</label>
+										</div>
+
+										<div class="form-check">
+											<input class="form-check-input" type="checkbox" value="30+" id="categoryUav30+" name="categoryUav">
+											<label class="form-check-label" for="flexCheckIndeterminate">
+												трекер ABR
+											</label>
+										</div>
+
+									</div>
+
+								</div>
+							</div>
+
+						</div>
+
+
+						<div class="row">
+							<h6 class="form-title">
+								Сведения о регистрации
+							</h6>
+							<div class="col-md-4">
+								<div class="form-row">
+									<div class="form-input">
+										<label class="input-label" for="statusRegister">Статус регистрации *</label>
+										<select class="form-select" aria-label="statusRegister">
+											<option selected>Не подлежит регистрации (для БВС с массой менее 250 г.</option>
+											<option value="1">Не зарегистрирован</option>
+											<option value="2">Заявка на согласовании</option>
+											<option value="3">Зарегистрирован</option>
+                      <option value="3">Заявка отклонена</option>
+                    	<option value="3">Изменение учетных данных</option>
+                    	<option value="3">Снят с регистрации</option>
+										</select>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-md-4">
+								<div class="form-row">
+									<div class="form-input">
+										<label class="input-label" for="categoryUav">Регистрационный номер *</label>
+										<input type="text" class="form-control" id="maxWeight" name="maxWeight">
+									</div>
+								</div>
+							</div>
+
+							<div class="col-md-4">
+								<div class="form-row">
+									<div class="form-input">
+                    				<span class="input-label">Загрузить уведомление</span>
+										<input type="file" name="file" id="file" class="uploadfile" />
+										<label for="file" class="uploadfile-text">Выберите файл</label>
+									</div>
+								</div>
+							</div>
+
+						</div>
+
+						<div class="row">
+
+							<div class="col-md-6">
+								<div class="form-row">
+									<div class="form-input">
+	<span class="input-label">Технический паспорт</span>
+										<input type="file" name="file" id="file" class="uploadfile" />
+										<label for="file" class="uploadfile-text">Выберите файл</label>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-md-6">
+								<div class="form-row">
+									<div class="form-input">
+										<label class="input-label" for="categoryUav">Фото БВС</label>
+
+										<input type="file" class="form-control" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04" aria-label="Upload">
+
+									</div>
+								</div>
+							</div>
+
+
+						</div>
+					</form>
+
+
+				</div>
+
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-outline" data-bs-dismiss="modal">Отмена</button>
+				<button type="button" class="btn btn-green">Сохранить</button>
+			</div>
+		</div>
+	</div>
 </div>

@@ -1,0 +1,1 @@
+(()=>{"use strict";$(document).ready((function(){$(".uploadfile").change((function(){$(".uploadfile-text").text(this.files[0].name)}))}))})();
