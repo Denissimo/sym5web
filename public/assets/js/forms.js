@@ -207,9 +207,11 @@ $(document).ready(function () {
       },
 
       error: function (response) {
+        console.log(response);
+        console.log(response.responseJSON);
         $('.alert_place').html(
             '<div class="alert alert-danger alert-dismissible fade show" role="alert">\n' +
-            '\t\t\t\t\tServer error\n' +
+            '\t\t\t\t\t' + response.responseJSON.message + '\n' +
             '\t\t\t\t\t<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>\n' +
             '\t\t\t\t</div>'
         );
