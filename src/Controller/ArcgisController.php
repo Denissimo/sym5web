@@ -15,7 +15,7 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Throwable;
 use Exception;
 
-class ContentController extends AbstractController
+class ArcgisController extends AbstractController
 {
     public function buildContent(Request $request, ContentLoader $contentLoader, $route)
     {

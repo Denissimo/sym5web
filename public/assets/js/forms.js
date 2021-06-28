@@ -173,7 +173,7 @@ $(document).ready(function () {
     console.log(legalRoles.length);
 
     var settings = {
-      url: "https://dev-api.airchannel.net/register/user",
+      url: "http://sym4swg/register/user",
       method: "POST",
       timeout: 0,
       headers: {
