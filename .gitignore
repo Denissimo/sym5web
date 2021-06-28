@@ -10,5 +10,7 @@
 /vendor/
 /_dev/
 /templates/.DS_Store
+public/proxy/proxy_log.log
+public/proxy/proxy.sqlite
 ###< symfony/framework-bundle ###
 #
