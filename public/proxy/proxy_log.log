@@ -2,3 +2,8 @@
  
 06-28-21 16:01:26 | GET detected
 06-28-21 16:01:26 | This proxy does not support empty parameters.
+ 
+06-28-21 18:35:30 | GET detected
+06-28-21 18:35:30 | ips table created!
+06-28-21 18:35:30 | clicks table created!
+06-28-21 18:35:30 | Can not determine if OAuth or ArcGIS Server means of authentication.  Check config for errors.
