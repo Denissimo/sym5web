@@ -137,8 +137,9 @@ $(document).ready(function () {
 
   // Remove cookie
   $("#logout").click(function (event) {
-    $.cookie("utmdata_token", null, { path: "/" });
-    console.log("coockie is die");
+    // $.cookie("utmdata_token", null, { path: "/" });
+    $.removeCookie('utmdata_token', { path: '/' });
+    console.log("utmdata_token");
     var url = "/login";
     $(location).prop("href", url);
   });
