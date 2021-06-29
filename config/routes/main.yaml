@@ -50,10 +50,10 @@ profile:
   path: /profile
   controller: App\Controller\ContentController::buildProfile
 
-content:
-  path: /{route}
-  controller: App\Controller\ContentController::buildContent
-  requirements:
-    route: '.*'
+#content:
+#  path: /{route}
+#  controller: App\Controller\ContentController::buildContent
+#  requirements:
+#    route: '.*'
 
 

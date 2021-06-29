@@ -1,59 +1,6 @@
-index:
-   path: /
-   controller: App\Controller\ContentController::buildAirSituation
 
-test:
-  path: /test
-  controller: App\Controller\ContentController::buildTest
-
-test.auth:
-  path: /test_auth
-  controller: App\Controller\ContentController::testAuth
-
-test.userdata:
-  path: /test_userdata
-  controller: App\Controller\ContentController::buildTestUserData
-
-login:
-  path: /login
-  controller: App\Controller\ContentController::buildLogin
-
-signup:
-  path: /signup
-  controller: App\Controller\ContentController::buildSignUp  
-
-# index:
-#   path: /index
-#   controller: App\Controller\ContentController::buildIndex
-
-airsituation:
-  path: /airsituation
-  controller: App\Controller\ContentController::buildAirSituation
-
-routes:
-  path: /tracks
-  controller: App\Controller\ContentController::buildTracks
-  
-flights:
-  path: /flights
-  controller: App\Controller\ContentController::buildFlights
-
-archive:
-  path: /archive
-  controller: App\Controller\ContentController::buildArchive
-
-uav:
-  path: /uav
-  controller: App\Controller\ContentController::buildUav
-
-profile:
-  path: /profile
-  controller: App\Controller\ContentController::buildProfile
-
-content:
-  path: /{route}
-  controller: App\Controller\ContentController::buildContent
-  requirements:
-    route: '.*'
+proxy:
+  path: /prox
+  controller: App\Controller\ArcgisController::buildProxy
 
 
