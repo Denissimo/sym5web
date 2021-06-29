@@ -372,7 +372,7 @@ var flagEdit;
          urlUtils.addProxyRule({
          urlPrefix: "https://tiles.qsupport.mts.ru",
           proxyUrl: "DotNet/proxy.ashx"
-          //DotNet/proxy.ashx" 
+          //DotNet/proxy.ashx"
         });
         //esriConfig.request.proxyUrl = "http://gallery.chn.esri.com/arcgis/sharing/proxy/resource-proxy-1.0/DotNet/proxy.ashx";
         esriConfig.request.proxyUrl = "DotNet/proxy.ashx";
