@@ -26,8 +26,12 @@
 
 		{# ESRI #}
 		<script src="https://js.arcgis.com/4.19/"></script>
-		<script src="../assets/js/esri-app-owner.js"></script>
-		<script src="../assets/js/esri-app-operator.js"></script>
+		{% if route == 'AirSituation' %}
+			<script src="../assets/js/esri-app-operator.js"></script>
+		{% else %}
+			<script src="../assets/js/esri-app-owner.js"></script>
+		{% endif %}
+
         
 	</head>
 
