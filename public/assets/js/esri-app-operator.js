@@ -1,10 +1,12 @@
 require(
     [
+
         "esri/WebScene",
         "esri/views/SceneView",
         "esri/widgets/Search",
         "esri/widgets/Expand",
-        "esri/widgets/BasemapGallery"
+        "esri/widgets/BasemapGallery",
+        "esri/widgets/BasemapToggle"
     ],
 
     function (
@@ -12,7 +14,8 @@ require(
         SceneView,
         Search,
         Expand,
-        BasemapGallery
+        BasemapGallery,
+        BasemapToggle
     ) {
         var token = $.cookie("utmdata_token");
         var apiUrl = 'https://dev-api.airchannel.net';
@@ -26,7 +29,6 @@ require(
         myApplications.then(function (response) {
             console.log(response);
         });
-
         const scene = new WebScene({
             portalItem: {
                 id: "4c4de937a5d148f18cfa76b23c873766",
@@ -39,6 +41,26 @@ require(
             container: "map-operator"
         });
 
+        // Quality settings of scene
+
+        const quality = document.querySelector('.quality-selector');
+        quality.addEventListener("change", function (event) {
+            changeQualityScene(this.value);
+        });
+
+        function changeQualityScene(param) {
+            if (param.toString() === "low") {
+                view.qualityProfile = "low";
+            }
+
+            if (param.toString() === "medium") {
+                view.qualityProfile = "medium";
+            }
+            if (param.toString() === "high") {
+                view.qualityProfile = "high";
+            }
+        }
+
         // Remove copyrights at bottom
         view.ui.remove("attribution");
 
@@ -48,7 +70,8 @@ require(
         });
 
         view.ui.add(searchWidget, {
-            position: "top-left"
+            position: "top-left",
+            index: 0
         });
 
         // Basemap gallery stack
@@ -71,9 +94,18 @@ require(
 
         });
 
-        view.ui.add(bgExpand, "top-right");
+        view.ui.add(bgExpand, {
+            position: "top-left",
+            index: 1
+        });
 
 
+        let bmToggleWidget = new BasemapToggle({
+            view: view,
+            nextBasemap: "hybrid"
+        });
+
+        view.ui.add(bmToggleWidget, "bottom-left");
     });
 
 function getApiData(url, path, token) {
@@ -102,7 +134,6 @@ function getApiData(url, path, token) {
         })
     );
 }
-
 
 
 
