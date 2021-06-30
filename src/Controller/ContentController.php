@@ -118,6 +118,7 @@ class ContentController extends AbstractController
         return $this->render('flights.html.twig', [
             'id' => 155,
             'route' => 'Flights',
+            'use_arcgis' => true
         ]);
     }
 
@@ -128,6 +129,7 @@ class ContentController extends AbstractController
         return $this->render('archive.html.twig', [
             'id' => 155,
             'route' => 'Archive',
+            'use_arcgis' => true
         ]);
     }
     public function buildTestUserData(Request $request, Client $client, string $tokenCookieName): Response
