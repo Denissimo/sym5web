@@ -128,8 +128,7 @@ class ContentController extends AbstractController
  
         return $this->render('archive.html.twig', [
             'id' => 155,
-            'route' => 'Archive',
-            'use_arcgis' => true
+            'route' => 'Archive'
         ]);
     }
     public function buildTestUserData(Request $request, Client $client, string $tokenCookieName): Response

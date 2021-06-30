@@ -22,6 +22,9 @@
     <script src="../assets/js/app.js"></script>
     <script src="../assets/js/forms.js"></script>
 
+    {% if use_arcgis is not defined %}
+        {% set use_arcgis = false %}
+    {% endif %}
 
     {% if use_arcgis %}
         {# ESRI #}
@@ -32,7 +35,3 @@
             <script src="../assets/js/esri-app-owner.js"></script>
         {% endif %}
     {% endif %}
-
-
-</head>
-<body>
