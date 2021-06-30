@@ -1,6 +1,6 @@
 $(document).ready(function () {
   var currentPath = new URL($(location).prop("href")).pathname;
-  if ($.cookie("utmdata_token") === undefined && currentPath !== '/login') {
+  if ($.cookie("utmdata_token") === undefined && currentPath !== '/login' && currentPath !== '/signup') {
     console.log(document.referrer.pathname);
     var url = "/login";
     $(location).prop("href", url);
@@ -26,7 +26,7 @@ $(document).ready(function () {
           console.log(refererPath);
         }
         var url;
-        if (refererPath !== undefined && refererPath !== '/login') {
+        if (refererPath !== undefined && refererPath !== '/login' && refererPath !== '/signup') {
           url = refererPath;
         } else {
           url = "/";

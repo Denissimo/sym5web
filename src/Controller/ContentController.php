@@ -22,6 +22,7 @@ class ContentController extends AbstractController
         return $this->render('main.html.twig', [
             'id' => 155,
             'route' => $route,
+            'use_arcgis' => false
         ]);
     }
 
@@ -30,6 +31,7 @@ class ContentController extends AbstractController
         return $this->render('login.html.twig', [
             'id' => 155,
             'route' => 'Login',
+            'use_arcgis' => false
         ]);
     }
 
@@ -38,6 +40,7 @@ class ContentController extends AbstractController
         return $this->render('signup.html.twig', [
             'id' => 155,
             'route' => 'SignUp',
+            'use_arcgis' => false
         ]);
     }
 
@@ -46,6 +49,7 @@ class ContentController extends AbstractController
         return $this->render('index.html.twig', [
             'id' => 155,
             'route' => 'Index',
+            'use_arcgis' => true
         ]);
     }
 
@@ -54,6 +58,7 @@ class ContentController extends AbstractController
         return $this->render('uav.html.twig', [
             'id' => 155,
             'route' => 'UAV',
+            'use_arcgis' => true
         ]);
     }
 
@@ -62,6 +67,7 @@ class ContentController extends AbstractController
         return $this->render('profile.html.twig', [
             'id' => 155,
             'route' => 'Profile',
+            'use_arcgis' => false
         ]);
     }
 
@@ -76,7 +82,8 @@ class ContentController extends AbstractController
         return $this->render('base.html.twig', [
             'message' => '',
             'code' => '',
-            'data' => $name
+            'data' => $name,
+            'use_arcgis' => false
         ]);
     }
 
@@ -93,6 +100,7 @@ class ContentController extends AbstractController
         return $this->render('airsituation.html.twig', [
             'id' => 155,
             'route' => 'AirSituation',
+            'use_arcgis' => true
         ]);
     }
 
@@ -101,6 +109,7 @@ class ContentController extends AbstractController
         return $this->render('tracks.html.twig', [
             'id' => 155,
             'route' => 'Tracks',
+            'use_arcgis' => true
         ]);
     }
 
@@ -184,7 +193,8 @@ class ContentController extends AbstractController
         $response = $this->render(
             'token.html.twig',
             [
-                'token' => $result->token
+                'token' => $result->token,
+                'use_arcgis' => false
             ]
         );
 
@@ -209,6 +219,7 @@ class ContentController extends AbstractController
         return $this->render('main.html.twig', [
             'id' => 155,
             'number' => $route,
+            'use_arcgis' => false
 //            'carouselUnits' => $carousel->getCarouselUnits()
         ]);
     }

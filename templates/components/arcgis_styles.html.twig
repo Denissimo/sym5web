@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<meta charset="UTF-8">
+<title>ABR AIRCHANNEL UTM</title>
+{# <link rel="stylesheet" href="{{ asset('assets/css/esri_main.css') }}"/> #}
+<link rel="stylesheet" href="https://js.arcgis.com/4.17/esri/themes/light/main.css"/>
+<link href="{{ asset('assets/css/bootstrap.min.css') }}" rel="stylesheet">
+<link href="{{ asset('assets/css/app.css') }}" rel="stylesheet">
+
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/images/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/images/favicon-16x16.png">
+{# <link rel="manifest" href="/site.webmanifest"> #}
+
+<script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}"></script>
+<script src="{{ asset('assets/js/jquery.min.js') }}"></script>
+<script src="{{ asset('assets/js/jquery.cookie.js') }}"></script>
+{# <script src="{{ asset('assets/js/app.js') }}"></script> #}
+{# <script src="{{ asset('assets/js/forms.js') }}"></script> #}
+{% if use_arcgis %}
+    {# <script src="{{ asset('assets/js/dojo.js') }}"></script> #}
+    <script src="https://js.arcgis.com/4.17/"></script>
+
+    {# ESRI #}
+    {% if route == 'Operator' %}
+        <script src="{{ asset('assets/js/esri_operator.js') }}"></script>
+    {% endif %}
+{% endif %}
+<body>
