@@ -1,21 +1,15 @@
-     {% block styles %}
-            {% include('header.html.twig') %}
-     {% endblock %}
+{% block styles %}
+    {% include('header.html.twig') %}
+{% endblock %}
 
      {% block header %}
-            {% include('nav.html.twig') %}
+         {% include('nav.html.twig') %}
      {% endblock %}
 
+<div class="page">
 
-        <div class="page-content"> 
-
-              <div class="page-map-container">
-                     <div class="page-map-content" id="map-owner">
-              </div>
-
+    <div class="page-map">
+        <div class="page-map-content" id="map-owner">
         </div>
 
-
-    {% block footer %}
-            {% include('footer.html.twig') %}
-    {% endblock %}
+    </div>
