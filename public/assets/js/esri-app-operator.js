@@ -20,15 +20,35 @@ require(
         var token = $.cookie("utmdata_token");
         var apiUrl = 'https://dev-api.airchannel.net';
 
-        var myApplications = getApiData(
+        // пример получения данных из API
+        var allApplications = apiData(
             apiUrl,
-            '/my/data/applications',
+            '/application/interval/20210604000000/20210615000000',
             token
         );
 
-        myApplications.then(function (response) {
+        allApplications.then(function (response) {
             console.log(response);
         });
+
+        // пример изменения данных в API
+        /*
+        var setAircraft = apiData(
+            apiUrl,
+            '/aircraft/a6ed6021-c495-4aba-b3bf-f234ebcaf4ae',
+            token,
+            'PUT',
+            {
+                "category": 3,
+                "mass": 2
+            }
+        );
+
+        setAircraft.then(function (response) {
+            console.log(response);
+        });
+        */
+        
         const scene = new WebScene({
             portalItem: {
                 id: "4c4de937a5d148f18cfa76b23c873766",
@@ -108,11 +128,13 @@ require(
         view.ui.add(bmToggleWidget, "bottom-left");
     });
 
-function getApiData(url, path, token) {
+function apiData(url, path, token, method = 'GET', data = null) {
     var settings = {
         url: url + path,
-        method: "GET",
+        method: method,
         timeout: 0,
+        dataType: "json",
+        data: JSON.stringify(data),
         headers: {
             "Content-Type": "application/json",
             Authorization: "Bearer " + token,
@@ -134,9 +156,3 @@ function getApiData(url, path, token) {
         })
     );
 }
-
-
-
-
-
-
