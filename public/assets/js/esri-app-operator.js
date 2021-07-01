@@ -56,7 +56,7 @@ require(
             console.log(response);
         });
         */
-        
+
         const scene = new WebScene({
             portalItem: {
                 id: "4c4de937a5d148f18cfa76b23c873766",
@@ -135,9 +135,9 @@ require(
 
         view.ui.add(bmToggleWidget, "bottom-left");
         
-        addMobail(WebTileLayer,GroupLayer,esriConfig,scene);
-        addReal(FeatureLayer,scene);  
-       
+        // addMobail(WebTileLayer,GroupLayer,scene);
+        // addReal(FeatureLayer,scene);
+
     });
 
     function addMobail(WebTileLayer,GroupLayer,esriConfig,scene){

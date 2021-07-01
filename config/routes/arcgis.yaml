@@ -1,6 +1,29 @@
+index:
+  path: /
+  controller: App\Controller\ArcgisController::buildAirSituation
+
+airsituation:
+  path: /airsituation
+  controller: App\Controller\ArcgisController::buildAirSituation
+
+routes:
+  path: /tracks
+  controller: App\Controller\ArcgisController::buildTracks
+
+flights:
+  path: /flights
+  controller: App\Controller\ArcgisController::buildFlights
+
+archive:
+  path: /archive
+  controller: App\Controller\ArcgisController::buildArchive
 
 proxy:
   path: /prox
   controller: App\Controller\ArcgisController::buildProxy
+
+arcgis_js:
+  path: /javascript/arcgis
+  controller: App\Controller\ArcgisController::buildCommonJs
 
 

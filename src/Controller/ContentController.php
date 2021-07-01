@@ -87,50 +87,6 @@ class ContentController extends AbstractController
         ]);
     }
 
-    public function buildAirSituation(Request $request, ContentLoader $contentLoader, string $tokenCookieName)
-    {
-        $cookieChecker = $request->cookies->get($tokenCookieName);
-        // var_dump ($cookieChecker);
-        // die;
-
-        if (!$cookieChecker) {
-            return $this->redirectToRoute('login');
-        }
-
-        return $this->render('airsituation.html.twig', [
-            'id' => 155,
-            'route' => 'AirSituation',
-            'use_arcgis' => true
-        ]);
-    }
-
-    public function buildTracks(Request $request, ContentLoader $contentLoader)
-    {
-        return $this->render('tracks.html.twig', [
-            'id' => 155,
-            'route' => 'Tracks',
-            'use_arcgis' => true
-        ]);
-    }
-
-    public function buildFlights(Request $request, ContentLoader $contentLoader)
-    {
-        return $this->render('flights.html.twig', [
-            'id' => 155,
-            'route' => 'Flights',
-            'use_arcgis' => true
-        ]);
-    }
-
-
-    public function buildArchive(Request $request, ContentLoader $contentLoader)
-    {
- 
-        return $this->render('archive.html.twig', [
-            'id' => 155,
-            'route' => 'Archive'
-        ]);
-    }
     public function buildTestUserData(Request $request, Client $client, string $tokenCookieName): Response
     {
         return $this->requestAuthorized($request, $client, $tokenCookieName, '/my/userdata');
