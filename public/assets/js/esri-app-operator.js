@@ -9,7 +9,10 @@ require(
         "esri/widgets/Search",
         "esri/widgets/Expand",
         "esri/widgets/BasemapGallery",
-        "esri/widgets/BasemapToggle"
+        "esri/widgets/BasemapToggle",
+        "esri/widgets/LayerList",
+        "esri/widgets/Locate"
+
     ],
 
     function (
@@ -23,7 +26,10 @@ require(
         Search,
         Expand,
         BasemapGallery,
-        BasemapToggle
+        BasemapToggle,
+        LayerList,
+        Locate
+
     ) {
         var token = $.cookie("utmdata_token");
         var apiUrl = 'https://dev-api.airchannel.net';
@@ -70,7 +76,6 @@ require(
         });
 
         // Quality settings of scene
-
         const quality = document.querySelector('.quality-selector');
         quality.addEventListener("change", function (event) {
             changeQualityScene(this.value);
@@ -88,6 +93,8 @@ require(
                 view.qualityProfile = "high";
             }
         }
+
+
 
         // Remove copyrights at bottom
         view.ui.remove("attribution");
@@ -128,13 +135,21 @@ require(
         });
 
 
-        let bmToggleWidget = new BasemapToggle({
+        // Layer list of obstacles + expand menu
+        const layerList = new LayerList({
+              view: view
+        });
+            
+        const bgExpandLayerList = new Expand({
             view: view,
-            nextBasemap: "hybrid"
+            content: layerList
         });
 
-        view.ui.add(bmToggleWidget, "bottom-left");
-        
+        view.ui.add(bgExpandLayerList, {
+            position: "top-left",
+            index: 1
+        });
+
         // addMobail(WebTileLayer,GroupLayer,scene);
         // addReal(FeatureLayer,scene);
 
