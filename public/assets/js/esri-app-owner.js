@@ -38,7 +38,6 @@ import {changeExtent,queryRoad} from './sub/app-owner-view.js';
 /*export*/ var prohLayer;
 /*export*/ var selectLayer;
 
-
 /*export*/ var markerSymbol;
 /*export*/ var markerSymbol2;
 /*export*/ var lineSymbol;
@@ -364,11 +363,11 @@ var flagEdit;
 
          urlUtils.addProxyRule({
          urlPrefix: "https://tiles.qsupport.mts.ru",
-          proxyUrl: "DotNet/proxy.ashx"
+          proxyUrl: "proxy/proxy.php"
           //DotNet/proxy.ashx"
         });
         //esriConfig.request.proxyUrl = "http://gallery.chn.esri.com/arcgis/sharing/proxy/resource-proxy-1.0/DotNet/proxy.ashx";
-        esriConfig.request.proxyUrl = "DotNet/proxy.ashx";
+        esriConfig.request.proxyUrl = "proxy/proxy.php";
          layerManual = new GraphicsLayer(); //слой графики для скетча
       
     //************************************************************************************
@@ -881,33 +880,34 @@ var templatePunkts = {
    let tele2 =new GroupLayer();
        tele2.title="Tele2"
    var tele2g= new WebTileLayer({urlTemplate:'https://new-msk.tele2.ru/maps/_2g/{level}/{col}/{row}.png',title: "TELE2_2G",  visible :false });
-   var tele3g= new WebTileLayer({urlTemplate:'https://new-msk.tele2.ru/maps/_3g//{level}/{col}/{row}',title: "TELE2_3G",  visible :false });
-   var telelte= new WebTileLayer({urlTemplate:'https://new-msk.tele2.ru/maps/_4g//{level}/{col}/{row}',title: "TELE2_LTE",  visible :false });
+   var tele3g= new WebTileLayer({urlTemplate:'https://new-msk.tele2.ru/maps/_3g/{level}/{col}/{row}.png',title: "TELE2_3G",  visible :false });
+   var telelte= new WebTileLayer({urlTemplate:'https://new-msk.tele2.ru/maps/_4g/{level}/{col}/{row}.png',title: "TELE2_LTE",  visible :false });
    tele2.layers.add(tele2g);tele2.layers.add(tele3g);tele2.layers.add(telelte); grpMobail.layers.add(tele2);
    
    let mts   =new GroupLayer();
        mts.title="MTS"
    var mts2g= new WebTileLayer({urlTemplate:'https://tiles.qsupport.mts.ru/g2_New/{level}/{col}/{row}',title: "MTS_2G",  visible :false });
    var mts3g= new WebTileLayer({urlTemplate:'https://tiles.qsupport.mts.ru/g3_New/{level}/{col}/{row}',title: "MTS_3G",  visible :false });
-   var mtslte= new WebTileLayer({urlTemplate:'https://tiles.qsupport.mts.ru/glte_New/{level}/{col}/{row}',title: "MTS_LTE",  visible :false });
+   var mtslte= new WebTileLayer({urlTemplate:'https://tiles.qsupport.mts.ru/lte_New/{level}/{col}/{row}',title: "MTS_LTE",  visible :false });
    mts.layers.add(mts2g);mts.layers.add(mts3g);mts.layers.add(mtslte); grpMobail.layers.add(mts)
  
 
    let megafon =new GroupLayer();
    megafon.title="Megafon"
-   var megafon2g= new WebTileLayer({urlTemplate:'https://coverage-map.megafon.ru/{level}/{col}/{row}.png?layers=2g',title: "Megafon_2G",  visible :false });
-   var megafon3g= new WebTileLayer({urlTemplate:'https://coverage-map.megafon.ru/{level}/{col}/{row}.png?layers=3g',title: "Megafon_3G",  visible :false });
-   var megafonlte= new WebTileLayer({urlTemplate:'https://coverage-map.megafon.ru/{level}/{col}/{row}.png?layers=lte',title: "Megafon_LTE",  visible :false });
-   var megafonltep= new WebTileLayer({urlTemplate:'https://coverage-map.megafon.ru/{level}/{col}/{row}.png?layers=lte_plus',title: "Megafon_LTE+",  visible :false });
-
+   var megafon2g= new WebTileLayer({urlTemplate:'https://coverage-map.megafon.ru/{level}/{col}/{row}.png?layers=2g',title: "Megafon_2G",  visible :false});// ,spatialReference: { wkid: 3395 } });
+   var megafon3g= new WebTileLayer({urlTemplate:'https://coverage-map.megafon.ru/{level}/{col}/{row}.png?layers=3g',title: "Megafon_3G",  visible :false});// , spatialReference: { wkid: 3395 }});
+   var megafonlte= new WebTileLayer({urlTemplate:'https://coverage-map.megafon.ru/{level}/{col}/{row}.png?layers=lte',title: "Megafon_LTE",  visible :false});// , spatialReference: { wkid: 3395 }});
+   var megafonltep= new WebTileLayer({urlTemplate:'https://coverage-map.megafon.ru/{level}/{col}/{row}.png?layers=lte_plus',title: "Megafon_LTE+",  visible :false});// , spatialReference: { wkid: 3395 }});
+   
+   console.log(megafon3g.spatialReference.wkid);
    megafon.layers.add(megafon2g);megafon.layers.add(megafon3g);megafon.layers.add(megafonlte);megafon.layers.add(megafonltep); grpMobail.layers.add(megafon)
   
    let beeline =new GroupLayer();
    
    beeline.title="Beeline"
    var beeline2g= new WebTileLayer({urlTemplate:'https://static.beeline.ru/upload/tiles/2G/current/{level}/{col}/{row}.png',title: "Beeline_2G",  visible :false });
-   var beeline3g= new WebTileLayer({urlTemplate:'https://static.beeline.ru/upload/tiles/3G/current//{level}/{col}/{row}',title: "Beeline_3G",  visible :false });
-   var beelinelte= new WebTileLayer({urlTemplate:'https://static.beeline.ru/upload/tiles/4G/current//{level}/{col}/{row}',title: "Beeline_LTE",  visible :false });
+   var beeline3g= new WebTileLayer({urlTemplate:'https://static.beeline.ru/upload/tiles/3G/current/{level}/{col}/{row}.png',title: "Beeline_3G",  visible :false });
+   var beelinelte= new WebTileLayer({urlTemplate:'https://static.beeline.ru/upload/tiles/4G/current/{level}/{col}/{row}.png',title: "Beeline_LTE",  visible :false });
    beeline.layers.add(beeline2g);beeline.layers.add(beeline3g);beeline.layers.add(beelinelte); grpMobail.layers.add(beeline)
 
 
@@ -1082,10 +1082,11 @@ placeholder :"example : {ULD10}"});
      //Фильтр траекторий по  ID клиента
      /*export*/  function buildDefinitionQuery() {
           
-          var ownerId= document.getElementById("ownerid").value;
+         // var ownerId= document.getElementById("ownerid").value;
           
           
-          var defQuery= "ownerid = '"+ownerId+"'" ;
+          //var defQuery= "ownerid = '"+ownerId+"'" ;
+          defQuery="";
           return defQuery;
         }
 
