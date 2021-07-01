@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use App\Service\Client;
 
 class ArcgisController extends AbstractController
 {
@@ -58,9 +59,18 @@ class ArcgisController extends AbstractController
         ]);
     }
 
-    public function buildCommonJs(Request $request)
+    public function buildCommonJs(Request $request, Client $client, string $tokenCookieName)
     {
-        return $this->render('js/scripr.html.twig', [
+        $token = $request->cookies->get($tokenCookieName);
+        $userData = $client->sendJson(
+            '/my/userdata',
+            null,
+            'GET',
+            ['Authorization' => sprintf('Bearer %s', $token)]
+        );
+
+        return $this->render('js/script.html.twig', [
+            'user' => $userData->user,
             'use_arcgis' => false
         ]);
     }
