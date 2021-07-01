@@ -57,4 +57,11 @@ class ArcgisController extends AbstractController
             'route' => 'Archive'
         ]);
     }
+
+    public function buildCommonJs(Request $request)
+    {
+        return $this->render('js/scripr.html.twig', [
+            'use_arcgis' => false
+        ]);
+    }
 }
