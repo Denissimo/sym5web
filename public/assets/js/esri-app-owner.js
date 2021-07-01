@@ -888,7 +888,7 @@ var templatePunkts = {
        mts.title="MTS"
    var mts2g= new WebTileLayer({urlTemplate:'https://tiles.qsupport.mts.ru/g2_New/{level}/{col}/{row}',title: "MTS_2G",  visible :false });
    var mts3g= new WebTileLayer({urlTemplate:'https://tiles.qsupport.mts.ru/g3_New/{level}/{col}/{row}',title: "MTS_3G",  visible :false });
-   var mtslte= new WebTileLayer({urlTemplate:'https://tiles.qsupport.mts.ru/glte_New/{level}/{col}/{row}',title: "MTS_LTE",  visible :false });
+   var mtslte= new WebTileLayer({urlTemplate:'https://tiles.qsupport.mts.ru/lte_New/{level}/{col}/{row}',title: "MTS_LTE",  visible :false });
    mts.layers.add(mts2g);mts.layers.add(mts3g);mts.layers.add(mtslte); grpMobail.layers.add(mts)
  
 
