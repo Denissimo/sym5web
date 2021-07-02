@@ -81,10 +81,14 @@ class ArcgisController extends AbstractController
             ['Authorization' => sprintf('Bearer %s', $token)]
         );
 
-        return $this->render('js/script.html.twig', [
+        $response = $this->render('js/script.html.twig', [
             'user' => $userData->user,
             'route' => $route,
             'use_arcgis' => false
         ]);
+
+        $response->headers->set('Content-Type', 'text/plain');
+
+        return $response;
     }
 }
