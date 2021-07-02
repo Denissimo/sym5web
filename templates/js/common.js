@@ -1,3 +1,4 @@
+ 
 require(
     [   "esri/config", //dv
         "esri/layers/WebTileLayer", //dv
@@ -5,8 +6,12 @@ require(
         "esri/layers/FeatureLayer" ,//dv
         "esri/layers/support/LabelClass",//dv
 
-        "esri/WebScene",
+        
+        "esri/views/MapView",
         "esri/views/SceneView",
+        "esri/WebMap",
+        "esri/WebScene",
+        
         "esri/widgets/Search",
         "esri/widgets/Expand",
         "esri/widgets/BasemapGallery",
@@ -20,17 +25,27 @@ require(
         FeatureLayer, //dv
         LabelClass,//dv
    
-        WebScene,
+        
+        MapView,
         SceneView,
+        WebMap,
+        WebScene,
         Search,
         Expand,
         BasemapGallery,
         BasemapToggle
     ) {
+        var view;
+        var scene;
         var token = $.cookie("utmdata_token");
         var apiUrl = 'https://dev-api.airchannel.net';
         var roles = JSON.parse('{{ user.user.roles|json_encode() }}');
+        var user = JSON.parse('{{ user|json_encode() }}');
+        var route = '{{ route }}';
+
+        console.log(route);
         console.log(roles);
+        console.log(user); 
 
         // пример получения данных из API
         var allApplications = apiData(
@@ -60,21 +75,44 @@ require(
             console.log(response);
         });
         */
-
-        const scene = new WebScene({
+        
+        if(checkRoleRoute("ROLE_OPERATOR",roles))
+        {
+            
+            scene = new WebScene({
             portalItem: {
                 id: "4c4de937a5d148f18cfa76b23c873766",
                 portal: "https://abr-gis-portal.airchannel.net/portal"
             },
         });
-
-        const view = new SceneView({
+        
+           view = new SceneView({
             map: scene,
             container: "map-operator"
         });
+       }
+       else  if(checkRoleRoute("ROLE_OWNER",roles))
+        {
+            
+            scene = new WebMap({
+               portalItem: {
+                  id:  "4e1ce0dd127c4cadabd554b808d059b4",
+                  portal: "https://abr-gis-portal.airchannel.net/portal"
+                       },
+                ground : "world-elevation"  
+                
+              });
+        
+            view = new MapView({
+            map: scene,
+            spatialReference : {wkid :3857},
+            container: "map-operator"
+             }); 
+        }
 
+        
         // Quality settings of scene
-
+ 
         const quality = document.querySelector('.quality-selector');
         quality.addEventListener("change", function (event) {
             changeQualityScene(this.value);
@@ -139,17 +177,17 @@ require(
 
         view.ui.add(bmToggleWidget, "bottom-left");
         
-        if(checkRole("ROLE_OPERATOR",roles))
+        if(checkRoleRoute("ROLE_OPERATOR",roles))
              addReal(FeatureLayer,LabelClass,scene);
         // addMobail(WebTileLayer,GroupLayer,scene);
          
        
     });
 
-    function checkRole(role,roles)
+    function checkRoleRoute(role,roles)
     {
         for (let i=0; i<roles.length; i++) 
-          if(roles[i]==role) return true;
+          if(roles[i]===role) return true;
         return false;    
     }
    

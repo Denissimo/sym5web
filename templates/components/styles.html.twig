@@ -26,9 +26,10 @@
     {% if use_arcgis %}
         {# ESRI #}
         <script src="https://js.arcgis.com/4.19/"></script>
+        <script src="/javascript/arcgis/?route={{ route }}"></script>
         {% if route == 'AirSituation' %}
-            <script src="/javascript/arcgis"></script>
+{#            <script src="/javascript/arcgis"></script>#}
         {% else %}
-            <script src="../assets/js/esri-app-owner.js"></script>
+{#            <script src="../assets/js/esri-app-owner.js"></script>#}
         {% endif %}
     {% endif %}
