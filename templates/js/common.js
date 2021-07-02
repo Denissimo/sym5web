@@ -30,6 +30,9 @@ require(
         var token = $.cookie("utmdata_token");
         var apiUrl = 'https://dev-api.airchannel.net';
         var roles = JSON.parse('{{ user.user.roles|json_encode() }}');
+        var route = '{{ route }}';
+
+        console.log(route);
         console.log(roles);
 
         // пример получения данных из API
@@ -149,7 +152,7 @@ require(
     function checkRole(role,roles)
     {
         for (let i=0; i<roles.length; i++) 
-          if(roles[i]==role) return true;
+          if(roles[i]===role) return true;
         return false;    
     }
    
