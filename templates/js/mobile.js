@@ -22,7 +22,7 @@ function addMobail(WebTileLayer,GroupLayer,scene){
     megafon.title="Megafon"
     var megafon2g= new WebTileLayer({urlTemplate:'https://coverage-map.megafon.ru/{level}/{col}/{row}.png?layers=2g',title: "Megafon_2G",  visible :false ,maxScale : 300000});
     var megafon3g= new WebTileLayer({urlTemplate:'https://coverage-map.megafon.ru/{level}/{col}/{row}.png?layers=3g',title: "Megafon_3G",  visible :false ,maxScale : 300000});
-    var megafonlte= new WebTileLayer({urlTemplate:'https://coverage-map.megafon.ru/{level}/{col}/{row}.png?layers=lte',title: "Megafon_LTE",  visible :true ,mingitScale : 300000});
+    var megafonlte= new WebTileLayer({urlTemplate:'https://coverage-map.megafon.ru/{level}/{col}/{row}.png?layers=lte',title: "Megafon_LTE",  visible :false ,mingitScale : 300000});
     var megafonltep= new WebTileLayer({urlTemplate:'https://coverage-map.megafon.ru/{level}/{col}/{row}.png?layers=lte_plus',title: "Megafon_LTE+",  visible :false,maxScale : 300000 });
 
     megafon.layers.add(megafon2g);megafon.layers.add(megafon3g);megafon.layers.add(megafonlte);megafon.layers.add(megafonltep); grpMobail.layers.add(megafon)
