@@ -23,7 +23,7 @@ proxy:
   controller: App\Controller\ArcgisController::buildProxy
 
 arcgis_js:
-  path: /javascript/arcgis
+  path: /javascript/arcgis.js
   controller: App\Controller\ArcgisController::buildCommonJs
 
 
