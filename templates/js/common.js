@@ -27,6 +27,8 @@ require(
     ) {
         var token = $.cookie("utmdata_token");
         var apiUrl = 'https://dev-api.airchannel.net';
+        var roles = JSON.parse('{{ user.user.roles|json_encode() }}');
+        console.log(roles);
 
         // пример получения данных из API
         var allApplications = apiData(
