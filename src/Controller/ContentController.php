@@ -58,7 +58,7 @@ class ContentController extends AbstractController
         return $this->render('uav.html.twig', [
             'id' => 155,
             'route' => 'UAV',
-            'use_arcgis' => true
+            'use_arcgis' => false
         ]);
     }
 

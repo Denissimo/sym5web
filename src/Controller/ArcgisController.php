@@ -65,7 +65,8 @@ class ArcgisController extends AbstractController
 
         return $this->render('archive.html.twig', [
             'id' => 155,
-            'route' => 'Archive'
+            'route' => 'Archive',
+            'use_arcgis' => true
         ]);
     }
 
