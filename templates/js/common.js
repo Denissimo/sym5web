@@ -3,7 +3,8 @@ require(
         "esri/layers/WebTileLayer", //dv
         "esri/layers/GroupLayer", //dv
         "esri/layers/FeatureLayer" ,//dv
-        
+        "esri/layers/support/LabelClass",//dv
+
         "esri/WebScene",
         "esri/views/SceneView",
         "esri/widgets/Search",
@@ -17,7 +18,8 @@ require(
         WebTileLayer, //dv
         GroupLayer,   //dv
         FeatureLayer, //dv
-
+        LabelClass,//dv
+   
         WebScene,
         SceneView,
         Search,
@@ -137,15 +139,18 @@ require(
 
         view.ui.add(bmToggleWidget, "bottom-left");
         
+        if(checkRole("ROLE_OPERATOR",roles))
+             addReal(FeatureLayer,LabelClass,scene);
         // addMobail(WebTileLayer,GroupLayer,scene);
-        // addReal(FeatureLayer,scene);
+         
        
     });
 
-    function addReal(FeatureLayer,scene){
-        var realLayer = new FeatureLayer({
-           url: "https://abr-gis-server.airchannel.net/airchannel/rest/services/Hosted/TruckLastBJTime/FeatureServer",
-       });
-       scene.layers.add(realLayer);
-   }    
+    function checkRole(role,roles)
+    {
+        for (let i=0; i<roles.length; i++) 
+          if(roles[i]==role) return true;
+        return false;    
+    }
+   
 
