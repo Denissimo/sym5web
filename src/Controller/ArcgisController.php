@@ -8,6 +8,8 @@ use App\Service\Client;
 
 class ArcgisController extends AbstractController
 {
+    public const DEFAULT_ROUTE = 'AirSituation';
+
     public function buildProxy(Request $request)
     {
             return $this->redirectToRoute('login');
@@ -31,8 +33,16 @@ class ArcgisController extends AbstractController
         ]);
     }
 
-    public function buildTracks(Request $request)
+    public function buildTracks(Request $request, string $tokenCookieName)
     {
+        $cookieChecker = $request->cookies->get($tokenCookieName);
+        // var_dump ($cookieChecker);
+        // die;
+
+        if (!$cookieChecker) {
+            return $this->redirectToRoute('login');
+        }
+
         return $this->render('tracks.html.twig', [
             'id' => 155,
             'route' => 'Tracks',
@@ -61,6 +71,7 @@ class ArcgisController extends AbstractController
 
     public function buildCommonJs(Request $request, Client $client, string $tokenCookieName)
     {
+        $route = $request->query->get('route') ?? self::DEFAULT_ROUTE;
         $token = $request->cookies->get($tokenCookieName);
         $userData = $client->sendJson(
             '/my/userdata',
@@ -71,6 +82,7 @@ class ArcgisController extends AbstractController
 
         return $this->render('js/script.html.twig', [
             'user' => $userData->user,
+            'route' => $route,
             'use_arcgis' => false
         ]);
     }
