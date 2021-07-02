@@ -6,6 +6,40 @@ $(document).ready(function () {
     $(location).prop("href", url);
   }
 
+
+  $("#takeoffMass").blur(function () {
+    var mass = parseFloat($(this).val());
+    console.log(mass);
+    // $('.mass_category_label').hide('explode');
+    $('.mass_category_label').each(function(i,elem) {
+      massMin = parseFloat($(this).attr('data-mass-min') ?? 0);
+      massMax = parseFloat($(this).attr('data-mass-max') ?? 10000000);
+      massId = $(this).attr('data-mass-id');
+      if (isNaN(massMin)) {
+        massMin = 0;
+      }
+
+      if (isNaN(massMax)) {
+        massMax = 100000000;
+      }
+
+      $(this).addClass('label_invisible');
+      if (mass >= massMin && mass < massMax) {
+        $("#mass").val(massId);
+        $(this).removeClass('label_invisible');
+      }
+
+      console.log(massMin + ' >>> ' +  massMax);
+      // if ($(this).hasClass("stop")) {
+      //   alert("Остановлено на " + i + "-м пункте списка.");
+      //   return false;
+      // } else {
+      //   alert(i + ': ' + $(elem).text());
+      // }
+    });
+      console.log('blur');
+  });
+
   $("#form-login").submit(function (event) {
     var settings = {
       url: "https://dev-auth.airchannel.net/api/login_check",
@@ -242,7 +276,5 @@ $(document).ready(function () {
       console.log(response);
       return response;
     });
-
-
   });
 });

@@ -53,10 +53,27 @@ class ContentController extends AbstractController
         ]);
     }
 
-    public function buildUav(Request $request, ContentLoader $contentLoader)
+    public function buildUav(Request $request, Client $client)
     {
+        $aircraftCategory = $this->requestUnauthorized(
+            $client,
+            '/classifiers/aircraft_category/'
+        );
+
+        $aircraftEngine = $this->requestUnauthorized(
+            $client,
+            '/classifiers/aircraft_engine/'
+        );
+
+        $aircraftMass = $this->requestUnauthorized(
+            $client,
+            '/classifiers/aircraft_mass/'
+        );
+
         return $this->render('uav.html.twig', [
-            'id' => 155,
+            'category' => $aircraftCategory->category,
+            'engine' => $aircraftEngine->engine,
+            'mass' => $aircraftMass->mass,
             'route' => 'UAV',
             'use_arcgis' => false
         ]);
@@ -123,6 +140,31 @@ class ContentController extends AbstractController
 
         } catch (AccessDeniedException $e) {
 //            return $this->redirectToRoute('login');
+
+            return $this->buildError($e);
+        } catch (BadRequestHttpException $e) {
+
+            return $this->buildError($e);
+        } catch (Exception $e) {
+
+            return $this->buildError($e);
+        }
+    }
+
+    private function requestUnauthorized(
+        Client $client,
+        $path,
+        $json = null,
+        $method = 'GET'
+    )
+    {
+        try {
+            return  $client->sendJson(
+                $path,
+                $json,
+                $method
+            );
+        } catch (AccessDeniedException $e) {
 
             return $this->buildError($e);
         } catch (BadRequestHttpException $e) {

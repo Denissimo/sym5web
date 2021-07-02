@@ -5,9 +5,11 @@
 
     <meta charset="UTF-8">
     <title>ABR AIRCHANNEL UTM</title>
-    <link href="https://js.arcgis.com/4.17/esri/themes/light/main.css"/ rel="stylesheet" >
-    <link href="/assets/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="/assets/css/app.css" rel="stylesheet" />
+    {% if use_arcgis %}
+        <link href="https://js.arcgis.com/4.17/esri/themes/light/main.css" rel="stylesheet">
+    {% endif %}
+    <link href="/assets/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="/assets/css/app.css" rel="stylesheet"/>
 
     <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon-32x32.png">
@@ -28,8 +30,8 @@
         <script src="https://js.arcgis.com/4.19/"></script>
         <script src="/javascript/arcgis.js?route={{ route }}"></script>
         {% if route == 'AirSituation' %}
-{#            <script src="/javascript/arcgis"></script>#}
+            {# <script src="/javascript/arcgis"></script> #}
         {% else %}
-{#            <script src="../assets/js/esri-app-owner.js"></script>#}
+            {# <script src="../assets/js/esri-app-owner.js"></script> #}
         {% endif %}
     {% endif %}

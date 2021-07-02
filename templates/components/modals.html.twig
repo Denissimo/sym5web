@@ -99,8 +99,8 @@
 							<div class="col-md-6">
 								<div class="form-row">
 									<div class="form-input">
-										<label class="input-label" for="maxWeight">Максимальная взлетная масса, кг</label>
-										<input type="text" class="form-control" id="maxWeight" name="maxWeight">
+										<label class="input-label" for="takeoffMass">Максимальная взлетная масса, кг</label>
+										<input type="text" class="form-control" id="takeoffMass" name="takeoffMass">
 									</div>
 								</div>
 							</div>
@@ -112,31 +112,12 @@
 										<label class="input-label" for="maxWeight">Категория БВС (Масса)</label>
 									</div>
 
-
-									<div class="form-check-group">
-
-										<div class="form-check">
-											<input class="form-check-input" type="radio" name="exampleRadios" id="categoryUav250" value="250" checked>
-											<label class="form-check-label" for="exampleRadios1">
-												До 250 г.
-											</label>
-										</div>
-
-										<div class="form-check">
-											<input class="form-check-input" type="radio" name="exampleRadios" id="categoryUav250-30" value="250-30">
-											<label class="form-check-label" for="exampleRadios1">
-												от 250 г. до 30 кг.
-											</label>
-										</div>
-
-										<div class="form-check">
-											<input class="form-check-input" type="radio" name="exampleRadios" id="categoryUav30+" value="30+">
-											<label class="form-check-label" for="exampleRadios1">
-												свыше 30 кг.
-											</label>
-										</div>
-
+									{% for mass in mass %}
+									<div class="label_invisible mass_category_label mt-2" data-mass-id="{{ mass.id }}" data-mass-min="{{ mass.massMin }}" data-mass-max="{{ mass.massMax }}" id="labelMass{{ mass.id }}">
+										{{ mass.name }}
 									</div>
+									{% endfor %}
+									<input type="hidden" name="mass" id="mass" value="">
 								</div>
 							</div>
 						</div>
