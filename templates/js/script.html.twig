@@ -13,9 +13,11 @@
         {% if role == 'ROLE_OPERATOR' %}
             {% include('js/role_operator.js') %}
             {% include('js/real.js') %}
+            {% include('js/appendLayer3D.js') %}
         {% endif %}
         {% if role == 'ROLE_OWNER' %}
             {% include('js/role_owner.js') %}
+            {% include('js/appendLayer2D.js') %}
         {% endif %}
     {% endfor %}
 {% endblock %}
