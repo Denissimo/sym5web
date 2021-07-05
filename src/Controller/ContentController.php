@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Api\Content\Aircraft\AircraftList;
 use App\Service\Client;
 use App\Service\ClientAuth;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -12,6 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 use App\Service\ContentLoader;
 use stdClass;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use App\Api\Content\Aircraft\AircraftUnit;
 use Throwable;
 use Exception;
 
@@ -53,8 +55,14 @@ class ContentController extends AbstractController
         ]);
     }
 
-    public function buildUav(Request $request, Client $client)
+    public function buildUav(Request $request, Client $client, string $tokenCookieName)
     {
+        $cookieChecker = $request->cookies->get($tokenCookieName);
+
+        if (!$cookieChecker) {
+            return $this->redirectToRoute('login');
+        }
+
         $aircraftCategory = $this->requestUnauthorized(
             $client,
             '/classifiers/aircraft_category/'
@@ -70,10 +78,20 @@ class ContentController extends AbstractController
             '/classifiers/aircraft_mass/'
         );
 
+        $myAircrafts = $this->requestAuthorized(
+            $request,
+            $client,
+            $tokenCookieName,
+            '/my/data/aircrafts'
+        );
+
+        $aircraftList = new AircraftList($myAircrafts);
+
         return $this->render('uav.html.twig', [
             'category' => $aircraftCategory->category,
             'engine' => $aircraftEngine->engine,
             'mass' => $aircraftMass->mass,
+            'aircrafts' => $aircraftList,
             'route' => 'UAV',
             'use_arcgis' => false
         ]);
@@ -116,11 +134,11 @@ class ContentController extends AbstractController
         $path,
         $json = null,
         $method = 'GET'
-    ): Response
+    )
     {
         try {
             $token = $request->cookies->get($tokenCookieName);
-            $res = $client->sendJson(
+            return $client->sendJson(
                 $path,
                 $json,
                 $method,
@@ -131,13 +149,6 @@ class ContentController extends AbstractController
                     )
                 ]
             );
-
-            return $this->render('base.html.twig', [
-                'data' => json_encode($res->user),
-                'message' => 'OK',
-                'code' => Response::HTTP_OK
-            ]);
-
         } catch (AccessDeniedException $e) {
 //            return $this->redirectToRoute('login');
 
