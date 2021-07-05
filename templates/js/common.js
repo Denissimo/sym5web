@@ -75,9 +75,11 @@ require(
             console.log(response);
         });
         */
-        
+        esriConfig.portalUrl = "https://abr-gis-portal.airchannel.net/portal";
+
         if(checkRoleRoute("ROLE_OPERATOR",roles))
         {
+            
             
             scene = new WebScene({
             portalItem: {
@@ -93,7 +95,7 @@ require(
        }
        else  if(checkRoleRoute("ROLE_OWNER",roles))
         {
-            
+          
             scene = new WebMap({
                portalItem: {
                   id:  "4e1ce0dd127c4cadabd554b808d059b4",
@@ -178,7 +180,21 @@ require(
         view.ui.add(bmToggleWidget, "bottom-left");
         
         if(checkRoleRoute("ROLE_OPERATOR",roles))
-             addReal(FeatureLayer,LabelClass,scene);
+        {
+            if(route=="AirSituation")
+              addReal(FeatureLayer,LabelClass,scene);
+            if(route=="Flights")
+              addLayers3D(FeatureLayer,scene) 
+
+
+        }
+        else if(checkRoleRoute("ROLE_OWNER",roles))
+
+        {
+            if(route=="Flights")
+            addLayers2D(FeatureLayer,scene) 
+
+        }
         // addMobail(WebTileLayer,GroupLayer,scene);
          
        
