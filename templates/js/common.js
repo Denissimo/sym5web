@@ -166,16 +166,9 @@ require(
 
         view.ui.add(bgExpand, {
             position: "top-left",
-            index: 1
+            index: 4
         });
 
-
-        let bmToggleWidget = new BasemapToggle({
-            view: view,
-            nextBasemap: "hybrid"
-        });
-
-        view.ui.add(bmToggleWidget, "bottom-left");
         
         if(checkRoleRoute("ROLE_OPERATOR",roles))
              addReal(FeatureLayer,LabelClass,scene);

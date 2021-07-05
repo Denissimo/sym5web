@@ -74,6 +74,7 @@ class ArcgisController extends AbstractController
     {
         $route = $request->query->get('route') ?? self::DEFAULT_ROUTE;
         $token = $request->cookies->get($tokenCookieName);
+       
         $userData = $client->sendJson(
             '/my/userdata',
             null,

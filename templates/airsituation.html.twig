@@ -6,9 +6,9 @@
 	{% include('nav.html.twig') %}
 {% endblock %}
 
-<div class="page">
+<div class="page page-map">
 
-	<div class="page-map" id="map-operator">
+	<main class="map-container" id="map-operator">
 
 		<div class="quality">
 			<select name="quality-selector" class="quality-selector" id="quality">
@@ -18,5 +18,15 @@
 			</select>
 		</div>
 
-	</div>
+	</main>
+
+	<aside>
+
+		{% block sidebar %}
+			{% include('/components/sidebar.html.twig') %}
+		{% endblock %}
+
+	</aside>
+
+
 </div>
