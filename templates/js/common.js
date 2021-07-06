@@ -15,7 +15,9 @@ require(
         "esri/widgets/Search",
         "esri/widgets/Expand",
         "esri/widgets/BasemapGallery",
-        "esri/widgets/BasemapToggle"
+        "esri/widgets/BasemapToggle",
+        "esri/widgets/LayerList",
+        "esri/widgets/Locate"
     ],
 
     function (
@@ -33,7 +35,9 @@ require(
         Search,
         Expand,
         BasemapGallery,
-        BasemapToggle
+        BasemapToggle,
+        LayerList,
+        Locate
     ) {
         var view;
         var scene;
@@ -143,6 +147,22 @@ require(
             position: "top-left",
             index: 0
         });
+
+        
+        // Layer list of obstacles + expand menu
+        const layerList = new LayerList({
+            view: view
+      });
+          
+      const bgExpandLayerList = new Expand({
+          view: view,
+          content: layerList
+      });
+
+      view.ui.add(bgExpandLayerList, {
+          position: "top-left",
+          index: 5
+      });
 
         // Basemap gallery stack
         const basemapGallery = new BasemapGallery({
