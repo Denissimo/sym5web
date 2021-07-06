@@ -204,7 +204,7 @@ require(
         else if(checkRoleRoute("ROLE_OWNER",roles))
 
         {
-            if(route=="Flights")
+            if(route=="Flights"||route=="Tracks"  )
             addLayers2D(FeatureLayer,scene) 
 
         }
