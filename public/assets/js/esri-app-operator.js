@@ -11,7 +11,7 @@ require(
         "esri/widgets/BasemapGallery",
         "esri/widgets/BasemapToggle",
         "esri/widgets/LayerList",
-        "esri/widgets/Locate"
+
 
     ],
 
@@ -27,8 +27,7 @@ require(
         Expand,
         BasemapGallery,
         BasemapToggle,
-        LayerList,
-        Locate
+        LayerList
 
     ) {
         var token = $.cookie("utmdata_token");
@@ -147,11 +146,9 @@ require(
 
         view.ui.add(bgExpandLayerList, {
             position: "top-left",
-            index: 1
+            index: 2
         });
 
-        // addMobail(WebTileLayer,GroupLayer,scene);
-        // addReal(FeatureLayer,scene);
 
     });
 
