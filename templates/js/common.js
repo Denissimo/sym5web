@@ -205,10 +205,10 @@ require(
 
         {
             if(route=="Flights"||route=="Tracks"  )
-            addLayers2D(FeatureLayer,scene) 
+          var realLayer= addLayers2D(FeatureLayer,scene) 
 
         }
-        // addMobail(WebTileLayer,GroupLayer,scene);
+         addMobail(WebTileLayer,GroupLayer,scene);
          
        
     });
