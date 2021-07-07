@@ -1,5 +1,5 @@
            
-     function addLayers2D(FeatureLayer,webmap)
+     function addLayers2D(FeatureLayer,webmap,route)
      {
           var servicePath = "https://abr-gis-server.airchannel.net/airchannel/rest/services/Dev/VectorDevelop/FeatureServer/";
           
@@ -10,22 +10,39 @@
           var sourceFlyghtSeg=servicePath+"3";
           var sourceFlyghtPunkts=servicePath+"0";
           
+
+          
+               
+        
+            var   routeVecLayer = new FeatureLayer({
+            url:     sourceTrackRoute, 
+            
+            outFields: ["*"],
+            hasM:true,
+            hasZ:true,
+            returnM :true,
+            returnZ: true,
+            title : "Траектории" 
+                });
+    
+
+
           lineSymbolTable = {
             type: "simple-line", // autocasts as SimpleLineSymbol()
             color: [0, 128, 0],
             width: 2
           };
   
-          var lineRendererTable = {
-            type: "simple",
-            symbol: lineSymbolTable
-          };
+           var lineRendererTable = {
+               type: "simple",
+               symbol: lineSymbolTable
+            };
 
-         var tableLayer = new FeatureLayer({
-            url:    sourceTrackRoute,
-            outFields: ["*"],
-            renderer :lineRendererTable,
-            listMode :"hide"
+           var tableLayer = new FeatureLayer({
+              url:    sourceTrackRoute,
+              outFields: ["*"],
+              renderer :lineRendererTable,
+              listMode :"hide"
                 });
             
 
@@ -51,9 +68,60 @@
             outFields: ["*"],
             renderer:zoneRendererTable,
             listMode :"hide" });
-              
-             
+    
     //****************************************************************************************************** */              
+           var fillSymbol = {
+            type: "simple-fill", // autocasts as SimpleLineSymbol()
+             color: [255, 0, 197,0.2],
+             width: 2
+            };
+
+          var zoneRenderer = {
+              type: "simple",
+              symbol: fillSymbol
+            };      
+          var zoneLayer = new FeatureLayer({
+               url:     sourceTrackZone,
+               outFields: ["*"],
+               hasZ:true,
+               returnZ: true,
+               renderer:zoneRenderer,
+               title : "Зоны полетов"
+              });         
+  //****************************************************************************************************** */                   
+               
+          var lineSymbol = {
+             type: "simple-line", // autocasts as SimpleLineSymbol()
+             color: [255, 0, 197],
+             width: 2
+            };
+          var lineRenderer = {
+             type: "simple",
+            symbol: lineSymbol
+           };
+        var routeLayer = new FeatureLayer({
+              url:         sourceTrackRoute,
+              outFields: ["*"],
+              hasM:true,
+              hasZ:true,
+              returnM :true,
+              returnZ: true,
+              renderer:lineRenderer,
+              title : "Траектории"
+               });
+ //****************************************************************************************************** */              
+       if( route=="Flights")
+       { 
+
+            segmentLayer = new FeatureLayer({
+              url:       sourceFlyghtSeg,
+              outFields: ["*"],
+              hasM:true,
+              hasZ:true,
+              returnM :true,
+              returnZ: true
+                  });   
+   //****************************************************************************************************** */              
             var flyVecLayer = new FeatureLayer({
             url: sourceFlyghtRoute,
             outFields: ["*"],
@@ -62,7 +130,7 @@
             returnM :true,
             returnZ: true
             });
-       //****************************************************************************************************** */               
+     //****************************************************************************************************** */               
             var flyZoneLayer = new FeatureLayer({
             url: sourceFlyghtZone,
             outFields: ["*"],
@@ -80,47 +148,7 @@
                   title : "Опасные зоны"                    
                   });
          
-           //****************************************************************************************************** */              
-          var fillSymbol = {
-            type: "simple-fill", // autocasts as SimpleLineSymbol()
-            color: [255, 0, 197,0.2],
-            width: 2
-          };
-   
-           var zoneRenderer = {
-                    type: "simple",
-                    symbol: fillSymbol
-                  };      
-            var zoneLayer = new FeatureLayer({
-                  url:     sourceTrackZone,
-                  outFields: ["*"],
-                  hasZ:true,
-                  returnZ: true,
-                  renderer:zoneRenderer,
-                  title : "Зоны полетов"
-                   });         
-             //****************************************************************************************************** */                   
-             
-             var lineSymbol = {
-                type: "simple-line", // autocasts as SimpleLineSymbol()
-                color: [255, 0, 197],
-                width: 2
-              };
-             var lineRenderer = {
-                type: "simple",
-                symbol: lineSymbol
-              };
-             var routeLayer = new FeatureLayer({
-              url:         sourceTrackRoute,
-              outFields: ["*"],
-              hasM:true,
-              hasZ:true,
-              returnM :true,
-              returnZ: true,
-              renderer:lineRenderer,
-              title : "Траектории"
-                   });
-             //****************************************************************************************************** */              
+         //****************************************************************************************************** */              
               var punktsLayer = new FeatureLayer({url: sourceFlyghtPunkts,          
                       //popupTemplate:templatePunkts,
                       hasM:true,
@@ -131,20 +159,36 @@
                      });
 
          
-                //     let defQ=buildDefinitionQuery();  
+                  }        //     let defQ=buildDefinitionQuery();  
                      defQ="";
+                     if( route=="Flights")
+                     { 
+                     flyZoneLayer.definitionExpression="";//   buildDefinitionQueryFly();//timeSlider);
+                     webmap.layers.add(flyZoneLayer);
+                     }
+
+
                      zoneLayer.definitionExpression=defQ;
-                     webmap.add(zoneLayer);
                      routeLayer.definitionExpression=defQ;
                      tableLayer.definitionExpression="objectid < 0";
                      tableZoneLayer.definitionExpression="objectid < 0";
-                     webmap.add(routeLayer);
+                     
+                     webmap.add(zoneLayer);
+                     webmap.layers.add(tableZoneLayer)
+                     
+                     webmap.layers.add(tableZoneLayer)
+                     webmap.layers.add(tableLayer)
+                     
+             
                      //webmap.layers.reorder(routeLayer, webmap.layers.length); 
-                     punktsLayer.definitionExpression="";//                     buildDefinitionQueryPunkts();//timeSlider);
-                     webmap.layers.add(punktsLayer);
-                     flyZoneLayer.definitionExpression="";//   buildDefinitionQueryFly();//timeSlider);
-                     webmap.layers.add(flyZoneLayer);
-    
+                     if( route=="Flights")
+                     { 
+                       punktsLayer.definitionExpression="";//                     buildDefinitionQueryPunkts();//timeSlider);
+                       webmap.layers.add(punktsLayer);
+                     }
+
+
+                    
                  
 
 
