@@ -78,6 +78,11 @@ class ContentController extends AbstractController
             '/classifiers/aircraft_mass/'
         );
 
+        $aircraftStatuses = $this->requestUnauthorized(
+            $client,
+            '/classifiers/aircraft_status/'
+        );
+
         $myAircrafts = $this->requestAuthorized(
             $request,
             $client,
@@ -91,6 +96,7 @@ class ContentController extends AbstractController
             'category' => $aircraftCategory->category,
             'engine' => $aircraftEngine->engine,
             'mass' => $aircraftMass->mass,
+            'statuses' => $aircraftStatuses->status,
             'aircrafts' => $aircraftList,
             'route' => 'UAV',
             'use_arcgis' => false

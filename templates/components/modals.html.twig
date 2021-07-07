@@ -211,15 +211,11 @@
                                 <div class="form-row">
                                     <div class="form-input">
                                         <label class="input-label" for="statusRegister">Статус регистрации *</label>
+
                                         <select class="form-select" aria-label="statusRegister">
-                                            <option selected>Не подлежит регистрации (для БВС с массой менее 250 г.
-                                            </option>
-                                            <option value="1">Не зарегистрирован</option>
-                                            <option value="2">Заявка на согласовании</option>
-                                            <option value="3">Зарегистрирован</option>
-                                            <option value="3">Заявка отклонена</option>
-                                            <option value="3">Изменение учетных данных</option>
-                                            <option value="3">Снят с регистрации</option>
+                                            {% for status in statuses %}
+                                                <option value="{{ status.id }}">{{ status.name }}</option>
+                                            {% endfor %}
                                         </select>
                                     </div>
                                 </div>
