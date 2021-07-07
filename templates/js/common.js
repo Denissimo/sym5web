@@ -1,4 +1,4 @@
- 
+var GEOPROCESSOR; 
 require(
     [   "esri/config", //dv
         "esri/layers/WebTileLayer", //dv
@@ -17,7 +17,8 @@ require(
         "esri/widgets/BasemapGallery",
         "esri/widgets/BasemapToggle",
         "esri/widgets/LayerList",
-        "esri/widgets/Locate"
+        "esri/widgets/Locate",
+        "esri/tasks/Geoprocessor"
     ],
 
     function (
@@ -37,7 +38,8 @@ require(
         BasemapGallery,
         BasemapToggle,
         LayerList,
-        Locate
+        Locate,
+        Geoprocessor
     ) {
         var view;
         var scene;
@@ -195,7 +197,11 @@ require(
         if(checkRoleRoute("ROLE_OPERATOR",roles))
         {
             if(route=="AirSituation")
-              addReal(FeatureLayer,LabelClass,scene);
+            {
+                
+              var realLayer=addReal(FeatureLayer,LabelClass,Geoprocessor,scene);
+              makeRealFlyght(realLayer);
+            } 
             if(route=="Flights")
               addLayers3D(FeatureLayer,scene) 
 
@@ -205,10 +211,11 @@ require(
 
         {
             if(route=="Flights"||route=="Tracks"  )
-          var realLayer= addLayers2D(FeatureLayer,scene) 
+              addLayers2D(FeatureLayer,scene) 
+          
 
         }
-         addMobail(WebTileLayer,GroupLayer,scene);
+        // addMobail(WebTileLayer,GroupLayer,esriConfig,scene);
          
        
     });

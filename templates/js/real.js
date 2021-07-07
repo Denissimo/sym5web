@@ -1,4 +1,4 @@
-function addReal(FeatureLayer,LabelClass,scene){
+function addReal(FeatureLayer,LabelClass,Geoprocessor,scene){
     const realLabelClass = new LabelClass({
         labelExpressionInfo: {
           expression:
@@ -53,6 +53,12 @@ function addReal(FeatureLayer,LabelClass,scene){
           },
         ],
       };
+     var gpUrl =
+      "https://abr-gis-server.airchannel.net/airchannel/rest/services/Dev/SendTracker/GPServer/SendTracker";
+     GEOPROCESSOR = new Geoprocessor({
+     url: gpUrl
+     });      
+    
     var realLayer = new FeatureLayer({
        url: "https://abr-gis-server.airchannel.net/airchannel/rest/services/Hosted/TruckLastBJTime/FeatureServer",
        popupTemplate: templateReal,
@@ -84,7 +90,7 @@ function makeRealFlyght(realLayer)
 
 function makeListRealFlyght(feats)
          {
-          const flightrealhtml0 ='<div class="uav-item-header">\
+          const flightrealhtml0 ='<li class="uav-list-item"><div class="uav-item-header">\
           <span class="uav-item-status">В полёте</span>\
           <button class="btn uav-btn-more">Подробнее</button>\
         </div>\
@@ -97,7 +103,8 @@ function makeListRealFlyght(feats)
         </div>\
         <div class="uav-item-footer">\
           <button class="btn btn-uav-small">Стоп</button>\
-          <button class="btn btn-uav-small">Возврат</button>\
+          <button class="btn btn-uav-small" id="';
+          const flightrealhtml2 ='">Возврат</button>\
           <button class="btn btn-uav-small">Кружиться</button>\
           <button class="btn btn-uav-small">Посадить</button>\
         </div>\
@@ -115,7 +122,7 @@ function makeListRealFlyght(feats)
           }
           document.getElementById("uav-realtimelist").innerHTML=lst;
 
-          //addFlyRealEvent(glids);
+          addFlyRealEvent(glids);
           
 
           function panRealFlyght(feat,glids)
@@ -126,14 +133,13 @@ function makeListRealFlyght(feats)
               lst=lst+flightrealhtml0;
               lst=lst+nid; 
               lst=lst+flightrealhtml1;
-              
-              //lst=lst+glid;                    
-              
+              lst=lst+glid;                    
+              lst=lst+flightrealhtml2;
   
           }
      
         }
-        /*
+        
         function addFlyRealEvent(glids) {
           for (i=0;i<glids.length;i++)
           {
@@ -141,5 +147,128 @@ function makeListRealFlyght(feats)
              .getElementById(glids[i])
              .addEventListener("click", eventFlyRealSend);
           }
-         }*/
+         }
+         
+         function eventFlyRealSend(event)
+        {
+
+           //alert(event.target.id);
+           let data =dataForSend();
+           let params = { DATA : data  };
+               
+                  GEOPROCESSOR.submitJob(params).then(function (jobInfo) {
+                  var options = { statusCallback: function (jobInfo1) { progTest(jobInfo1); } };
+                  GEOPROCESSOR.waitForJobCompletion(jobInfo.jobId, options).then(function (jobInfo2 ) {  console.log(jobInfo2);                 
+                    getResultData(jobInfo2);
+                  });
+                 });
+                 function progTest(value) {
+                   console.log(value.jobStatus);
+                 }
+                 function getResultData(result2) {
+                   
+                  GEOPROCESSOR.getResultData(result2.jobId,"Result").then(function (result) { console.log(result.value); });
+                  } 
+
+
+
+        }
+         
+         function dataForSend()
+      {
+
+        let dt=new Float32Array([220,0,0,0,0,0,0]);
+        let  bths="";
+        for (let i=0;i<dt.length;i++)
+        {
+        let hex = ToHex(dt[i]);
+            for (let j=0;j<8;j+=2)
+                {
+                  bths=bths+hex.substring(j,j+2)+" ";
+                } 
+        
+        }
+        
+     
+        let bytes=getInt16Bytes(176);
+        let bth2=bytesToHexString(bytes);
+        let bth2s=(bth2.toString()).replaceAll(',', ' ');
+        bths=bths+bth2s+" 00 00 ";
+
+        let trId=177;
+        bytes=getInt32Bytes(trId);
+        let bth3=bytesToHexString(bytes);
+        let trIds=bth3[0]
+
+        bytes=getInt32Bytes(33);
+        let bth4=bytesToHexString(bytes);
+        let data="fe "+bth4[0]+" "+trIds+" 00 4c "+bths+"cc cc"
+
+        dt=new Float32Array([0,0,0,0,0,0,0]);
+        bths="";
+        for (let i=0;i<dt.length;i++)
+        {
+           let hex = ToHex(dt[i]);
+            for (let j=0;j<8;j+=2)
+                {
+                  bths=bths+hex.substring(j,j+2)+" ";
+                } 
+        }
+        bytes=getInt16Bytes(20);
+        bth2=bytesToHexString(bytes);
+        bth2s=(bth2.toString()).replaceAll(',', ' ');
+        bths=bths+bth2s+" 00 00 ";
+        data=data+" fe "+bth4[0]+" "+trIds+" 00 4c "+bths+"cc cc"
+        console.log(data);
+        return data
+
+         function bytesToHexString(bytes){
+          bth=[];
+          for ( var index = 0; index < bytes.length; index ++ ) {
+            if (bytes[index] < 16) {
+              bth.push( '0' + bytes[index].toString(16));
+            } else bth.push( bytes[index].toString(16));
+    
+          }
+            return bth;
+          } 
+
+          function ToHex(d) {
+
+            const getHex = i => ('00' + i.toString(16)).slice(-2);
+            var view = new DataView(new ArrayBuffer(4)),
+            result;
+            view.setFloat32(0, d);
+             result= Array
+            .apply(null, { length: 4 })
+            .map((_, i) => getHex(view.getUint8(i)))
+            .join('');
+            return result;
+            }
+        
+        function getInt32Bytes(long ){
+          var byteArray = [0, 0, 0, 0];
+          for ( var index = 0; index < byteArray.length; index ++ ) {
+              var byte = long & 0xff;
+              byteArray [ index ] = byte;
+              long = (long - byte) / 256 ;
+          }
+          return byteArray;
+          }
+
+      function getInt16Bytes(long ){
+        var byteArray = [0, 0];
+        for ( var index = 0; index < byteArray.length; index ++ ) {
+            var byte = long & 0xff;
+            byteArray [ index ] = byte;
+            long = (long - byte) / 256 ;
+        }
+        return byteArray;
+         }
+
+
+      }                          
+
+         
+        
 

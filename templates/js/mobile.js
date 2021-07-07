@@ -1,13 +1,13 @@
 
-function addMobail(WebTileLayer,GroupLayer,scene){
+function addMobail(WebTileLayer,GroupLayer,esriConfig,scene){
     esriConfig.request.proxyUrl = "/proxy/proxy.php";
     let grpMobail=new GroupLayer();
     grpMobail.title="Мобильная связь";
     let tele2 =new GroupLayer();
     tele2.title="Tele2"
-    var tele2g= new WebTileLayer({urlTemplate:'https://new-msk.tele2.ru/maps/_2g/{level}/{col}/{row}.png',title: "TELE2_2G",  visible :false, maxScale : 300000 });
-    var tele3g= new WebTileLayer({urlTemplate:'https://new-msk.tele2.ru/maps/_3g//{level}/{col}/{row}.png',title: "TELE2_3G",  visible :false, maxScale : 300000 });
-    var telelte= new WebTileLayer({urlTemplate:'https://new-msk.tele2.ru/maps/_4g//{level}/{col}/{row}.png',title: "TELE2_LTE",  visible :false ,maxScale : 300000});
+    var tele2g= new WebTileLayer({urlTemplate:'https://msk.tele2.ru/maps/_2g/{level}/{col}/{row}.png',title: "TELE2_2G",  visible :false, maxScale : 300000 });
+    var tele3g= new WebTileLayer({urlTemplate:'https://msk.tele2.ru/maps/_3g//{level}/{col}/{row}.png',title: "TELE2_3G",  visible :false, maxScale : 300000 });
+    var telelte= new WebTileLayer({urlTemplate:'https://msk.tele2.ru/maps/_4g//{level}/{col}/{row}.png',title: "TELE2_LTE",  visible :false ,maxScale : 300000});
     tele2.layers.add(tele2g);tele2.layers.add(tele3g);tele2.layers.add(telelte); grpMobail.layers.add(tele2);
 
     let mts   =new GroupLayer();
