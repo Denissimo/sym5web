@@ -1,9 +1,11 @@
 var GEOPROCESSOR; 
+var selectLayer; //слой подсветки выбраннных объектов на карте
 require(
     [   "esri/config", //dv
         "esri/layers/WebTileLayer", //dv
         "esri/layers/GroupLayer", //dv
-        "esri/layers/FeatureLayer" ,//dv
+        "esri/layers/FeatureLayer" , //dv
+        "esri/layers/GraphicsLayer" ,
         "esri/layers/support/LabelClass",//dv
 
         
@@ -26,6 +28,7 @@ require(
         WebTileLayer, //dv
         GroupLayer,   //dv
         FeatureLayer, //dv
+        GraphicsLayer, //dv
         LabelClass,//dv
    
         
@@ -48,6 +51,9 @@ require(
         var roles = JSON.parse('{{ user.user.roles|json_encode() }}');
         var user = JSON.parse('{{ user|json_encode() }}');
         var route = '{{ route }}';
+        var layerConf=[];
+
+        
 
         console.log(route);
         console.log(roles);
@@ -82,12 +88,31 @@ require(
         });
         */
         esriConfig.portalUrl = "https://abr-gis-portal.airchannel.net/portal";
+        
+        
+        
 
         if(checkRoleRoute("ROLE_OPERATOR",roles))
         {
-            
-            
-            scene = new WebScene({
+          
+ //*********************** Подгрузка карты  для выбора из нее слоев ограничивающих полеты (из сцены нельзя ) *************************/
+
+               
+                var map  = new WebMap({
+                portalItem: {
+                   id:  "4e1ce0dd127c4cadabd554b808d059b4",
+                   portal: "https://abr-gis-portal.airchannel.net/portal"
+                        }
+                 
+               }); 
+               view = new SceneView({
+                map: map,
+                container: "map-operator"
+                 });
+
+//********************************************************************************************************************************* */
+
+             scene = new WebScene({
             portalItem: {
                 id: "4c4de937a5d148f18cfa76b23c873766",
                 portal: "https://abr-gis-portal.airchannel.net/portal"
@@ -101,7 +126,8 @@ require(
        }
        else  if(checkRoleRoute("ROLE_OWNER",roles))
         {
-          
+           
+
             scene = new WebMap({
                portalItem: {
                   id:  "4e1ce0dd127c4cadabd554b808d059b4",
@@ -117,7 +143,7 @@ require(
             container: "map-operator"
              }); 
         }
-
+        
         
         // Quality settings of scene
  
@@ -201,9 +227,12 @@ require(
                 
               var realLayer=addReal(FeatureLayer,LabelClass,Geoprocessor,scene);
               makeRealFlyght(realLayer);
+              window.setInterval(makeRealFlyght, 60000,realLayer);
             } 
             if(route=="Flights")
+             { 
               addLayers3D(FeatureLayer,scene) 
+             }
 
 
         }
@@ -211,13 +240,63 @@ require(
 
         {
             if(route=="Flights"||route=="Tracks"  )
-              addLayers2D(FeatureLayer,scene) 
-          
+          addLayers2D(FeatureLayer,scene,roles) 
+          selectLayer=addSelectLayer(GraphicsLayer,scene);
 
         }
+        
         // addMobail(WebTileLayer,GroupLayer,esriConfig,scene);
-         
+
+
        
+        //******************************************************** выгрузка слоев ограничивающих полеты */
+        scene.when(function(){
+            if(checkRoleRoute("ROLE_OWNER",roles) && route=="Flights")
+             getLayersByTitle(FeatureLayer,scene.allLayers,["Опасные зоны","Запретные зоны","Зоны с ограничениями"],layerConf);
+           
+             
+          }, function(error){
+            
+          });
+
+          if(checkRoleRoute("ROLE_OPERATOR",roles))
+            map.when(function(){
+               if(checkRoleRoute("ROLE_OPERATOR",roles) && route=="Flights")
+                 getLayersByTitle(FeatureLayer,map.allLayers,["Опасные зоны","Запретные зоны","Зоны с ограничениями"],layerConf);
+           
+          }, function(error){
+            
+          });      
+        //************************************************************************************************************** */}
+        if(checkRoleRoute("ROLE_OWNER",roles))
+          view.popup.watch("visible", function(vis) {
+              if (!vis) selectLayer.graphics.removeAll();
+          });
+       if(checkRoleRoute("ROLE_OWNER",roles))    
+         view.popup.watch("selectedFeature", function(graphic) {
+          if (graphic) { 
+           if (graphic.geometry){  
+              
+             let graphic2=graphic.clone();    
+             if (graphic2.geometry.type=="polygon")
+                graphic2.symbol=selectSymbol.fillSymbol;
+             if (graphic2.geometry.type=="polyline")
+                graphic2.symbol=selectSymbol.lineSymbol;   
+             if (graphic2.geometry.type=="point")
+                 graphic2.symbol=selectSymbol.markerSymbol;   
+                 
+                 selectLayer.graphics.removeAll();
+                 selectLayer.graphics.add(graphic2);
+                 scene.layers.reorder(selectLayer,scene.layers.length);   
+                 
+        }
+    }
+  });
+  
+
+
+
+
     });
 
     function checkRoleRoute(role,roles)
@@ -225,6 +304,38 @@ require(
         for (let i=0; i<roles.length; i++) 
           if(roles[i]===role) return true;
         return false;    
+    }
+
+   
+    function getLayersByTitle(FeatureLayer,lays,titles,layerConflict)
+    {
+        
+        for (let i=0;i<lays.length;i++ )
+        {
+            let lay=lays.getItemAt(i);
+            
+            try {
+                for(let j=0;j<titles.length;j++)
+                if (lay.title==titles[j]) 
+                    {
+                    layerConflict.push(ret);
+              
+                    }
+              }
+                   catch{
+                    console.log("error");
+                   }
+          
+           lay.when(function(){
+               
+          if (lay.type=="map-image")   
+               getLayersByTitle(FeatureLayer,lay.allSublayers,titles,layerConflict);    
+            
+           });
+
+        }
+          
+       return null;
     }
    
 
