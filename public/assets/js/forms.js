@@ -6,6 +6,7 @@ $(document).ready(function () {
     $(location).prop("href", url);
   }
 
+  //$('#dp3').datepicker();
 
   $("#takeoffMass").blur(function () {
     var mass = parseFloat($(this).val());
@@ -277,4 +278,135 @@ $(document).ready(function () {
       return response;
     });
   });
+
+  $("#form-uav").submit(function (event) {
+    console.log('add UAV submit');
+    event.preventDefault();
+
+    if (false) {
+      $('.alert_place').html(
+          '<div class="alert alert-danger alert-dismissible fade show" role="alert">\n' +
+          '\t\t\t\t\tChoose at least one <strong id="b_role">legal role and aircraft role</strong>.\n' +
+          '\t\t\t\t\t<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>\n' +
+          '\t\t\t\t</div>'
+      );
+
+      return false;
+    }
+
+    if (false) {
+      $('.alert_place').html(
+          '<div class="alert alert-danger alert-dismissible fade show" role="alert">\n' +
+          '\t\t\t\t\tChoose at least one <strong id="b_role">legal role and aircraft role</strong>.\n' +
+          '\t\t\t\t\t<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>\n' +
+          '\t\t\t\t</div>'
+      );
+
+      return false;
+    }
+
+    var channels = [];
+    $('.channel').each(
+        function (){
+          if ($(this).prop('checked')) {
+              channelId = $(this).attr('data-chennal-id');
+              channels.push(channelId);
+          }
+        }
+    );
+    console.log(channels);
+    var token = $.cookie("utmdata_token");
+    console.log(token);
+    var settings = {
+      url: "https://dev-api.airchannel.net/aircraft/add",
+      // url: "http://sym4swg/aircraft/add",
+      method: "POST",
+      timeout: 0,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      },
+
+      data: JSON.stringify(
+          {
+            "channels": channels,
+            "controlSystem": $('#controlSystem').val(),
+            "category": $('#category').val(),
+            "mass": $('#mass').val(),
+            "engine": $('#engine').val(),
+            "registrationStatus": $('#registrationStatus').val(),
+            "aircraft": {
+              "isCatapultStart": $('#isCatapultStart').prop('checked'),
+              "isHandStart": $('#isHandStart').prop('checked'),
+              "isParachuteLanding": $('#isParachuteLanding').prop('checked'),
+              "isVerticalStart": $('#isVerticalStart').prop('checked'),
+              "landingSiteLength": $('#landingSiteLength').val(),
+              "landingSiteWidth": $('#landingSiteWidth').val(),
+              "responderType": $('#responderType').val(),
+              "otherParams": $('#otherParams').val(),
+              "serialNumber": $('#serialNumber').val(),
+              "registrationNumber": $('#registrationNumber').val(),
+              "registrationDate": makeDate($('#registrationDate').val()),
+              "deregistrationDate": makeDate($('#deregistrationDate').val()),
+              "deregistrationReason": $('#deregistrationReason').val(),
+              "type": $('#type').val(),
+              "numberOfEngines": $('#numberOfEngines').val(),
+              "takeoffMass": $('#takeoffMass').val(),
+              "manufacturer": $('#manufacturer').val(),
+              "insuranceCompany": $('#insuranceCompany').val(),
+              "insurancePolicyNumber": $('#insurancePolicyNumber').val(),
+              "insuranceStart": makeDate($('#insuranceStart').val()),
+              "insuranceEnd": makeDate($('#insuranceEnd').val())
+            }
+          }
+      ),
+
+      success: function (response) {
+        $('.alert_place').html(
+            '<div class="alert alert-success alert-dismissible fade show" role="alert">\n' +
+            '\t\t\t\t\tSuccess register\n' +
+            '\t\t\t\t\t<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>\n' +
+            '\t\t\t\t</div>'
+        );
+        // setTimeout(function() {
+        //   $(location).prop("href", '/login');
+        // }, 3000);
+      },
+
+      error: function (response) {
+        console.log(response);
+        // console.log(response.responseJSON);
+        $('.alert_place').html(
+            '<div class="alert alert-danger alert-dismissible fade show" role="alert">\n' +
+            '\t\t\t\t\t' + response.responseJSON.message + '\n' +
+            '\t\t\t\t\t<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>\n' +
+            '\t\t\t\t</div>'
+        );
+      },
+    };
+
+    console.log(settings.data);
+    // Token Response
+    $.ajax(settings).done(function (response) {
+      console.log(response);
+      return response;
+    });
+  });
+
+  function makeDate(stringDate) {
+    var date;
+    if (stringDate) {
+      date = {
+        "date": $('#registrationDate').val() + ' 00:00:00',
+        "timezone_type": 3,
+        "timezone": "Europe/Moscow"
+      };
+    } else {
+      date = null;
+    }
+
+    return date;
+  }
+
+
 });

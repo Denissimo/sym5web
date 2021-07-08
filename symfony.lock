@@ -11,6 +11,9 @@
     "psr/log": {
         "version": "1.1.4"
     },
+    "symfony/asset": {
+        "version": "v5.3.2"
+    },
     "symfony/cache": {
         "version": "v5.3.0"
     },
