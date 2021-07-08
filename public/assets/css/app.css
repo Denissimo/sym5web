@@ -24,7 +24,13 @@
     padding: .5rem
 }
 
-.btn.btn-outline {
+.btn.btn-uav-small {
+    font-size: .8rem;
+    margin-right: 4px;
+    padding: .5rem
+}
+
+.btn.btn-outline, .btn.btn-uav-small {
     border: 1px solid #e7eaf3
 }
 
@@ -54,6 +60,12 @@
 
 .btn.btn-icon .menu-item-icon {
     margin-right: 6px
+}
+
+.btn.uav-btn-more {
+    border: 1px solid #e7eaf3;
+    font-size: .8rem;
+    padding: .5rem
 }
 
 .notification {
@@ -236,6 +248,73 @@
     color: #fff
 }
 
+.close-btn {
+    align-items: center;
+    background: #fff;
+    border: 1px solid #e7eaf3;
+    border-radius: 100rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    padding: 1.5rem;
+    position: fixed;
+    right: 1rem;
+    top: 4.4rem;
+    transform: scale(.8);
+    z-index: 100000
+}
+
+.close-btn span {
+    background-color: #fff;
+    display: block;
+    height: 2px;
+    position: absolute;
+    width: 1.5rem
+}
+
+.close-btn span:before {
+    transform: rotate(130deg)
+}
+
+.close-btn span:after, .close-btn span:before {
+    background-color: #000;
+    content: "";
+    display: block;
+    height: 2px;
+    position: absolute;
+    top: 0;
+    width: 1.5rem
+}
+
+.close-btn span:after {
+    transform: rotate(45deg)
+}
+
+.close-btn.close-btn-closed span {
+    background-color: #000;
+    display: block;
+    height: 2px;
+    position: absolute;
+    width: 1.5rem
+}
+
+.close-btn.close-btn-closed span:before {
+    transform: rotate(0) translateY(-8px)
+}
+
+.close-btn.close-btn-closed span:after, .close-btn.close-btn-closed span:before {
+    background-color: #000;
+    content: "";
+    display: block;
+    height: 2px;
+    position: absolute;
+    width: 1.5rem
+}
+
+.close-btn.close-btn-closed span:after {
+    transform: rotate(0) translateY(8px)
+}
+
 .login-card.signup-card {
     min-width: 750px
 }
@@ -254,7 +333,7 @@
 }
 
 .form-row {
-    /*align-items: center;*/
+    align-items: center;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -405,7 +484,7 @@
 }
 
 select {
-    min-height: 45px
+    height: 45px
 }
 
 .form-title {
@@ -468,14 +547,23 @@ body, html {
 
 body {
     display: flex;
-    flex-direction: column
+    flex-direction: column;
+    max-height: 100%
 }
 
 .page {
-    position: relative
+    height: 100%;
+    position: relative;
+    width: 100%
 }
 
-.page, .page .page-map {
+.page.page-map {
+    display: flex;
+    flex-direction: row;
+    overflow: hidden
+}
+
+.page.page-map .map-container {
     height: 100%;
     width: 100%
 }
@@ -483,6 +571,10 @@ body {
 img {
     height: auto;
     max-width: 100%
+}
+
+[contenteditable].form-control:focus, [type=email].form-control:focus, [type=password].form-control:focus, [type=tel].form-control:focus, [type=text].form-control:focus, canvas, canvas:focus, input.form-control:focus, input[type=email]:focus, input[type=number]:focus, input[type=password]:focus, input[type=text]:focus, select, textarea.form-control:focus, textarea:focus {
+    outline: none !important
 }
 
 .page-header {
@@ -513,9 +605,106 @@ img {
     width: 100%
 }
 
+.sidebar {
+    display: flex;
+    height: 100%;
+    position: relative;
+    transition: all .2s ease-in-out;
+    width: auto
+}
+
+.sidebar .sidebar-content {
+    background: #fff;
+    border-radius: 1rem;
+    display: flex;
+    flex-direction: column
+}
+
+.sidebar .sidebar-content .sidebar-header {
+    border-bottom: 1px solid #e7eaf3;
+    margin-bottom: 1rem
+}
+
+.sidebar .sidebar-content .sidebar-header .sidebar-title {
+    font-size: 1rem;
+    padding: 1rem
+}
+
+.sidebar .sidebar-content .sidebar-body {
+    display: flex;
+    height: 100%;
+    overflow-y: scroll;
+    padding: 0 1rem
+}
+
+.sidebar .sidebar-content .sidebar-body .uav-list {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    padding: 0
+}
+
+.sidebar .sidebar-content .sidebar-body .uav-list .uav-list-item {
+    border: 1px solid #e7eaf3;
+    border-radius: 1rem;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem
+}
+
+.sidebar .sidebar-content .sidebar-body .uav-list .uav-list-item:last-child {
+    margin-bottom: 0
+}
+
+.sidebar .sidebar-content .sidebar-body .uav-list .uav-list-item .uav-item-header {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: .5rem 1rem
+}
+
+.sidebar .sidebar-content .sidebar-body .uav-list .uav-list-item .uav-item-header .uav-item-status {
+    background: #0acf97;
+    border-radius: 10rem;
+    color: #fff;
+    font-size: .8rem;
+    padding: .2rem .6rem
+}
+
+.sidebar .sidebar-content .sidebar-body .uav-list .uav-list-item .uav-item-body {
+    border-bottom: 1px solid #eee;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    overflow-y: scroll;
+    padding: .5rem 1rem
+}
+
+.sidebar .sidebar-content .sidebar-body .uav-list .uav-list-item .uav-item-body .uav-item-row {
+    font-size: .8rem
+}
+
+.sidebar .sidebar-content .sidebar-body .uav-list .uav-list-item .uav-item-body .uav-item-row .uav-item-reg {
+    color: #132144;
+    font-size: 1.2rem
+}
+
+.sidebar .sidebar-content .sidebar-body .uav-list .uav-list-item .uav-item-body .uav-item-row .uav-item-desc {
+    color: #999;
+    margin-right: .5rem
+}
+
+.sidebar .sidebar-content .sidebar-body .uav-list .uav-list-item .uav-item-footer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: .5rem 1rem
+}
+
 .quality {
-    bottom: 2rem;
-    left: 6rem;
+    bottom: 1rem;
+    left: 1rem;
     position: absolute
 }
 
@@ -525,19 +714,32 @@ img {
 }
 
 .quality select {
-    width: 100%
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border-color: #fff;
+    border-radius: 100rem;
+    font-size: .8rem;
+    height: 32px;
+    padding: .2rem .5rem;
+    text-align: center
 }
 
 .esri-expand__content--expanded, .esri-widget--panel {
     overflow: visible
 }
 
+.esri-view-surface--inset-outline {
+    -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+    outline: none
+}
+
 .esri-expand, .esri-widget, .esri-widget--button {
-    border-radius: 100px;
+    border-radius: 1rem;
     box-shadow: none
 }
 
-.esri-widget--panel, .esri-widget--panel-height-only {
+.esri-popup, .esri-widget--panel, .esri-widget--panel-height-only {
     border-radius: 16px
 }
 
@@ -613,8 +815,3 @@ img {
     color: #b1c908;
     font-size: .8rem
 }
-
-.label_invisible{
-    display: none;
-}
-

@@ -296,15 +296,15 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-4">
-                                <div class="form-row">
-                                    <div class="form-input">
-                                        <span class="input-label">Загрузить уведомление</span>
-                                        <input type="file" name="file" id="uavNotice" class="uploadfile"/>
-                                        <label for="uavNotice" class="uploadfile-notice-text">Выберите файл</label>
-                                    </div>
-                                </div>
-                            </div>
+{#                            <div class="col-md-4">#}
+{#                                <div class="form-row">#}
+{#                                    <div class="form-input">#}
+{#                                        <span class="input-label">Загрузить уведомление</span>#}
+{#                                        <input type="file" name="file" id="uavNotice" class="uploadfile"/>#}
+{#                                        <label for="uavNotice" class="uploadfile-notice-text">Выберите файл</label>#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                            </div>#}
 
                         </div>
 
@@ -313,7 +313,7 @@
                                 <div class="form-row">
                                     <div class="form-input">
                                         <label class="input-label" for="registrationDate">Дата регистрации</label>
-                                        <input type="text" class="form-control datepicker" data-date-format="yyyy-mm-dd"
+                                        <input type="date" class="form-control datepicker" data-date-format="yyyy-mm-dd"
                                                id="registrationDate" name="registrationDate" placeholder="2020-04-27">
                                     </div>
                                 </div>
@@ -323,7 +323,7 @@
                                     <div class="form-input">
                                         <label class="input-label" for="deregistrationDate">Дата снятия с
                                             регистрации</label>
-                                        <input type="text" class="form-control datepicker" data-date-format="yyyy-mm-dd"
+                                        <input type="date" class="form-control datepicker" data-date-format="yyyy-mm-dd"
                                                id="deregistrationDate" name="deregistrationDate"
                                                placeholder="2020-04-27">
                                     </div>
@@ -373,7 +373,7 @@
                                 <div class="form-row">
                                     <div class="form-input">
                                         <label class="input-label" for="insuranceCompany">Страховая компания</label>
-                                        <input type="number" class="form-control" id="insuranceCompany"
+                                        <input type="text" class="form-control" id="insuranceCompany"
                                                name="insuranceCompany">
                                     </div>
                                 </div>
@@ -381,9 +381,8 @@
                             <div class="col-md-3">
                                 <div class="form-row">
                                     <div class="form-input">
-                                        <label class="input-label" for="insurancePolicyNumber">Страховая
-                                            компания</label>
-                                        <input type="number" class="form-control" id="insurancePolicyNumber"
+                                        <label class="input-label" for="insurancePolicyNumber">Номер полиса</label>
+                                        <input type="text" class="form-control" id="insurancePolicyNumber"
                                                name="insurancePolicyNumber">
                                     </div>
                                 </div>
@@ -392,7 +391,7 @@
                                 <div class="form-row">
                                     <div class="form-input">
                                         <label class="input-label" for="insuranceStart">Дата начала страховки</label>
-                                        <input type="text" class="form-control datepicker" data-date-format="yyyy-mm-dd"
+                                        <input type="date" class="form-control datepicker" data-date-format="yyyy-mm-dd"
                                                id="insuranceStart" name="insuranceStart" placeholder="2020-04-27">
                                     </div>
                                 </div>
@@ -401,7 +400,7 @@
                                 <div class="form-row">
                                     <div class="form-input">
                                         <label class="input-label" for="insuranceEnd">Дата окончания страховки</label>
-                                        <input type="text" class="form-control datepicker" data-date-format="yyyy-mm-dd"
+                                        <input type="date" class="form-control datepicker" data-date-format="yyyy-mm-dd"
                                                id="insuranceEnd" name="insuranceEnd" placeholder="2020-04-27">
                                     </div>
                                 </div>
@@ -413,7 +412,7 @@
                                 <div class="form-row">
                                     <div class="form-input">
                                         <label class="input-label" for="otherParams">Прочие параметры</label>
-                                        <input type="number" class="form-control" id="otherParams"
+                                        <input type="text" class="form-control" id="otherParams"
                                                name="otherParams">
                                     </div>
                                 </div>
