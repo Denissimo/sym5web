@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Api\Content\Aircraft\AircraftList;
 use App\Service\Client;
 use App\Service\ClientAuth;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -12,6 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 use App\Service\ContentLoader;
 use stdClass;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use App\Api\Content\Aircraft\AircraftUnit;
 use Throwable;
 use Exception;
 
@@ -53,10 +55,49 @@ class ContentController extends AbstractController
         ]);
     }
 
-    public function buildUav(Request $request, ContentLoader $contentLoader)
+    public function buildUav(Request $request, Client $client, string $tokenCookieName)
     {
+        $cookieChecker = $request->cookies->get($tokenCookieName);
+
+        if (!$cookieChecker) {
+            return $this->redirectToRoute('login');
+        }
+
+        $aircraftCategory = $this->requestUnauthorized(
+            $client,
+            '/classifiers/aircraft_category/'
+        );
+
+        $aircraftEngine = $this->requestUnauthorized(
+            $client,
+            '/classifiers/aircraft_engine/'
+        );
+
+        $aircraftMass = $this->requestUnauthorized(
+            $client,
+            '/classifiers/aircraft_mass/'
+        );
+
+        $aircraftStatuses = $this->requestUnauthorized(
+            $client,
+            '/classifiers/aircraft_status/'
+        );
+
+        $myAircrafts = $this->requestAuthorized(
+            $request,
+            $client,
+            $tokenCookieName,
+            '/my/data/aircrafts'
+        );
+
+        $aircraftList = new AircraftList($myAircrafts);
+
         return $this->render('uav.html.twig', [
-            'id' => 155,
+            'category' => $aircraftCategory->category,
+            'engine' => $aircraftEngine->engine,
+            'mass' => $aircraftMass->mass,
+            'statuses' => $aircraftStatuses->status,
+            'aircrafts' => $aircraftList,
             'route' => 'UAV',
             'use_arcgis' => false
         ]);
@@ -99,11 +140,11 @@ class ContentController extends AbstractController
         $path,
         $json = null,
         $method = 'GET'
-    ): Response
+    )
     {
         try {
             $token = $request->cookies->get($tokenCookieName);
-            $res = $client->sendJson(
+            return $client->sendJson(
                 $path,
                 $json,
                 $method,
@@ -114,15 +155,33 @@ class ContentController extends AbstractController
                     )
                 ]
             );
-
-            return $this->render('base.html.twig', [
-                'data' => json_encode($res->user),
-                'message' => 'OK',
-                'code' => Response::HTTP_OK
-            ]);
-
         } catch (AccessDeniedException $e) {
 //            return $this->redirectToRoute('login');
+
+            return $this->buildError($e);
+        } catch (BadRequestHttpException $e) {
+
+            return $this->buildError($e);
+        } catch (Exception $e) {
+
+            return $this->buildError($e);
+        }
+    }
+
+    private function requestUnauthorized(
+        Client $client,
+        $path,
+        $json = null,
+        $method = 'GET'
+    )
+    {
+        try {
+            return  $client->sendJson(
+                $path,
+                $json,
+                $method
+            );
+        } catch (AccessDeniedException $e) {
 
             return $this->buildError($e);
         } catch (BadRequestHttpException $e) {
