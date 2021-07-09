@@ -72,23 +72,39 @@ function addReal(FeatureLayer,LabelClass,Geoprocessor,scene){
    
    return realLayer;
 }  
-function refreshRealLayer(FeatureLayer,scene,tit)
+function refreshRealLayer(FeatureLayer,scene,tit,isOwner)
 {  var lays=[];
    getLayersByTitle(FeatureLayer,scene.allLayers,[tit] ,lays);
    let realLay=lays[0];
    let url=realLay.url;
    let templateReal=realLay.popupTemplate;
    let labInfo=realLay.labelingInfo[0];
-   let elInfo=realLay.elevationInfo;
+   
    let title=realLay.title;
-   var newRealLayer=new FeatureLayer({
+   var newRealLayer;
+   if (isOwner)  
+    {
+      newRealLayer=new FeatureLayer({
       url:url,
       popupTemplate:templateReal,
       title : title,
       labelingInfo:[labInfo],
-      evalutionInfo :elInfo
+      spatialReference : {wkid :4326},
+      useTimeView : false 
 
-   }) 
+   })}
+   else
+   {
+    newRealLayer=new FeatureLayer({
+    url:url,
+    popupTemplate:templateReal,
+    title : title,
+    labelingInfo:[labInfo],
+    elevationInfo: {
+      mode: "relative-to-ground",   
+       }
+
+ })}
    scene.remove(realLay);
    scene.layers.add(newRealLayer);
    makeRealFlyght(newRealLayer); 
