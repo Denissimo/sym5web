@@ -243,10 +243,10 @@ require(
 >>>>>>> ae177b6 (ДВК_обновление_воздушной_обстановки)
             {
                 
-              var realLayer=addReal(FeatureLayer,LabelClass,Geoprocessor,scene);
+              var realLayer=addReal(FeatureLayer,LabelClass,Geoprocessor,scene,checkRoleRoute("ROLE_OWNER",roles));
               makeRealFlyght(realLayer);
               var realTitle=realLayer.title;
-              window.setInterval(refreshRealLayer, 60000,FeatureLayer,scene,realTitle);
+              window.setInterval(refreshRealLayer, 60000,FeatureLayer,scene,realTitle,checkRoleRoute("ROLE_OWNER",roles));
               
             }
         

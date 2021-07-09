@@ -1,4 +1,4 @@
-function addReal(FeatureLayer,LabelClass,Geoprocessor,scene){
+function addReal(FeatureLayer,LabelClass,Geoprocessor,scene,isOwner){
     const realLabelClass = new LabelClass({
         labelExpressionInfo: {
           expression:
@@ -59,15 +59,29 @@ function addReal(FeatureLayer,LabelClass,Geoprocessor,scene){
      url: gpUrl
      });      
      
-    var realLayer = new FeatureLayer({
+    var realLayer ;
+    if (isOwner)  
+    {
+    realLayer= new FeatureLayer({
        url: "https://abr-gis-server.airchannel.net/airchannel/rest/services/Hosted/TruckLastBJTime/FeatureServer",
        popupTemplate: templateReal,
        title: "Выполняющиеся полеты",
-       labelingInfo: [realLabelClass],
-       elevationInfo: {
-       mode: "relative-to-ground",   
-        }, //350000}//,
+       labelingInfo: [realLabelClass]
+        //350000}//,
        });
+      }
+      else
+      {
+        realLayer= new FeatureLayer({
+           url: "https://abr-gis-server.airchannel.net/airchannel/rest/services/Hosted/TruckLastBJTime/FeatureServer",
+           popupTemplate: templateReal,
+           title: "Выполняющиеся полеты",
+           labelingInfo: [realLabelClass],
+           elevationInfo: {
+           mode: "relative-to-ground",   
+            }, //350000}//,
+           });
+          }
    scene.layers.add(realLayer);
    
    return realLayer;
