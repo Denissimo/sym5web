@@ -47,81 +47,29 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                    {% for aircraft in aircrafts.aircrafts %}
+                                        {% if aircraft.registrationStatus.name is defined and aircraft.registrationStatus.name is not empty %}
+                                            {% set registrationName = aircraft.registrationStatus.name %}
+                                        {% else %}
+                                            {% set registrationName = 'Unknown' %}
+                                        {% endif %}
                                         <tr>
                                             <td>
-                                                <img src="/assets/images/icon__drone.svg" alt="">
+                                                <img src="/assets/images/icon__drone.svg" alt="aircraft icon" title="{{ aircraft.id }}">
                                             </td>
-                                            <td>HawkEye</td>
-                                            <td>AZ 16177</td>
-                                            <td>TAE2XASOUPHAH4</td>
-                                            <td>До 25кг.</td>
+                                            <td>{{ aircraft.type }}</td>
+                                            <td>{{ aircraft.registrationNumber }}</td>
+                                            <td>{{ aircraft.serialNumber }}</td>
+                                            <td>{{ aircraft.category.name }}</td>
                                             <td>
-                                                <span class="badge badge-danger">Зарегистрирован</span>
+                                                <span class="badge badge-danger">{{ registrationName }}</span>
                                             </td>
                                             <td>
                                                 <a href="/" class="btn btn-outline" id="btn-edit">редактировать</a>
                                             </td>
                                         </tr>
-                                        <tr>
-                                            <td>
-                                                <img src="/assets/images/icon__drone.svg" alt="">
-                                            </td>
-                                            <td>HawkEye</td>
-                                            <td>AZ 16177</td>
-                                            <td>TAE2XASOUPHAH4</td>
-                                            <td>До 25кг.</td>
-                                            <td>
-                                                <span class="badge badge-success">Зарегистрирован</span>
-                                            </td>
-                                            <td>
-                                                <a href="/" class="btn btn-outline" id="btn-edit">редактировать</a>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <img src="/assets/images/icon__drone.svg" alt="">
-                                            </td>
-                                            <td>HawkEye</td>
-                                            <td>AZ 16177</td>
-                                            <td>TAE2XASOUPHAH4</td>
-                                            <td>До 25кг.</td>
-                                            <td>
-                                                <span class="badge badge-attention">Зарегистрирован</span>
-                                            </td>
-                                            <td>
-                                                <a href="/" class="btn btn-outline" id="btn-edit">редактировать</a>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <img src="/assets/images/icon__drone.svg" alt="">
-                                            </td>
-                                            <td>HawkEye</td>
-                                            <td>AZ 16177</td>
-                                            <td>TAE2XASOUPHAH4</td>
-                                            <td>До 25кг.</td>
-                                            <td>
-                                                <span class="badge badge-outline">Зарегистрирован</span>
-                                            </td>
-                                            <td>
-                                                <a href="/" class="btn btn-outline" id="btn-edit">редактировать</a>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <img src="/assets/images/icon__drone.svg" alt="">
-                                            </td>
-                                            <td>HawkEye</td>
-                                            <td>AZ 16177</td>
-                                            <td>TAE2XASOUPHAH4</td>
-                                            <td>До 25кг.</td>
-                                            <td>
-                                                <span class="badge badge-info">Зарегистрирован</span>
-                                            </td>
-                                            <td>
-                                                <a href="/" class="btn btn-outline" id="btn-edit">редактировать</a>
-                                            </td>
-                                        </tr>
+                                    {% endfor %}
+
                                     </tbody>
                                 </table>
                             </div>

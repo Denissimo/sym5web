@@ -11,6 +11,11 @@ use stdClass;
 class AircraftUnit
 {
     /**
+     * @var string
+     */
+    public $id;
+
+    /**
      * @var bool
      */
     public $isHandStart;
@@ -152,12 +157,18 @@ class AircraftUnit
     public $mass;
 
     /**
+     * @var int|null
+     */
+    public $registrationStatus;
+
+    /**
      * AircraftUnit constructor.
      *
      * @param array $aircraft
      */
     public function __construct(stdClass $aircraft)
     {
+        $this->id = $aircraft->id;
         $this->channels = $aircraft->channels;
         $this->controlSystem = $aircraft->controlSystem;
         $this->isCatapultStart = $aircraft->isCatapultStart;
@@ -187,5 +198,6 @@ class AircraftUnit
         $this->category = new AircraftCategoryUnit($aircraft->category);
         $this->engine = new AircraftEngineUnit($aircraft->engine);
         $this->mass = new AircraftMassUnit($aircraft->mass);
+        $this->registrationStatus = $aircraft->registrationStatus;
     }
 }
