@@ -221,6 +221,7 @@ require(
         });
 
 
+<<<<<<< HEAD
             //  // Compass for Owner (3D map)
             //  let compass = new Compass({
             //     view: view
@@ -237,12 +238,21 @@ require(
         if(checkRoleRoute("ROLE_OPERATOR",roles))      
         {
             if(route=="AirSituation")
+=======
+        if(route=="AirSituation")
+>>>>>>> ae177b6 (ДВК_обновление_воздушной_обстановки)
             {
                 
               var realLayer=addReal(FeatureLayer,LabelClass,Geoprocessor,scene);
               makeRealFlyght(realLayer);
-              window.setInterval(makeRealFlyght, 60000,realLayer);
-            } 
+              var realTitle=realLayer.title;
+              window.setInterval(refreshRealLayer, 60000,FeatureLayer,scene,realTitle);
+              
+            }
+        
+        if(checkRoleRoute("ROLE_OPERATOR",roles))
+        {
+             
             if(route=="Flights")
              { 
               addLayers3D(FeatureLayer,scene) 
@@ -333,7 +343,8 @@ require(
                 for(let j=0;j<titles.length;j++)
                 if (lay.title==titles[j]) 
                     {
-                    layerConflict.push(ret);
+                        
+                    layerConflict.push(lay);
               
                     }
               }

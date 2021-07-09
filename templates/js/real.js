@@ -58,7 +58,7 @@ function addReal(FeatureLayer,LabelClass,Geoprocessor,scene){
      GEOPROCESSOR = new Geoprocessor({
      url: gpUrl
      });      
-    
+     
     var realLayer = new FeatureLayer({
        url: "https://abr-gis-server.airchannel.net/airchannel/rest/services/Hosted/TruckLastBJTime/FeatureServer",
        popupTemplate: templateReal,
@@ -69,8 +69,32 @@ function addReal(FeatureLayer,LabelClass,Geoprocessor,scene){
         }, //350000}//,
        });
    scene.layers.add(realLayer);
+   
    return realLayer;
 }  
+function refreshRealLayer(FeatureLayer,scene,tit)
+{  var lays=[];
+   getLayersByTitle(FeatureLayer,scene.allLayers,[tit] ,lays);
+   let realLay=lays[0];
+   let url=realLay.url;
+   let templateReal=realLay.popupTemplate;
+   let labInfo=realLay.labelingInfo[0];
+   let elInfo=realLay.elevationInfo;
+   let title=realLay.title;
+   var newRealLayer=new FeatureLayer({
+      url:url,
+      popupTemplate:templateReal,
+      title : title,
+      labelingInfo:[labInfo],
+      evalutionInfo :elInfo
+
+   }) 
+   scene.remove(realLay);
+   scene.layers.add(newRealLayer);
+   makeRealFlyght(newRealLayer); 
+   
+
+}
 function makeRealFlyght(realLayer)
        {
         
