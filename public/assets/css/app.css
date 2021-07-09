@@ -815,3 +815,7 @@ img {
     color: #b1c908;
     font-size: .8rem
 }
+
+.label_invisible{
+    display: none;
+}
