@@ -1,4 +1,12 @@
-           
+       function addSelectLayer(GraphicsLayer,webmap)
+       {
+         var selectLayer = new GraphicsLayer({
+          listMode:"hide"
+           });
+        webmap.layers.add(selectLayer);   
+        return selectLayer;
+       }
+
      function addLayers2D(FeatureLayer,webmap,route)
      {
           var servicePath = "https://abr-gis-server.airchannel.net/airchannel/rest/services/Dev/VectorDevelop/FeatureServer/";
@@ -186,8 +194,8 @@
                        punktsLayer.definitionExpression="";//                     buildDefinitionQueryPunkts();//timeSlider);
                        webmap.layers.add(punktsLayer);
                      }
-
-
+                     
+                  
                     
                  
 
