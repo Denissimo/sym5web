@@ -20,7 +20,11 @@ require(
         "esri/widgets/BasemapToggle",
         "esri/widgets/LayerList",
         "esri/widgets/Locate",
+<<<<<<< HEAD
         "esri/tasks/Geoprocessor"
+=======
+        "esri/widgets/Compass"
+>>>>>>> ddff82a (Мелкие фиксы, добавление всякой фигни для карт)
     ],
 
     function (
@@ -42,7 +46,11 @@ require(
         BasemapToggle,
         LayerList,
         Locate,
+<<<<<<< HEAD
         Geoprocessor
+=======
+        Compass
+>>>>>>> ddff82a (Мелкие фиксы, добавление всякой фигни для карт)
     ) {
         var view;
         var scene;
@@ -146,7 +154,6 @@ require(
         
         
         // Quality settings of scene
- 
         const quality = document.querySelector('.quality-selector');
         quality.addEventListener("change", function (event) {
             changeQualityScene(this.value);
@@ -191,7 +198,7 @@ require(
 
       view.ui.add(bgExpandLayerList, {
           position: "top-left",
-          index: 5
+          index: 4
       });
 
         // Basemap gallery stack
@@ -216,11 +223,24 @@ require(
 
         view.ui.add(bgExpand, {
             position: "top-left",
-            index: 4
+            index: 5
         });
 
+
+            //  // Compass for Owner (3D map)
+            //  let compass = new Compass({
+            //     view: view
+            //   });
+    
+            // view.ui.add(compass, {
+            //     position: "top-left",
+            //     index: 6
+            // });
+
+   
+
         
-        if(checkRoleRoute("ROLE_OPERATOR",roles))
+        if(checkRoleRoute("ROLE_OPERATOR",roles))      
         {
             if(route=="AirSituation")
             {
@@ -233,8 +253,6 @@ require(
              { 
               addLayers3D(FeatureLayer,scene) 
              }
-
-
         }
         else if(checkRoleRoute("ROLE_OWNER",roles))
 
@@ -248,6 +266,9 @@ require(
         // addMobail(WebTileLayer,GroupLayer,esriConfig,scene);
 
 
+
+        addReal(FeatureLayer,LabelClass, Compass, scene);
+        
        
         //******************************************************** выгрузка слоев ограничивающих полеты */
         scene.when(function(){
