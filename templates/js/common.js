@@ -20,11 +20,8 @@ require(
         "esri/widgets/BasemapToggle",
         "esri/widgets/LayerList",
         "esri/widgets/Locate",
-<<<<<<< HEAD
-        "esri/tasks/Geoprocessor"
-=======
+        "esri/tasks/Geoprocessor",
         "esri/widgets/Compass"
->>>>>>> ddff82a (Мелкие фиксы, добавление всякой фигни для карт)
     ],
 
     function (
@@ -46,11 +43,8 @@ require(
         BasemapToggle,
         LayerList,
         Locate,
-<<<<<<< HEAD
-        Geoprocessor
-=======
+        Geoprocessor,
         Compass
->>>>>>> ddff82a (Мелкие фиксы, добавление всякой фигни для карт)
     ) {
         var view;
         var scene;
