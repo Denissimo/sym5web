@@ -1,4 +1,4 @@
-function addReal(FeatureLayer,LabelClass,Geoprocessor,scene){
+function addReal(FeatureLayer,LabelClass,Geoprocessor,scene,isOwner){
     const realLabelClass = new LabelClass({
         labelExpressionInfo: {
           expression:
@@ -58,19 +58,73 @@ function addReal(FeatureLayer,LabelClass,Geoprocessor,scene){
      GEOPROCESSOR = new Geoprocessor({
      url: gpUrl
      });      
-    
-    var realLayer = new FeatureLayer({
+     
+    var realLayer ;
+    if (isOwner)  
+    {
+    realLayer= new FeatureLayer({
        url: "https://abr-gis-server.airchannel.net/airchannel/rest/services/Hosted/TruckLastBJTime/FeatureServer",
        popupTemplate: templateReal,
        title: "Выполняющиеся полеты",
-       labelingInfo: [realLabelClass],
-       elevationInfo: {
-       mode: "relative-to-ground",   
-        }, //350000}//,
+       labelingInfo: [realLabelClass]
+        //350000}//,
        });
+      }
+      else
+      {
+        realLayer= new FeatureLayer({
+           url: "https://abr-gis-server.airchannel.net/airchannel/rest/services/Hosted/TruckLastBJTime/FeatureServer",
+           popupTemplate: templateReal,
+           title: "Выполняющиеся полеты",
+           labelingInfo: [realLabelClass],
+           elevationInfo: {
+           mode: "relative-to-ground",   
+            }, //350000}//,
+           });
+          }
    scene.layers.add(realLayer);
+   
    return realLayer;
 }  
+function refreshRealLayer(FeatureLayer,scene,tit,isOwner)
+{  var lays=[];
+   getLayersByTitle(FeatureLayer,scene.allLayers,[tit] ,lays);
+   let realLay=lays[0];
+   let url=realLay.url;
+   let templateReal=realLay.popupTemplate;
+   let labInfo=realLay.labelingInfo[0];
+   
+   let title=realLay.title;
+   var newRealLayer;
+   if (isOwner)  
+    {
+      newRealLayer=new FeatureLayer({
+      url:url,
+      popupTemplate:templateReal,
+      title : title,
+      labelingInfo:[labInfo],
+      spatialReference : {wkid :4326},
+      useTimeView : false 
+
+   })}
+   else
+   {
+    newRealLayer=new FeatureLayer({
+    url:url,
+    popupTemplate:templateReal,
+    title : title,
+    labelingInfo:[labInfo],
+    elevationInfo: {
+      mode: "relative-to-ground",   
+       }
+
+ })}
+   scene.remove(realLay);
+   scene.layers.add(newRealLayer);
+   makeRealFlyght(newRealLayer); 
+   
+
+}
 function makeRealFlyght(realLayer)
        {
         
