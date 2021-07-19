@@ -22,11 +22,13 @@ signup:
 #   path: /index
 #   controller: App\Controller\ContentController::buildIndex
 
-
-
 uav:
   path: /uav
   controller: App\Controller\ContentController::buildUav
+
+uav.pages:
+  path: /uav/{page}
+  controller: App\Controller\ContentController::buildUavPaginated
 
 profile:
   path: /profile

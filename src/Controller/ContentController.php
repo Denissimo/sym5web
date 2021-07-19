@@ -57,6 +57,11 @@ class ContentController extends AbstractController
 
     public function buildUav(Request $request, Client $client, string $tokenCookieName)
     {
+        return $this->buildUavPaginated($request, $client, $tokenCookieName, 1);
+    }
+
+    public function buildUavPaginated(Request $request, Client $client, string $tokenCookieName, int $page)
+    {
         $cookieChecker = $request->cookies->get($tokenCookieName);
 
         if (!$cookieChecker) {
@@ -87,7 +92,7 @@ class ContentController extends AbstractController
             $request,
             $client,
             $tokenCookieName,
-            '/my/data/aircrafts'
+            sprintf('/my/data/aircrafts/%d', $page)
         );
 
         $aircraftList = new AircraftList($myAircrafts);
