@@ -221,26 +221,11 @@ require(
         });
 
 
-<<<<<<< HEAD
-            //  // Compass for Owner (3D map)
-            //  let compass = new Compass({
-            //     view: view
-            //   });
-    
-            // view.ui.add(compass, {
-            //     position: "top-left",
-            //     index: 6
-            // });
 
-   
-
-        
-        if(checkRoleRoute("ROLE_OPERATOR",roles))      
-        {
-            if(route=="AirSituation")
-=======
+         
+       
         if(route=="AirSituation")
->>>>>>> ae177b6 (ДВК_обновление_воздушной_обстановки)
+
             {
                 
               var realLayer=addReal(FeatureLayer,LabelClass,Geoprocessor,scene,checkRoleRoute("ROLE_OWNER",roles));
@@ -271,7 +256,7 @@ require(
 
 
 
-        addReal(FeatureLayer,LabelClass, Compass, scene);
+        
         
        
         //******************************************************** выгрузка слоев ограничивающих полеты */
