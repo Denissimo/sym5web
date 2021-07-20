@@ -22,14 +22,27 @@ class AircraftList
     private $aircrafts;
 
     /**
-     * AircraftList constructor.
-     * @param stdClass $aircraft
+     * @var int
      */
-    public function __construct($aircraft)
+    private $pagesQty;
+
+    /**
+     * @var int
+     */
+    private $currentPage;
+
+    /**
+     * AircraftList constructor.
+     * @param stdClass $myAircrafts
+     */
+    public function __construct($myAircrafts)
     {
-        foreach ($aircraft->aircrafts as $aircraft) {
+        foreach ($myAircrafts->aircrafts as $aircraft) {
             $this->aircrafts[$aircraft->id] = new AircraftUnit($aircraft);
         }
+
+        $this->currentPage = $myAircrafts->currentPage;
+        $this->pagesQty = $myAircrafts->pagesQty;
     }
 
     /**
@@ -38,6 +51,22 @@ class AircraftList
     public function getAircrafts(): array
     {
         return $this->aircrafts;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPagesQty(): int
+    {
+        return $this->pagesQty;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCurrentPage(): int
+    {
+        return $this->currentPage;
     }
 
     public static function loadControlSystem() :array
