@@ -224,7 +224,7 @@ require(
 
          
        
-        if(route=="AirSituation")
+        if(route==="AirSituation")
 
             {
                 
@@ -238,7 +238,7 @@ require(
         if(checkRoleRoute("ROLE_OPERATOR",roles))
         {
              
-            if(route=="Flights")
+            if(route==="Flights")
              { 
               addLayers3D(FeatureLayer,scene) 
              }
@@ -246,7 +246,7 @@ require(
         else if(checkRoleRoute("ROLE_OWNER",roles))
 
         {
-            if(route=="Flights"||route=="Tracks"  )
+            if(route==="Flights"||route==="Tracks"  )
           addLayers2D(FeatureLayer,scene,roles) 
           selectLayer=addSelectLayer(GraphicsLayer,scene);
 
@@ -261,7 +261,7 @@ require(
        
         //******************************************************** выгрузка слоев ограничивающих полеты */
         scene.when(function(){
-            if(checkRoleRoute("ROLE_OWNER",roles) && route=="Flights")
+            if(checkRoleRoute("ROLE_OWNER",roles) && route==="Flights")
              getLayersByTitle(FeatureLayer,scene.allLayers,["Опасные зоны","Запретные зоны","Зоны с ограничениями"],layerConf);
            
              
@@ -271,7 +271,7 @@ require(
 
           if(checkRoleRoute("ROLE_OPERATOR",roles))
             map.when(function(){
-               if(checkRoleRoute("ROLE_OPERATOR",roles) && route=="Flights")
+               if(checkRoleRoute("ROLE_OPERATOR",roles) && route==="Flights")
                  getLayersByTitle(FeatureLayer,map.allLayers,["Опасные зоны","Запретные зоны","Зоны с ограничениями"],layerConf);
            
           }, function(error){
@@ -288,11 +288,11 @@ require(
            if (graphic.geometry){  
               
              let graphic2=graphic.clone();    
-             if (graphic2.geometry.type=="polygon")
+             if (graphic2.geometry.type==="polygon")
                 graphic2.symbol=selectSymbol.fillSymbol;
-             if (graphic2.geometry.type=="polyline")
+             if (graphic2.geometry.type==="polyline")
                 graphic2.symbol=selectSymbol.lineSymbol;   
-             if (graphic2.geometry.type=="point")
+             if (graphic2.geometry.type==="point")
                  graphic2.symbol=selectSymbol.markerSymbol;   
                  
                  selectLayer.graphics.removeAll();
@@ -326,7 +326,7 @@ require(
             
             try {
                 for(let j=0;j<titles.length;j++)
-                if (lay.title==titles[j]) 
+                if (lay.title===titles[j])
                     {
                         
                     layerConflict.push(lay);
@@ -339,7 +339,7 @@ require(
           
            lay.when(function(){
                
-          if (lay.type=="map-image")   
+          if (lay.type==="map-image")
                getLayersByTitle(FeatureLayer,lay.allSublayers,titles,layerConflict);    
             
            });
