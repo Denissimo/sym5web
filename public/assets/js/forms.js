@@ -70,6 +70,9 @@ $(document).ready(function () {
         $(location).prop("href", url);
       },
       error: function (response) {
+        console.log('error before');
+        console.log(response);
+        console.log('error after');
         $(".form-alert").addClass("alert-danger");
         $(".alert-message").html("Ошибка входа. Проверьте введенные данные.");
       },
@@ -81,10 +84,10 @@ $(document).ready(function () {
     // console.log($(this).serialize());
 
     // Token Response
-    $.ajax(settings).done(function (response) {
-      console.log(response);
-      return response;
-    });
+    // $.ajax(settings).done(function (response) {
+    //   console.log(response);
+    //   return response;
+    // });
 
     // Cookie test
     $.ajax(settings).done(function (response) {
