@@ -253,7 +253,7 @@ require(
 
         }
         
-        // addMobail(WebTileLayer,GroupLayer,esriConfig,scene);
+         addMobail(WebTileLayer,GroupLayer,esriConfig,scene);
 
 
 
