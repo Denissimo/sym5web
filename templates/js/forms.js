@@ -1,6 +1,9 @@
 $(document).ready(function () {
   var currentPath = new URL($(location).prop("href")).pathname;
-  if ($.cookie("utmdata_token") === undefined && currentPath !== '/login' && currentPath !== '/signup') {
+  var apiUrl = '{{ api_url|raw }}';
+  var authUrl = '{{ auth_url|raw }}';
+  var tokenCookieName = '{{ token_cookie_name }}';
+  if ($.cookie(tokenCookieName) === undefined && currentPath !== '/login' && currentPath !== '/signup') {
     console.log(document.referrer.pathname);
     var url = "/login";
     $(location).prop("href", url);
@@ -43,7 +46,7 @@ $(document).ready(function () {
 
   $("#form-login").submit(function (event) {
     var settings = {
-      url: "https://dev-auth.airchannel.net/api/login_check",
+      url: authUrl + "/api/login_check",
       method: "POST",
       timeout: 0,
       headers: {
@@ -91,7 +94,7 @@ $(document).ready(function () {
 
     // Cookie test
     $.ajax(settings).done(function (response) {
-      $.cookie("utmdata_token", response.token, { expires: 10/24, path: '/' });
+      $.cookie(tokenCookieName, response.token, { expires: 10/24, path: '/' });
       console.log(response);
     });
   });
@@ -100,11 +103,11 @@ $(document).ready(function () {
 
   if (window.location.pathname === "/profile") {
     $("#form-individual").ready(function (event) {
-      var token = $.cookie("utmdata_token");
+      var token = $.cookie(tokenCookieName);
 
       $(function () {
         $.ajax({
-          url: "https://dev-api.airchannel.net/my/userdata",
+          url: apiUrl + "/my/userdata",
           type: "GET",
           dataType: "json",
           headers: {
@@ -132,11 +135,11 @@ $(document).ready(function () {
   // Form - Profile -> Edit information
 
   $("#form-individual").submit(function (event) {
-    var token = $.cookie("utmdata_token");
+    var token = $.cookie(tokenCookieName);
     console.log(token);
 
     var settings = {
-      url: "https://dev-api.airchannel.net/my/userdata",
+      url: apiUrl + "/my/userdata",
       method: "PUT",
       timeout: 0,
       headers: {
@@ -175,9 +178,9 @@ $(document).ready(function () {
 
   // Remove cookie
   $("#logout").click(function (event) {
-    // $.cookie("utmdata_token", null, { path: "/" });
-    $.removeCookie('utmdata_token', { path: '/' });
-    console.log("utmdata_token");
+    // $.cookie(tokenCookieName, null, { path: "/" });
+    $.removeCookie(tokenCookieName, { path: '/' });
+    console.log(tokenCookieName);
     var url = "/login";
     $(location).prop("href", url);
   });
@@ -230,7 +233,7 @@ $(document).ready(function () {
     console.log(legalRoles.length);
 
     var settings = {
-      url: "https://dev-api.airchannel.net/register/user",
+      url: apiUrl + "/register/user",
       method: "POST",
       timeout: 0,
       headers: {
@@ -318,10 +321,10 @@ $(document).ready(function () {
         }
     );
     console.log(channels);
-    var token = $.cookie("utmdata_token");
+    var token = $.cookie(tokenCookieName);
     console.log(token);
     var settings = {
-      url: "https://dev-api.airchannel.net/aircraft/add",
+      url: apiUrl + "/aircraft/add",
       // url: "http://sym4swg/aircraft/add",
       method: "POST",
       timeout: 0,

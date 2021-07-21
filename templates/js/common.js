@@ -48,8 +48,9 @@ require(
     ) {
         var view;
         var scene;
-        var token = $.cookie("utmdata_token");
-        var apiUrl = 'https://dev-api.airchannel.net';
+        var tokenCookieName = '{{ token_cookie_name }}';
+        var token = $.cookie(tokenCookieName);
+        var apiUrl = '{{ api_url|raw }}';
         var roles = JSON.parse('{{ user.user.roles|json_encode() }}');
         var user = JSON.parse('{{ user|json_encode() }}');
         var route = '{{ route }}';
