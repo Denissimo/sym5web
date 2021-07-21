@@ -22,7 +22,7 @@ function addMobail(WebTileLayer,GroupLayer,esriConfig,scene){
     megafon.title="Megafon"
     var megafon2g= new WebTileLayer({urlTemplate:'https://coverage-map.megafon.ru/{level}/{col}/{row}.png?layers=2g',title: "Megafon_2G",  visible :false ,minScale : 500000});
     var megafon3g= new WebTileLayer({urlTemplate:'https://coverage-map.megafon.ru/{level}/{col}/{row}.png?layers=3g',
-    tileInfo:{origin:{x:0,y:0},spatialReference : {wkid :3857}},
+   // tileInfo:{origin:{x:0,y:0},spatialReference : {wkid :3857}},
     title: "Megafon_3G",  visible :false ,minScale : 500000});
     var megafonlte= new WebTileLayer({urlTemplate:'https://coverage-map.megafon.ru/{level}/{col}/{row}.png?layers=lte',title: "Megafon_LTE",  visible :false ,minScale : 500000});
     var megafonltep= new WebTileLayer({urlTemplate:'https://coverage-map.megafon.ru/{level}/{col}/{row}.png?layers=lte_plus',title: "Megafon_LTE+",  visible :false,minScale : 500000 });

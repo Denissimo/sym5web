@@ -248,7 +248,7 @@ require(
 
         {
             if(route==="Flights"||route==="Tracks"  )
-          addLayers2D(FeatureLayer,scene,roles) 
+          addLayers2D(FeatureLayer,scene,roles,user.id); 
           selectLayer=addSelectLayer(GraphicsLayer,scene);
 
         }

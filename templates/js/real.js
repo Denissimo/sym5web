@@ -66,6 +66,7 @@ function addReal(FeatureLayer,LabelClass,Geoprocessor,scene,isOwner){
        url: "https://abr-gis-server.airchannel.net/airchannel/rest/services/Hosted/TruckLastBJTime/FeatureServer",
        popupTemplate: templateReal,
        title: "Выполняющиеся полеты",
+       spatialReference : {wkid :4326},
        labelingInfo: [realLabelClass]
         //350000}//,
        });
@@ -134,7 +135,7 @@ function makeRealFlyght(realLayer)
           outFields: ["*"],
         })
         .then(function(featureSet) {
-            
+          console.log(featureSet.features.length);  
           makeListRealFlyght(featureSet.features);
 
          });
