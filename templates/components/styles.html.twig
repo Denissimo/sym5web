@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <title>ABR AIRCHANNEL UTM</title>
     {% if use_arcgis %}
-        <link href="https://js.arcgis.com/4.17/esri/themes/light/main.css" rel="stylesheet">
+        <link href="https://js.arcgis.com/4.20/esri/themes/light/main.css" rel="stylesheet">
     {% endif %}
     <link href="/assets/css/bootstrap.min.css" rel="stylesheet"/>
     <link href="/assets/css/app.css" rel="stylesheet"/>
@@ -20,15 +20,14 @@
     <script src="../assets/js/jquery.cookie.js"></script>
 {#    <script src="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.1.4/dist/js/datepicker.min.js"></script>#}
     <script src="../assets/js/app.js"></script>
-    <script src="../assets/js/forms.js"></script>
-
+    <script src="/javascript/forms.js?route={{ route }}"></script>
     {% if use_arcgis is not defined %}
         {% set use_arcgis = false %}
     {% endif %}
 
     {% if use_arcgis %}
         {# ESRI #}
-        <script src="https://js.arcgis.com/4.19/"></script>
+        <script src="https://js.arcgis.com/4.20/"></script>
         <script src="/javascript/arcgis.js?route={{ route }}"></script>
         {% if route == 'AirSituation' %}
             {# <script src="/javascript/arcgis"></script> #}
