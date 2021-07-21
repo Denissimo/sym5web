@@ -285,10 +285,18 @@ $(document).ready(function () {
     });
   });
 
+  $("#staticBackdropLabel").click(function (event) {
+    console.log(3);
+    $("#modalUav").modal("hide");
+  });
+
   $("#form-uav").submit(function (event) {
     console.log('add UAV submit');
     event.preventDefault();
-
+    var addUavModal = new bootstrap.Modal(document.getElementById('modalUav'), {
+      keyboard: false
+    });
+    addUavModal.toggle();
     if (false) {
       $('.alert_place').html(
           '<div class="alert alert-danger alert-dismissible fade show" role="alert">\n' +
@@ -370,10 +378,11 @@ $(document).ready(function () {
       success: function (response) {
         $('.alert_place').html(
             '<div class="alert alert-success alert-dismissible fade show" role="alert">\n' +
-            '\t\t\t\t\tSuccess register\n' +
-            '\t\t\t\t\t<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>\n' +
-            '\t\t\t\t</div>'
+            'БВС успешно добавлено\n' +
+            '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>\n' +
+            '</div>'
         );
+        $("#modalUav").modal("hide");
         // setTimeout(function() {
         //   $(location).prop("href", '/login');
         // }, 3000);
@@ -384,9 +393,9 @@ $(document).ready(function () {
         // console.log(response.responseJSON);
         $('.alert_place').html(
             '<div class="alert alert-danger alert-dismissible fade show" role="alert">\n' +
-            '\t\t\t\t\t' + response.responseJSON.message + '\n' +
-            '\t\t\t\t\t<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>\n' +
-            '\t\t\t\t</div>'
+             response.responseJSON.message + '\n' +
+            '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>\n' +
+            '</div>'
         );
       },
     };
