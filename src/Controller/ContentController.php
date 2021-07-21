@@ -258,4 +258,26 @@ class ContentController extends AbstractController
             ]
         );
     }
+
+    public function buildFormJs(
+        Request $request,
+        string $tokenCookieName,
+        string $apiUrl,
+        string $authUrl
+    )
+    {
+        $route = $request->query->get('route') ?? ArcgisController::DEFAULT_ROUTE;
+
+        $response = $this->render('js/form.html.twig', [
+            'route' => $route,
+            'api_url' => $apiUrl,
+            'auth_url' => $authUrl,
+            'token_cookie_name' => $tokenCookieName,
+            'use_arcgis' => false
+        ]);
+
+        $response->headers->set('Content-Type', 'text/plain');
+
+        return $response;
+    }
 }

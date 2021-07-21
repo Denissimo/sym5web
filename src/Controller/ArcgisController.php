@@ -12,7 +12,7 @@ class ArcgisController extends AbstractController
 
     public function buildProxy(Request $request)
     {
-            return $this->redirectToRoute('login');
+        return $this->redirectToRoute('login');
     }
 
 
@@ -70,11 +70,16 @@ class ArcgisController extends AbstractController
         ]);
     }
 
-    public function buildCommonJs(Request $request, Client $client, string $tokenCookieName)
+    public function buildCommonJs(
+        Request $request,
+        Client $client,
+        string $tokenCookieName,
+        string $apiUrl
+    )
     {
         $route = $request->query->get('route') ?? self::DEFAULT_ROUTE;
         $token = $request->cookies->get($tokenCookieName);
-       
+
         $userData = $client->sendJson(
             '/my/userdata',
             null,
@@ -85,6 +90,8 @@ class ArcgisController extends AbstractController
         $response = $this->render('js/script.html.twig', [
             'user' => $userData->user,
             'route' => $route,
+            'api_url' => $apiUrl,
+            'token_cookie_name' => $tokenCookieName,
             'use_arcgis' => false
         ]);
 
