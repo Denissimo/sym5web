@@ -55,7 +55,14 @@
                                         {% endif %}
                                         <tr>
                                             <td>
-                                                <img src="/assets/images/icon__drone.svg" alt="aircraft icon" title="{{ aircraft.id }}">
+                                                {% if aircraft.userDocuments[0].uploadDocuments[0] is defined and aircraft.userDocuments[0].uploadDocuments[0] is not empty %}
+                                                    <img src="{{ adm_url ~ adm_img_upload_path ~ aircraft.userDocuments[0].uploadDocuments[0].path}}"
+                                                         style="width: 50px; height: 50px; border-radius: 25px;" alt="aircraft icon" title="{{ aircraft.id }}">
+                                                {% else %}
+                                                    <img src="/assets/images/icon__drone.svg" alt="aircraft icon" title="{{ aircraft.id }}">
+                                                {% endif %}
+
+
                                             </td>
                                             <td>{{ aircraft.type }}</td>
                                             <td>{{ aircraft.registrationNumber }}</td>
