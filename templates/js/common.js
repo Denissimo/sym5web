@@ -1,4 +1,5 @@
-var GEOPROCESSOR; 
+var GEOPROCESSOR;
+
 var selectLayer; //слой подсветки выбраннных объектов на карте
 require(
     [   "esri/config", //dv
@@ -7,13 +8,23 @@ require(
         "esri/layers/FeatureLayer" , //dv
         "esri/layers/GraphicsLayer" ,
         "esri/layers/support/LabelClass",//dv
-
+         
+        "esri/Graphic",
+        "esri/geometry/Extent",
+        "esri/geometry/Polyline",
+        "esri/geometry/Circle",
+        "esri/geometry/Polygon",
+        "esri/geometry/Point",
+        "esri/geometry/Multipoint",
+        "esri/geometry/geometryEngine",
+        "esri/geometry/projection",
         
         "esri/views/MapView",
         "esri/views/SceneView",
         "esri/WebMap",
         "esri/WebScene",
         
+        "esri/widgets/Sketch",
         "esri/widgets/Search",
         "esri/widgets/Expand",
         "esri/widgets/BasemapGallery",
@@ -31,12 +42,22 @@ require(
         FeatureLayer, //dv
         GraphicsLayer, //dv
         LabelClass,//dv
-   
+        
+        Graphic,
+        Extent,
+        Polyline,
+        Circle,
+        Polygon,
+        Point,
+        Multipoint,
+        geometryEngine,
+        projection,
         
         MapView,
         SceneView,
         WebMap,
         WebScene,
+        Sketch,
         Search,
         Expand,
         BasemapGallery,
@@ -55,7 +76,8 @@ require(
         var user = JSON.parse('{{ user|json_encode() }}');
         var route = '{{ route }}';
         var layerConf=[];
-
+        
+        projection.load();
         
 
         console.log(route);
@@ -169,6 +191,30 @@ require(
 
         // Remove copyrights at bottom
         view.ui.remove("attribution");
+
+        if(checkRoleRoute("ROLE_OWNER",roles) && route==="Tracks" )
+        {
+         setTrackSidebar();   
+         layerManual = new GraphicsLayer({listMode:"hide"}); //слой графики для скетча    
+        // Sketch widget
+        const sketch = new Sketch({
+            layer: layerManual,
+            view: view,
+            availableCreateTools:["polyline", "polygon", "rectangle", "circle","point"],
+            // graphic will be selected as soon as it is created
+            creationMode: "single"
+          });
+          const bgExpandSketch = new Expand({
+            view: view,
+            content: sketch
+        });
+        view.ui.add(bgExpandSketch, {
+            position: "top-left",
+            index: 1
+        });
+       eventSketch(sketch,layerManual,view,Extent,projection,Graphic,Circle);
+       scene.layers.add(layerManual);    
+        }
 
         // Search widget
         const searchWidget = new Search({
