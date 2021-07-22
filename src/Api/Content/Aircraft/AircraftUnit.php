@@ -5,6 +5,7 @@ namespace App\Api\Content\Aircraft;
 use App\Api\Content\AircraftClassificator\AircraftCategoryUnit;
 use App\Api\Content\AircraftClassificator\AircraftEngineUnit;
 use App\Api\Content\AircraftClassificator\AircraftMassUnit;
+use App\Api\Content\Document\UserDocument;
 use DateTimeInterface;
 use stdClass;
 
@@ -65,8 +66,10 @@ class AircraftUnit
      */
     public $otherParams;
 
-    // TODO uploadDocuments
-    public $uploadDocuments;
+    /**
+     * @var UserDocument[]|array
+     */
+    public $userDocuments;
 
     // TODO owner
     public $owner;
@@ -199,5 +202,25 @@ class AircraftUnit
         $this->engine = new AircraftEngineUnit($aircraft->engine);
         $this->mass = new AircraftMassUnit($aircraft->mass);
         $this->registrationStatus = $aircraft->registrationStatus;
+        $this->userDocuments = $this->listUserDocuments($aircraft);
+    }
+
+    /**
+     * @param stdClass $aircraft
+     *
+     * @return array
+     */
+    private function listUserDocuments(stdClass $aircraft)
+    {
+        if (!isset($aircraft->userDocuments)) {
+            return [];
+        }
+
+        $userDocuments = [];
+        foreach ($aircraft->userDocuments as $userDocument) {
+            $userDocuments[]  = new UserDocument($userDocument);
+        }
+
+        return $userDocuments;
     }
 }
