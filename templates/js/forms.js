@@ -288,6 +288,18 @@ $(document).ready(function () {
   $("#staticBackdropLabel").click(function (event) {
     console.log(3);
     $("#modalUav").modal("hide");
+    // $("#modalUav").hide();
+  });
+
+  $(".btn-aircraft-edit").click(function (event) {
+    console.log($(this).attr('data-aircraft-id'));
+    var aircraft = JSON.parse($(this).attr('data-aircraft'));
+    console.log(aircraft);
+    $('#form-uav input').each(
+        function (){
+          $(this).val(2);
+        }
+    );
   });
 
   $("#form-uav").submit(function (event) {
