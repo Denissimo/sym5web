@@ -9,15 +9,15 @@
 <div class="page page-map">
 
     <main class="map-container" id="map-operator">
-
-        <div class="quality">
-            <select name="quality-selector" class="quality-selector" id="quality">
-                <option value="low">Низкая</option>
-                <option value="medium">Средняя</option>
-                <option value="high">Высокая</option>
-            </select>
+      <div class="quality"  style="bottom: 4rem;left: 1rem; position: absolute">
+          <input type="file" name="file" id="inFile" style="opacity : 1" /> 
+       </div>    
+      <div class="quality">
+      <button id="createRoute" class="esri-button esri-button-overwrite">Создать маршрут</button>
         </div>
+         
     </main>
+    
     <aside>
 
         {% block sidebar %}
@@ -26,3 +26,5 @@
 
     </aside>
 </div>
+ 
+

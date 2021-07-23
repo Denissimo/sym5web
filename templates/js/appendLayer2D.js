@@ -7,7 +7,7 @@
         return selectLayer;
        }
 
-     function addLayers2D(FeatureLayer,webmap,route,userid)
+     function addLayers2D(FeatureLayer,webmap,route)
      {
           var servicePath = "https://abr-gis-server.airchannel.net/airchannel/rest/services/Dev/VectorDevelop/FeatureServer/";
           
@@ -176,12 +176,12 @@
                      }
 
 
-                     zoneLayer.definitionExpression="ownerid = '"+userid+"'";
-                     routeLayer.definitionExpression="ownerid = '"+userid+"'";
+                     zoneLayer.definitionExpression="ownerid = '"+user.id.toString()+"'";
+                     routeLayer.definitionExpression="ownerid = '"+user.id.toString()+"'";
 
-                     tableLayer.definitionExpression="ownerid = '"+userid+"'";
+                     tableLayer.definitionExpression="ownerid = '"+user.id.toString()+"'";
                      console.log(tableLayer.definitionExpression);
-                     tableZoneLayer.definitionExpression="ownerid = '"+userid+"'";
+                     tableZoneLayer.definitionExpression="ownerid = '"+user.id.toString()+"'";
                      
                      webmap.add(routeLayer);
                      webmap.add(zoneLayer);
