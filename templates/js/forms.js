@@ -32,14 +32,7 @@ $(document).ready(function () {
         $("#mass").val(massId);
         $(this).removeClass('label_invisible');
       }
-
       console.log(massMin + ' >>> ' +  massMax);
-      // if ($(this).hasClass("stop")) {
-      //   alert("Остановлено на " + i + "-м пункте списка.");
-      //   return false;
-      // } else {
-      //   alert(i + ': ' + $(elem).text());
-      // }
     });
       console.log('blur');
   });
@@ -162,7 +155,6 @@ $(document).ready(function () {
       },
 
       error: function (response) {
-        console.log("ПНХ");
         console.log(response);
       },
     };
@@ -291,16 +283,42 @@ $(document).ready(function () {
     // $("#modalUav").hide();
   });
 
+  $("#addAircraftBtn").click(function (event) {
+    aircraftActionMode = 'add';
+    aircraftActionMethod = 'POST';
+    console.log(aircraftActionMode);
+  });
+
   $(".btn-aircraft-edit").click(function (event) {
-    console.log($(this).attr('data-aircraft-id'));
+    aircraftActionMode = $(this).attr('data-aircraft-id');
+    aircraftActionMethod = 'PUT';
+    console.log(aircraftActionMode);
     var aircraft = JSON.parse($(this).attr('data-aircraft'));
-    console.log(aircraft);
+    console.log(aircraft.controlSystem);
+    console.log(aircraft.channels);
     $('#form-uav input').each(
         function (){
-          $(this).val(2);
+          var elementName = $(this).attr('name');
+          if ((typeof aircraft[elementName]) != 'object') {
+            $(this).val(aircraft[elementName]);
+            $(this).prop( "checked", aircraft[elementName] );
+          }
         }
     );
+    $("#engine option[value=" + aircraft.engine.id + "]").attr("selected", "selected");
+    $("#category option[value=" + aircraft.category.id + "]").attr("selected", "selected");
+    $("#registrationStatus option[value=" + aircraft.registrationStatus.id + "]").attr("selected", "selected");
+    $(".controlSystemOption").removeAttr('selected');
+    $("#controlSystem option[value=" + aircraft.controlSystem.id + "]").attr("selected", "selected");
+    $(".channel").prop( "checked", false );
+    $.each(aircraft.channels, function(index, value){
+      $('#channel_' + index).prop( "checked", true );
+      console.log('#channel_' + index);
+    });
   });
+
+  var aircraftActionMode = 'add';
+  var aircraftActionMethod = 'POST';
 
   $("#form-uav").submit(function (event) {
     console.log('add UAV submit');
@@ -335,7 +353,7 @@ $(document).ready(function () {
     $('.channel').each(
         function (){
           if ($(this).prop('checked')) {
-              channelId = $(this).attr('data-chennal-id');
+              channelId = $(this).attr('data-channel-id');
               channels.push(channelId);
           }
         }
@@ -344,9 +362,9 @@ $(document).ready(function () {
     var token = $.cookie(tokenCookieName);
     console.log(token);
     var settings = {
-      url: apiUrl + "/aircraft/add",
+      url: apiUrl + "/aircraft/" + aircraftActionMode,
       // url: "http://sym4swg/aircraft/add",
-      method: "POST",
+      method: aircraftActionMethod,
       timeout: 0,
       headers: {
         "Content-Type": "application/json",
