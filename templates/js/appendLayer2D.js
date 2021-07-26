@@ -1,4 +1,8 @@
-       function addSelectLayer(GraphicsLayer,webmap)
+var routeVecLayer;
+var zoneLayer;
+var tableLayer;
+var tableZoneLayer;
+function addSelectLayer(GraphicsLayer,webmap)
        {
          var selectLayer = new GraphicsLayer({
           listMode:"hide"
@@ -22,7 +26,7 @@
           
                
         
-            var   routeVecLayer = new FeatureLayer({
+            routeVecLayer = new FeatureLayer({
             url:     sourceTrackRoute, 
             
             outFields: ["*"],
@@ -46,7 +50,7 @@
                symbol: lineSymbolTable
             };
 
-           var tableLayer = new FeatureLayer({
+             tableLayer = new FeatureLayer({
               url:    sourceTrackRoute,
               outFields: ["*"],
               renderer :lineRendererTable,
@@ -71,7 +75,7 @@
                     symbol: fillSymbolSelectZone
                   };    
 
-           var tableZoneLayer = new FeatureLayer({
+            tableZoneLayer = new FeatureLayer({
             url:     sourceTrackZone,
             outFields: ["*"],
             renderer:zoneRendererTable,
@@ -88,7 +92,7 @@
               type: "simple",
               symbol: fillSymbol
             };      
-          var zoneLayer = new FeatureLayer({
+          zoneLayer = new FeatureLayer({
                url:     sourceTrackZone,
                outFields: ["*"],
                hasZ:true,

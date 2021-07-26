@@ -2,9 +2,10 @@ console.log('role_owner');
 
 
 
-
+var rlb=[];
 function setTrackSidebar()
 {
+/*  
 let tracksidebar="<a href='#'" +'class="close-btn" id="close-btn">\
 <span></span>\
 </a>\
@@ -18,8 +19,9 @@ let tracksidebar="<a href='#'" +'class="close-btn" id="close-btn">\
    </div>\
   </div>';
  
- document.getElementById("sidebar").innerHTML=tracksidebar;
-
+ document.getElementById("sidebar").innerHTML=tracksidebar;*/
+ var els=document.getElementsByClassName("sidebar-title");
+ els[0].innerText="Траектории и зоны";
  document
           .getElementById("createRoute")
           .addEventListener("click", makeNewRoute);
@@ -42,7 +44,7 @@ let tracksidebar="<a href='#'" +'class="close-btn" id="close-btn">\
 
       });         
 
- 
+      getUserRoute(null);
 }
 //Загрузка KML
 
@@ -56,7 +58,7 @@ function myFly(res){
    
   s="load_"+s.substring(n+1,n2);
   nameRoute=s;
-  document.getElementById("inFile").value="";
+  //document.getElementById("inFile").value="";
   changeExtent( 
                makeLine( parserKML(res),layerManual)); 
                flagEdit=true; 
@@ -314,7 +316,7 @@ function changeExtent (geom)
                         {
                          stat=1; 
                         }
-                        createRecordRouteTable(user.id,stat,nameRoute,createRouteVector);
+                        createRecordRouteTable(stat,nameRoute,createRouteVector);
                         
                       return;
                     
@@ -324,7 +326,8 @@ function changeExtent (geom)
                     
                 
                            function createRouteVector(routeid) {
-                
+                           
+                            
                                 idRoute=routeid;
                 
                                 let lGraph=[];
@@ -427,6 +430,23 @@ function changeExtent (geom)
                                   return;
                          
                          }   
+                         function createZone(params,dat,routeid) {
+                          zoneLayer
+                            .applyEdits(params)
+                            .then(function(editsResult1){ 
+                              layerManual.removeAll()
+                              tableZoneLayer.refresh()
+                              
+                              applyTableUpdate(dat,routeid);
+                             
+                            })
+                            .catch(function(error) {
+                               alert( error.name);
+                               alert( error.message);
+                              
+                            });
+                        
+                         }                       
       function makeLines()
       {
       
@@ -697,7 +717,7 @@ function changeExtent (geom)
                   updateFeatures: ftSet.features
                           };
                    
-                    var dat1={userId: user.id,
+                    var dat1={
                             track: {
                              heightMin :Z3+5 ,
                              heightMax: Z3+100,
@@ -775,20 +795,22 @@ function changeExtent (geom)
       function checkRouteName(isNew)
     {
       
+      console.log(idRoute);
       if(isNew)
       {
       if (idRoute != "")  // наименование маршрута
-      {
-      alert ("Маршрут существует");
-      return false;
+       {
+       alert ("Маршрут существует");
+       return false;
+       }
       }
-    }
+     console.log(nameRoute); 
      let newName=nameRoute;  
-     if (nameRoute=="")  // наименование маршрута
-      {
-      newName=prompt ("Введите наименование маршрута");
-      if (newName==null) return false;
-      }
+     //if (nameRoute=="")  // наименование маршрута
+     // {
+      newName=prompt ("Введите наименование маршрута",nameRoute);
+     // if (newName==null) return false;
+     // }
     
         
        
@@ -819,4 +841,207 @@ function changeExtent (geom)
     }
        return true;
 
-    }              
+    }    
+    
+    function createRecordRouteTable(tp,nm,functVect) {
+      
+      dt= 
+      //JSON.stringify(
+        {"track": {
+                       "type": tp,
+                       "name": nm,
+                       "isFinal": false 
+                     }
+                    };
+     //               );
+     console.log(dt);     
+     console.log(token);         
+      apiNewTrack= apiData(apiUrl, "/track/add", token, 'POST', dt);
+      
+      apiNewTrack.then(function (response) {
+        console.log(response);
+        functVect(response.id);
+    });
+
+  }
+    
+
+
+
+
+
+    function updateVecRoute(params,dat,routeid) {
+    
+      routeVecLayer
+        .applyEdits(params)
+        .then(function(editsResult){ 
+          
+        //var rd=document.getElementById("routeid").value
+         tableLayer.definitionExpression="routeid = '"+routeid+"' And numb >= 0"                   ;
+         
+         layerManual.removeAll();
+        
+         applyTableUpdate(dat,routeid);  
+        
+        
+                  
+    
+    
+          
+      })
+        .catch(function(error) {
+            alert( error.name);
+           alert( error.message);
+          
+        });
+        
+        
+      
+    }
+
+    function applyTableUpdate(dat,routeid) {
+      
+      // emptyArray(rlb);
+   
+      apiModTrack= apiData(apiUrl, "/track/"+routeid, token, 'PUT', dat);
+      
+      apiModTrack.then(function (response) {
+        console.log(response);
+       // getUserRoute(routeid);
+        alert( " Маршрут создан. ");
+      });
+       
+       
+       }
+       function getRouteRecords(resFunc)
+    {  
+     
+      apiTracks= apiData(apiUrl, "/track/user/"+user.id, token);
+
+      apiTracks.then(function (response) {
+        emptyArray(tabName);
+        emptyArray(rlb);
+        for (let i=0;i<response.tracks.length;i++)
+                  if (response.tracks[i].isFinal)
+                       tabName.push([response.tracks[i].id,response.tracks[i].name,response.user.id]);
+        resFunc(response);
+      });
+   }
+
+       function getUserRoute(viewRid)
+        {
+         
+          var stats= ["Зональный круговой","Зональный","Линейный"];
+          
+          const trackhtml0 ='<li class="uav-list-item"><div class="uav-item-header">\
+          <span class="uav-item-status">';
+          const trackhtml1 ='</span>\
+          <button class="btn uav-btn-more" id="';
+          const trackhtml1_1='">Подробнее</button>\
+          </div>\
+          <div class="uav-item-body">';
+         // <span class="uav-item-row uav-item-reg">123123123123ABBB</span>\
+         const trackhtml2='<span class="uav-item-row uav-item-flight"><span class="uav-item-desc">Наименование</span>';
+         const trackhtml3 ='</span>\
+          <span class="uav-item-row uav-item-date-start"><span class="uav-item-desc">Дата создания</span>';
+          const trackhtml4='</span>\
+                           </div>\
+          <div class="uav-item-footer">';
+
+          const trackhtml5='<button class="btn btn-uav-small"id="';
+          const trackhtml6 ='">Сохранить</button>';
+          const trackhtml7='<button class="btn btn-uav-small" id="';
+          const trackhtml8='">Сохранить как</button>';
+          const trackhtml9='<button class="btn btn-uav-small" id="';
+          const trackhtml10='">Импорт геометрии</button>';
+          const trackhtml11='<button class="btn btn-uav-small" id="';
+          const trackhtml12='">Удалить</button>';
+          const trackhtml13='</div></li>'; 
+
+      /*
+      const routhtml1 ='<div class="flight-list-item  flight-list-item-onapproval"'
+      const routhtml2='><div class="flight-top">';
+      const routhtml3=' <div class="flight-content">';//<p class="flight-item-reg">';//AZ 200187
+      const routhtml4='<p class="flight-item-flightnumber"><span  class="flight-item-title">Название </span>';//000150
+      const routhtml5='<span  class="flight-item-title"> </span>';//20.12.2020 16:30
+     // const flighthtml6='</p><p class="flight-item-date-stop"><span  class="flight-item-title">Продолжительность</span>';//20.12.2020 17:30
+      const routhtml7='</p>  </div> </div>  <div class="flight-bottom">' ; //<p class="flight-item-status ';// status-onapproval">На утверждении
+      const routhtml8='</p>';
+      const routhtml8a=' <a  class="btn btn-more" id="';
+      const routhtml8b='">Подробнее</a>';//</div>';
+      //const routehtml8b2='">Cкрыть</a>';//</div>';
+      //"form-item">
+      const routhtml9 ='<div  id="';    
+      const routhtml9a='">'
+      const routhtml9c='<p   class="flight-bottom" <div class="flight-bottom"> <label> Duration</label>  <label>Zmin</label> <label  class="form-label">Zmax</label> </div> ';
+      const routhtml9b='  <div class="flight-bottom"> <input  type="number"    value=1.5>  <input  type="number"    value=100><input  type="number"  value=1500></div></p></div>';
+      const routhtml10="</div>"
+      const routhtml8c= '</div>';
+      //const routhtml9= '<a href="#" class="btn btn-more" id="';//'<br /> <button id="'; 
+      //const routhtml10='">Сохранить </a></div>';// </button> </div>'
+      const routhtml11='</div>';*/
+      
+          var     lst="";
+          
+          // var   whFF="ownerid = '"+document.getElementById("ownerid").value+"'";
+ //statusid > 2 не ЧЕРНОВИК не ШАБЛОН
+           //alert(document.getElementById("ownerid").value); 
+             getRouteRecords(makeListRoutePanel);
+
+           
+             function makeListRoutePanel(response)
+             {
+              
+              for (let i=0;i<response.tracks.length;i++) {      
+                if(response.tracks[i].isFinal)
+
+                  //alert( response.tracks[i].id+" "+response.tracks[i].type);
+                  panTrack(response.tracks[i]);
+                }
+
+                document.getElementById("uav-realtimelist").innerHTML=lst;
+                addRouteEvent();
+                if(viewRid!=null)   getRouteRecord(viewRid,evRouteDetal);
+
+             }
+                 
+               function   panTrack(track){
+                   var rlob=track.id;
+                   var nm=track.name;
+                   var kod=track.type;
+                   var dt=track.createdAt.date;
+                   rlb.push(rlob) ; 
+                   lst=lst+trackhtml0;
+                   lst=lst+stats[kod];
+                   lst=lst+trackhtml1;
+                   lst=lst+rlob;
+                   lst=lst+trackhtml1_1;
+                   lst=lst+trackhtml2;
+                   lst=lst+nm;
+                   lst=lst+trackhtml3;
+                   lst=lst+dt;
+                   lst=lst+trackhtml4;
+                   lst=lst+trackhtml5;
+                   lst=lst+"S"+rlob;
+                   lst=lst+trackhtml6;
+                   lst=lst+trackhtml7;
+                   lst=lst+"P"+rlob;
+                   lst=lst+trackhtml8;
+                   lst=lst+trackhtml9;
+                   lst=lst+"I"+rlob;
+                   lst=lst+trackhtml10;
+                   lst=lst+trackhtml11;
+                   lst=lst+"D"+rlob;
+                   lst=lst+trackhtml12;
+                   lst=lst+trackhtml13;
+                   
+             
+                    }
+
+
+         }
+
+   
+     
+
+

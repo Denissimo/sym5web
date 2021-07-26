@@ -1,3 +1,6 @@
+var token ;
+var apiUrl
+
 var GEOPROCESSOR;
 var POLYLINE;
 var POLYGON;
@@ -87,8 +90,8 @@ require(
        
         var scene;
         var tokenCookieName = '{{ token_cookie_name }}';
-        var token = $.cookie(tokenCookieName);
-        var apiUrl = '{{ api_url|raw }}';
+        token = $.cookie(tokenCookieName);
+        apiUrl = '{{ api_url|raw }}';
         var roles = JSON.parse('{{ user.user.roles|json_encode() }}');
         user = JSON.parse('{{ user|json_encode() }}');
         var route = '{{ route }}';
