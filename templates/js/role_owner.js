@@ -43,7 +43,7 @@ let tracksidebar="<a href='#'" +'class="close-btn" id="close-btn">\
            
 
       });         
-
+      idRoute="";
       getUserRoute(null);
 }
 //Загрузка KML
@@ -264,15 +264,7 @@ function changeExtent (geom)
                  function makeCircle(cPoint,radius,layerManual)
                 {    
                   
-                    fillSymbol3 = {
-                        type: "simple-fill", // autocasts as SimpleLineSymbol()
-                        color: [128, 128, 128,0],
-                        outline: {  // autocasts as new SimpleLineSymbol()
-                          color: [ 128,128, 128 ],
-                          width: 2
-                        }
-                        
-                      };  
+                      
                   let cp=   PROJECTION.project(cPoint, { wkid: 4326 },PROJECTION.getTransformation(cPoint.spatialReference,{ wkid: 4326 }));
                  
                      let nP=240;
@@ -288,7 +280,7 @@ function changeExtent (geom)
               
                     var circGraphic=new GRAPHIC({
                       geometry:circ,
-                      symbol:fillSymbol3,
+                      symbol:selectSymbol.fillSymbolGray,
 
                     });
                      
@@ -907,7 +899,7 @@ function changeExtent (geom)
       
       apiModTrack.then(function (response) {
         console.log(response);
-       // getUserRoute(routeid);
+        getUserRoute(routeid);
         alert( " Маршрут создан. ");
       });
        
@@ -946,8 +938,9 @@ function changeExtent (geom)
           <span class="uav-item-row uav-item-date-start"><span class="uav-item-desc">Дата создания</span>';
           const trackhtml4='</span>\
                            </div>\
-          <div class="uav-item-footer">';
-
+                           <div class="uav-item-body" id="';
+         const trackhtml4_2='"></div>\
+                         <div class="uav-item-footer">';
           const trackhtml5='<button class="btn btn-uav-small"id="';
           const trackhtml6 ='">Сохранить</button>';
           const trackhtml7='<button class="btn btn-uav-small" id="';
@@ -956,6 +949,9 @@ function changeExtent (geom)
           const trackhtml10='">Импорт геометрии</button>';
           const trackhtml11='<button class="btn btn-uav-small" id="';
           const trackhtml12='">Удалить</button>';
+          const trackhtml12_2='<input type="hidden" id="';
+          const trackhtml12_3='" value="';
+          const trackhtml12_4='"></input>';
           const trackhtml13='</div></li>'; 
 
       /*
@@ -1010,6 +1006,7 @@ function changeExtent (geom)
                    var nm=track.name;
                    var kod=track.type;
                    var dt=track.createdAt.date;
+                   var numb=track.applicationsNumber;
                    rlb.push(rlob) ; 
                    lst=lst+trackhtml0;
                    lst=lst+stats[kod];
@@ -1021,18 +1018,31 @@ function changeExtent (geom)
                    lst=lst+trackhtml3;
                    lst=lst+dt;
                    lst=lst+trackhtml4;
-                   lst=lst+trackhtml5;
-                   lst=lst+"S"+rlob;
-                   lst=lst+trackhtml6;
+                   lst=lst+"R"+rlob;
+                   lst=lst+trackhtml4_2;
+                   if (numb==0)
+                   {
+                    lst=lst+trackhtml5;
+                    lst=lst+"S"+rlob;
+                    lst=lst+trackhtml6;
+                   }
                    lst=lst+trackhtml7;
                    lst=lst+"P"+rlob;
                    lst=lst+trackhtml8;
                    lst=lst+trackhtml9;
                    lst=lst+"I"+rlob;
                    lst=lst+trackhtml10;
-                   lst=lst+trackhtml11;
-                   lst=lst+"D"+rlob;
-                   lst=lst+trackhtml12;
+                   if(numb==0)
+                   {
+                    lst=lst+trackhtml11;
+                    lst=lst+"D"+rlob;
+                    lst=lst+trackhtml12;
+                   }
+                   lst=lst+trackhtml12_2;
+                    lst=lst+"T"+rlob;
+                    lst=lstlst=lst+trackhtml12_3;
+                    lst=lst+kod; 
+                    lst=lst+trackhtml12_4;
                    lst=lst+trackhtml13;
                    
              
@@ -1041,7 +1051,717 @@ function changeExtent (geom)
 
          }
 
-   
+         function addRouteEvent() {
+          
+          for (var i=0;i<rlb.length;i++)
+          {
+            // alert(rlb[i]);
+            
+             document
+             .getElementById(rlb[i])
+             .addEventListener("click", eventRouteDetal); 
+
+             if(document.getElementById("S"+rlb[i])!=null)
+             {
+              document
+              .getElementById("S"+rlb[i])
+              .addEventListener("click", mySaveRoute); 
+             }
+             document
+             .getElementById("P"+rlb[i])
+             .addEventListener("click", mySaveRouteAs); 
+             document
+             .getElementById("I"+rlb[i])
+             .addEventListener("click", myImportGraphic); 
+             if(document.getElementById("D"+rlb[i])!=null)
+             {
+             document
+             .getElementById("D"+rlb[i])
+             .addEventListener("click", myDeleteRoute); 
+             }
+             
+             
+             
+              
+      
+             
+         
+          }
+      
+         }
+         function eventRouteDetal(event){
      
+        
+          var gld=event.target.id;
+           
+           evRouteDetal(gld);
+           
+         }
+
+     /*export*/   function evRouteDetal(trackid)
+         {
+           
+          let gld=trackid;
+          
+          let tps=document.getElementById("T"+gld).value;
+          //console.log(tps);
+          let tp=parseInt(tps);
+          
+                if (tp<2)
+                {     
+                       let elem=document.getElementById("DR"+gld);
+                       
+                       if (elem ==null )  
+                       {
+                         let oldrid=idRoute;
+                         {
+                          removeSelectSeg(oldrid,"")  
+                          getDetailZone(oldrid,false)
+                         }
+                         getDetailZone(gld,true);
+                         queryRoad(event,gld);
+                     
+                       }
+                       else
+                        {
+                        getDetailZone(gld,false);
+                        queryRoad(event,"");
+                     
+                        }
+  
+                }
+                else
+                if (tp==2){
+                  emptyArray(flypts);
+                      //flypts=[];
+                  let elem=document.getElementById("0ZZ"+gld);
+                        if (elem ==null )  
+                          { 
+                           let oldrid=idRoute
+                           {
+                           removeSelectSeg(oldrid,"")  
+                           getDetailRoute(oldrid,false) 
+                           }
+                           getDetailRoute(gld,true);
+                           queryRoad(event,gld);
+                     
+                          }
+                          else
+                              {
+                              
+                              removeSelectSeg(gld,"");
+                              getDetailRoute(gld,false);
+                              queryRoad(event,"");
+                     
+                              }
+                        }
+
+             // });
+            
+             
+             
+             
+  
+       }    
+/*export*/ function getDetailZone(routeid,flag)
+{
+  var lst="";
+  var id="R"+routeid;
+  
+  //const routhtml1='<p    class="uav-item-body" <div  class="uav-item-body" style="font-size:12px;">\
+  const routhtml1='<p   <div >\
+   <label style="width: 50px;font-size:12px;"> Duration</label>\
+   <label style="width: 50px;font-size:12px;">Zmin</label>\
+  <label style="width: 50px;font-size:12px;" >Zmax</label></div> ';
+  const routhtml1a='<p    <div > <label style="width: 50px;font-size:12px;"> Duration</label> <label style="width: 50px;font-size:12px;">Radius</label>  <label style="width: 50px;font-size:12px;">Zmin</label> <label style="width: 50px;font-size:12px;">Zmax</label> </div> ';
+  const routhtml2='  <div ';
+  const routhtml3='>  <input style="width: 50px;font-size:12px;"  type="number" id="';
+  const routhtml3a='> <input style="width: 50px;font-size:12px;"  type="hidden" id="';
+  const routhtml4='"   value='
+  const routhtml5='></div></p></div>';
+  const routhtml6='></div>';
+  if (flag)
+  {
+   
+    var   whZ="routeid = '"+routeid+"'";
+ //statusid > 2 не ЧЕРНОВИК не ШАБЛОН
+                   zoneLayer.queryFeatures({
+                   where : whZ,
+                 //  orderByFields : ["startdate DESC"],
+                   returnGeometry: true,
+                     outFields: ["*"],
+                   })
+                   .then(function(ftfSet) {
+                    let zmin=ftfSet.features[0].getAttribute("zmin");
+                    let zmax=ftfSet.features[0].getAttribute("zmax");
+                    let duration=ftfSet.features[0].getAttribute("duration");
+                    let rad=ftfSet.features[0].getAttribute("radius");
+                    var geom=ftfSet.features[0].geometry;
+                    let lat=geom.centroid.y;
+                    let lon=geom.centroid.x;
+                    if (rad>0)
+                     lst=routhtml1a;
+                    else
+                     lst=routhtml1;
+                    lst=lst+routhtml2;
+                    lst=lst+routhtml3;
+                    lst=lst+"DR"+routeid;
+                    lst=lst+routhtml4;
+                    lst=lst+duration.toString();
+                    
+                    
+                    if (rad>0) 
+                          lst=lst+routhtml3;
+                    else 
+                          lst=lst+routhtml3a;   
+                    lst=lst+"RD"+routeid;
+                    lst=lst+routhtml4;
+                    lst=lst+rad.toString();
+                    
+                    lst=lst+routhtml3a;
+                    lst=lst+"LT"+routeid;
+                    lst=lst+routhtml4;
+                    lst=lst+lat.toString();
+                    
+                    lst=lst+routhtml3a;
+                    lst=lst+"LN"+routeid;
+                    lst=lst+routhtml4;
+                    lst=lst+lon.toString();
 
 
+
+                    lst=lst+routhtml3;
+                    lst=lst+"ZN"+routeid;
+                    lst=lst+routhtml4;
+                    lst=lst+zmin.toString();
+
+                    lst=lst+routhtml3;
+                    lst=lst+"ZX"+routeid;
+                    lst=lst+routhtml4;
+                    lst=lst+zmax.toString();
+
+                    lst=lst+routhtml6;
+                    
+                    
+
+
+                    document.getElementById(id).innerHTML=lst;
+                     const el = document.getElementById(routeid);
+                     el.scrollIntoView({block: "center", inline: "center",behavior: "smooth"}); 
+                   })
+                  
+
+  }
+  else{
+    if (document.getElementById(id)!=null) 
+     document.getElementById(id).innerHTML=lst;
+  }
+  
+
+}
+
+/*export*/ function getDetailRoute(routeid,flag)
+{
+  var lst="";
+  var id="R"+routeid;
+
+  const routhtml1='<p    <div><label style="width: 10px;font-size:12px;">*</label> <label style="width: 50px;font-size:12px;">  Speed</label>  <label style="width: 50px;font-size:12px;"> Z </label>  <label style="width: 50px;font-size:12px;"> Zmin </label>  <label style="width: 50px;font-size:12px;"> Zmax </label> </div> ';
+  const routhtml2='  <div  ';
+  const routhtml8='  <div >  <input  type="checkbox" id="';
+  const routhtml9='" unchecked ';
+  const routhtml3='>  <input style="width: 50px;font-size:12px;" type="number" id="';
+  const routhtml4='"   value=';
+  const routhtml5='></div></p></div>';
+  const routhtml6='></div>'
+  
+  if (flag)
+  {
+
+    var   whR="routeid = '"+routeid+"' And numb>=0 ";
+ //statusid > 2 не ЧЕРНОВИК не ШАБЛОН
+                   routeVecLayer.queryFeatures({
+                   where : whR,
+                   orderByFields : ["numb"],
+                   returnGeometry: true,
+                     outFields: ["*"],
+                   })
+                   .then(function(ftfSet) {
+                    lst=routhtml1;
+                    lst=lst+routhtml2; 
+                    for (let i=0;i<ftfSet.features.length;i++)
+                    { 
+                    let zmin=Math.round(ftfSet.features[i].getAttribute("zmin"));
+                    let zmax=Math.round(ftfSet.features[i].getAttribute("zmax"));
+                    let speed=Math.round(ftfSet.features[i].getAttribute("speed"));
+                    let z1=Math.round(ftfSet.features[i].getAttribute("z1"));
+                    lst=lst+routhtml2;
+                    lst=lst+routhtml8;
+                    lst=lst+i.toString()+"CH"+routeid;
+                    lst=lst+routhtml9;
+                    lst=lst+routhtml3;
+                    lst=lst+i.toString()+"SP"+routeid;
+                    lst=lst+routhtml4;
+                    lst=lst+speed.toString();
+                    lst=lst+routhtml3;
+                    lst=lst+i.toString()+"ZZ"+routeid;
+                    lst=lst+routhtml4;
+                    lst=lst+z1.toString();
+                    lst=lst+routhtml3;
+                    lst=lst+i.toString()+"ZN"+routeid;
+                    lst=lst+routhtml4;
+                    lst=lst+zmin.toString();
+                    lst=lst+" readonly";
+                    lst=lst+routhtml3;
+                    lst=lst+i.toString()+"ZX"+routeid;
+                    lst=lst+routhtml4;
+                    lst=lst+zmax.toString();
+                    lst=lst+" readonly";
+                    if(i==ftfSet.features.length-1)
+                    {
+                    lst=lst+routhtml6;
+                    
+                    }
+                    else
+                     lst=lst+routhtml5;
+                    
+                    }
+                  
+                     document.getElementById(id).innerHTML=lst;
+                     for (let i=0;i<ftfSet.features.length;i++)
+                     {
+                      document.getElementById(i.toString()+"CH"+routeid).addEventListener("click", changSelectSeg);
+
+
+                     }
+                   })
+                   const el = document.getElementById(routeid);
+                   el.scrollIntoView({block: "center", inline: "center",behavior: "smooth"}); 
+
+  }
+  else{
+    if (document.getElementById(id)!=null) 
+     document.getElementById(id).innerHTML=lst;
+  }
+  
+
+}
+
+function mySaveRoute(event)
+    {
+       var rid=document.getElementById("routeid").value;  
+       let elem=document.getElementById("DR"+rid);
+   }   
+   function mySaveRouteAs(event)
+   {
+    if (!checkRouteName(false)) return;
+   }   
+   function myDeleteRoute(event)
+   {
+    return;
+   }   
+   function myImportGraphic(event)
+                  {
+                    var rid=idRoute;
+                    let elem=document.getElementById("DR"+rid);
+                    clean(true,layerManual);
+                    if (elem ==null )
+                    {
+                      let whr="routeid = '"+rid+"' And numb < 0 ";
+                       
+                    routeVecLayer.queryFeatures({
+                      where : whr,
+                      returnGeometry: true,
+                      returnZ :false,
+                      returnM : false,  
+                      outFields: ["*"]
+                    })
+                    .then(function(ftfSet) 
+                    {
+                      
+                      lin = PROJECTION.project(ftfSet.features[0].geometry, { wkid: 3857 },PROJECTION.getTransformation(ftfSet.features[0].geometry.spatialReference,{ wkid: 3857 }));     
+                      lin = GEOMETRYENGINE.generalize(lin,10,false,"meters"); 
+                      let imGr=new GRAPHIC({
+                         geometry:lin,
+                         symbol:lineSymbol3
+
+                      })
+                      layerManual.add(imGr);
+                    }); 
+                    getDetailRoute(rid,false);
+                    queryRoad(event,"");
+                    }
+                    else
+                    {
+                       
+                      let whz="routeid = '"+rid+"'"; 
+                      zoneLayer.queryFeatures({
+                      where : whz,
+                      returnGeometry: true,
+                      returnZ:false,
+                      returnM:false,
+                        outFields: ["*"]
+                        
+            
+                      })
+                      .then(function(ftfSet) {
+                        pol = PROJECTION.project(ftfSet.features[0].geometry, { wkid: 3857 },PROJECTION.getTransformation(ftfSet.features[0].geometry.spatialReference,{ wkid: 3857 }));     
+                        let imGr=new GRAPHIC({
+                          geometry:pol,
+                          symbol:selectSymbol.fillSymbolGray
+                        })
+                       layerManual.add(imGr);
+               
+
+                      });
+                      getDetailZone(rid,false);
+                      queryRoad(event,"");
+                    }
+                    flagEdit=true; 
+                  }        
+ 
+function removeSelectSeg(rid,numb){  
+      console.log(rid+" ! "+numb) ;
+      for (;;)
+      { var flag=true;
+       selectLayer.graphics.forEach(function(item, i){
+        // Do something here to each graphic like calculate area of its geometry
+        if (item.getAttribute("routeid")==rid)
+         {
+          if (numb!="")
+          { 
+          if (item.getAttribute("numb")==numb)
+           {
+            selectLayer.graphics.remove(item); 
+            return;
+           }
+          }
+        
+        else 
+        {
+          selectLayer.graphics.remove(item);
+          flag=false;
+        }
+        }
+      });
+      if (flag) return;
+    }
+    }
+
+//************************************************************* выбор маршрута из слоя по клику
+                /*export*/ function queryRoad(screenPoint,routeid) {
+                
+                  
+                  function queryEmpty(stat)
+                  {
+                
+                    
+                    if  (stat==2)
+                    {
+                     tableLayer.definitionExpression="routeid = '"+routeid+"' And numb >= 0"
+                  
+                         queryRoadAll(routeid);
+                    }
+                    else      
+                        queryZone(screenPoint,routeid);
+                 
+                     
+                 
+                     
+                  }  
+                  var ownerId= user.id;
+                  if (routeid!="")
+                  {
+                   tableLayer.definitionExpression="objectid < 0";
+                   tableZoneLayer.definitionExpression="objectid < 0"; 
+                   let stat=document.getElementById("T"+routeid).value;
+                   queryEmpty(parseInt(stat));
+                  
+                   
+                  }
+                 else{
+                  
+                  var distance =// 200;
+                   (view.extent.xmax-view.extent.xmin)/200;
+                  var units = "meters";
+                   tableLayer.definitionExpression="objectid < 0";
+                   tableZoneLayer.definitionExpression="objectid < 0";
+                  var  wH = "ownerid = '"+ownerId+"'";
+                   const point = view.toMap(screenPoint);
+                   tableLayer.queryFeatures({
+                     geometry: point,
+                     // distance and units will be null if basic query selected
+                     distance: distance,
+                     units: units,
+                     where : wH,
+                     spatialRelationship: "intersects",
+                     returnGeometry: true,
+                     returnZ :true,
+                     returnM :true,
+                     returnQueryGeometry: true,
+                     outFields: ["*"],
+                   })
+                   .then(function(featureSet) {
+                     //featureTable.clearSelection();
+                     if(featureSet.features.length>0)
+                     
+                     // set graphic location to mouse pointer and add to mapview
+                     {
+                      
+                       
+                 
+                        var rd=featureSet.features[0].getAttribute("routeid");
+                        tableLayer.definitionExpression="routeid = '"+rd+"' And numb >= 0"
+                                      
+                        queryRoadAll(rd);
+                        
+                         
+                 
+                     }
+                     else 
+                     {
+                        
+                       //tableLayer.definitionExpression="objectid < 0'";
+                      
+                       queryZone(point,"");
+                       
+                     
+                    
+                   }
+                   
+                  });
+                    //******** получение имени маршрута  */
+                 }
+                 function getRouteName(track)
+                 {
+                  document.getElementById("nameroute").value=track.name; 
+                 
+                 }
+                 
+                
+                    function queryZone(point,routeid) { 
+                
+                      if (routeid!="")
+                      {
+                
+                
+                        let wH = "routeid = '"+routeid+"'";
+                        
+                         zoneLayer.queryFeatures({
+                        
+                             where : wH,
+                           // distance and units will be null if basic query selected
+                        
+                             returnGeometry: true,
+                             returnZ :true,
+                             
+                           outFields: ["*"],
+                         })
+                         .then(function(featureSet) {     
+                          if(featureSet.features.length>0)
+                          {
+                        
+                         var rd=featureSet.features[0].getAttribute("routeid");
+                          
+                          layerManual.removeAll();
+                          idRoute=featureSet.features[0].getAttribute("routeid");
+                          
+                           tableZoneLayer.definitionExpression="routeid = '"+rd+"'";
+                          
+                          // featureTableZone.selectRows(featureSet.features);
+                           
+                         //  featureTableZone.refresh(); 
+                         // getRouteRecord(rd,getRouteName);
+                          //getRouteName(rd);
+                             
+                          changeExtent(featureSet.features[0].geometry);
+                          
+                          
+                        
+                             }
+                            
+                             });
+                
+                
+                      }
+                      else
+                      {
+                      var wH = "ownerid = '"+ownerId+"'";
+                      var distance=0;
+                      var units = "meters";
+                       zoneLayer.queryFeatures({
+                           geometry: point,
+                           where : wH,
+                         // distance and units will be null if basic query selected
+                           distance: distance,
+                           units: units,
+                           spatialRelationship: "intersects",
+                           returnGeometry: true,
+                           returnZ :true,
+                           
+                         outFields: ["*"],
+                       })
+                       .then(function(featureSet) {     
+                        if(featureSet.features.length>0)
+                        {
+                     
+                       var rd=featureSet.features[0].getAttribute("routeid");
+                        
+                        layerManual.removeAll();
+                        document.getElementById("routeid").value=featureSet.features[0].getAttribute("routeid");
+                       
+                       
+                        
+                         tableZoneLayer.definitionExpression="routeid = '"+rd+"'";
+                            
+                        
+                        
+                        
+                       //  featureTableZone.selectRows(featureSet.features);
+                         
+                       //  featureTableZone.refresh(); 
+                           getRouteRecord(rd,getRouteName);
+                         //getRouteName(rd);
+                           
+                        changeExtent(featureSet.features[0].geometry);
+                        getDetailZone(document.getElementById("routeid").value,true);
+                      
+                           }
+                          
+                           });
+                       } 
+                     }  
+                    
+                
+                   
+                 
+                 function queryRoadAll (rd)
+                 {
+                   //getRouteRecord(rd,getRouteName);
+                   //getRouteName(rd);
+                    
+                
+                   console.log(rd+" ??")
+                   var whh="routeid = '"+rd+"' And numb >= 0 ";  
+                   routeVecLayer.queryFeatures({
+                     where : whh,
+                     orderByFields : ["numb"],
+                      returnGeometry: true,
+                     returnZ :true,
+                     returnM :true,
+                     
+                     outFields: ["*"],
+                   })
+                   .then(function(featureSet) {
+                     
+                   // alert(featureSet.features.length);
+                     if(featureSet.features.length>0)
+                     // set graphic location to mouse pointer and add to mapview
+                     {
+                      
+                      var pts=[];
+                     // flypts=[];
+                   
+                     
+                      for (var i=0;i<featureSet.features.length;i++)
+                      {
+                        var m=i;
+                       
+                       if(i==0) 
+                           pts.push(featureSet.features[m].geometry.paths[0][0]);
+                       
+                       var n=featureSet.features[m].geometry.paths[0].length; 
+                       
+                       pts.push(featureSet.features[m].geometry.paths[0][n-1]);
+                       
+                       flypts.push(featureSet.features[m].geometry.paths[0]);
+                       
+                      }
+                       //  alert(flypts.length)
+                     }
+                     
+                     var lin=
+                     new POLYLINE({
+                     hasZ: true,
+                     hasM: true,
+                     paths: pts,
+                     spatialReference: { wkid: 4326 }
+                     });
+                        //lin =featureSet.features[i].geometry;
+                     
+                     if (idRoute!=featureSet.features[0].getAttribute("routeid"))
+                     {
+                
+                        rd=featureSet.features[0].getAttribute("routeid");
+                        
+                        whh="routeid = '"+rd+"'";
+                     layerManual.removeAll();
+                     idRoute=featureSet.features[0].getAttribute("routeid");
+                     
+                     
+                     
+                    
+                     changeExtent(lin);
+                    
+                      
+                    
+                     //featureTable.refresh();
+                
+                     
+                     
+                     }
+                     getDetailRoute(idRoute,true); 
+                    
+                     
+                   });
+                
+                
+                 }
+                             
+                }
+                function changSelectSeg(event) 
+                {
+                  
+                 
+            
+                  
+                  let gld=event.target.id;
+                  
+                  let ind =gld.indexOf("CH");
+                  var numb=gld.substring(0,ind);
+                  var rid=gld.substring(ind+2);
+                  var WRR="routeid = '"+rid+"' And numb = "+numb;
+                  
+                  if (event.target.checked)
+                   {                  
+                      routeVecLayer.queryFeatures({
+                        where: WRR,
+                        returnGeometry: true,
+                        outFields: ["*"],
+                        outSpatialReference :{ wkid : 4326 }
+                      }).then(function(ftfSet) {
+                      
+                       
+                      var ll=new GRAPHIC(
+                         {
+                           geometry :ftfSet.features[0].geometry,
+                           symbol : selectSymbol.lineSymbol,
+                           attributes : {
+                            "routeid": rid,
+                            "numb":  numb
+                            }
+                         } 
+                       );
+                       selectLayer.graphics.add(ll);
+           
+                      })
+                   }
+                   else
+                   {
+           
+                    removeSelectSeg(rid,numb);
+                    
+                    
+                   }
+                  
+                }
+           

@@ -11,6 +11,15 @@
       }
 
     }
+    fillSymbolGray = {
+      type: "simple-fill", // autocasts as SimpleLineSymbol()
+      color: [128, 128, 128,0],
+      outline: {  // autocasts as new SimpleLineSymbol()
+        color: [ 128,128, 128 ],
+        width: 2
+      }
+      
+    };
   static lineSymbol =
        {
         type: "simple-line",

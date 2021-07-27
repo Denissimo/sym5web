@@ -1,5 +1,5 @@
 var token ;
-var apiUrl
+var apiUrl;
 
 var GEOPROCESSOR;
 var POLYLINE;
@@ -20,6 +20,7 @@ var tabName=[];
 var nameRoute;
 var idRoute;
 var selectLayer; //слой подсветки выбраннных объектов на карте
+var layerManual;
 require(
     [   "esri/config", //dv
         "esri/layers/WebTileLayer", //dv
