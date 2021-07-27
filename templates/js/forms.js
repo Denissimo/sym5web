@@ -12,8 +12,13 @@ $(document).ready(function () {
   //$('#dp3').datepicker();
 
   $("#takeoffMass").blur(function () {
-    var mass = parseFloat($(this).val());
-    console.log(mass);
+      setMassCategory();
+  });
+
+  function setMassCategory()
+  {
+    var mass = parseFloat($("#takeoffMass").val());
+    // console.log(mass);
     // $('.mass_category_label').hide('explode');
     $('.mass_category_label').each(function(i,elem) {
       massMin = parseFloat($(this).attr('data-mass-min') ?? 0);
@@ -32,10 +37,12 @@ $(document).ready(function () {
         $("#mass").val(massId);
         $(this).removeClass('label_invisible');
       }
-      console.log(massMin + ' >>> ' +  massMax);
+      // console.log(massMin + ' >>> ' +  massMax);
     });
-      console.log('blur');
-  });
+    // console.log('blur');
+
+    return true;
+  }
 
   $("#form-login").submit(function (event) {
     var settings = {
@@ -286,16 +293,16 @@ $(document).ready(function () {
   $("#addAircraftBtn").click(function (event) {
     aircraftActionMode = 'add';
     aircraftActionMethod = 'POST';
-    console.log(aircraftActionMode);
+    // console.log(aircraftActionMode);
   });
 
   $(".btn-aircraft-edit").click(function (event) {
     aircraftActionMode = $(this).attr('data-aircraft-id');
     aircraftActionMethod = 'PUT';
-    console.log(aircraftActionMode);
+    // console.log(aircraftActionMode);
     var aircraft = JSON.parse($(this).attr('data-aircraft'));
-    console.log(aircraft.controlSystem);
-    console.log(aircraft.channels);
+
+    // console.log(aircraft.channels);
     $('#form-uav input').each(
         function (){
           var elementName = $(this).attr('name');
@@ -313,20 +320,48 @@ $(document).ready(function () {
     $(".channel").prop( "checked", false );
     $.each(aircraft.channels, function(index, value){
       $('#channel_' + index).prop( "checked", true );
-      console.log('#channel_' + index);
+      // console.log('#channel_' + index);
     });
+    console.log('Date');
+    console.log(parseDate(aircraft.insuranceEnd));
+    // console.log(strToDate(aircraft.insuranceStart).toLocaleDateString("ru-RU"));
+    $("#registrationDate").val(parseDate(aircraft.registrationDate));
+    $("#deregistrationDate").val(parseDate(aircraft.deregistrationDate));
+    $("#insuranceStart").val(parseDate(aircraft.insuranceStart));
+    $("#insuranceEnd").val(parseDate(aircraft.insuranceEnd));
+    setMassCategory();
   });
+
+  function parseDate(apiDateUnit)
+  {
+    if (apiDateUnit == null || apiDateUnit.date == null ){
+      return null;
+    }
+
+    var date = new Date(apiDateUnit.date);
+    if (typeof date == 'object') {
+      var dateElements =  date.toLocaleDateString("ru-RU").split('.');
+      return dateElements[2] + '-' + dateElements[1] + '-' + dateElements[0];
+    } else {
+      return null;
+    }
+  }
 
   var aircraftActionMode = 'add';
   var aircraftActionMethod = 'POST';
 
+  $('.datepicker').blur(function () {
+    console.log($(this).val());
+    console.log($(this).attr('id'));
+  });
+
   $("#form-uav").submit(function (event) {
-    console.log('add UAV submit');
+    // console.log('add UAV submit');
     event.preventDefault();
-    var addUavModal = new bootstrap.Modal(document.getElementById('modalUav'), {
-      keyboard: false
-    });
-    addUavModal.toggle();
+    // var addUavModal = new bootstrap.Modal(document.getElementById('modalUav'), {
+    //   keyboard: false
+    // });
+    // addUavModal.toggle();
     if (false) {
       $('.alert_place').html(
           '<div class="alert alert-danger alert-dismissible fade show" role="alert">\n' +
@@ -358,9 +393,9 @@ $(document).ready(function () {
           }
         }
     );
-    console.log(channels);
+    console.log($('#registrationDate').val());
     var token = $.cookie(tokenCookieName);
-    console.log(token);
+    // console.log(token);
     var settings = {
       url: apiUrl + "/aircraft/" + aircraftActionMode,
       // url: "http://sym4swg/aircraft/add",
@@ -442,7 +477,7 @@ $(document).ready(function () {
     var date;
     if (stringDate) {
       date = {
-        "date": $('#registrationDate').val() + ' 00:00:00',
+        "date": stringDate + ' 00:00:00',
         "timezone_type": 3,
         "timezone": "Europe/Moscow"
       };
