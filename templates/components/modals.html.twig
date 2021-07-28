@@ -5,7 +5,7 @@
         <div class="modal-content">
 
             <div class="modal-header">
-                <h5 class="modal-title" id="staticBackdropLabel">Добавление БВС</h5>
+                <h5 class="modal-title" id="staticBackdropLabel">Параметры БВС</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form action="/" class="form-uav" id="form-uav">
@@ -154,9 +154,9 @@
                                             <div class="form-input">
                                                 <label class="input-label" for="controlSystem">Система управления</label>
                                                 <select class="form-select" aria-label="Выберите систему" id="controlSystem" name="controlSystem">
-                                                    <option value="1">Программная</option>
-                                                    <option value="2">Радиокомандная</option>
-                                                    <option value="3">Гибридная</option>
+                                                    <option class="controlSystemOption" value="1">Программная</option>
+                                                    <option class="controlSystemOption" value="2">Радиокомандная</option>
+                                                    <option class="controlSystemOption" value="3">Гибридная</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -173,7 +173,7 @@
                                                 <div class="form-check form-switch">
                                                     <input class="form-check-input channel" type="checkbox"
                                                            id="channel_{{ channelKey }}"
-                                                           name="channels" data-chennal-id="{{ channelKey }}">
+                                                           name="channels" data-channel-id="{{ channelKey }}">
                                                     <label class="form-check-label"
                                                            for="channel_{{ channelKey }}">{{ channelName }}</label>
                                                 </div>
@@ -202,9 +202,9 @@
                                                 <label class="form-check-label" for="isCatapultStart">Катапультный старт</label>
                                             </div>
                                             <div class="form-check form-switch">
-                                                <input class="form-check-input" type="checkbox" id="isCatapultStart"
-                                                       name="isCatapultStart">
-                                                <label class="form-check-label" for="isCatapultStart">Посадка на
+                                                <input class="form-check-input" type="checkbox" id="isParachuteLanding"
+                                                       name="isParachuteLanding">
+                                                <label class="form-check-label" for="isParachuteLanding">Посадка на
                                                     парашюте</label>
                                             </div>
                                         </div>
