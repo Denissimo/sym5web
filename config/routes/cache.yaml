@@ -1,0 +1,10 @@
+cache_put:
+  path: /cache/load/{parameterName}
+  controller: App\Controller\CacheController::buildCacheLoadResponse
+
+cache_get:
+  path: /cache/put
+  controller: App\Controller\CacheController::buildCachePutResponse
+
+
+
