@@ -41,7 +41,7 @@ function addSelectLayer(GraphicsLayer,webmap)
 
           lineSymbolTable = {
             type: "simple-line", // autocasts as SimpleLineSymbol()
-            color: [0, 128, 0],
+            color: [0, 255, 0],
             width: 2
           };
   
@@ -105,7 +105,7 @@ function addSelectLayer(GraphicsLayer,webmap)
           var lineSymbol = {
              type: "simple-line", // autocasts as SimpleLineSymbol()
              color: [255, 0, 197],
-             width: 2
+             width: 1
             };
           var lineRenderer = {
              type: "simple",

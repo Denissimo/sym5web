@@ -1,3 +1,4 @@
+var scene;
 var token ;
 var apiUrl;
 
@@ -89,7 +90,7 @@ require(
         Compass
     ) {
        
-        var scene;
+        
         var tokenCookieName = '{{ token_cookie_name }}';
         token = $.cookie(tokenCookieName);
         apiUrl = '{{ api_url|raw }}';
@@ -265,6 +266,7 @@ require(
             index: 1
         });
        eventSketch(sketch,layerManual);
+       eventView(view,sketch,layerManual)
        scene.layers.add(layerManual);    
         }
 

@@ -27,6 +27,13 @@
         style: "solid",
         width: 3
       }
+  static lineSymbolGray =
+      {
+       type: "simple-line",
+       color: [ 128,128, 128 ],
+       style: "solid",
+       width: 3
+     }
 
    static  markerSymbol =
   {
