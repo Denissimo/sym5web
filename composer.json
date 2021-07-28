@@ -9,6 +9,7 @@
         "ext-ctype": "*",
         "ext-iconv": "*",
         "ext-json": "*",
+        "symfony-bundles/redis-bundle": "^3.1",
         "symfony/asset": "5.3.*",
         "symfony/console": "5.3.*",
         "symfony/dependency-injection": "5.3.*",

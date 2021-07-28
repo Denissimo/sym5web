@@ -1,4 +1,7 @@
 {
+    "predis/predis": {
+        "version": "v1.1.7"
+    },
     "psr/cache": {
         "version": "1.0.1"
     },
@@ -10,6 +13,18 @@
     },
     "psr/log": {
         "version": "1.1.4"
+    },
+    "symfony-bundles/redis-bundle": {
+        "version": "2.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "2.0",
+            "ref": "2becca99cc83c0e6d2ad68875fa84c516298dec4"
+        },
+        "files": [
+            "./config/packages/sb_redis.yaml"
+        ]
     },
     "symfony/asset": {
         "version": "v5.3.2"
