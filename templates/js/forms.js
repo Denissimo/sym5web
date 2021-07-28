@@ -1,4 +1,5 @@
 $(document).ready(function () {
+  var aircraft;
   var currentPath = new URL($(location).prop("href")).pathname;
   var apiUrl = '{{ api_url|raw }}';
   var authUrl = '{{ auth_url|raw }}';
@@ -290,17 +291,27 @@ $(document).ready(function () {
     // $("#modalUav").hide();
   });
 
+  $(".title").click(function (event) {
+    console.log('title');
+    $(".alert").removeClass("show");
+    $(".alert").addClass("show");
+    // $(".alert").alert();
+    // $("#modalUav").hide();
+  });
+
   $("#addAircraftBtn").click(function (event) {
     aircraftActionMode = 'add';
+    aircraftActionDoneRu = ' добавлено';
     aircraftActionMethod = 'POST';
     // console.log(aircraftActionMode);
   });
 
   $(".btn-aircraft-edit").click(function (event) {
     aircraftActionMode = $(this).attr('data-aircraft-id');
+    aircraftActionDoneRu = ' изменено';
     aircraftActionMethod = 'PUT';
     // console.log(aircraftActionMode);
-    var aircraft = JSON.parse($(this).attr('data-aircraft'));
+    aircraft = JSON.parse($(this).attr('data-aircraft'));
 
     // console.log(aircraft.channels);
     $('#form-uav input').each(
@@ -322,8 +333,8 @@ $(document).ready(function () {
       $('#channel_' + index).prop( "checked", true );
       // console.log('#channel_' + index);
     });
-    console.log('Date');
-    console.log(parseDate(aircraft.insuranceEnd));
+    // console.log('Date');
+    // console.log(parseDate(aircraft.insuranceEnd));
     // console.log(strToDate(aircraft.insuranceStart).toLocaleDateString("ru-RU"));
     $("#registrationDate").val(parseDate(aircraft.registrationDate));
     $("#deregistrationDate").val(parseDate(aircraft.deregistrationDate));
@@ -348,6 +359,7 @@ $(document).ready(function () {
   }
 
   var aircraftActionMode = 'add';
+  var aircraftActionDoneRu = ' добавлено';
   var aircraftActionMethod = 'POST';
 
   $('.datepicker').blur(function () {
@@ -393,7 +405,7 @@ $(document).ready(function () {
           }
         }
     );
-    console.log($('#registrationDate').val());
+    // console.log($('#registrationDate').val());
     var token = $.cookie(tokenCookieName);
     // console.log(token);
     var settings = {
@@ -441,16 +453,23 @@ $(document).ready(function () {
       ),
 
       success: function (response) {
-        $('.alert_place').html(
+        $("#modalUav").modal("hide");
+        if (aircraftActionMethod === 'PUT') {
+          // console.log('PUT');
+          // console.log(aircraft);
+          // $(this).attr('data-aircraft', JSON.stringify(aircraft));
+        }
+
+        $('.footer-alert').html(
             '<div class="alert alert-success alert-dismissible fade show" role="alert">\n' +
-            'БВС успешно добавлено\n' +
+            'БВС успешно ' + aircraftActionDoneRu + '\n' +
             '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>\n' +
             '</div>'
         );
-        $("#modalUav").modal("hide");
-        // setTimeout(function() {
-        //   $(location).prop("href", '/login');
-        // }, 3000);
+
+        setTimeout(function() {
+          $(location).prop("href", '/uav');
+        }, 2000);
       },
 
       error: function (response) {
