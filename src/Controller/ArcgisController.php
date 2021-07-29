@@ -2,11 +2,10 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Api\Content\User\User;
 use Symfony\Component\HttpFoundation\Request;
-use App\Service\Client;
 
-class ArcgisController extends AbstractController
+class ArcgisController extends BaseController
 {
     public const DEFAULT_ROUTE = 'AirSituation';
 
@@ -19,15 +18,14 @@ class ArcgisController extends AbstractController
     public function buildAirSituation(Request $request, string $tokenCookieName)
     {
         $cookieChecker = $request->cookies->get($tokenCookieName);
-        // var_dump ($cookieChecker);
-        // die;
 
         if (!$cookieChecker) {
             return $this->redirectToRoute('login');
         }
+        $this->loadUserData($request, $tokenCookieName);
 
         return $this->render('airsituation.html.twig', [
-            'id' => 155,
+            'user' => $this->user,
             'route' => 'AirSituation',
             'use_arcgis' => true
         ]);
@@ -36,35 +34,42 @@ class ArcgisController extends AbstractController
     public function buildTracks(Request $request, string $tokenCookieName)
     {
         $cookieChecker = $request->cookies->get($tokenCookieName);
-        // var_dump ($cookieChecker);
-        // die;
 
         if (!$cookieChecker) {
             return $this->redirectToRoute('login');
         }
 
+        $this->loadUserData($request, $tokenCookieName);
+
+        if ($this->user->hasRole(User::ROLE_OPERATOR)) {
+            return $this->redirectToRoute('index');
+        }
+
         return $this->render('tracks.html.twig', [
-            'id' => 155,
+            'user' => $this->user,
             'route' => 'Tracks',
             'use_arcgis' => true
         ]);
     }
 
-    public function buildFlights(Request $request)
+    public function buildFlights(Request $request, string $tokenCookieName)
     {
+        $this->loadUserData($request, $tokenCookieName);
+
         return $this->render('flights.html.twig', [
-            'id' => 155,
+            'user' => $this->user,
             'route' => 'Flights',
             'use_arcgis' => true
         ]);
     }
 
 
-    public function buildArchive(Request $request)
+    public function buildArchive(Request $request, string $tokenCookieName)
     {
+        $this->loadUserData($request, $tokenCookieName);
 
         return $this->render('archive.html.twig', [
-            'id' => 155,
+            'user' => $this->user,
             'route' => 'Archive',
             'use_arcgis' => true
         ]);
@@ -72,23 +77,15 @@ class ArcgisController extends AbstractController
 
     public function buildCommonJs(
         Request $request,
-        Client $client,
         string $tokenCookieName,
         string $apiUrl
     )
     {
         $route = $request->query->get('route') ?? self::DEFAULT_ROUTE;
-        $token = $request->cookies->get($tokenCookieName);
-
-        $userData = $client->sendJson(
-            '/my/userdata',
-            null,
-            'GET',
-            ['Authorization' => sprintf('Bearer %s', $token)]
-        );
+        $this->loadUserData($request, $tokenCookieName);
 
         $response = $this->render('js/script.html.twig', [
-            'user' => $userData->user,
+            'user' => $this->user,
             'route' => $route,
             'api_url' => $apiUrl,
             'token_cookie_name' => $tokenCookieName,

@@ -469,7 +469,7 @@ $(document).ready(function () {
 
         setTimeout(function() {
           $(location).prop("href", '/uav');
-        }, 2000);
+        }, 500);
       },
 
       error: function (response) {
