@@ -17,7 +17,7 @@ use App\Api\Content\Aircraft\AircraftUnit;
 use Throwable;
 use Exception;
 
-class ContentController extends AbstractController
+class ContentController extends BaseController
 {
     public function buildContent(Request $request, ContentLoader $contentLoader, $route)
     {
@@ -28,7 +28,7 @@ class ContentController extends AbstractController
         ]);
     }
 
-    public function buildLogin(Request $request, ContentLoader $contentLoader)
+    public function buildLogin(Request $request)
     {
         return $this->render('login.html.twig', [
             'id' => 155,
@@ -46,10 +46,12 @@ class ContentController extends AbstractController
         ]);
     }
 
-    public function buildIndex(Request $request, ContentLoader $contentLoader)
+    public function buildIndex(Request $request, string $tokenCookieName)
     {
+        $this->loadUserData($request, $tokenCookieName);
+
         return $this->render('index.html.twig', [
-            'id' => 155,
+            'user' => $this->user,
             'route' => 'Index',
             'use_arcgis' => true
         ]);
@@ -63,6 +65,7 @@ class ContentController extends AbstractController
     public function buildUavPaginated(Request $request, Client $client, string $tokenCookieName, int $page)
     {
         $cookieChecker = $request->cookies->get($tokenCookieName);
+        $this->loadUserData($request, $tokenCookieName);
 
         if (!$cookieChecker) {
             return $this->redirectToRoute('login');
@@ -98,6 +101,7 @@ class ContentController extends AbstractController
         $aircraftList = new AircraftList($myAircrafts);
 
         return $this->render('uav.html.twig', [
+            'user' => $this->user,
             'category' => $aircraftCategory->category,
             'engine' => $aircraftEngine->engine,
             'mass' => $aircraftMass->mass,
@@ -108,10 +112,12 @@ class ContentController extends AbstractController
         ]);
     }
 
-    public function buildProfile(Request $request, ContentLoader $contentLoader)
+    public function buildProfile(Request $request, string $tokenCookieName)
     {
+        $this->loadUserData($request, $tokenCookieName);
+
         return $this->render('profile.html.twig', [
-            'id' => 155,
+            'user' => $this->user,
             'route' => 'Profile',
             'use_arcgis' => false
         ]);
