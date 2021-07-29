@@ -4,6 +4,7 @@ twig:
         test_data: '%env(test_data)%'
         adm_img_carousel_path: '%env(ADM_IMG_CAROUSEL_PATH)%'
         adm_url: '%env(ADM_URL)%'
+        adm_img_upload_path: '%env(ADM_IMG_UPLOADL_PATH)%'
 
 when@test:
     twig:

@@ -1,137 +1,199 @@
-     {% block styles %}
-            {% include('header.html.twig') %}
-     {% endblock %}
+{% block styles %}
+    {% include('header.html.twig') %}
+{% endblock %}
 
      {% block header %}
-            {% include('nav.html.twig') %}
+         {% include('nav.html.twig') %}
      {% endblock %}
 
+<div class="page-content">
 
-        <div class="page-content"> 
-
-            <div class="page-header">
-                <div class="container">
-                    <div class="row">
-                        <div class="page-title">
-                            <h2 class="title">
-                                Мои БВС
-                            </h2>
-                            <button class="btn btn-green" data-bs-toggle="modal" data-bs-target="#modalUav">Добавить БВС</button>
-                        </div> 
-                    </div>
+    <div class="page-header">
+        <div class="container">
+            <div class="row">
+                <div class="page-title">
+                    <h2 class="title">
+                        Реестр БВС
+                    </h2>
+                    <button class="btn btn-green" data-bs-toggle="modal" id="addAircraftBtn" data-bs-target="#modalUav">
+                        Добавить БВС
+                    </button>
                 </div>
             </div>
-            
+        </div>
+    </div>
 
-        <div class="page-body">
-            <div class="container">
-                <div class="row">
-                    <div class="card">
-                        <div class="card-header">
-                                 <div class="form-input">
-                                   <input placeholder="Поиск" type="text" id="firstname" class="form-control">
-                                  </div>
+
+    <div class="page-body">
+        <div class="container">
+            <div class="row">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="form-input">
+                            <input placeholder="Поиск" type="text" id="firstname" class="form-control">
                         </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-hover table-centered mb-0">
-                                    <thead>
-                                        <tr>
-                                            <th></th>
-                                            <th>Название БВС</th>
-                                            <th>Регистрационный номер</th>
-                                            <th>Серийный номер</th>
-                                            <th>Категория БВС, кг</th>
-                                            <th>Статус регистрации</th>
-                                            <th></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                    {% for aircraft in aircrafts.aircrafts %}
-                                        {% if aircraft.registrationStatus.name is defined and aircraft.registrationStatus.name is not empty %}
-                                            {% set registrationName = aircraft.registrationStatus.name %}
-                                        {% else %}
-                                            {% set registrationName = 'Unknown' %}
-                                        {% endif %}
-                                        <tr>
-                                            <td>
-                                                <img src="/assets/images/icon__drone.svg" alt="aircraft icon" title="{{ aircraft.id }}">
-                                            </td>
-                                            <td>{{ aircraft.type }}</td>
-                                            <td>{{ aircraft.registrationNumber }}</td>
-                                            <td>{{ aircraft.serialNumber }}</td>
-                                            <td>{{ aircraft.category.name }}</td>
-                                            <td>
-                                                <span class="badge badge-danger">{{ registrationName }}</span>
-                                            </td>
-                                            <td>
-                                                <a href="/" class="btn btn-outline" id="btn-edit">редактировать</a>
-                                            </td>
-                                        </tr>
-                                    {% endfor %}
-
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                        <div class="card-footer">
-
-                            <ul class="pagination">
-{#                                {{ dump(aircrafts.currentPage) }}#}
-{#                                {{ dump(aircrafts.pagesQty) }}#}
-
-                                {% if aircrafts.currentPage == 1 %}
-                                    {% set pagePrevious = "#" %}
-                                     {% set ariaDisabledFirst = "true" %}
-                                     {% set liDisabledFirst = " disabled" %}
-                                {% else %}
-                                    {% set pagePrevious = "/uav/" ~ (aircrafts.currentPage - 1)  %}
-                                    {% set ariaDisabledFirst = "false" %}
-                                    {% set liDisabledFirst = "" %}
-                                {% endif %}
-
-                                {% if aircrafts.currentPage == aircrafts.pagesQty %}
-                                    {% set pageNext = "#" %}
-                                    {% set ariaDisabledLast = "true" %}
-                                    {% set liDisabledLast = " disabled" %}
-                                {% else %}
-                                    {% set pageNext = "/uav/" ~ (aircrafts.currentPage + 1)  %}
-                                    {% set ariaDisabledLast = "false" %}
-                                    {% set liDisabledLast = "" %}
-                                {% endif %}
-
-
-                                <li class="page-item{{ liDisabledFirst }}">
-                                    <a class="page-link" href="{{ pagePrevious }}" aria-disabled="{{ ariaDisabledFirst }}">
-                                        <span aria-hidden="true">&laquo;</span>
-                                    </a>
-                                </li>
-                                {% for i in 1..aircrafts.pagesQty %}
-                                    {% if aircrafts.currentPage == i %}
-                                        <li class="page-item disabled"><a class="page-link" href="#">{{ i }}</a></li>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover table-centered mb-0">
+                                <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>Название БВС</th>
+                                    <th>Регистрационный номер</th>
+                                    <th>Серийный номер</th>
+                                    <th>Категория БВС, кг</th>
+                                    <th>Статус регистрации</th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% set divStyle = "margin: 0 0 2px 2px; float: left; width: 50px; height: 50px; border-radius: 25px; display:inline-block;" %}
+                                {% set iStyle = "font-size:20px; color:#FFFFFF; padding:4px 0 0 7px;width: 30px; height: 30px; border-radius: 15px;" %}
+                                {% set imgStyle = "width: 30px; height: 30px; border-radius: 15px;" %}
+                                {% set btnStyle = "margin: 0 0 0 0; padding: 0; cursor:pointer;" %}
+                                {% for aircraft in aircrafts.aircrafts %}
+                                    {% if aircraft.registrationStatus.name is defined and aircraft.registrationStatus.name is not empty %}
+                                        {% set registrationName = aircraft.registrationStatus.name %}
                                     {% else %}
-                                        <li class="page-item"><a class="page-link" href="/uav/{{ i }}">{{ i }}</a></li>
+                                        {% set registrationName = 'Unknown' %}
                                     {% endif %}
-                                {% endfor %}
-                                <li class="page-item{{ liDisabledLast }}">
-                                    <a class="page-link" href="{{ pageNext }}" aria-disabled="{{ liDisabledLast }}">
-                                        <span aria-hidden="true">&raquo;</span>
-                                    </a>
-                                </li>
-                            </ul>
+                                    <tr>
+                                        <td>
+                                            {% if aircraft.userDocuments[0].uploadDocuments[0] is defined and aircraft.userDocuments[0].uploadDocuments[0] is not empty %}
+                                                {% set doc = aircraft.userDocuments[0].uploadDocuments[0] %}
+                                                {% set ext = doc.uploadDocument.documentName|split('.')|reverse.0 %}
+                                                {% set fullPath = adm_url ~ adm_img_upload_path ~ doc.path %}
+                                                {% if doc.uploadDocument.mimeType|split('/')[0] == 'image' %}
+                                                    <a data-bs-toggle="modal" data-bs-target="#imageModel_{{ doc.id }}"
+                                                       style="{{ btnStyle }}">
+                                                        <img src="{{ fullPath }}" style="{{ imgStyle }}"/>
+                                                    </a>
+                                                    <!-- Modal -->
+                                                    <div class="modal fade" id="imageModel_{{ doc.id }}" tabindex="-1"
+                                                         role="dialog"
+                                                         aria-labelledby="myModalLabel_{{ doc.id }}">
+                                                        <div class="modal-dialog" role="document">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h4 class="modal-title"
+                                                                        id="myModalLabel_{{ doc.id }}">{{ doc.uploadDocument.label }}</h4>
+                                                                    <button type="button" class="btn-close"
+                                                                            data-bs-dismiss="modal"
+                                                                            aria-label="Close"></button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <img src="{{ fullPath }}"
+                                                                         alt="{{ doc.uploadDocument.label }}"/>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                {% elseif ext in ['docx', 'doc'] %}
+                                                    <a href="{{ fullPath }}">
+                                                        <i class="fa fa-file-word-o" aria-hidden="true"
+                                                           style="{{ iStyle }} background: #000090;"></i>
+                                                    </a>
+                                                {% elseif ext == 'pdf' %}
+                                                    <a href="{{ fullPath }}">
+                                                        <i class="fa fa-file-pdf-o" aria-hidden="true"
+                                                           style="{{ iStyle }} background: #900000;"></i>
+                                                    </a>
+                                                {% elseif ext in ['xlsx', 'xls', 'xlsm'] %}
+                                                    <a href="{{ fullPath }}">
+                                                        <i class="fa fa-file-excel-o" aria-hidden="true"
+                                                           style="{{ iStyle }} background: #009000;"></i>
+                                                    </a>
+                                                {% else %}
+                                                    <a href="{{ fullPath }}">
+                                                        <i class="fa fa-file-text-o" aria-hidden="true"
+                                                           style="{{ iStyle }} background: #909000;"></i>
+                                                    </a>
+                                                {% endif %}
+                                            {% else %}
+                                                <img src="/assets/images/icon__drone.svg" alt="aircraft icon"
+                                                     title="{{ aircraft.id }}">
+                                            {% endif %}
 
+                                        </td>
+                                        <td>{{ aircraft.type }}</td>
+                                        <td>{{ aircraft.registrationNumber }}</td>
+                                        <td>{{ aircraft.serialNumber }}</td>
+                                        <td>{{ aircraft.category.name }}</td>
+                                        <td>
+                                            <span class="badge badge-danger">{{ registrationName }}</span>
+                                        </td>
+                                        <td>
+                                            <button data-bs-toggle="modal" data-bs-target="#modalUav"
+                                                    class="btn btn-small btn-outline btn-aircraft-edit"
+                                                    id="btn-edit_{{ aircraft.id }}" data-aircraft-id="{{ aircraft.id }}"
+                                                    data-aircraft="{{ aircraft|json_encode() }}"><i class="fa fa-cogs" aria-hidden="true"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+
+                                </tbody>
+                            </table>
                         </div>
+                    </div>
+                    <div class="card-footer">
+
+                        <ul class="pagination">
+                            {# {{ dump(aircrafts.currentPage) }} #}
+                            {# {{ dump(aircrafts.pagesQty) }} #}
+
+                            {% if aircrafts.currentPage == 1 %}
+                                {% set pagePrevious = "#" %}
+                                {% set ariaDisabledFirst = "true" %}
+                                {% set liDisabledFirst = " disabled" %}
+                            {% else %}
+                                {% set pagePrevious = "/uav/" ~ (aircrafts.currentPage - 1) %}
+                                {% set ariaDisabledFirst = "false" %}
+                                {% set liDisabledFirst = "" %}
+                            {% endif %}
+
+                            {% if aircrafts.currentPage == aircrafts.pagesQty %}
+                                {% set pageNext = "#" %}
+                                {% set ariaDisabledLast = "true" %}
+                                {% set liDisabledLast = " disabled" %}
+                            {% else %}
+                                {% set pageNext = "/uav/" ~ (aircrafts.currentPage + 1) %}
+                                {% set ariaDisabledLast = "false" %}
+                                {% set liDisabledLast = "" %}
+                            {% endif %}
+
+
+                            <li class="page-item{{ liDisabledFirst }}">
+                                <a class="page-link" href="{{ pagePrevious }}" aria-disabled="{{ ariaDisabledFirst }}">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                            {% for i in 1..aircrafts.pagesQty %}
+                                {% if aircrafts.currentPage == i %}
+                                    <li class="page-item disabled"><a class="page-link" href="#">{{ i }}</a></li>
+                                {% else %}
+                                    <li class="page-item"><a class="page-link" href="/uav/{{ i }}">{{ i }}</a></li>
+                                {% endif %}
+                            {% endfor %}
+                            <li class="page-item{{ liDisabledLast }}">
+                                <a class="page-link" href="{{ pageNext }}" aria-disabled="{{ liDisabledLast }}">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                        </ul>
+
                     </div>
                 </div>
             </div>
         </div>
-
+    </div>
 
     {% block modals %}
-            {% include('components/modals.html.twig') %}
-    {% endblock %}    
+        {% include('components/modals.html.twig') %}
+    {% endblock %}
 
 
     {% block footer %}
-            {% include('footer.html.twig') %}
-    {% endblock %}
+    {% include('footer.html.twig') %}
+{% endblock %}

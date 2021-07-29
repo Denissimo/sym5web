@@ -5,7 +5,7 @@
         <div class="modal-content">
 
             <div class="modal-header">
-                <h5 class="modal-title" id="staticBackdropLabel">Добавление БВС</h5>
+                <h5 class="modal-title" id="staticBackdropLabel">Параметры БВС</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form action="/" class="form-uav" id="form-uav">
@@ -14,333 +14,361 @@
 
                     <ul class="nav nav-tabs" id="myTab" role="tablist">
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home"
-                                    type="button" role="tab" aria-controls="home" aria-selected="true">Home
+                            <button class="nav-link active" id="basic-tab" data-bs-toggle="tab" data-bs-target="#basic"
+                                    type="button" role="tab" aria-controls="basic" aria-selected="true">Основные сведения
                             </button>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile"
-                                    type="button" role="tab" aria-controls="profile" aria-selected="false">Profile
+                            <button class="nav-link" id="construction-tab" data-bs-toggle="tab" data-bs-target="#construction"
+                                    type="button" role="tab" aria-controls="construction" aria-selected="false">Конструкция
                             </button>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact"
-                                    type="button" role="tab" aria-controls="contact" aria-selected="false">Contact
+                            <button class="nav-link" id="registration-tab" data-bs-toggle="tab" data-bs-target="#registration"
+                                    type="button" role="tab" aria-controls="registration" aria-selected="false">Регистрация и страховка
                             </button>
                         </li>
                     </ul>
                     <div class="tab-content" id="myTabContent">
-                        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">1
+                        <div class="tab-pane fade show active" id="basic" role="tabpanel" aria-labelledby="basic-tab">
+                            <div class="container-fluid">
+                                <h6 class="form-title">
+                                    Основные сведения
+                                </h6>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-row">
+                                            <div class="form-input">
+                                                <label class="input-label" for="type">Наименование (тип) *</label>
+                                                <input type="text" class="form-control" id="type" name="type"
+                                                       placeholder="Беспилотник" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-row">
+                                            <div class="form-input">
+                                                <label class="input-label" for="manufacturer">Изготовитель БВС</label>
+                                                <input type="text" class="form-control" id="manufacturer" name="manufacturer"
+                                                       placeholder="Cобственная сборка">
+                                                {# <p class="form-desc">Для самостоятельно собранных БВС, указывается «собственная сборка»</p> #}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <div class="form-row">
+                                            <div class="form-input">
+                                                <label class="input-label" for="serialNumber">Серийный номер *</label>
+                                                <input type="text" class="form-control" id="serialNumber"
+                                                       name="serialNumber" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+
+                                    <div class="col-md-6">
+                                        <div class="form-row">
+                                            <div class="form-input">
+                                                <label class="input-label" for="category">Катекгория</label>
+                                                <select class="form-select" aria-label="Выберите тип" id="category" name="category">
+                                                    {% for category in category %}
+                                                        <option value="{{ category.id }}">{{ category.name }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <div class="form-row">
+                                            <div class="form-input">
+                                                <label class="input-label" for="takeoffMass">Макс. взлетная масса, кг *</label>
+                                                <input type="text" class="form-control" id="takeoffMass"
+                                                       name="takeoffMass" required>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <div class="form-row form-column">
+                                            <div class="form-input">
+                                                <label class="input-label" for="maxWeight">Категория БВС (Масса)</label>
+                                            </div>
+
+                                            {% for mass in mass %}
+                                                <div class="label_invisible mass_category_label mt-2"
+                                                     data-mass-id="{{ mass.id }}" data-mass-min="{{ mass.massMin }}"
+                                                     data-mass-max="{{ mass.massMax }}" id="labelMass{{ mass.id }}">
+                                                    {{ mass.name }}
+                                                </div>
+                                            {% endfor %}
+                                            <input type="hidden" name="mass" id="mass" value="">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-row">
+                                            <div class="form-input">
+                                                <label class="input-label" for="otherParams">Прочие параметры</label>
+                                                <input type="text" class="form-control" id="otherParams"
+                                                       name="otherParams">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">2</div>
-                        <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">3</div>
+                        <div class="tab-pane fade" id="construction" role="tabpanel" aria-labelledby="construction-tab">
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <h6 class="form-title">
+                                        Конструкция
+                                    </h6>
+
+                                    <div class="col-md-4">
+                                        <div class="form-row">
+                                            <div class="form-input">
+                                                <label class="input-label" for="numberOfEngines">Количество двигателей</label>
+                                                <input type="number" class="form-control" id="numberOfEngines"
+                                                       name="numberOfEngines" placeholder="4">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-row">
+                                            <div class="form-input">
+                                                <label class="input-label" for="engine">Тип двигателя</label>
+                                                <select class="form-select" aria-label="Выберите тип" id="engine" name="engine">
+                                                    {% for engine in engine %}
+                                                        <option value="{{ engine.id }}">{{ engine.name }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-row">
+                                            <div class="form-input">
+                                                <label class="input-label" for="controlSystem">Система управления</label>
+                                                <select class="form-select" aria-label="Выберите систему" id="controlSystem" name="controlSystem">
+                                                    <option class="controlSystemOption" value="1">Программная</option>
+                                                    <option class="controlSystemOption" value="2">Радиокомандная</option>
+                                                    <option class="controlSystemOption" value="3">Гибридная</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-row form-column">
+                                            <div class="form-input">
+                                                <label class="input-label" for="categoryUav">Тип каналов
+                                                    связи/управления</label>
+                                            </div>
+                                            {% for channelKey, channelName in aircrafts.loadChannels %}
+                                                <div class="form-check form-switch">
+                                                    <input class="form-check-input channel" type="checkbox"
+                                                           id="channel_{{ channelKey }}"
+                                                           name="channels" data-channel-id="{{ channelKey }}">
+                                                    <label class="form-check-label"
+                                                           for="channel_{{ channelKey }}">{{ channelName }}</label>
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-row form-column">
+                                            <div class="form-input">
+                                                <label class="input-label" for="categoryUav">Особенности запуска</label>
+                                            </div>
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" id="isHandStart"
+                                                       name="isHandStart">
+                                                <label class="form-check-label" for="isHandStart">Запуск с рук</label>
+                                            </div>
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" id="isVerticalStart"
+                                                       name="isVerticalStart">
+                                                <label class="form-check-label" for="isVerticalStart">Вертикальный взлёт</label>
+                                            </div>
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" id="isCatapultStart"
+                                                       name="isCatapultStart">
+                                                <label class="form-check-label" for="isCatapultStart">Катапультный старт</label>
+                                            </div>
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" id="isParachuteLanding"
+                                                       name="isParachuteLanding">
+                                                <label class="form-check-label" for="isParachuteLanding">Посадка на
+                                                    парашюте</label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-row">
+                                            <div class="form-input">
+                                                <label class="input-label" for="landingSiteLength">Длина взлётной площадки,
+                                                    м</label>
+                                                <input type="text" class="form-control" id="landingSiteLength"
+                                                       name="landingSiteLength">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-row">
+                                            <div class="form-input">
+                                                <label class="input-label" for="landingSiteWidth">Ширина взлётной площадки,
+                                                    м</label>
+                                                <input type="text" class="form-control" id="landingSiteWidth"
+                                                       name="landingSiteWidth">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-row">
+                                            <div class="form-input">
+                                                <label class="input-label" for="responderType">Тип ответчика</label>
+                                                <input type="text" class="form-control" id="responderType" name="responderType">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="registration" role="tabpanel" aria-labelledby="registration-tab">
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <h6 class="form-title">
+                                        Сведения о регистрации
+                                    </h6>
+                                    <div class="col-md-4">
+                                        <div class="form-row">
+                                            <div class="form-input">
+                                                <label class="input-label" for="registrationStatus">Статус регистрации</label>
+
+                                                <select class="form-select" aria-label="registrationStatus" id="registrationStatus" name="registrationStatus">>
+                                                    {% for status in statuses %}
+                                                        <option value="{{ status.id }}">{{ status.name }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <div class="form-row">
+                                            <div class="form-input">
+                                                <label class="input-label" for="registrationNumber">Регистрационный номер</label>
+                                                <input type="text" class="form-control" id="registrationNumber"
+                                                       name="registrationNumber">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {#                            <div class="col-md-4">#}
+                                    {#                                <div class="form-row">#}
+                                    {#                                    <div class="form-input">#}
+                                    {#                                        <span class="input-label">Загрузить уведомление</span>#}
+                                    {#                                        <input type="file" name="file" id="uavNotice" class="uploadfile"/>#}
+                                    {#                                        <label for="uavNotice" class="uploadfile-notice-text">Выберите файл</label>#}
+                                    {#                                    </div>#}
+                                    {#                                </div>#}
+                                    {#                            </div>#}
+
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="form-row">
+                                            <div class="form-input">
+                                                <label class="input-label" for="registrationDate">Дата регистрации</label>
+                                                <input type="date" class="form-control datepicker" data-date-format="yyyy-mm-dd"
+                                                       id="registrationDate" name="registrationDate" placeholder="2020-04-27">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-row">
+                                            <div class="form-input">
+                                                <label class="input-label" for="deregistrationDate">Дата снятия с
+                                                    регистрации</label>
+                                                <input type="date" class="form-control datepicker" data-date-format="yyyy-mm-dd"
+                                                       id="deregistrationDate" name="deregistrationDate"
+                                                       placeholder="2020-04-27">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-row">
+                                            <div class="form-input">
+                                                <label class="input-label" for="deregistrationReason">Причина снятия
+                                                    регистрации</label>
+                                                <input type="text" class="form-control"
+                                                       id="deregistrationReason" name="deregistrationReason">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <h6 class="form-title">
+                                        Страховка
+                                    </h6>
+
+                                    <div class="col-md-3">
+                                        <div class="form-row">
+                                            <div class="form-input">
+                                                <label class="input-label" for="insuranceCompany">Страховая компания</label>
+                                                <input type="text" class="form-control" id="insuranceCompany"
+                                                       name="insuranceCompany">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-row">
+                                            <div class="form-input">
+                                                <label class="input-label" for="insurancePolicyNumber">Номер полиса</label>
+                                                <input type="text" class="form-control" id="insurancePolicyNumber"
+                                                       name="insurancePolicyNumber">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-row">
+                                            <div class="form-input">
+                                                <label class="input-label" for="insuranceStart">Дата начала страховки</label>
+                                                <input type="date" class="form-control datepicker" data-date-format="yyyy-mm-dd"
+                                                       id="insuranceStart" name="insuranceStart" placeholder="2020-04-27">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-row">
+                                            <div class="form-input">
+                                                <label class="input-label" for="insuranceEnd">Дата окончания страховки</label>
+                                                <input type="date" class="form-control datepicker" data-date-format="yyyy-mm-dd"
+                                                       id="insuranceEnd" name="insuranceEnd" placeholder="2020-04-27">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="container-fluid">
-                        <div class="row">
-                            <div class="col-md-4">
-                                <div class="form-row">
-                                    <div class="form-input">
-                                        <label class="input-label" for="type">Наименование (тип)</label>
-                                        <input type="text" class="form-control" id="type" name="type"
-                                               placeholder="Беспилотник">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-row">
-                                    <div class="form-input">
-                                        <label class="input-label" for="manufacturer">Изготовитель БВС *</label>
-                                        <input type="text" class="form-control" id="manufacturer" name="manufacturer"
-                                               placeholder="Cобственная сборка">
-                                        {# <p class="form-desc">Для самостоятельно собранных БВС, указывается «собственная сборка»</p> #}
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-4">
-                                <div class="form-row">
-                                    <div class="form-input">
-                                        <label class="input-label" for="serialNumber">Серийный номер *</label>
-                                        <input type="text" class="form-control" id="serialNumber" name="serialNumber">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <h6 class="form-title">
-                                Конструкция
-                            </h6>
-
-                            <div class="col-md-4">
-                                <div class="form-row">
-                                    <div class="form-input">
-                                        <label class="input-label" for="numberOfEngines">Количество двигателей</label>
-                                        <input type="number" class="form-control" id="numberOfEngines"
-                                               name="numberOfEngines" placeholder="4">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-row">
-                                    <div class="form-input">
-                                        <label class="input-label" for="engine">Тип двигателя</label>
-                                        <select class="form-select" aria-label="Выберите тип" id="engine" name="engine">
-                                            {% for engine in engine %}
-                                                <option value="{{ engine.id }}">{{ engine.name }}</option>
-                                            {% endfor %}
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-row">
-                                    <div class="form-input">
-                                        <label class="input-label" for="controlSystem">Система управления</label>
-                                        <select class="form-select" aria-label="Выберите систему" id="controlSystem" name="controlSystem">
-                                            <option value="1">Программная</option>
-                                            <option value="2">Радиокомандная</option>
-                                            <option value="3">Гибридная</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row">
-
-                            <div class="col-md-6">
-                                <div class="form-row">
-                                    <div class="form-input">
-                                        <label class="input-label" for="category">Катекгория</label>
-                                        <select class="form-select" aria-label="Выберите тип" id="category" name="category">
-                                            {% for category in category %}
-                                                <option value="{{ category.id }}">{{ category.name }}</option>
-                                            {% endfor %}
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-3">
-                                <div class="form-row">
-                                    <div class="form-input">
-                                        <label class="input-label" for="takeoffMass">Макс. взлетная масса,
-                                            кг</label>
-                                        <input type="text" class="form-control" id="takeoffMass" name="takeoffMass">
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-3">
-                                <div class="form-row form-column">
-                                    <div class="form-input">
-                                        <label class="input-label" for="maxWeight">Категория БВС (Масса)</label>
-                                    </div>
-
-                                    {% for mass in mass %}
-                                        <div class="label_invisible mass_category_label mt-2"
-                                             data-mass-id="{{ mass.id }}" data-mass-min="{{ mass.massMin }}"
-                                             data-mass-max="{{ mass.massMax }}" id="labelMass{{ mass.id }}">
-                                            {{ mass.name }}
-                                        </div>
-                                    {% endfor %}
-                                    <input type="hidden" name="mass" id="mass" value="">
-                                </div>
-                            </div>
-                        </div>
 
 
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-row form-column">
-                                    <div class="form-input">
-                                        <label class="input-label" for="categoryUav">Тип каналов
-                                            связи/управления</label>
-                                    </div>
-                                    {% for channelKey, channelName in aircrafts.loadChannels %}
-                                        <div class="form-check form-switch">
-                                            <input class="form-check-input channel" type="checkbox"
-                                                   id="channel_{{ channelKey }}"
-                                                   name="channels" data-chennal-id="{{ channelKey }}">
-                                            <label class="form-check-label"
-                                                   for="channel_{{ channelKey }}">{{ channelName }}</label>
-                                        </div>
-                                    {% endfor %}
-                                </div>
-                            </div>
-
-                            <div class="col-md-6">
-                                <div class="form-row form-column">
-                                    <div class="form-input">
-                                        <label class="input-label" for="categoryUav">Особенности запуска</label>
-                                    </div>
-                                    <div class="form-check form-switch">
-                                        <input class="form-check-input" type="checkbox" id="isHandStart"
-                                               name="isHandStart">
-                                        <label class="form-check-label" for="isHandStart">Запуск с рук</label>
-                                    </div>
-                                    <div class="form-check form-switch">
-                                        <input class="form-check-input" type="checkbox" id="isVerticalStart"
-                                               name="isVerticalStart">
-                                        <label class="form-check-label" for="isVerticalStart">Вертикальный взлёт</label>
-                                    </div>
-                                    <div class="form-check form-switch">
-                                        <input class="form-check-input" type="checkbox" id="isCatapultStart"
-                                               name="isCatapultStart">
-                                        <label class="form-check-label" for="isCatapultStart">Катапультный старт</label>
-                                    </div>
-                                    <div class="form-check form-switch">
-                                        <input class="form-check-input" type="checkbox" id="isCatapultStart"
-                                               name="isCatapultStart">
-                                        <label class="form-check-label" for="isCatapultStart">Посадка на
-                                            парашюте</label>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {# <div class="col-md-6"> #}
-                            {# <div class="form-row form-column"> #}
-                            {# <div class="form-input"> #}
-                            {# <label class="input-label" for="categoryUav">Транспондер</label> #}
-                            {# </div> #}
 
 
-                            {# <div class="form-check-group"> #}
-                            {# <div class="form-check"> #}
-                            {# <input class="form-check-input" type="checkbox" value="250" #}
-                            {# id="categoryUav250" name="categoryUav"> #}
-                            {# <label class="form-check-label" for="flexCheckIndeterminate"> #}
-                            {# ADS-B (out, in/out) #}
-                            {# </label> #}
-                            {# </div> #}
-
-                            {# <div class="form-check"> #}
-                            {# <input class="form-check-input" type="checkbox" value="250-30" #}
-                            {# id="categoryUav250-30" name="categoryUav"> #}
-                            {# <label class="form-check-label" for="flexCheckIndeterminate"> #}
-                            {# Режим S #}
-                            {# </label> #}
-                            {# </div> #}
-
-                            {# <div class="form-check"> #}
-                            {# <input class="form-check-input" type="checkbox" value="30+" #}
-                            {# id="categoryUav30+" name="categoryUav"> #}
-                            {# <label class="form-check-label" for="flexCheckIndeterminate"> #}
-                            {# трекер ABR #}
-                            {# </label> #}
-                            {# </div> #}
-
-                            {# </div> #}
-
-                            {# </div> #}
-                            {# </div> #}
-
-                        </div>
-                        <div class="row">
-                            <div class="col-md-4">
-                                <div class="form-row">
-                                    <div class="form-input">
-                                        <label class="input-label" for="landingSiteLength">Длина взлётной площадки,
-                                            м</label>
-                                        <input type="text" class="form-control" id="landingSiteLength"
-                                               name="landingSiteLength">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-row">
-                                    <div class="form-input">
-                                        <label class="input-label" for="landingSiteWidth">Ширина взлётной площадки,
-                                            м</label>
-                                        <input type="text" class="form-control" id="landingSiteWidth"
-                                               name="landingSiteWidth">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-row">
-                                    <div class="form-input">
-                                        <label class="input-label" for="responderType">Тип ответчика</label>
-                                        <input type="text" class="form-control" id="responderType" name="responderType">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <h6 class="form-title">
-                                Сведения о регистрации
-                            </h6>
-                            <div class="col-md-4">
-                                <div class="form-row">
-                                    <div class="form-input">
-                                        <label class="input-label" for="statusRegister">Статус регистрации *</label>
-
-                                        <select class="form-select" aria-label="statusRegister" id="statusRegister" name="statusRegister">>
-                                            {% for status in statuses %}
-                                                <option value="{{ status.id }}">{{ status.name }}</option>
-                                            {% endfor %}
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-4">
-                                <div class="form-row">
-                                    <div class="form-input">
-                                        <label class="input-label" for="registrationNumber">Регистрационный номер
-                                            *</label>
-                                        <input type="text" class="form-control" id="registrationNumber"
-                                               name="registrationNumber">
-                                    </div>
-                                </div>
-                            </div>
-
-{#                            <div class="col-md-4">#}
-{#                                <div class="form-row">#}
-{#                                    <div class="form-input">#}
-{#                                        <span class="input-label">Загрузить уведомление</span>#}
-{#                                        <input type="file" name="file" id="uavNotice" class="uploadfile"/>#}
-{#                                        <label for="uavNotice" class="uploadfile-notice-text">Выберите файл</label>#}
-{#                                    </div>#}
-{#                                </div>#}
-{#                            </div>#}
-
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-3">
-                                <div class="form-row">
-                                    <div class="form-input">
-                                        <label class="input-label" for="registrationDate">Дата регистрации</label>
-                                        <input type="date" class="form-control datepicker" data-date-format="yyyy-mm-dd"
-                                               id="registrationDate" name="registrationDate" placeholder="2020-04-27">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-row">
-                                    <div class="form-input">
-                                        <label class="input-label" for="deregistrationDate">Дата снятия с
-                                            регистрации</label>
-                                        <input type="date" class="form-control datepicker" data-date-format="yyyy-mm-dd"
-                                               id="deregistrationDate" name="deregistrationDate"
-                                               placeholder="2020-04-27">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-row">
-                                    <div class="form-input">
-                                        <label class="input-label" for="deregistrationReason">Причина снятия
-                                            регистрации</label>
-                                        <input type="text" class="form-control"
-                                               id="deregistrationReason" name="deregistrationReason">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
+{#                        <div class="row">#}
 
                             {# <div class="col-md-6"> #}
                             {# <div class="form-row"> #}
@@ -363,61 +391,8 @@
                             {# </div> #}
 
 
-                        </div>
-                        <div class="row">
-                            <h6 class="form-title">
-                                Страховка
-                            </h6>
+{#                        </div>#}
 
-                            <div class="col-md-3">
-                                <div class="form-row">
-                                    <div class="form-input">
-                                        <label class="input-label" for="insuranceCompany">Страховая компания</label>
-                                        <input type="text" class="form-control" id="insuranceCompany"
-                                               name="insuranceCompany">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-row">
-                                    <div class="form-input">
-                                        <label class="input-label" for="insurancePolicyNumber">Номер полиса</label>
-                                        <input type="text" class="form-control" id="insurancePolicyNumber"
-                                               name="insurancePolicyNumber">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-row">
-                                    <div class="form-input">
-                                        <label class="input-label" for="insuranceStart">Дата начала страховки</label>
-                                        <input type="date" class="form-control datepicker" data-date-format="yyyy-mm-dd"
-                                               id="insuranceStart" name="insuranceStart" placeholder="2020-04-27">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-row">
-                                    <div class="form-input">
-                                        <label class="input-label" for="insuranceEnd">Дата окончания страховки</label>
-                                        <input type="date" class="form-control datepicker" data-date-format="yyyy-mm-dd"
-                                               id="insuranceEnd" name="insuranceEnd" placeholder="2020-04-27">
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-row">
-                                    <div class="form-input">
-                                        <label class="input-label" for="otherParams">Прочие параметры</label>
-                                        <input type="text" class="form-control" id="otherParams"
-                                               name="otherParams">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                         <div class="row">
                             <div class="col-md-12 alert_place">
 

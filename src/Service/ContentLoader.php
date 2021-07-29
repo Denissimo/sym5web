@@ -31,7 +31,7 @@ class ContentLoader
     {
         $data = $this->client->request(
             'GET',
-            $this->apiUrl . $path,
+            $this->apiUrl . $path
         );
 
         $content = $data->getContent();
