@@ -270,10 +270,42 @@ require(
         // Remove copyrights at bottom
         view.ui.remove("attribution");
 
-        if(checkRoleRoute("ROLE_OWNER",roles) && route==="Tracks" )
+        let d=new Date();   d.setDate(d.getDate() );  
+          let d2=new Date();  d2.setDate(d2.getDate() + 20); // 10 дней предыдущих 20 последующих
+          let  d1=new Date(); d1.setDate(d1.getDate() + 1);
+          let timeExtent = ({
+             start: d,
+             end:  d2
+                      });
+ 
+           timeSlider = new TimeSlider({
+           container: document.createElement("div"),
+           fullTimeExtent : timeExtent,
+           values: [d1],
+           mode : "instant", // не интервал
+           timeVisible:true,
+          
+           stops: {
+             interval: {
+               value: 15,
+               unit: "minutes"
+             }
+           }
+         });
+   
+
+
+
+        if(checkRoleRoute("ROLE_OWNER",roles) )
         {
+         if(route==="Flights"||route==="Tracks"  )
+            addLayers2D(FeatureLayer,scene,roles,user.id);   
+          
+         if( route==="Tracks" ) 
+         {
+         layerManual = new GraphicsLayer({listMode:"hide"}); //слой графики для скетча       
          setTrackSidebar();   
-         layerManual = new GraphicsLayer({listMode:"hide"}); //слой графики для скетча    
+         
         // Sketch widget
         const sketch = new Sketch({
             layer: layerManual,
@@ -294,7 +326,7 @@ require(
        eventView(view,sketch,layerManual)
        scene.layers.add(layerManual);    
         }
-
+    }  
 
 
 
@@ -352,29 +384,7 @@ require(
         });
 
 
-          let d=new Date();   d.setDate(d.getDate() );  
-          let d2=new Date();  d2.setDate(d2.getDate() + 20); // 10 дней предыдущих 20 последующих
-          let  d1=new Date(); d1.setDate(d1.getDate() + 1);
-          let timeExtent = ({
-             start: d,
-             end:  d2
-                      });
- 
-           timeSlider = new TimeSlider({
-           container: document.createElement("div"),
-           fullTimeExtent : timeExtent,
-           values: [d1],
-           mode : "instant", // не интервал
-           timeVisible:true,
           
-           stops: {
-             interval: {
-               value: 15,
-               unit: "minutes"
-             }
-           }
-         });
-   
          const bgExpandTime = new Expand({
             view: view,
             expandIconClass:"esri-icon-time-clock",
@@ -418,8 +428,7 @@ require(
         else if(checkRoleRoute("ROLE_OWNER",roles))
 
         {
-            if(route==="Flights"||route==="Tracks"  )
-          addLayers2D(FeatureLayer,scene,roles,user.id); 
+          
           selectLayer=addSelectLayer(GraphicsLayer,scene);
 
         }

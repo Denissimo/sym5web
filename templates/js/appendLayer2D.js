@@ -201,7 +201,7 @@ function addSelectLayer(GraphicsLayer,webmap)
                   
 
                   flyZoneLayer = new FeatureLayer({
-                    title: "Полетные зоны",  
+                    title: "Зоны заявок",  
                     url: sourceFlyghtZone,
                     outFields: ["*"],
                     renderer:zoneRendererFly,
@@ -215,10 +215,10 @@ function addSelectLayer(GraphicsLayer,webmap)
                      
 
 
-                     zoneLayer.definitionExpression="ownerid = '"+user.id.toString()+"'";
-                     routeLayer.definitionExpression="ownerid = '"+user.id.toString()+"'";
+                   zoneLayer.definitionExpression="ownerid = '"+user.id.toString()+"'";
+                   routeLayer.definitionExpression="ownerid = '"+user.id.toString()+"'";
 
-                     tableLayer.definitionExpression="ownerid = '"+user.id.toString()+"'";
+                   tableLayer.definitionExpression="ownerid = '"+user.id.toString()+"'";
                      console.log(tableLayer.definitionExpression);
                      tableZoneLayer.definitionExpression="ownerid = '"+user.id.toString()+"'";
                      

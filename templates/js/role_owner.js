@@ -125,7 +125,8 @@ let tracksidebar="<a href='#'" +'class="close-btn" id="close-btn">\
       });         
       idRoute= $.cookie("idRoute");
       if(idRoute==null) idRoute="";
-      getUserRoute(idRoute);
+      if (idRoute=="") clean(true)
+       getUserRoute(idRoute);
 }
 //Загрузка KML
 
@@ -348,10 +349,11 @@ function changeExtent (geom)
                    //  if(withBuffer)
                    //    bufferLayer.graphics.removeAll();
                      
-                /*   
+                   
                      tableLayer.definitionExpression="objectid < 0";
                      tableZoneLayer.definitionExpression="objectid < 0"; 
-                     
+
+               /*      
                      getDetailRoute(document.getElementById("routeid").value,false);
                      
                      document.getElementById("routeid").value="";
@@ -1090,8 +1092,9 @@ function changeExtent (geom)
            
              function makeListRoutePanel(response)
              {
-              
-              for (let i=0;i<response.tracks.length;i++) {      
+              console.log(response.tracks);
+              for (let i=0;i<response.tracks.length;i++) {     
+                 
                 if(response.tracks[i].isFinal)
 
                   //alert( response.tracks[i].id+" "+response.tracks[i].type);
