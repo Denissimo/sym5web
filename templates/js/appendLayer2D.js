@@ -1,4 +1,8 @@
-       function addSelectLayer(GraphicsLayer,webmap)
+var routeVecLayer;
+var zoneLayer;
+var tableLayer;
+var tableZoneLayer;
+function addSelectLayer(GraphicsLayer,webmap)
        {
          var selectLayer = new GraphicsLayer({
           listMode:"hide"
@@ -22,7 +26,7 @@
           
                
         
-            var   routeVecLayer = new FeatureLayer({
+            routeVecLayer = new FeatureLayer({
             url:     sourceTrackRoute, 
             
             outFields: ["*"],
@@ -37,7 +41,7 @@
 
           lineSymbolTable = {
             type: "simple-line", // autocasts as SimpleLineSymbol()
-            color: [0, 128, 0],
+            color: [0, 255, 0],
             width: 2
           };
   
@@ -46,7 +50,7 @@
                symbol: lineSymbolTable
             };
 
-           var tableLayer = new FeatureLayer({
+             tableLayer = new FeatureLayer({
               url:    sourceTrackRoute,
               outFields: ["*"],
               renderer :lineRendererTable,
@@ -71,7 +75,7 @@
                     symbol: fillSymbolSelectZone
                   };    
 
-           var tableZoneLayer = new FeatureLayer({
+            tableZoneLayer = new FeatureLayer({
             url:     sourceTrackZone,
             outFields: ["*"],
             renderer:zoneRendererTable,
@@ -88,7 +92,7 @@
               type: "simple",
               symbol: fillSymbol
             };      
-          var zoneLayer = new FeatureLayer({
+          zoneLayer = new FeatureLayer({
                url:     sourceTrackZone,
                outFields: ["*"],
                hasZ:true,
@@ -101,7 +105,7 @@
           var lineSymbol = {
              type: "simple-line", // autocasts as SimpleLineSymbol()
              color: [255, 0, 197],
-             width: 2
+             width: 1
             };
           var lineRenderer = {
              type: "simple",
@@ -176,14 +180,16 @@
                      }
 
 
-                     zoneLayer.definitionExpression=defQ;
-                     routeLayer.definitionExpression=defQ;
-                     tableLayer.definitionExpression="objectid < 0";
-                     tableZoneLayer.definitionExpression="objectid < 0";
+                     zoneLayer.definitionExpression="ownerid = '"+user.id.toString()+"'";
+                     routeLayer.definitionExpression="ownerid = '"+user.id.toString()+"'";
+
+                     tableLayer.definitionExpression="ownerid = '"+user.id.toString()+"'";
+                     console.log(tableLayer.definitionExpression);
+                     tableZoneLayer.definitionExpression="ownerid = '"+user.id.toString()+"'";
                      
+                     webmap.add(routeLayer);
                      webmap.add(zoneLayer);
-                     webmap.layers.add(tableZoneLayer)
-                     
+                                          
                      webmap.layers.add(tableZoneLayer)
                      webmap.layers.add(tableLayer)
                      

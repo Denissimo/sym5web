@@ -1,5 +1,27 @@
-var GEOPROCESSOR; 
+var scene;
+var token ;
+var apiUrl;
+
+var GEOPROCESSOR;
+var POLYLINE;
+var POLYGON;
+var MULTIPOINT;
+var POINT;
+var EXTENT;
+var GRAPHIC;
+var PROJECTION;
+var CIRCLE;
+var GEOMETRYENGINE;    
+var QUERY;
+var user;
+var view;
+var flypts=[];
+var profil=[];
+var tabName=[];
+var nameRoute;
+var idRoute;
 var selectLayer; //слой подсветки выбраннных объектов на карте
+var layerManual;
 require(
     [   "esri/config", //dv
         "esri/layers/WebTileLayer", //dv
@@ -7,13 +29,24 @@ require(
         "esri/layers/FeatureLayer" , //dv
         "esri/layers/GraphicsLayer" ,
         "esri/layers/support/LabelClass",//dv
-
+        
+        "esri/tasks/support/Query",
+        "esri/Graphic",
+        "esri/geometry/Extent",
+        "esri/geometry/Polyline",
+        "esri/geometry/Circle",
+        "esri/geometry/Polygon",
+        "esri/geometry/Point",
+        "esri/geometry/Multipoint",
+        "esri/geometry/geometryEngine",
+        "esri/geometry/projection",
         
         "esri/views/MapView",
         "esri/views/SceneView",
         "esri/WebMap",
         "esri/WebScene",
         
+        "esri/widgets/Sketch",
         "esri/widgets/Search",
         "esri/widgets/Expand",
         "esri/widgets/BasemapGallery",
@@ -31,12 +64,22 @@ require(
         FeatureLayer, //dv
         GraphicsLayer, //dv
         LabelClass,//dv
-   
+        Query,
+        Graphic,
+        Extent,
+        Polyline,
+        Circle,
+        Polygon,
+        Point,
+        Multipoint,
+        geometryEngine,
+        projection,
         
         MapView,
         SceneView,
         WebMap,
         WebScene,
+        Sketch,
         Search,
         Expand,
         BasemapGallery,
@@ -46,16 +89,28 @@ require(
         Geoprocessor,
         Compass
     ) {
-        var view;
-        var scene;
+       
+        
         var tokenCookieName = '{{ token_cookie_name }}';
-        var token = $.cookie(tokenCookieName);
-        var apiUrl = '{{ api_url|raw }}';
+        token = $.cookie(tokenCookieName);
+        apiUrl = '{{ api_url|raw }}';
         var roles = JSON.parse('{{ user.user.roles|json_encode() }}');
-        var user = JSON.parse('{{ user|json_encode() }}');
+        user = JSON.parse('{{ user|json_encode() }}');
         var route = '{{ route }}';
         var layerConf=[];
 
+        MULTIPOINT=Multipoint;
+        POINT=Point;
+        POLYGON=Polygon;
+        POLYLINE=Polyline; 
+        EXTENT=Extent;
+        GRAPHIC=Graphic;
+        CIRCLE=Circle;
+        GEOMETRYENGINE=geometryEngine;    
+        QUERY=Query;
+        projection.load();
+        PROJECTION=projection;
+        
         
 
         console.log(route);
@@ -72,6 +127,8 @@ require(
         allApplications.then(function (response) {
             console.log(response);
         });
+
+
 
         // пример изменения данных в API
         /*
@@ -126,29 +183,6 @@ require(
             map: scene,
             container: "map-operator"
         });
-       }
-       else  if(checkRoleRoute("ROLE_OWNER",roles))
-        {
-           
-
-            scene = new WebMap({
-               portalItem: {
-                  id:  "4e1ce0dd127c4cadabd554b808d059b4",
-                  portal: "https://abr-gis-portal.airchannel.net/portal"
-                       },
-                ground : "world-elevation"  
-                
-              });
-        
-            view = new MapView({
-            map: scene,
-            spatialReference : {wkid :3857},
-            container: "map-operator"
-             }); 
-        }
-        
-        
-        // Quality settings of scene
         const quality = document.querySelector('.quality-selector');
         quality.addEventListener("change", function (event) {
             changeQualityScene(this.value);
@@ -166,9 +200,75 @@ require(
                 view.qualityProfile = "high";
             }
         }
+       }
+       else  if(checkRoleRoute("ROLE_OWNER",roles))
+        {
+           
+            
+            scene = new WebMap({
+               portalItem: {
+                  id:  "4e1ce0dd127c4cadabd554b808d059b4",
+                  portal: "https://abr-gis-portal.airchannel.net/portal"
+                       },
+                ground : "world-elevation"  
+                
+              });
+        
+            view = new MapView({
+            map: scene,
+            spatialReference : {wkid :3857},
+            container: "map-operator"
+             });
+
+         var tracks=apiData(
+            apiUrl,
+            '/track/user/'+user.id.toString(),
+            token
+           );
+           tracks.then(function (response) {
+            
+            for (let i=0;i<response.tracks.length;i++)
+            {
+              if(response.tracks[i].isFinal)
+              {
+                  tabName.push(response.tracks[i].name);
+              }
+            }
+        });
+             
+        }
+        
+        
+        // Quality settings of scene
+        
 
         // Remove copyrights at bottom
         view.ui.remove("attribution");
+
+        if(checkRoleRoute("ROLE_OWNER",roles) && route==="Tracks" )
+        {
+         setTrackSidebar();   
+         layerManual = new GraphicsLayer({listMode:"hide"}); //слой графики для скетча    
+        // Sketch widget
+        const sketch = new Sketch({
+            layer: layerManual,
+            view: view,
+            availableCreateTools:["polyline", "polygon", "rectangle", "circle","point"],
+            // graphic will be selected as soon as it is created
+            creationMode: "single"
+          });
+          const bgExpandSketch = new Expand({
+            view: view,
+            content: sketch
+        });
+        view.ui.add(bgExpandSketch, {
+            position: "top-left",
+            index: 1
+        });
+       eventSketch(sketch,layerManual);
+       eventView(view,sketch,layerManual)
+       scene.layers.add(layerManual);    
+        }
 
         // Search widget
         const searchWidget = new Search({
@@ -229,10 +329,10 @@ require(
 
             {
                 
-              var realLayer=addReal(FeatureLayer,LabelClass,Geoprocessor,scene);
+              var realLayer=addReal(FeatureLayer,LabelClass,Geoprocessor,scene,checkRoleRoute("ROLE_OWNER",roles));
               makeRealFlyght(realLayer);
               var realTitle=realLayer.title;
-              window.setInterval(refreshRealLayer, 60000,FeatureLayer,scene,realTitle);
+              window.setInterval(refreshRealLayer, 60000,FeatureLayer,scene,realTitle,checkRoleRoute("ROLE_OWNER",roles));
               
             }
         
@@ -248,12 +348,12 @@ require(
 
         {
             if(route==="Flights"||route==="Tracks"  )
-          addLayers2D(FeatureLayer,scene,roles) 
+          addLayers2D(FeatureLayer,scene,roles,user.id); 
           selectLayer=addSelectLayer(GraphicsLayer,scene);
 
         }
         
-        // addMobail(WebTileLayer,GroupLayer,esriConfig,scene);
+         addMobail(WebTileLayer,GroupLayer,esriConfig,scene);
 
 
 
@@ -349,5 +449,9 @@ require(
           
        return null;
     }
-   
+    function emptyArray(arr) {
+        while(arr.length > 0) {
+          arr.pop();
+        } 
+        }   
 
