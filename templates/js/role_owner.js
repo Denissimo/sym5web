@@ -1,6 +1,24 @@
 console.log('role_owner');
 var flagEdit=false;
 
+function setTimeSliderWatch()
+{
+
+   timeSlider.watch("timeExtent", function () { 
+    flyZoneLayer.definitionExpression=buildDefinitionQueryFly();
+  });
+}
+function convertTime(stt)
+        { 
+         var st1=stt.toISOString();
+         var i1=st1.indexOf("T")
+         var i2=st1.indexOf(".",i1)
+        
+         var st2=st1.substring(0, i2);
+         var st=st2.replace("T", " ");
+         return st;
+        }
+
 
 function eventView(view,sketch,layerManual){
 
@@ -105,13 +123,14 @@ let tracksidebar="<a href='#'" +'class="close-btn" id="close-btn">\
            
 
       });         
-      idRoute="";
-      getUserRoute(null);
+      idRoute= $.cookie("idRoute");
+      if(idRoute==null) idRoute="";
+      getUserRoute(idRoute);
 }
 //Загрузка KML
 
 function myFly(res){
-  clean(true,layerManual);
+  clean(true);
   let s=document.getElementById("inFile").value.toString();
   
   let n=s.lastIndexOf("\\");
@@ -204,7 +223,7 @@ sketch.on("create", function(event) {
     // при создании нового объекта вся предыдущая графика вычищается 
     if (event.state === "start" || event.tool==="point") {   
      console.log("start");               
-     clean(true,layerManual);     
+     clean(true);     
      console.log("start2");  
     }
      if (event.state === "complete") {
@@ -256,6 +275,7 @@ sketch.on("create", function(event) {
               catch{break;}
             }        
      var circ=makeCircle(layerManual.graphics.getItemAt(1).geometry,rz,layerManual);
+     
            changeExtent(circ);
       layerManual.graphics.removeAt(0);  
    }
@@ -263,15 +283,17 @@ sketch.on("create", function(event) {
  }
    else
     if(layerManual.graphics.length==1)
+    
     changeExtent(layerManual.graphics.getItemAt(0).geometry);
-      
+
+     
  }
 });
 }
 
 function changeExtent (geom)
                  {
-                   console.log(geom.type);  
+               
                    if (geom.type==="polygon")
                    {
                       console.log(geom.isSelfIntersecting) 
@@ -286,7 +308,7 @@ function changeExtent (geom)
                    var ext=geom.extent;
                    var wkd=ext.spatialReference.wkid;
                       
-                   console.log(geom);                          
+                                         
                          
                          view.extent= new EXTENT({
               
@@ -299,15 +321,30 @@ function changeExtent (geom)
                            wkid: wkd
                                       }
                             });
-                
+                $.cookie("xMin", ext.xmin-(ext.xmax-ext.xmin));            
+                $.cookie("yMin", ext.ymin-(ext.ymax-ext.ymin));            
+                $.cookie("xMax", ext.xmax+(ext.xmax-ext.xmin));
+                $.cookie("yMax", ext.ymax+(ext.ymax-ext.ymin));            
+                $.cookie("wkid", wkd);            
+               
+                if(layerManual.graphics.length>0)
+                 document.getElementById("createRoute").disabled=false
+                else
+                 document.getElementById("createRoute").disabled=true
                  }
 
                  function clean(withBuffer)
                  {
                      nameRoute=""; 
-                     idRoute="";
+                     if (idRoute!="")
+                     {
+                      idRoute="";
+                      getUserRoute("");
+                     }
                      console.log("clear"); 
                      layerManual.graphics.removeAll();
+                     document
+                     .getElementById("createRoute").disabled=true
                    //  if(withBuffer)
                    //    bufferLayer.graphics.removeAll();
                      
@@ -357,14 +394,21 @@ function changeExtent (geom)
                 }
 
                 function makeNewRoute() {
-                //  
+                //
+                if(layerManual.graphics.length==0) 
+                {  
+                  alert("Графика отсутствует");  
+                  return;  
+                
+                }
+                  
                   emptyArray(profil);
                   emptyArray(flypts);
                   if (!checkRouteName(true)) return; 
                 
                      let routeid;
                      
-                      if(layerManual.graphics.length==0) return;
+                      
                       var stat=2 
                       if(layerManual.graphics.getItemAt(0).geometry.type=="polygon")
                         {
@@ -851,6 +895,7 @@ function changeExtent (geom)
      //if (nameRoute=="")  // наименование маршрута
      // {
       newName=prompt ("Введите наименование маршрута",nameRoute);
+      if (newName==null) return false;
      // if (newName==null) return false;
      // }
     
@@ -881,6 +926,7 @@ function changeExtent (geom)
         break;
       }
     }
+    if (nameRoute=="") return false;
        return true;
 
     }    
@@ -973,6 +1019,7 @@ function changeExtent (geom)
        function getUserRoute(viewRid)
         {
          
+          
           var stats= ["Зональный круговой","Зональный","Линейный"];
           
           const trackhtml0 ='<li class="uav-list-item"><div class="uav-item-header">\
@@ -1053,8 +1100,10 @@ function changeExtent (geom)
 
                 document.getElementById("uav-realtimelist").innerHTML=lst;
                 addRouteEvent();
-                if(viewRid!=null)  // getRouteRecord(viewRid,evRouteDetal);
-                evRouteDetal(viewRid); 
+                if(viewRid!=null && viewRid!="" )  // getRouteRecord(viewRid,evRouteDetal);
+                  evRouteDetal(viewRid); 
+                else 
+                  buttonDisabled();  
              }
                  
                function   panTrack(track){
@@ -1194,19 +1243,43 @@ function changeExtent (geom)
                      
                               }
                         }
-
+                
              // });
             
              
              
              
   
-       }    
+ 
+            }    
+            function buttonDisabled()
+            {
+              document.getElementById("saveRoute").disabled=true;
+              document.getElementById("deleteRoute").disabled=true;
+              document.getElementById("saveRouteAs").disabled=true;
+              document.getElementById("importGeometry").disabled=true;
+              $.cookie("idRoute","");
+            } 
+           function buttonEnabled(rid)
+           {
+            n=document.getElementById("N"+rid).value ;
+            if (n==0)
+             {
+              document.getElementById("saveRoute").disabled=false;
+              document.getElementById("deleteRoute").disabled=false;
+              }
+             document.getElementById("saveRouteAs").disabled=false;
+             document.getElementById("importGeometry").disabled=false;
+             $.cookie("idRoute",rid);  
+
+            }      
 /*export*/ function getDetailZone(routeid,flag)
 {
   var lst="";
   var id="R"+routeid;
   
+  if (flag) buttonEnabled(routeid); 
+
   //const routhtml1='<p    class="uav-item-body" <div  class="uav-item-body" style="font-size:12px;">\
   const routhtml1='<p   <div >\
    <label style="width: 50px;font-size:12px;"> Duration</label>\
@@ -1220,8 +1293,8 @@ function changeExtent (geom)
   const routhtml5='></div></p></div>';
   const routhtml6='></div>';
   if (flag)
-  {
-   
+  {               
+      
     var   whZ="routeid = '"+routeid+"'";
  //statusid > 2 не ЧЕРНОВИК не ШАБЛОН
                    zoneLayer.queryFeatures({
@@ -1301,6 +1374,7 @@ function changeExtent (geom)
 
 /*export*/ function getDetailRoute(routeid,flag)
 {
+  if (flag) buttonEnabled(routeid); 
   var lst="";
   var id="R"+routeid;
 
@@ -1765,7 +1839,7 @@ function mySaveRoute(event)
                      delRoute(routeVecLayer);
                 else         
                     delRoute(zoneLayer);
-                      idRoute="";  getUserRoute(null);
+                      idRoute="";  getUserRoute(idRoute);
                  });
     
         }
@@ -1814,7 +1888,7 @@ function mySaveRoute(event)
                     var rid=idRoute;
 
                     let elem=document.getElementById("DR"+rid);
-                    clean(true,layerManual);
+                    clean(true);
                     if (elem ==null )
                     {
                       let whr="routeid = '"+rid+"' And numb < 0 ";
@@ -1835,8 +1909,10 @@ function mySaveRoute(event)
                          geometry:lin,
                          symbol:selectSymbol.lineSymbolGray
 
-                      })
+                      });
+                      
                       layerManual.add(imGr);
+                      changeExtent(lin);
                       getDetailRoute(rid,false);
                       queryRoad(null,"");
                     }); 
@@ -1864,6 +1940,7 @@ function mySaveRoute(event)
                         });
                         
                        layerManual.add(imGr);
+                       changeExtent(pol);
                        //console.log(layerManual.graphics.length);
                        getDetailZone(rid,false);
                        //console.log(layerManual.graphics.length);
@@ -1876,7 +1953,7 @@ function mySaveRoute(event)
                   }        
  
 function removeSelectSeg(rid,numb){  
-      console.log(rid+" ! "+numb) ;
+      
       for (;;)
       { var flag=true;
        selectLayer.graphics.forEach(function(item, i){

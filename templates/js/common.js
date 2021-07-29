@@ -13,6 +13,8 @@ var PROJECTION;
 var CIRCLE;
 var GEOMETRYENGINE;    
 var QUERY;
+
+var timeSlider;
 var user;
 var view;
 var flypts=[];
@@ -48,6 +50,7 @@ require(
         
         "esri/widgets/Sketch",
         "esri/widgets/Search",
+        "esri/widgets/TimeSlider",
         "esri/widgets/Expand",
         "esri/widgets/BasemapGallery",
         "esri/widgets/BasemapToggle",
@@ -81,6 +84,7 @@ require(
         WebScene,
         Sketch,
         Search,
+        TimeSlider,
         Expand,
         BasemapGallery,
         BasemapToggle,
@@ -219,6 +223,27 @@ require(
             spatialReference : {wkid :3857},
             container: "map-operator"
              });
+         
+             let xmn=$.cookie("xMin");            
+             let ymn=$.cookie("yMin");            
+             let xmx=$.cookie("xMax");
+             let ymx=$.cookie("yMax");
+             let wk=$.cookie("wkid");  
+             console.log(xmn);    
+             if (xmn!=null)
+             {
+                view.extent= new EXTENT({
+              
+                           
+                    xmin: xmn,
+                    ymin: ymn,
+                    xmax: xmx,
+                    ymax: ymx,
+                   spatialReference: {
+                   wkid: wk
+                              }
+                    });
+             }        
 
          var tracks=apiData(
             apiUrl,
@@ -270,6 +295,11 @@ require(
        scene.layers.add(layerManual);    
         }
 
+
+
+
+
+
         // Search widget
         const searchWidget = new Search({
             view: view
@@ -320,6 +350,47 @@ require(
             position: "top-left",
             index: 5
         });
+
+
+          let d=new Date();   d.setDate(d.getDate() );  
+          let d2=new Date();  d2.setDate(d2.getDate() + 20); // 10 дней предыдущих 20 последующих
+          let  d1=new Date(); d1.setDate(d1.getDate() + 1);
+          let timeExtent = ({
+             start: d,
+             end:  d2
+                      });
+ 
+           timeSlider = new TimeSlider({
+           container: document.createElement("div"),
+           fullTimeExtent : timeExtent,
+           values: [d1],
+           mode : "instant", // не интервал
+           timeVisible:true,
+          
+           stops: {
+             interval: {
+               value: 15,
+               unit: "minutes"
+             }
+           }
+         });
+   
+         const bgExpandTime = new Expand({
+            view: view,
+            expandIconClass:"esri-icon-time-clock",
+            content: timeSlider.container
+        });  
+        setTimeSliderWatch();
+        
+        view.ui.add(bgExpandTime, {
+            position: "top-left",
+            index: 6
+        });
+        
+
+
+
+
 
 
 
@@ -454,4 +525,14 @@ require(
           arr.pop();
         } 
         }   
-
+        function buildDefinitionQueryFly()/*timeSlider)*/ {   // показывать точки полетов в суточном интервале от установленной даты
+    
+            let et=timeSlider.timeExtent.end.getTime();
+            let st=timeSlider.timeExtent.start.getTime();
+            let ett= new Date(et); ett.setDate(ett.getDate()+1)
+            let stt= new Date(st);
+            let startDt=convertTime(stt);//st;
+            let endDt=convertTime(ett);//et
+            let defQuery ="sdate >= timestamp'"+ startDt+"' And edate <= timestamp'"+endDt+ "'";
+           return defQuery;
+         }

@@ -2,6 +2,7 @@ var routeVecLayer;
 var zoneLayer;
 var tableLayer;
 var tableZoneLayer;
+var flyZoneLayer;
 function addSelectLayer(GraphicsLayer,webmap)
        {
          var selectLayer = new GraphicsLayer({
@@ -23,6 +24,27 @@ function addSelectLayer(GraphicsLayer,webmap)
           var sourceFlyghtPunkts=servicePath+"0";
           
 
+          var      templateZoneFly = {
+        
+            title: "Полетные зоны",
+            returnGeometry : true,
+            content: [
+              {
+                type: "fields",
+                fieldInfos: [
+                  {
+                    fieldName: "sdate",
+                    label: "Старт"
+                  }
+                  ,
+                  {
+                    fieldName: "edate",
+                    label: "Финиш"
+                  }
+                ]
+              }
+            ]
+          };
           
                
         
@@ -92,6 +114,14 @@ function addSelectLayer(GraphicsLayer,webmap)
               type: "simple",
               symbol: fillSymbol
             };      
+            
+            var zoneRendererFly = {
+              type: "simple",
+              symbol: selectSymbol.fillSymbolFly
+            };      
+
+            
+
           zoneLayer = new FeatureLayer({
                url:     sourceTrackZone,
                outFields: ["*"],
@@ -143,12 +173,7 @@ function addSelectLayer(GraphicsLayer,webmap)
             returnZ: true
             });
      //****************************************************************************************************** */               
-            var flyZoneLayer = new FeatureLayer({
-            url: sourceFlyghtZone,
-            outFields: ["*"],
-            hasZ:true,
-            returnZ: true
-              });
+            
          //****************************************************************************************************** */                     
            var restrictLayer = new FeatureLayer({
                     url:   "https://abr-gis-server.airchannel.net/airchannel/rest/services/Airspace_Azerbaijan/MapServer/6",
@@ -171,13 +196,23 @@ function addSelectLayer(GraphicsLayer,webmap)
                      });
 
          
-                  }        //     let defQ=buildDefinitionQuery();  
-                     defQ="";
-                     if( route=="Flights")
-                     { 
-                     flyZoneLayer.definitionExpression="";//   buildDefinitionQueryFly();//timeSlider);
-                     webmap.layers.add(flyZoneLayer);
-                     }
+                  }  
+                  
+                  
+
+                  flyZoneLayer = new FeatureLayer({
+                    title: "Полетные зоны",  
+                    url: sourceFlyghtZone,
+                    outFields: ["*"],
+                    renderer:zoneRendererFly,
+                    popupTemplate :templateZoneFly,
+                    hasZ:true,
+                    returnZ: true
+                      });   //     let defQ=buildDefinitionQuery();  
+                      
+                   flyZoneLayer.definitionExpression=buildDefinitionQueryFly();
+                   webmap.layers.add(flyZoneLayer);
+                     
 
 
                      zoneLayer.definitionExpression="ownerid = '"+user.id.toString()+"'";
