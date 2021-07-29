@@ -15,9 +15,11 @@
           <li class="nav-menu-item">
             <a href="/airsituation/" class="nav-menu-link active">Воздушная обстановка</a>
           </li>
+          {% if not user.hasRole(constant('App\\Api\\Content\\User\\User::ROLE_OPERATOR')) %}
           <li class="nav-menu-item">
             <a href="/tracks/" class="nav-menu-link">Маршруты</a>
           </li>
+          {% endif %}
           <li class="nav-menu-item">
             <a href="/flights/" class="nav-menu-link">Полеты</a>
           </li>

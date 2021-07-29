@@ -2,9 +2,8 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Api\Content\User\User;
 use Symfony\Component\HttpFoundation\Request;
-use App\Service\Client;
 
 class ArcgisController extends BaseController
 {
@@ -26,7 +25,7 @@ class ArcgisController extends BaseController
         $this->loadUserData($request, $tokenCookieName);
 
         return $this->render('airsituation.html.twig', [
-            'id' => 155,
+            'user' => $this->user,
             'route' => 'AirSituation',
             'use_arcgis' => true
         ]);
@@ -42,8 +41,12 @@ class ArcgisController extends BaseController
 
         $this->loadUserData($request, $tokenCookieName);
 
+        if ($this->user->hasRole(User::ROLE_OPERATOR)) {
+            return $this->redirectToRoute('index');
+        }
+
         return $this->render('tracks.html.twig', [
-            'id' => 155,
+            'user' => $this->user,
             'route' => 'Tracks',
             'use_arcgis' => true
         ]);
@@ -54,7 +57,7 @@ class ArcgisController extends BaseController
         $this->loadUserData($request, $tokenCookieName);
 
         return $this->render('flights.html.twig', [
-            'id' => 155,
+            'user' => $this->user,
             'route' => 'Flights',
             'use_arcgis' => true
         ]);
@@ -66,7 +69,7 @@ class ArcgisController extends BaseController
         $this->loadUserData($request, $tokenCookieName);
 
         return $this->render('archive.html.twig', [
-            'id' => 155,
+            'user' => $this->user,
             'route' => 'Archive',
             'use_arcgis' => true
         ]);
