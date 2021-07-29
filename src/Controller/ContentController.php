@@ -46,9 +46,9 @@ class ContentController extends BaseController
         ]);
     }
 
-    public function buildIndex(Request $request, string $tokenCookieName)
+    public function buildIndex(Request $request, string $tokenCookieName, string $userdataSessionName)
     {
-        $this->loadUserData($request, $tokenCookieName);
+        $this->loadUserData($request, $tokenCookieName, $userdataSessionName);
 
         return $this->render('index.html.twig', [
             'user' => $this->user,
@@ -57,15 +57,21 @@ class ContentController extends BaseController
         ]);
     }
 
-    public function buildUav(Request $request, Client $client, string $tokenCookieName)
+    public function buildUav(Request $request, Client $client, string $tokenCookieName, string $userdataSessionName)
     {
-        return $this->buildUavPaginated($request, $client, $tokenCookieName, 1);
+        return $this->buildUavPaginated($request, $client, $tokenCookieName, $userdataSessionName,1);
     }
 
-    public function buildUavPaginated(Request $request, Client $client, string $tokenCookieName, int $page)
+    public function buildUavPaginated(
+        Request $request,
+        Client $client,
+        string $tokenCookieName,
+        string $userdataSessionName,
+        int $page
+    )
     {
         $cookieChecker = $request->cookies->get($tokenCookieName);
-        $this->loadUserData($request, $tokenCookieName);
+        $this->loadUserData($request, $tokenCookieName, $userdataSessionName);
 
         if (!$cookieChecker) {
             return $this->redirectToRoute('login');
@@ -112,9 +118,9 @@ class ContentController extends BaseController
         ]);
     }
 
-    public function buildProfile(Request $request, string $tokenCookieName)
+    public function buildProfile(Request $request, string $tokenCookieName, string $userdataSessionName)
     {
-        $this->loadUserData($request, $tokenCookieName);
+        $this->loadUserData($request, $tokenCookieName, $userdataSessionName);
 
         return $this->render('profile.html.twig', [
             'user' => $this->user,

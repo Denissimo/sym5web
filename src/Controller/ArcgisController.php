@@ -15,14 +15,14 @@ class ArcgisController extends BaseController
     }
 
 
-    public function buildAirSituation(Request $request, string $tokenCookieName)
+    public function buildAirSituation(Request $request, string $tokenCookieName, string $userdataSessionName)
     {
         $cookieChecker = $request->cookies->get($tokenCookieName);
 
         if (!$cookieChecker) {
             return $this->redirectToRoute('login');
         }
-        $this->loadUserData($request, $tokenCookieName);
+        $this->loadUserData($request, $tokenCookieName, $userdataSessionName);
 
         return $this->render('airsituation.html.twig', [
             'user' => $this->user,
@@ -31,7 +31,7 @@ class ArcgisController extends BaseController
         ]);
     }
 
-    public function buildTracks(Request $request, string $tokenCookieName)
+    public function buildTracks(Request $request, string $tokenCookieName, string $userdataSessionName)
     {
         $cookieChecker = $request->cookies->get($tokenCookieName);
 
@@ -39,7 +39,7 @@ class ArcgisController extends BaseController
             return $this->redirectToRoute('login');
         }
 
-        $this->loadUserData($request, $tokenCookieName);
+        $this->loadUserData($request, $tokenCookieName, $userdataSessionName);
 
         if ($this->user->hasRole(User::ROLE_OPERATOR)) {
             return $this->redirectToRoute('index');
@@ -52,9 +52,9 @@ class ArcgisController extends BaseController
         ]);
     }
 
-    public function buildFlights(Request $request, string $tokenCookieName)
+    public function buildFlights(Request $request, string $tokenCookieName, string $userdataSessionName)
     {
-        $this->loadUserData($request, $tokenCookieName);
+        $this->loadUserData($request, $tokenCookieName, $userdataSessionName);
 
         return $this->render('flights.html.twig', [
             'user' => $this->user,
@@ -64,9 +64,9 @@ class ArcgisController extends BaseController
     }
 
 
-    public function buildArchive(Request $request, string $tokenCookieName)
+    public function buildArchive(Request $request, string $tokenCookieName, string $userdataSessionName)
     {
-        $this->loadUserData($request, $tokenCookieName);
+        $this->loadUserData($request, $tokenCookieName, $userdataSessionName);
 
         return $this->render('archive.html.twig', [
             'user' => $this->user,
@@ -78,11 +78,12 @@ class ArcgisController extends BaseController
     public function buildCommonJs(
         Request $request,
         string $tokenCookieName,
-        string $apiUrl
+        string $apiUrl,
+        string $userdataSessionName
     )
     {
         $route = $request->query->get('route') ?? self::DEFAULT_ROUTE;
-        $this->loadUserData($request, $tokenCookieName);
+        $this->loadUserData($request, $tokenCookieName, $userdataSessionName);
 
         $response = $this->render('js/script.html.twig', [
             'user' => $this->user,

@@ -7,6 +7,7 @@ parameters:
     api_url: '%env(API_URL)%'
     auth_url: '%env(AUTH_URL)%'
     token_cookie_name: '%env(TOKEN_COOKIE_NAME)%'
+    userdata_session_name: '%env(USERDATA_SESSION_NAME)%'
 
 services:
     # default configuration for services in *this* file
@@ -17,6 +18,7 @@ services:
             string $apiUrl: '%api_url%'
             string $authUrl: '%auth_url%'
             string $tokenCookieName: '%token_cookie_name%'
+            string $userdataSessionName: '%userdata_session_name%'
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
