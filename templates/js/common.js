@@ -17,11 +17,11 @@ var QUERY;
 var timeSlider;
 var user;
 var view;
-var flypts=[];
-var profil=[];
-var tabName=[];
-var nameRoute;
-var idRoute;
+var flyZoneLayer;
+var flyVecLayer;
+var segmentLayer;
+var punktsLayer;
+
 var selectLayer; //слой подсветки выбраннных объектов на карте
 var layerManual;
 require(
@@ -326,7 +326,7 @@ require(
        eventView(view,sketch,layerManual)
        scene.layers.add(layerManual);    
         }
-        else
+        else if( route==="Flights" ) 
         {
             
             setFlightSidebar()
@@ -396,7 +396,8 @@ require(
             content: timeSlider
         });  
         bgExpandTime.content=timeSlider.container;
-        setTimeSliderWatch();
+
+      
         
         view.ui.add(bgExpandTime, {
             position: "top-left",
@@ -422,6 +423,8 @@ require(
               window.setInterval(refreshRealLayer, 60000,FeatureLayer,scene,realTitle,checkRoleRoute("ROLE_OWNER",roles));
               
             }
+            else
+             setTimeSliderWatch();
         
         if(checkRoleRoute("ROLE_OPERATOR",roles))
         {
@@ -563,3 +566,4 @@ require(
           return st;
          }
    
+         

@@ -2,7 +2,7 @@ var routeVecLayer;
 var zoneLayer;
 var tableLayer;
 var tableZoneLayer;
-var flyZoneLayer;
+var punktsLayer;
 function addSelectLayer(GraphicsLayer,webmap)
        {
          var selectLayer = new GraphicsLayer({
@@ -164,7 +164,7 @@ function addSelectLayer(GraphicsLayer,webmap)
               returnZ: true
                   });   
    //****************************************************************************************************** */              
-            var flyVecLayer = new FeatureLayer({
+            flyVecLayer = new FeatureLayer({
             url: sourceFlyghtRoute,
             outFields: ["*"],
             hasM:true,
@@ -186,7 +186,7 @@ function addSelectLayer(GraphicsLayer,webmap)
                   });
          
          //****************************************************************************************************** */              
-              var punktsLayer = new FeatureLayer({url: sourceFlyghtPunkts,          
+               punktsLayer = new FeatureLayer({url: sourceFlyghtPunkts,          
                       //popupTemplate:templatePunkts,
                       hasM:true,
                       hasZ:true,
