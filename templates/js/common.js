@@ -270,18 +270,18 @@ require(
         // Remove copyrights at bottom
         view.ui.remove("attribution");
 
-        let d=new Date();   d.setDate(d.getDate() );  
-          let d2=new Date();  d2.setDate(d2.getDate() + 20); // 10 дней предыдущих 20 последующих
-          let  d1=new Date(); d1.setDate(d1.getDate() + 1);
-          let timeExtent = ({
+        let d=new Date();    
+        let d2=new Date();  d2.setDate(d2.getDate() + 20); // 10 дней предыдущих 20 последующих
+        let  d1=new Date(); d1.setDate(d1.getDate() + 1);
+        let timeExtent = ({
              start: d,
-             end:  d2
+              end:  d2
                       });
  
            timeSlider = new TimeSlider({
            container: document.createElement("div"),
            fullTimeExtent : timeExtent,
-           values: [d1],
+           values: [d,d1],
            mode : "instant", // не интервал
            timeVisible:true,
           
@@ -325,6 +325,11 @@ require(
        eventSketch(sketch,layerManual);
        eventView(view,sketch,layerManual)
        scene.layers.add(layerManual);    
+        }
+        else
+        {
+            
+            setFlightSidebar()
         }
     }  
 
@@ -385,11 +390,12 @@ require(
 
 
           
-         const bgExpandTime = new Expand({
+        const bgExpandTime = new Expand({
             view: view,
             expandIconClass:"esri-icon-time-clock",
-            content: timeSlider.container
+            content: timeSlider
         });  
+        bgExpandTime.content=timeSlider.container;
         setTimeSliderWatch();
         
         view.ui.add(bgExpandTime, {
@@ -545,3 +551,15 @@ require(
             let defQuery ="sdate >= timestamp'"+ startDt+"' And edate <= timestamp'"+endDt+ "'";
            return defQuery;
          }
+
+         function convertTime(stt)
+         { 
+          var st1=stt.toISOString();
+          var i1=st1.indexOf("T")
+          var i2=st1.indexOf(".",i1)
+         
+          var st2=st1.substring(0, i2);
+          var st=st2.replace("T", " ");
+          return st;
+         }
+   

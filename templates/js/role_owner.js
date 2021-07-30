@@ -8,16 +8,6 @@ function setTimeSliderWatch()
     flyZoneLayer.definitionExpression=buildDefinitionQueryFly();
   });
 }
-function convertTime(stt)
-        { 
-         var st1=stt.toISOString();
-         var i1=st1.indexOf("T")
-         var i2=st1.indexOf(".",i1)
-        
-         var st2=st1.substring(0, i2);
-         var st=st2.replace("T", " ");
-         return st;
-        }
 
 
 function eventView(view,sketch,layerManual){
@@ -66,24 +56,46 @@ view.on("click" ,function(event){
 
 
 
+function setFlightSidebar()
+{
+
+ var els=document.getElementsByClassName("sidebar-title");
+ els[0].innerText="Заявки на полеты";
+ /*
+         document
+          .getElementById("createFlight")
+          .addEventListener("click", makeNewFlight);
+         document
+           .getElementById("checkFlight")
+           .addEventListener("click", myCheckFlight); 
+   */       
+          
+                   
+  
+      
+          
+      idRoute= $.cookie("idRoute");
+      if(idRoute==null) idRoute="";
+      if (idRoute=="") 
+      {
+        tableLayer.definitionExpression="objectid < 0";
+        tableZoneLayer.definitionExpression="objectid < 0";  
+      }
+      else
+      {
+        tableLayer.definitionExpression="routeid = '"+idRoute+"'";
+        tableZoneLayer.definitionExpression="routeid = '"+idRoute+"'";
+      }
+      
+     //  getUserFly();
+}
+
+
+
 var rlb=[];
 function setTrackSidebar()
 {
-/*  
-let tracksidebar="<a href='#'" +'class="close-btn" id="close-btn">\
-<span></span>\
-</a>\
-<div class="sidebar-content">\
-  <div class="sidebar-header">\
-    <h3 class="sidebar-title">Траектории и зоны</h3>\
-  </div>\
-  <div class="sidebar-body">\
-    <ul class="uav-list" id="uav-realtimelist">\
-    </ul>\
-   </div>\
-  </div>';
- 
- document.getElementById("sidebar").innerHTML=tracksidebar;*/
+
  var els=document.getElementsByClassName("sidebar-title");
  els[0].innerText="Траектории и зоны";
          document
