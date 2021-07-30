@@ -67,4 +67,12 @@ class BaseController extends AbstractController
 
         return $this;
     }
+
+    protected function dropSessionUserData(string $userdataSessionName)
+    {
+        $session = $this->requestStack->getSession();
+        $session->remove($userdataSessionName);
+
+        return $this;
+    }
 }

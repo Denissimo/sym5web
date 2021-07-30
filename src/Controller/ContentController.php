@@ -28,8 +28,10 @@ class ContentController extends BaseController
         ]);
     }
 
-    public function buildLogin(Request $request)
+    public function buildLogin(Request $request, string $userdataSessionName)
     {
+        $this->dropSessionUserData($userdataSessionName);
+
         return $this->render('login.html.twig', [
             'id' => 155,
             'route' => 'Login',
