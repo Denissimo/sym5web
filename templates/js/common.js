@@ -1,3 +1,4 @@
+var route;
 var scene;
 var token ;
 var apiUrl;
@@ -13,14 +14,19 @@ var PROJECTION;
 var CIRCLE;
 var GEOMETRYENGINE;    
 var QUERY;
+
+var flyType;
+var timeSlider;
 var user;
 var view;
-var flypts=[];
-var profil=[];
-var tabName=[];
-var nameRoute;
-var idRoute;
+var flyZoneLayer;
+var flyVecLayer;
+var segmentLayer;
+var punktsLayer;
+var layerConf;
+
 var selectLayer; //слой подсветки выбраннных объектов на карте
+var bufferLayer;
 var layerManual;
 require(
     [   "esri/config", //dv
@@ -48,6 +54,7 @@ require(
         
         "esri/widgets/Sketch",
         "esri/widgets/Search",
+        "esri/widgets/TimeSlider",
         "esri/widgets/Expand",
         "esri/widgets/BasemapGallery",
         "esri/widgets/BasemapToggle",
@@ -81,6 +88,7 @@ require(
         WebScene,
         Sketch,
         Search,
+        TimeSlider,
         Expand,
         BasemapGallery,
         BasemapToggle,
@@ -96,8 +104,8 @@ require(
         apiUrl = '{{ api_url|raw }}';
         var roles = JSON.parse('{{ user.user.roles|json_encode() }}');
         user = JSON.parse('{{ user|json_encode() }}');
-        var route = '{{ route }}';
-        var layerConf=[];
+        route = '{{ route }}';
+        layerConf=[];
 
         MULTIPOINT=Multipoint;
         POINT=Point;
@@ -219,6 +227,27 @@ require(
             spatialReference : {wkid :3857},
             container: "map-operator"
              });
+         
+             let xmn=$.cookie("xMin");            
+             let ymn=$.cookie("yMin");            
+             let xmx=$.cookie("xMax");
+             let ymx=$.cookie("yMax");
+             let wk=$.cookie("wkid");  
+             console.log(xmn);    
+             if (xmn!=null)
+             {
+                view.extent= new EXTENT({
+              
+                           
+                    xmin: xmn,
+                    ymin: ymn,
+                    xmax: xmx,
+                    ymax: ymx,
+                   spatialReference: {
+                   wkid: wk
+                              }
+                    });
+             }        
 
          var tracks=apiData(
             apiUrl,
@@ -245,10 +274,44 @@ require(
         // Remove copyrights at bottom
         view.ui.remove("attribution");
 
-        if(checkRoleRoute("ROLE_OWNER",roles) && route==="Tracks" )
+        let d=new Date();    
+        let d2=new Date();  d2.setDate(d2.getDate() + 20); // 10 дней предыдущих 20 последующих
+        let  d1=new Date(); d1.setDate(d1.getDate() + 1);
+        let timeExtent = ({
+             start: d,
+              end:  d2
+                      });
+ 
+           timeSlider = new TimeSlider({
+           container: document.createElement("div"),
+           fullTimeExtent : timeExtent,
+           values: [d,d1],
+           mode : "instant", // не интервал
+           timeVisible:true,
+          
+           stops: {
+             interval: {
+               value: 15,
+               unit: "minutes"
+             }
+           }
+         });
+   
+
+
+
+        if(checkRoleRoute("ROLE_OWNER",roles) )
         {
+         if(route==="Flights" ||route==="Tracks"  )
+         {
+            addLayers2D(FeatureLayer,scene);   
+            layerManual = new GraphicsLayer({listMode:"hide"});
+         }
+         if( route==="Tracks" ) 
+         {
+         
          setTrackSidebar();   
-         layerManual = new GraphicsLayer({listMode:"hide"}); //слой графики для скетча    
+         
         // Sketch widget
         const sketch = new Sketch({
             layer: layerManual,
@@ -269,6 +332,16 @@ require(
        eventView(view,sketch,layerManual)
        scene.layers.add(layerManual);    
         }
+        else if( route==="Flights" ) 
+        {
+            
+            setFlightSidebar()
+        }
+    }  
+
+
+
+
 
         // Search widget
         const searchWidget = new Search({
@@ -322,6 +395,32 @@ require(
         });
 
 
+          
+        const bgExpandTime = new Expand({
+            view: view,
+            expandIconClass:"esri-icon-time-clock",
+            content: timeSlider
+        });  
+        bgExpandTime.content=timeSlider.container;
+
+      
+        
+        view.ui.add(bgExpandTime, {
+            position: "top-left",
+            index: 6
+        });
+        
+
+
+
+        bufferLayer = new GraphicsLayer({
+
+          listMode:"hide"
+      });
+      scene.layers.add(bufferLayer);
+
+
+
 
          
        
@@ -335,7 +434,9 @@ require(
               window.setInterval(refreshRealLayer, 60000,FeatureLayer,scene,realTitle,checkRoleRoute("ROLE_OWNER",roles));
               
             }
-        
+            else
+             setTimeSliderWatch();
+             
         if(checkRoleRoute("ROLE_OPERATOR",roles))
         {
              
@@ -347,8 +448,7 @@ require(
         else if(checkRoleRoute("ROLE_OWNER",roles))
 
         {
-            if(route==="Flights"||route==="Tracks"  )
-          addLayers2D(FeatureLayer,scene,roles,user.id); 
+          
           selectLayer=addSelectLayer(GraphicsLayer,scene);
 
         }
@@ -454,4 +554,33 @@ require(
           arr.pop();
         } 
         }   
+        function buildDefinitionQueryFly()/*timeSlider)*/ {   // показывать точки полетов в суточном интервале от установленной даты
+    
+            let et=timeSlider.timeExtent.end.getTime();
+            let st=timeSlider.timeExtent.start.getTime();
+            let ett= new Date(et); ett.setDate(ett.getDate()+1)
+            let stt= new Date(st);
+            let startDt=convertTime(stt);//st;
+            let endDt=convertTime(ett);//et
+            let defQuery ="sdate >= timestamp'"+ startDt+"' And edate <= timestamp'"+endDt+ "'";
+           return defQuery;
+         }
 
+         function convertTime(stt)
+         { 
+          var st1=stt.toISOString();
+          var i1=st1.indexOf("T")
+          var i2=st1.indexOf(".",i1)
+         
+          var st2=st1.substring(0, i2);
+          var st=st2.replace("T", " ");
+          return st;
+         }
+   
+         function setTimeSliderWatch()
+{
+
+   timeSlider.watch("timeExtent", function () { 
+       flyZoneLayer.definitionExpression=buildDefinitionQueryFly();
+  });
+}

@@ -1,5 +1,22 @@
 console.log('role_owner');
 var flagEdit=false;
+var idFly;
+
+var flypts=[];
+var profil=[];
+var tabName=[];
+var nameRoute;
+var idRoute;
+
+
+
+function setTimeSliderWatch()
+{
+
+   timeSlider.watch("timeExtent", function () { 
+       flyZoneLayer.definitionExpression=buildDefinitionQueryFly();
+  });
+}
 
 
 function eventView(view,sketch,layerManual){
@@ -48,24 +65,52 @@ view.on("click" ,function(event){
 
 
 
+function setFlightSidebar()
+{
+
+ var els=document.getElementsByClassName("sidebar-title");
+ els[0].innerText="Заявки на полеты";
+ 
+        
+         document
+           .getElementById("checkFlight")
+           .addEventListener("click", myCheckFlight); 
+          
+          
+                   
+          document
+           .getElementById("createFlight")
+           .addEventListener("click", makeNewFlight); 
+      
+          
+      idRoute= $.cookie("idRoute");
+      
+      if(idRoute==null) idRoute="";
+      if (idRoute=="") 
+      {
+        tableLayer.definitionExpression="objectid < 0";
+        tableZoneLayer.definitionExpression="objectid < 0";
+       
+        document.getElementById("createFlight").disabled=true  
+      }
+      else
+      {
+        tableLayer.definitionExpression="routeid = '"+idRoute+"'";
+        tableZoneLayer.definitionExpression="routeid = '"+idRoute+"'";
+        document.getElementById("createFlight").disabled=false
+        queryRoad(null,idRoute) ;     
+      }
+      
+       getUserFly();
+}
+
+
+
 var rlb=[];
+var glb=[];
 function setTrackSidebar()
 {
-/*  
-let tracksidebar="<a href='#'" +'class="close-btn" id="close-btn">\
-<span></span>\
-</a>\
-<div class="sidebar-content">\
-  <div class="sidebar-header">\
-    <h3 class="sidebar-title">Траектории и зоны</h3>\
-  </div>\
-  <div class="sidebar-body">\
-    <ul class="uav-list" id="uav-realtimelist">\
-    </ul>\
-   </div>\
-  </div>';
- 
- document.getElementById("sidebar").innerHTML=tracksidebar;*/
+
  var els=document.getElementsByClassName("sidebar-title");
  els[0].innerText="Траектории и зоны";
          document
@@ -105,13 +150,15 @@ let tracksidebar="<a href='#'" +'class="close-btn" id="close-btn">\
            
 
       });         
-      idRoute="";
-      getUserRoute(null);
+      idRoute= $.cookie("idRoute");
+      if(idRoute==null) idRoute="";
+      if (idRoute=="") clean(true)
+       getUserRoute(idRoute);
 }
 //Загрузка KML
 
 function myFly(res){
-  clean(true,layerManual);
+  clean(true);
   let s=document.getElementById("inFile").value.toString();
   
   let n=s.lastIndexOf("\\");
@@ -204,7 +251,7 @@ sketch.on("create", function(event) {
     // при создании нового объекта вся предыдущая графика вычищается 
     if (event.state === "start" || event.tool==="point") {   
      console.log("start");               
-     clean(true,layerManual);     
+     clean(true);     
      console.log("start2");  
     }
      if (event.state === "complete") {
@@ -256,6 +303,7 @@ sketch.on("create", function(event) {
               catch{break;}
             }        
      var circ=makeCircle(layerManual.graphics.getItemAt(1).geometry,rz,layerManual);
+     
            changeExtent(circ);
       layerManual.graphics.removeAt(0);  
    }
@@ -263,15 +311,17 @@ sketch.on("create", function(event) {
  }
    else
     if(layerManual.graphics.length==1)
+    
     changeExtent(layerManual.graphics.getItemAt(0).geometry);
-      
+
+     
  }
 });
 }
 
 function changeExtent (geom)
                  {
-                   console.log(geom.type);  
+               
                    if (geom.type==="polygon")
                    {
                       console.log(geom.isSelfIntersecting) 
@@ -286,7 +336,7 @@ function changeExtent (geom)
                    var ext=geom.extent;
                    var wkd=ext.spatialReference.wkid;
                       
-                   console.log(geom);                          
+                                         
                          
                          view.extent= new EXTENT({
               
@@ -299,22 +349,48 @@ function changeExtent (geom)
                            wkid: wkd
                                       }
                             });
+                $.cookie("xMin", ext.xmin-(ext.xmax-ext.xmin));            
+                $.cookie("yMin", ext.ymin-(ext.ymax-ext.ymin));            
+                $.cookie("xMax", ext.xmax+(ext.xmax-ext.xmin));
+                $.cookie("yMax", ext.ymax+(ext.ymax-ext.ymin));            
+                $.cookie("wkid", wkd);            
                 
-                 }
+                if(route==="Tracks")
+                   {
+                 if(layerManual.graphics.length>0)
+                    document.getElementById("createRoute").disabled=false
+                  else
+                    document.getElementById("createRoute").disabled=true
+                  } 
+                
+                if(route==="Flights")
+                   {
+                
+                    buttonEnabled();
+                   } 
+                
+                  }
 
                  function clean(withBuffer)
                  {
                      nameRoute=""; 
-                     idRoute="";
+                     if (idRoute!="")
+                     {
+                      idRoute="";
+                      getUserRoute("");
+                     }
                      console.log("clear"); 
                      layerManual.graphics.removeAll();
+                     document
+                     .getElementById("createRoute").disabled=true
                    //  if(withBuffer)
                    //    bufferLayer.graphics.removeAll();
                      
-                /*   
+                   
                      tableLayer.definitionExpression="objectid < 0";
                      tableZoneLayer.definitionExpression="objectid < 0"; 
-                     
+
+               /*      
                      getDetailRoute(document.getElementById("routeid").value,false);
                      
                      document.getElementById("routeid").value="";
@@ -357,14 +433,21 @@ function changeExtent (geom)
                 }
 
                 function makeNewRoute() {
-                //  
+                //
+                if(layerManual.graphics.length==0) 
+                {  
+                  alert("Графика отсутствует");  
+                  return;  
+                
+                }
+                  
                   emptyArray(profil);
                   emptyArray(flypts);
                   if (!checkRouteName(true)) return; 
                 
                      let routeid;
                      
-                      if(layerManual.graphics.length==0) return;
+                      
                       var stat=2 
                       if(layerManual.graphics.getItemAt(0).geometry.type=="polygon")
                         {
@@ -851,6 +934,7 @@ function changeExtent (geom)
      //if (nameRoute=="")  // наименование маршрута
      // {
       newName=prompt ("Введите наименование маршрута",nameRoute);
+      if (newName==null) return false;
      // if (newName==null) return false;
      // }
     
@@ -881,6 +965,7 @@ function changeExtent (geom)
         break;
       }
     }
+    if (nameRoute=="") return false;
        return true;
 
     }    
@@ -973,6 +1058,7 @@ function changeExtent (geom)
        function getUserRoute(viewRid)
         {
          
+          
           var stats= ["Зональный круговой","Зональный","Линейный"];
           
           const trackhtml0 ='<li class="uav-list-item"><div class="uav-item-header">\
@@ -996,55 +1082,19 @@ function changeExtent (geom)
           const trackhtml13='</li>';
          
 
-         /*                <div class="uav-item-footer">';
-          const trackhtml5='<button class="btn btn-uav-small"id="';
-          const trackhtml6 ='">Сохранить</button>';
-          const trackhtml7='<button class="btn btn-uav-small" id="';
-          const trackhtml8='">Сохранить как</button>';
-          const trackhtml9='<button class="btn btn-uav-small" id="';
-          const trackhtml10='">Импорт геометрии</button>';
-          const trackhtml11='<button class="btn btn-uav-small" id="';
-          const trackhtml12='">Удалить</button>';
-          const trackhtml12_2='<input type="hidden" id="';
-          const trackhtml12_3='" value="';
-          const trackhtml12_4='"></input>';
-          const trackhtml13='</div></li>'; 
-*/
-      /*
-      const routhtml1 ='<div class="flight-list-item  flight-list-item-onapproval"'
-      const routhtml2='><div class="flight-top">';
-      const routhtml3=' <div class="flight-content">';//<p class="flight-item-reg">';//AZ 200187
-      const routhtml4='<p class="flight-item-flightnumber"><span  class="flight-item-title">Название </span>';//000150
-      const routhtml5='<span  class="flight-item-title"> </span>';//20.12.2020 16:30
-     // const flighthtml6='</p><p class="flight-item-date-stop"><span  class="flight-item-title">Продолжительность</span>';//20.12.2020 17:30
-      const routhtml7='</p>  </div> </div>  <div class="flight-bottom">' ; //<p class="flight-item-status ';// status-onapproval">На утверждении
-      const routhtml8='</p>';
-      const routhtml8a=' <a  class="btn btn-more" id="';
-      const routhtml8b='">Подробнее</a>';//</div>';
-      //const routehtml8b2='">Cкрыть</a>';//</div>';
-      //"form-item">
-      const routhtml9 ='<div  id="';    
-      const routhtml9a='">'
-      const routhtml9c='<p   class="flight-bottom" <div class="flight-bottom"> <label> Duration</label>  <label>Zmin</label> <label  class="form-label">Zmax</label> </div> ';
-      const routhtml9b='  <div class="flight-bottom"> <input  type="number"    value=1.5>  <input  type="number"    value=100><input  type="number"  value=1500></div></p></div>';
-      const routhtml10="</div>"
-      const routhtml8c= '</div>';
-      //const routhtml9= '<a href="#" class="btn btn-more" id="';//'<br /> <button id="'; 
-      //const routhtml10='">Сохранить </a></div>';// </button> </div>'
-      const routhtml11='</div>';*/
+      
       
           var     lst="";
           
-          // var   whFF="ownerid = '"+document.getElementById("ownerid").value+"'";
- //statusid > 2 не ЧЕРНОВИК не ШАБЛОН
-           //alert(document.getElementById("ownerid").value); 
+         
              getRouteRecords(makeListRoutePanel);
 
            
              function makeListRoutePanel(response)
              {
-              
-              for (let i=0;i<response.tracks.length;i++) {      
+              console.log(response.tracks);
+              for (let i=0;i<response.tracks.length;i++) {     
+                 
                 if(response.tracks[i].isFinal)
 
                   //alert( response.tracks[i].id+" "+response.tracks[i].type);
@@ -1053,8 +1103,10 @@ function changeExtent (geom)
 
                 document.getElementById("uav-realtimelist").innerHTML=lst;
                 addRouteEvent();
-                if(viewRid!=null)  // getRouteRecord(viewRid,evRouteDetal);
-                evRouteDetal(viewRid); 
+                if(viewRid!=null && viewRid!="" )  // getRouteRecord(viewRid,evRouteDetal);
+                  evRouteDetal(viewRid); 
+                else 
+                  buttonDisabled();  
              }
                  
                function   panTrack(track){
@@ -1194,19 +1246,60 @@ function changeExtent (geom)
                      
                               }
                         }
-
+                
              // });
             
              
              
              
   
-       }    
+ 
+            }    
+            function buttonDisabled()
+            {
+              document.getElementById("saveRoute").disabled=true;
+              document.getElementById("deleteRoute").disabled=true;
+              document.getElementById("saveRouteAs").disabled=true;
+              document.getElementById("importGeometry").disabled=true;
+              $.cookie("idRoute","");
+            } 
+           function buttonEnabled(rid)
+           {
+
+            if( route==="Flights" )
+            {
+              document.getElementById("checkFlight").disabled=false;
+              document.getElementById("resetFlight").disabled=false; 
+              document.getElementById("cancelFlight").disabled=false; 
+
+            }  
+
+            if( route==="Tracks" ) 
+            { 
+            n=document.getElementById("N"+rid).value ;
+            t=document.getElementById("T"+rid).value ;
+            
+            if (n==0)
+             {
+              document.getElementById("saveRoute").disabled=false;
+              document.getElementById("deleteRoute").disabled=false;
+              }
+
+             document.getElementById("saveRouteAs").disabled=false;
+             document.getElementById("importGeometry").disabled=false;
+             $.cookie("idRoute",rid);  
+             $.cookie("typeRoute",t);
+             
+            }
+            
+            }      
 /*export*/ function getDetailZone(routeid,flag)
 {
   var lst="";
   var id="R"+routeid;
   
+  if (flag) buttonEnabled(routeid); 
+
   //const routhtml1='<p    class="uav-item-body" <div  class="uav-item-body" style="font-size:12px;">\
   const routhtml1='<p   <div >\
    <label style="width: 50px;font-size:12px;"> Duration</label>\
@@ -1220,8 +1313,8 @@ function changeExtent (geom)
   const routhtml5='></div></p></div>';
   const routhtml6='></div>';
   if (flag)
-  {
-   
+  {               
+      
     var   whZ="routeid = '"+routeid+"'";
  //statusid > 2 не ЧЕРНОВИК не ШАБЛОН
                    zoneLayer.queryFeatures({
@@ -1301,6 +1394,7 @@ function changeExtent (geom)
 
 /*export*/ function getDetailRoute(routeid,flag)
 {
+  if (flag) buttonEnabled(routeid); 
   var lst="";
   var id="R"+routeid;
 
@@ -1765,7 +1859,7 @@ function mySaveRoute(event)
                      delRoute(routeVecLayer);
                 else         
                     delRoute(zoneLayer);
-                      idRoute="";  getUserRoute(null);
+                      idRoute="";  getUserRoute(idRoute);
                  });
     
         }
@@ -1814,7 +1908,7 @@ function mySaveRoute(event)
                     var rid=idRoute;
 
                     let elem=document.getElementById("DR"+rid);
-                    clean(true,layerManual);
+                    clean(true);
                     if (elem ==null )
                     {
                       let whr="routeid = '"+rid+"' And numb < 0 ";
@@ -1835,8 +1929,10 @@ function mySaveRoute(event)
                          geometry:lin,
                          symbol:selectSymbol.lineSymbolGray
 
-                      })
+                      });
+                      
                       layerManual.add(imGr);
+                      changeExtent(lin);
                       getDetailRoute(rid,false);
                       queryRoad(null,"");
                     }); 
@@ -1864,6 +1960,7 @@ function mySaveRoute(event)
                         });
                         
                        layerManual.add(imGr);
+                       changeExtent(pol);
                        //console.log(layerManual.graphics.length);
                        getDetailZone(rid,false);
                        //console.log(layerManual.graphics.length);
@@ -1876,7 +1973,7 @@ function mySaveRoute(event)
                   }        
  
 function removeSelectSeg(rid,numb){  
-      console.log(rid+" ! "+numb) ;
+      
       for (;;)
       { var flag=true;
        selectLayer.graphics.forEach(function(item, i){
@@ -1924,12 +2021,18 @@ function removeSelectSeg(rid,numb){
                  
                      
                   }  
-                  var ownerId= user.id;
+                  //var ownerId= user.id;
                   if (routeid!="")
                   {
                    tableLayer.definitionExpression="objectid < 0";
                    tableZoneLayer.definitionExpression="objectid < 0"; 
-                   let stat=document.getElementById("T"+routeid).value;
+                   let stat;
+                   try{
+                    stat=document.getElementById("T"+routeid).value;
+                    }
+                    catch{
+                      stat =$.cookie("typeRoute");
+                    }
                    queryEmpty(parseInt(stat));
                   
                    
@@ -2084,7 +2187,8 @@ function removeSelectSeg(rid,numb){
                          //getRouteName(rd);
                            
                         changeExtent(featureSet.features[0].geometry);
-                        getDetailZone(idRoute,true);
+                        if( route ==="Tracks" ) 
+                                     getDetailZone(idRoute,true);
                       
                            }
                           
@@ -2159,7 +2263,7 @@ function removeSelectSeg(rid,numb){
                      idRoute=featureSet.features[0].getAttribute("routeid");
                      
                      
-                     
+                     }
                     
                      changeExtent(lin);
                     
@@ -2169,8 +2273,9 @@ function removeSelectSeg(rid,numb){
                 
                      
                      
-                     }
-                     getDetailRoute(idRoute,true); 
+                    
+                     if( route==="Tracks" ) 
+                      getDetailRoute(idRoute,true); 
                     
                      
                    });
@@ -2257,3 +2362,1590 @@ function removeSelectSeg(rid,numb){
                     });
                 
                  }
+
+   //*******************************************Flight  */
+   function addFlyEvent() {
+          
+    for (var i=0;i<glb.length;i++)
+    {
+    
+      // document
+     //  .getElementById(glb[i][0]+glb[i][1])
+     //  .addEventListener("click", cancelFly); //событие отмены полета
+        
+       document
+       .getElementById(glb[i][0])
+       .addEventListener("click",  eventFlyDetal); //событие просмотра полета
+   ;
+    }
+
+   }       
+   function eventFlyDetal(event){
+
+    var gld=event.target.id;
+
+    var allApplication = apiData(
+      apiUrl,
+      '/application/'+gld,
+      token
+  );
+
+  allApplication.then(function (response) {
+      console.log(response);
+      let dt=response.application.start.date;
+      dt=new Date(dt);
+      timeSlider.values=[dt];
+      typeFly=response.track.type;
+      $.cookie("typeRoute",typeFly);
+      idFly=response.id;
+      idRoute=response.track.id;
+      if(typeFly==2)
+      {
+           detalFlyght(flyVecLayer,0,typeFly,gld);
+           queryRoad(null,idRoute);
+      }
+      else{
+            detalFlyght(flyZoneLayer,0,typeFly,gld)
+            queryRoad(null,idRoute);
+         }
+  });
+
+  function detalFlyght (detalLayer,reg,tp,gld) { return }
+      
+            
+            
+           
+       
+     return;  
+  
+
+ }
+
+
+
+
+   function makeNewFlight()
+        {
+          if(idRoute=="")
+          {
+            alert("Маршрут не выбран");
+            return;             
+          }
+         // var  ownerId=user.id;
+          var sdt=timeSlider.values[0];                             //время старта полета
+         
+          tp=$.cookie("typeRoute");
+          typeFly=$.cookie("typeRoute");
+          var ted=new Date();
+          if (ted>sdt)
+          {
+            alert("Неверное время  старта ");
+            return; 
+          }
+
+                  idFly="";            // новый полет
+          
+                 startDat= convertTime(sdt);
+            var   sd=new Date(startDat)
+            var   dt=sdt.getTime()-sd.getTime();
+                 // sd.setTime(sd.getTime()+2*dt) ; !!!!!!!!!!!!!
+                  sd.setTime(sd.getTime()+3*dt) ; 
+                  startDat= convertTime(sd);//+".000000";
+                  sd=new Date(startDat) 
+ 
+//формирование заявки
+            
+            
+            
+            let dat =
+            
+            {
+              "userId": user.id,
+              "application": {
+              "externalId": "AL14212",
+               "start": {
+                  "date": convertTime(sd)// "2021-05-19 11:21:48"
+                }
+              },
+              "statusId": 1,
+              "trackId": idRoute//"4c5d793e-fb8d-46cb-b645-613198ebeae0"  
+
+            };
+            apiNewFlight= apiData(apiUrl, "/application/add", token, 'POST', dat);
+      
+            apiNewFlight.then(function (response) {
+                 console.log(response);
+                 createFlyVectors(response.id);
+                  
+    });
+            
+            
+             
+              
+                        
+                  
+              
+          
+     //   }); 
+//****************************************************************    Формирование зонального полета
+function createFlyVectors(id){
+  idFly=id;
+  
+  routeid= idRoute;
+  var whR="routeid = '"+routeid+"'";
+  if(tp ==2 )
+                   {
+  // выбор геометрии из набора данных линейных маршрутов                     
+                   routeVecLayer.queryFeatures({
+                    where : whR,
+                    returnGeometry: true,
+                    orderByFields : ["numb"],
+                     outFields: ["*"]
+                                   })
+                    .then(function(frSet) {
+   
+    //Определение высоты и скорости на конкретном отрезке маршрута               
+  
+                   let pZ=[];  // массив высот 
+                   let pSpeed=[];  //массив скоростей 
+  
+                    for(var i=1;i<frSet.features.length;i++)
+                    {
+                          pZ.push(frSet.features[i].getAttribute("z1"));
+                          pSpeed.push(frSet.features[i].getAttribute("speed"));
+           
+                   }       
+                           pZ.push(frSet.features[0].getAttribute("z1"));
+                           pSpeed.push(frSet.features[0].getAttribute("speed"));
+                      
+                    makePunkts(pZ,pSpeed); //Формирование контрольных точек линейного маршрута через 100 м вдоль траектории
+                           
+                    })
+                  }
+                  else
+  
+                  {
+                    if (tp<2)   // выбор геометрии из набора данных зональных маршрутов 
+                    {
+                    zoneLayer.queryFeatures({
+                     where : whR,
+                     returnGeometry: true,
+                     returnZ :true, 
+                     outFields: ["*"]
+                                   })
+                    .then(function(frSet) {
+                     if (frSet.features.length>0)
+                     {
+                     var dur=frSet.features[0].getAttribute("duration") ; //Продолжительность нахождения в зоне 
+                     var zmin=frSet.features[0].getAttribute("zmin");  
+                     var zmax=frSet.features[0].getAttribute("zmax");
+                     var  geom=frSet.features[0].geometry;
+                       
+                        makeZone(geom,dur,zmin,zmax);
+                     }
+  
+                    });
+                    }
+                    
+                    
+  
+                  }
+  
+  
+  }
+  function makeZone(geom,dur,zmin,zmax)
+  {
+  
+          routeid = idRoute;
+          flyid = idFly;
+        
+       
+        var zmin2=zmin;
+        var zmax2=zmax;
+        var sdt=new Date(startDat);//timeSlider.values[0];
+  
+         
+  
+        var tdt= new Date(startDat);
+         
+         
+         tdt.setTime(tdt.getTime()+dur*60000); 
+        
+         let zons=[] 
+  
+         //Формирование геометрии зоны
+         let rgs=[]
+         let rings=geom.rings;
+          for (var i=0;i<rings[0].length;i++) 
+             { 
+              rgs.push([rings[0][i][0],rings[0][i][1],rings[0][i][2]]);
+              
+             }
+            let pts=[rgs];
+           var pol=
+              new POLYGON({
+              hasZ: true,
+              hasM :false,
+              rings: pts,
+              spatialReference: { wkid: 4326 }
+              });
+           var polBuffer = GEOMETRYENGINE.geodesicBuffer(pol, 500, "meters");
+            
+              
+              
+             var flyRout=new GRAPHIC();
+              flyRout.geometry=polBuffer;//pol;
+              flyRout.attributes = {
+                                 "ownerid": user.id.toString(),
+                                 "sdate": convertTime(sdt),
+                                 "edate" : convertTime(tdt) ,
+                                 "flyid":  flyid,
+                                 "routeid" : routeid,
+                                 "zmin" : zmin2, 
+                                 "zmax": zmax2,
+                                 "status" :3
+                                             };
+                zons.push(flyRout)
+                var param2 = {
+                     addFeatures: zons
+                      }; 
+                    
+              // формирование контрольных точек внутри зоны по внутренним буферам 
+              
+              var extpol=pol.extent;
+  
+              
+              var rf=[];
+              let dink=-500;
+             var extpol2= PROJECTION.project(extpol, {wkid :3857},PROJECTION.getTransformation({wkid :4326},{wkid :3857}));
+              var dd=extpol2.xmax-extpol2.xmin;
+              if (dd>extpol2.ymax-extpol2.ymin)
+                   dd=extpol2.ymax-extpol2.ymin;
+            
+              let sch=0;  
+                
+              if (dd<2000)
+              {
+                 
+                 rf.push(10-dd);    
+              }
+              else 
+               while (dd-2000>0)
+                {
+                 
+                  rf.push(dink);
+                  dink=dink-500;
+                  dd=dd-1000;
+                  sch++;
+                  if (sch>5) break;
+                }
+              
+             
+              var bufferIn=[];
+              var bufferI
+              for (let j=0;j<rf.length;j++)
+              {
+                bufferI =
+                 GEOMETRYENGINE.geodesicBuffer(pol,rf[j], "meters");
+                 bufferIn.push(bufferI);
+                 
+              }
+              
+              makePunktsPol(bufferIn,tdt);
+              
+              
+              //** формирование зонального полета   */       
+                   flyZoneLayer
+              .applyEdits(param2)
+              .then(function(editsResult) {
+                 
+             
+                //######################################################################
+                if(editsResult.addFeatureResults.length>0)
+                {
+                  let dat ={userId: user.id,
+                    "statusId": 3,
+                    "trackId": routeid,  
+                     "application" :{
+                               
+                             "finish" : {date:convertTime(tdt)}
+                          }   
+                        }
+                
+                updateRecordFlyghtTable(dat,flyid,true);
+                        
+                return;  
+                
+  
+                      }
+  
+  
+                //####################################################################
+  
+               })
+              .catch(function(error) {
+                  alert("Zon "+ error.name);
+                 alert( error.message);
+                
+              });  
+               
+                      
+  }
+  
+  
+  // формирование контрольных точек внутри зоны  geoms - список внутренних буферов , fdt - время покидания зоны
+  function makePunktsPol(geoms,fdt) 
+   {
+    let paths=[]
+    let pts=[]
+     for (var l=0;l<geoms.length;l++)
+     {
+     if (geoms[l]!=null) 
+     { 
+     
+    
+     var geom1=PROJECTION.project(geoms[l], {wkid :3857},PROJECTION.getTransformation({wkid :4326},{wkid :3857})); 
+     var geom2=GEOMETRYENGINE.densify(geom1,200,"meters");
+     
+     var geom3=PROJECTION.project(geom2, {wkid :4326},PROJECTION.getTransformation({wkid :3857},{wkid :4326}));
+  
+     
+     
+     for(var i=0;i<geom3.rings[0].length;i++)
+     {
+       pts.push([geom3.rings[0][i][0],geom3.rings[0][i][1]])
+       paths.push([geom2.rings[0][i][0],geom2.rings[0][i][1]])
+       
+     }
+     //paths.push(pts);
+    }
+     
+    }
+     //paths.push(pts);
+     var geom3=new MULTIPOINT({ points:pts, spatialReference : {wkid :4326}});
+     geom2=new MULTIPOINT({ points:paths, spatialReference : {wkid :3857}});
+     view.map.ground.queryElevation(geom3, { returnSampleInfo: true })
+  
+  // Successfully sampled all points
+    .then(function(result) {
+    // Print result of each sampled point to the console
+    var geom4=result.geometry;
+    var sd=new Date(startDat)
+       
+    var td=sd;
+    
+     var lM=0;
+     var dl=0;
+     var addFeat=[];
+     var svetofor=1
+     
+     
+   
+     for(;;)
+     {
+      svetofor=1-svetofor;
+  
+      var flag=false;
+     var sc=0; 
+     for(var i=0;i<geom2.points.length;i++)
+     {
+      var ind=i*(1-svetofor)+(geom2.points.length-1-i)*svetofor;
+      
+      if(i>0)
+      {
+        var ind2=(i-1)*(1-svetofor)+(geom2.points.length-1-i+1)*svetofor;
+        dl=dl+Math.sqrt((geom2.points[ind][0]-geom2.points[ind2][0])*(geom2.points[ind][0]-geom2.points[ind2][0])+(geom2.points[ind][1]-geom2.points[ind2][1])*(geom2.points[ind][1]-geom2.points[ind2][1]));
+      }  
+      
+      if(i==0 || dl>200)
+      { 
+       td.setTime(td.getTime()+5000) ;
+       if (td.getTime()>fdt.getTime() )
+       {
+        flag=true;
+        break; 
+       }
+       
+       lM=lM+dl;
+       
+        
+       var featurePunkt=getPunkt(geom4.points[ind][0],geom4.points[ind][1],geom4.points[ind][2]+200,lM,td,user.id.toString(),flyid,routeid,{ wkid: 4326 }) ;
+       
+       
+       addFeat.push(featurePunkt);
+       dl=0;
+      }
+     } 
+     sc=sc+1;
+     
+     if (flag) break;
+    }
+    
+         if (addFeat.length>0)
+         {
+          var paramP = {
+                  addFeatures: addFeat
+                }; 
+            punktsLayer
+              .applyEdits(paramP)
+              .then(function(editsResult) {
+              // alert(editsResult.addFeatureResults.length) 
+               })
+              .catch(function(error) {
+                  alert( error.name);
+                 alert( error.message);
+                
+              });
+  
+            }
+    })
+  
+  // Failed to sample (e.g. service unavailable)
+  .catch(function(error) {
+    return []
+  });
+     
+   }
+  
+  //*********************Построение пунктов линейного полета
+   function makePunkts(pZ,pSpeed)
+   {
+  
+            routeid = idRoute;
+             flyid =idFly;
+             
+        
+         let tdt= new Date(startDat);
+         let zmin2=9000;
+         let zmax2=-500;
+            
+          var   addFeat=[];
+          var   addSegment=[];
+    
+             let lM=0;
+             var ptsLine=[[]];
+  
+              for(let m=0;m<pZ.length-1;m++)
+              {
+              
+  
+             
+              if (m==0)
+               {
+                 var tz=flypts[0][0][2];
+                 for (let p=0;p<2;p++)
+                 {
+                    var featurePunkts =  getPunkt(flypts[0][0][0],flypts[0][0][1],tz,lM,tdt,user.id.toString(),flyid,routeid,{ wkid: 4326 }) ;
+                    ptsLine[0].push([flypts[0][0][0],flypts[0][0][1],tz,lM]);          
+                    addFeat.push(featurePunkts);
+                    tz= pZ[0];
+                    tdt.setTime(tdt.getTime()+10000);
+                    lM=pZ[0];
+                    
+                }
+                
+                var featureSegment =  getSegment(flypts[0][0][0],flypts[0][0][1],tz,lM,tdt,user.id.toString(),flyid,routeid,flypts[0][0][0],flypts[0][0][1],flypts[0][0][2],0) ;
+                addSegment.push(featureSegment);
+               }
+               
+               var nPt=flypts[m].length;
+               var dz=pZ[m+1]-pZ[m];
+               var dm=flypts[m][nPt-1][3]-flypts[m][0][3];
+               var dzm=dz/dm;
+               var tz1=tz;
+               tz=pZ[m];
+               for (let p=1;p<nPt;p++)
+                 {
+                    //lM=lM+flypts[m][p][3]; 
+                   var  delt=(flypts[m][p][3]-flypts[m][p-1][3])/(pSpeed[m]/3600)
+                   var deltZ=(flypts[m][p][3]-flypts[m][p-1][3])*dzm;
+                    tdt.setTime(tdt.getTime()+delt);
+                    //tz= pHeight+flypts[m][p][2];
+                    tz1=tz;
+                    tz=tz+deltZ;
+                    featurePunkts =  getPunkt(flypts[m][p][0],flypts[m][p][1],tz,lM+flypts[m][p][3],tdt,user.id.toString(),flyid,routeid,{ wkid: 4326 }) ;
+                    featureSegment =  getSegment(flypts[m][p][0],flypts[m][p][1],tz,lM+flypts[m][p][3],tdt,user.id.toString(),flyid,routeid,flypts[m][p-1][0],flypts[m][p-1][1],tz1,lM+flypts[m][p-1][3]) ;
+                    ptsLine[0].push([flypts[m][p][0],flypts[m][p][1],tz,lM+flypts[m][p][3]]);                 
+                    addFeat.push(featurePunkts);
+                    addSegment.push(featureSegment);
+                    if(zmin2>tz) zmin2=tz;
+                    if(zmax2<tz) zmax2=tz;
+                }
+  
+               if (m==pZ.length-2)
+               {
+             
+                 tdt.setTime(tdt.getTime()+10000);
+                 
+                 featurePunkts =  getPunkt(flypts[m][nPt-1][0],flypts[m][nPt-1][1],flypts[m][nPt-1][2],lM+flypts[m][nPt-1][3]+pZ[m],tdt,user.id.toString(),flyid,routeid,{ wkid: 4326 }) ;
+                 featureSegment =  getSegment(flypts[m][nPt-1][0],flypts[m][nPt-1][1],flypts[m][nPt-1][2],lM+flypts[m][nPt-1][3]+pZ[m],tdt,user.id.toString(),flyid,routeid,flypts[m][nPt-1][0],flypts[m][nPt-1][1],tz,lM+flypts[m][nPt-1][3]) ;
+                 ptsLine[0].push([flypts[m][nPt-1][0],flypts[m][nPt-1][1],flypts[m][nPt-1][2],lM+flypts[m][nPt-1][3]])
+                 addFeat.push(featurePunkts);
+                 addSegment.push(featureSegment);
+                    
+  
+                }
+                lM=lM+flypts[m][nPt-1][3];
+  
+              }
+              
+            
+            var param = {
+                  addFeatures: addFeat
+                }; 
+            punktsLayer
+              .applyEdits(param)
+              .then(function(editsResult) {
+                
+               })
+              .catch(function(error) {
+                  alert("punk "+ error.name);
+                 alert( error.message);
+                
+              });
+             
+              var paramS = {
+                  addFeatures: addSegment
+                }; 
+            segmentLayer
+              .applyEdits(paramS)
+              .then(function(editsResult) {
+                
+               })
+              .catch(function(error) {
+                  alert("seg "+ error.name);
+                 alert( error.message);
+                
+              });
+  
+  
+             let sd=new Date(startDat)
+  
+             let lin1=
+              new POLYLINE({
+              hasZ: true,
+              hasM: true,
+              paths: ptsLine,
+              spatialReference: { wkid: 4326 }
+              });
+  
+              var flyRout=new GRAPHIC();
+              flyRout.geometry=lin1;
+              flyRout.attributes = {
+                                 "ownerid": user.id.toString(),
+                                 "sdate": convertTime(sd),
+                                 "edate" : convertTime(tdt) ,
+                                 "flyid":  flyid,
+                                 "routeid" : routeid,
+                                 "status" :3
+                                             };
+  
+               const param2 = {
+                     addFeatures: [flyRout]
+                      };  
+                      
+                   flyVecLayer
+              .applyEdits(param2)
+              .then(function(editsResult) {
+                let dat ={userId: user.id,
+                  "statusId": 3,
+                  "trackId": routeid,  
+                  "application" :{
+                          "finish" : {date:convertTime(tdt)}
+                                  }   
+                      }
+              
+              updateRecordFlyghtTable(dat,flyid,true);
+                      
+               
+        
+  
+               })
+              .catch(function(error) {
+                  alert( error.name);
+                 alert( error.message);
+                
+              });  
+              
+              
+              var ptsLine2=[[]];
+              for(let i=1;i<ptsLine[0].length-1;i++)
+               ptsLine2[0].push([ptsLine[0][i][0],ptsLine[0][i][1],0]);
+               let lin2=
+               new POLYLINE({
+               hasZ: true,
+               hasM: false,
+               paths: ptsLine2,
+               spatialReference: { wkid: 4326 }
+               });
+    
+              var polBuffer = GEOMETRYENGINE.geodesicBuffer(lin2, 500, "meters");
+              
+              
+              
+              var flyZone=new GRAPHIC();
+              flyZone.geometry=polBuffer;//pol;
+              flyZone.attributes = {
+                                 "ownerid": user.id.toString(),
+                                 "sdate": convertTime(sd),
+                                 "edate" : convertTime(tdt) ,
+                                 "flyid":  flyid,
+                                 "routeid" : routeid,
+                                 "zmin" : zmin2, 
+                                 "zmax": zmax2,
+                                 "status" :3
+                                             };
+                
+                var param3 = {
+                     addFeatures: [flyZone]
+                      }; 
+            
+                      console.log("add bufferzone");     
+                      flyZoneLayer
+                      .applyEdits(param3)
+                      .then(function(editsResult) {
+                         
+                     
+                        //######################################################################
+                        if(editsResult.addFeatureResults.length>0)
+                        {
+                                
+                          console.log("bufferzone OK");  
+                       }
+          
+          
+                        //####################################################################
+          
+                       })
+                      .catch(function(error) {
+                          alert("Zon "+ error.name);
+                         alert( error.message);
+                        
+                      });      
+  
+  
+             //@@@@@@@@@@@@@@@@@@@@
+      
+  
+           
+   }
+  
+  
+  
+  
+  
+   // ******************* определение  высоты контрольных пунктов
+   
+  // Преобразование времени для записи в базу из формата java script
+  
+        
+    // Формирование пункта      
+     function getPunkt(x1,y1,z1,m1,dt1,owi,flyi,roi,wk) 
+     {
+       
+      var featurePunkt = new GRAPHIC();
+                    var   pnt = {
+                               type: "point", // autocasts as new Point()
+                                x: x1,
+                                y:y1,
+                                z: z1,
+                                m :m1,
+                                spatialReference : wk
+                              };
+                       featurePunkt.geometry=pnt;
+                                   
+                       featurePunkt.attributes = {
+                                "ownerid": owi,
+                                "zvalue": z1,
+                                "tdate" : convertTime(dt1) ,
+                                "flyid":  flyi,
+                                "routeid" : roi
+                                                 };
+                                                 
+  
+      return featurePunkt;
+     }
+   // Формирование сегмента
+     function getSegment(x1,y1,z1,m1,dt1,owi,flyi,roi,x2,y2,z2,m2) 
+     {
+       
+      var featurePunkt = new GRAPHIC();
+                     
+                      var seg = {
+                               type: "polyline", // autocasts as new Point()
+                                paths: [[[x2,y2,z2,m2],[x1,y1,z1,m1]]],
+                                spatialReference : { wkid: 4326 }
+                              };
+                       featurePunkt.geometry=seg;             
+                       featurePunkt.attributes = {
+                                "ownerid": owi,
+                                "zvalue": z1,
+                                "tdate" : convertTime(dt1) ,
+                                "flyid":  flyi,
+                                "routeid" : roi
+                                                 };
+  
+      return featurePunkt
+     }
+    }
+  
+    function updateRecordFlyghtTable(dat,flid,isNew) {
+            emptyArray(glb);
+            apiModFlight= apiData(apiUrl, "/application/"+flid, token, 'PUT', dat);
+      
+            apiModFlight.then(function (response) {
+                 console.log(response);
+                 getUserFly(); // формирование панели полетов
+                 if (isNew)
+                 {
+                  
+                  
+                  alert ("Заявка сформирована. ");
+                 }
+    }); 
+     
+ }
+ 
+ /*export*/ function getUserFly()
+ {
+        
+        
+
+
+
+
+  
+  var stats= ["Черновик","Шаблон","На утверждении","Подтверждена","Отклонена","Отменена","Выполняется"];
+          
+  const flighthtml0 ='<li class="uav-list-item"><div class="uav-item-header">\
+  <span class="uav-item-status">';
+  const flighthtml1 ='</span>\
+  <button class="btn uav-btn-more" id="';
+  const flighthtml1_1='">Подробнее</button>\
+  </div>\
+  <div class="uav-item-body">';
+ // <span class="uav-item-row uav-item-reg">123123123123ABBB</span>\
+ const flighthtml2='<span class="uav-item-row uav-item-flight"><span class="uav-item-desc">Наименование</span>';
+ const flighthtml3 ='</span>\
+  <span class="uav-item-row uav-item-date-start"><span class="uav-item-desc">Старт</span>';
+  const flighthtml3_2 ='</span>\
+  <span class="uav-item-row uav-item-date-start"><span class="uav-item-desc">Финиш</span>'; 
+ const flighthtml4='</span>\
+                   </div>\
+                   <div class="uav-item-body" id="';
+  const flighthtml4_2='"></div>';
+  const flighthtml12_2='<input type="hidden" id="';
+  const flighthtml12_3='" value="';
+  const flighthtml12_4='"></input>';
+  const flighthtml13='</li>';
+  
+// Нижняя граница периода полетов  
+      var stt= new Date();
+                 
+      var stDt=convertTime(stt);
+      var     lst="";
+      apiUserFlight= apiData(apiUrl, "/application/user/"+user.id.toString(), token);
+      
+      apiUserFlight.then(function (response) {
+           console.log(response);
+           makeListFlyghtPanel(response); // формирование панели полетов
+          });
+
+
+      
+       
+// Выбор задействованных маршрутных шаблонов и формирование массива имен 
+       
+        
+//Формирование панели полета
+           
+              function makeListFlyghtPanel(response)
+              {
+               
+               for (let i=0;i<response.applications.length;i++) {   
+                 
+                if(response.applications[i].application.start.date >= stDt)
+                  if(response.applications[i].status.id >2) 
+                  
+                    panFlyght(response.applications[i]);
+                 }
+                 document.getElementById("uav-realtimelist").innerHTML=lst;
+                 addFlyEvent();
+                 
+ 
+              }
+              
+              
+              function  panFlyght(flyght)
+              {
+              
+              
+              var  nm=flyght.track.name;
+                                      
+              var glob= flyght.id;       // glob - GUID полета
+              var kod=  flyght.status.id;   
+              if (kod==3 || kod==4)
+               glb.push([glob,flyght.track.type.toString()]) ;   // glb -  массив согласованных или на согласовании
+
+             // var obj=flyght.application.externalId;//ftfSet.features[i].getAttribute("objectid");
+              var sdat=flyght.application.start.date; //ftfSet.features[i].getAttribute("startdate");
+              var  fdat=flyght.application.finish.date;//ftfSet.features[i].getAttribute("finishdate");
+               
+              lst=lst+flighthtml0;
+              lst=lst+stats[kod-1];
+              lst=lst+flighthtml1;
+              lst=lst+glob;
+              lst=lst+flighthtml1_1;
+              lst=lst+flighthtml2;
+              lst=lst+nm;
+              lst=lst+flighthtml3;
+              lst=lst+sdat;
+              lst=lst+flighthtml3_2;
+              lst=lst+fdat;
+              lst=lst+flighthtml4;
+              lst=lst+"R"+glob;
+              lst=lst+flighthtml4_2;
+              /*
+              if (numb==0)
+              {
+               lst=lst+trackhtml5;
+               lst=lst+"S"+rlob;
+               lst=lst+trackhtml6;
+              }
+              lst=lst+trackhtml7;
+              lst=lst+"P"+rlob;
+              lst=lst+trackhtml8;
+              lst=lst+trackhtml9;
+              lst=lst+"I"+rlob;
+              lst=lst+trackhtml10;
+              if(numb==0)
+              {
+               lst=lst+trackhtml11;
+               lst=lst+"D"+rlob;
+               lst=lst+trackhtml12;
+              }*/
+               lst=lst+flighthtml12_2;
+               lst=lst+"T"+glob;
+               lst=lstlst=lst+flighthtml12_3;
+               lst=lst+kod; 
+               lst=lst+flighthtml12_4;
+               
+               lst=lst+flighthtml13;
+            }
+                 /* 
+                 document.getElementById("flist").innerHTML=lst; 
+                   
+                         
+                 addFlyEvent()    подключение обработчиков событий 
+                   */        
+                  //});
+             
+                //  });
+
+    }
+//**************************************************   Cytring Conflict   */
+
+
+/********************************** Check******************************************************************************************* */
+  /*export*/  function myCheckFlight()
+  {
+
+   
+    
+  var      templateBuffer = {
+   
+         title: "Пересечение",
+         content: [
+           {
+             type: "fields",
+             fieldInfos: [
+               {
+                 fieldName: "describe",
+                 label: "Описание"
+               }
+               
+             ]
+           }
+         ]
+       };
+       var      templateBufferRoute = {
+   
+         title: "Пересечение c полетом",
+         returnGeometry : true,
+         content: [
+           {
+             type: "fields",
+             fieldInfos: [
+               {
+                 fieldName: "start",
+                 label: "Старт"
+               }
+               ,
+               {
+                 fieldName: "finish",
+                 label: "Финиш"
+               },
+               {
+                 fieldName: "owner",
+                 label: "Клиент"
+               }
+             ]
+           }
+         ]
+       };
+
+  var checkGeometry;    
+  var checkGeometryZ;
+  
+  var rid=idRoute;
+   if(rid=="") return;
+   
+   bufferLayer.removeAll();
+ 
+   getCheckGeometry(rid)
+   //checkGeometry.spatialReference =srw;
+   
+/*
+   function getUserName(owid)
+{
+    // alert(UsersId);
+     for (let i=0;i<userIds.length;i++)
+         if(userIds[i][0]==owid) return userIds[i][1];
+      return null;      
+}
+*/
+
+function getCheckGeometry(rdd)
+ {
+     
+   checkGeometry=null;
+   checkGeometryZ=null;
+
+     const query = new QUERY(); 
+     query.where = "routeid = '"+rdd+"' And numb >= 0 ";
+     query.outSpatialReference = { wkid: 4326  };
+     query.returnGeometry = true;
+     query.returnZ= true,
+     query.returnM =true,
+     query.orderByFields = ["numb"]
+     query.outFields = [ "*" ];
+   
+     routeVecLayer.queryFeatures(query).then(function(featureSet){
+     var paths=[] 
+     var pts=[]
+  
+      if(featureSet.features.length>0){ 
+       for (var i=0;i<featureSet.features.length;i++)
+      {
+        var m=i;
+        
+       if(i==0) 
+           pts.push(featureSet.features[m].geometry.paths[0][0]);
+       var n=featureSet.features[m].geometry.paths[0].length;
+       for(var k=1;k<n;k++) 
+         pts.push(featureSet.features[m].geometry.paths[0][k]);
+       
+      }
+
+     paths.push(pts)            
+
+
+     checkGeometry  = new POLYLINE({
+     hasZ: true,
+     hasM: true,
+   //  paths: featureSet.features[0].geometry.paths,
+    paths: paths,
+     spatialReference: { wkid: 4326 }
+     });
+    
+
+     changeExtent(checkGeometry); 
+     
+     //featureSet.features[0].geometry;
+     processCheck();
+       }
+       else{
+         
+       query.where ="routeid = '"+rdd+"'";
+       query.orderByFields=["objectid"];
+       zoneLayer.queryFeatures(query).then(function(featureSet){
+         
+       paths=[] 
+       pts=[]
+       
+       if(featureSet.features.length>0){
+         
+       checkGeometry=new POLYGON(
+         {
+           hasZ: true,
+           hasM: false,
+           spatialReference: { wkid: 4326 },
+           rings : featureSet.features[0].geometry.rings
+         });
+         
+
+         changeExtent(checkGeometry);
+
+
+     //featureSet.features[0].geometry;
+     processCheck();
+
+
+       }
+       });
+       }
+       
+         });
+
+       
+   
+  
+ }
+ function processCheck()
+ {
+      
+     var buffer = GEOMETRYENGINE.geodesicBuffer(checkGeometry, 500, "meters");
+     
+    
+     
+     var buffer2 = GEOMETRYENGINE.geodesicBuffer(checkGeometry, 1000, "meters");
+    
+     /*
+       if (checkGeometry.type=="polyline")
+                {
+                  //checkInterFlyght(routeVecLayer,buffer,buffer2,flyVecLayer,routeLayer);  
+               checkInterFlyght(routeVecLayer,buffer,buffer2,flyZoneLayer,zoneLayer);           
+              //    checkInterRoute(buffer,buffer2, flyVecLayer,routeLayer);
+              //    checkInterRoute(buffer,buffer2, flyZoneLayer,zoneLayer);
+                }
+       else { 
+              //checkInterFlyght(zoneLayer,buffer,buffer2,flyVecLayer,routeLayer);  
+               checkInterFlyght(zoneLayer,buffer,buffer2,flyZoneLayer,zoneLayer);           
+              //checkInterZoneRoute(zoneLayer,buffer,buffer2,flyVecLayer,routeLayer)
+             // checkInterZoneRoute(zoneLayer,buffer,buffer2,flyZoneLayer,zoneLayer)
+             }
+             */ 
+       //checkInterRest(buffer,restrictLayer);
+     
+       //checkInterProh(buffer,prohLayer);
+       
+       for(let i=0;i<layerConf.length;i++)
+       if (layerConf[i]!=null)
+       {
+        
+        checkInterProc(buffer,layerConf[i]);
+       }
+       
+       //checkInterProc(buffer,prohLayer);
+       
+       if (checkGeometry.type=="polyline")
+       {
+             hh=prompt("Введите предельно допустимую высоту",50);
+             if(hh==null) hh=50;
+             checkElevation(hh);
+       }
+         
+       
+             interv=window.setInterval(checksMess, 2000);
+       
+
+
+ }
+
+ 
+
+function checksMess()
+{
+
+
+window.clearInterval(interv);
+   if (bufferLayer.graphics.length==0)
+                alert("Нет конфиликтов");
+ 
+   else
+   {
+      console.log(bufferLayer.graphics.length)  ;
+      scene.layers.reorder(bufferLayer, scene.layers.length);
+       alert("Внимание конфиликты !!!");
+   }
+ 
+
+}   
+
+   
+//***************** Контроль  высот */
+    function checkElevation(delt)
+    {
+     var rdd= idRoute; 
+     var whR="routeid = '"+rdd+"' ";  
+      routeVecLayer.queryFeatures({
+        where : whR,
+            returnGeometry: true,
+            orderByFields : ["numb"],
+              outFields: ["*"]
+                                })
+              .then(function(frSet) {
+             var pZ=[];
+             var pSpeed=[];  
+              for(var i=1;i<frSet.features.length;i++)
+               // for (var k=0;k<frSet.features.length;k++)
+                {
+                  if(i>0)//<frSet.features.length-1)
+                  {
+                  //if (frSet.features[k].getAttribute("numb")==i)
+                  // {
+                    pZ.push(frSet.features[i].getAttribute("z1"));
+                    pSpeed.push(frSet.features[i].getAttribute("speed"));
+                   //}
+                  }
+                 }
+                 // else
+                  //if (frSet.features[k].getAttribute("numb")<0)
+                    //{
+                     pZ.push(frSet.features[0].getAttribute("z1"));
+                     pSpeed.push(frSet.features[0].getAttribute("speed"));
+                    //}
+
+                
+                                  
+                
+                var elevGeometry = makeElevGeometry(pZ);
+              processCheckElevation(delt,elevGeometry)
+            });    
+    }
+    function makeElevGeometry(pZ)
+     {
+       var lM=0;
+       let ptsLine=[[]];
+       
+     for(var m=0;m<pZ.length-1;m++)
+     {
+           
+     if (m==0)
+      {
+        var tz=flypts[0][0][2];
+        for (var p=0;p<2;p++)
+        {
+           ptsLine[0].push([flypts[0][0][0],flypts[0][0][1],tz,lM]);          
+           tz= pZ[0];
+           lM=pZ[0];
+        
+       }
+                
+      }
+      
+      var nPt=flypts[m].length;
+      var dz=pZ[m+1]-pZ[m];
+      var dm=flypts[m][nPt-1][3]-flypts[m][0][3];
+      var dzm=dz/dm;
+      var tz1=tz;
+      tz=pZ[m];
+      for (p=1;p<nPt;p++)
+        {
+           //lM=lM+flypts[m][p][3]; 
+      
+           var deltZ=(flypts[m][p][3]-flypts[m][p-1][3])*dzm;
+                        //tz= pHeight+flypts[m][p][2];
+           tz1=tz;
+           tz=tz+deltZ;
+     
+           ptsLine[0].push([flypts[m][p][0],flypts[m][p][1],tz,lM+flypts[m][p][3]]);                 
+       }
+
+      if (m==pZ.length-2)
+      {
+        ptsLine[0].push([flypts[m][nPt-1][0],flypts[m][nPt-1][1],flypts[m][nPt-1][2],lM+flypts[m][nPt-1][3]])
+         
+
+       }
+       lM=lM+flypts[m][nPt-1][3];
+       
+     }
+     //alert(ptsLine[0].length);
+     var elev =
+     new POLYLINE({
+     hasZ: true,
+     hasM: true,
+     paths: ptsLine,
+     spatialReference: { wkid: 4326 }
+     });
+     return elev;
+   }
+
+    function processCheckElevation(delt,elevGeometry) {
+     
+  
+     
+     var pts1=checkGeometry.paths;
+     var pts2=elevGeometry.paths;
+     var sost=0;
+     var outpts=[];
+     var el=[];
+        
+       // alert(pts1[0].length)
+       // alert(pts2[0].length)
+        for (var i=0;i<pts1[0].length;i++)
+         {
+          
+           var flag=false;
+                      
+           if (pts2[0][i+1][2]-pts1[0][i][2] <delt )
+           {
+            if(sost==0)
+            {
+              
+              if(i>0)
+              {
+               var  x=(pts1[0][i][0]+pts1[0][i-1][0])/2;
+               var y=(pts1[0][i][1]+pts1[0][i-1][1])/2;
+               var z=(pts1[0][i][2]+pts1[0][i-1][2])/2;
+               var lM=(pts1[0][i][3]+pts1[0][i-1][3])/2;
+                el.push([x,y,z,lM]);     
+              }
+              sost=1;
+            }
+
+             x=pts1[0][i][0];
+             y=pts1[0][i][1];
+             z=pts1[0][i][2];
+             lM=pts1[0][i][3];
+           
+             el.push([x,y,z,lM]);
+                                                  
+            if(i==pts1[0].length-1) flag=true;
+            
+          }
+          else 
+          {
+           if (sost==1)
+           {
+                x=(pts1[0][i][0]+pts1[0][i-1][0])/2;
+                y=(pts1[0][i][1]+pts1[0][i-1][1])/2;
+                z=(pts1[0][i][2]+pts1[0][i-1][2])/2;
+                lM=(pts1[0][i][3]+pts1[0][i-1][3])/2;
+                el.push([x,y,z,lM]);
+                flag=true;
+           }
+         
+           sost=0;
+           
+          }
+         
+           if (flag)
+           {
+            outpts.push(el);
+           var inter=new POLYLINE({
+                  hasZ: true,
+                  hasM: true,
+                  paths: outpts,
+                  spatialReference: { wkid: 4326 }
+                      })
+             
+                var gg = new GRAPHIC({
+                geometry: inter,
+                symbol: selectSymbol.lineSymbolIntersect,
+                spatialReference : { wkid: 4326 }
+                   });
+                  gg. attributes = {
+                    "describe": "dangerous approach to earth !!! < "+delt
+                  };
+                
+             gg.popupTemplate=templateBuffer;            
+             bufferLayer.add(gg);
+             outpts=[];
+             el=[];
+           }
+         }
+       
+        
+      
+      
+        
+
+    }
+
+
+
+ //*************************** Проверка на запретные зоны
+ //function checkInterRest(buffer,checkLayer) {
+  function checkInterProc(buffer,checkLayer) {
+     
+   var buff = PROJECTION.project(buffer, { wkid: 3857 },PROJECTION.getTransformation(buffer.spatialReference,{ wkid: 3857 })); 
+       
+   var distance = 0;
+   var units = "meters";
+              
+      checkLayer.queryFeatures({
+       // where :"OBJECTID = 2",
+        geometry: buff,
+        // distance and units will be null if basic query selected
+        distarence: distance,
+        units: units,
+        spatialRelationship: "intersects",
+        returnGeometry: true,
+        
+        outFields: ["*"],
+      })
+      .then(function(featureSet) {
+        
+      
+        if(featureSet.features.length>0)
+        {
+        for (var k=0;k<featureSet.features.length;k++)  
+        {
+        
+         var intRestGeometry= new POLYGON({
+        hasZ: false,
+        hasM: false,
+        rings: featureSet.features[k].geometry.rings,
+        spatialReference: { wkid: 3857 }
+        });
+        
+
+        
+        var inter = GEOMETRYENGINE.intersect(buff,intRestGeometry);
+        if (checkLayer.title== layerConf[0].title)
+        var Attrs={
+                  "describe": "Restriction [\n name  : "+featureSet.features[k].getAttribute("name")+"\n identification: "+
+                          featureSet.features[k].getAttribute("identification")+"\n remarks: "+featureSet.features[k].getAttribute("remarks")+
+                  "\n limit : "+featureSet.features[k].getAttribute("limit")+"\n ]"
+                  };
+        if (checkLayer.title==layerConf[1].title)
+        {
+        Attrs= {
+                  "describe": "Prohibite  [\n name  : "+featureSet.features[k].getAttribute("name")+"\n identification: "+
+                          featureSet.features[k].getAttribute("identification")+"\n remarks: "+featureSet.features[k].getAttribute("remarks")+
+                  "\n limit : "+featureSet.features[k].getAttribute("limit")+"\n ]"
+                  }; 
+           }         
+        if (inter instanceof Array) 
+              {
+                
+                for (var j=0;j<inter.length;j++)
+                {
+                 var gg= new GRAPHIC({
+                     geometry: inter[j],
+                     symbol: selectSymbol.fillSymbolIntersect,
+                     spatialReference : { wkid: 3857 }
+                   });
+                  gg. attributes = Attrs;
+                  gg.popupTemplate=templateBuffer;      
+                  bufferLayer.add(gg);  
+                 }    
+                
+             }
+         else if (inter!=null)
+         {  
+            
+            gg = new GRAPHIC({
+                geometry: inter,
+                symbol: selectSymbol.fillSymbolIntersect,
+                spatialReference : { wkid: 3857 }
+                   });
+                   
+           gg.attributes =Attrs 
+            gg.popupTemplate=templateBuffer;      
+             bufferLayer.add(gg);       
+
+         } 
+        }              
+        }
+       
+
+      });
+
+
+    }
+
+    
+
+function checkInterFlyght(baseLayer,buff,buff2,checkFlyLayer,checkTemplLayer) {
+//function checkInterZoneRoute(baseLayer,buff,buff2,checkFlyLayer,checkTemplLayer) {
+var sdt=timeSlider.values[0];
+var startDat= covertTime(sdt);
+var   sd=new Date(startDat)
+let   dt=sdt.getTime()-sd.getTime();
+//alert(dt);
+     //sd.setTime(sd.getTime()+2*dt) ;
+     sd.setTime(sd.getTime()+3*dt) ; 
+startDat= covertTime(sd);//+".000000";
+     sd=new Date(startDat) 
+
+
+var sdate=covertTime(sd);
+
+var orderByFields = ["objectid"]
+var edt=new Date(startDat);
+routeid=idRoute;
+if (baseLayer.title=="My Zone")
+var    whR="routeid = '"+routeid+"'";
+if (baseLayer.title=="My Route")
+{
+ whR="routeid = '"+routeid+"' And numb >= 0"; 
+ orderByFields = ["numb"]
+}
+ var units = "meters";
+baseLayer.queryFeatures({
+where : whR,
+orderByFields:orderByFields,
+units :units,
+returnGeometry: true,
+outSpatialReference : { wkid: 3857  },
+
+outFields: ["*"]
+
+})
+.then(function(featureSet) {
+
+if(featureSet.features.length>0)
+{
+
+if (baseLayer.title=="My Zone")
+{
+var dt=featureSet.features[0].getAttribute("duration");
+edt.setTime(edt.getTime()+dt*60000)
+}
+if (baseLayer.title=="My Route")
+{
+for (var k=0;k<featureSet.features.length;k++) 
+        {
+         var    spd=featureSet.features[k].getAttribute("speed");
+         var  pts=featureSet.features[k].geometry.paths 
+         var nn=pts[0].length-1;
+         var dl=Math.sqrt((pts[0][0][0]-pts[0][nn][0])*(pts[0][0][0]-pts[0][nn][0])+(pts[0][0][1]-pts[0][nn][1])*(pts[0][0][1]-pts[0][nn][1]))
+          
+          let dt=((dl/1000)/spd)*3600000;
+          edt.setTime(edt.getTime()+dt)
+          
+        }
+}
+
+var edate=covertTime(edt)
+checkInterRouteProcess(buff,buff2,sdate,edate,checkFlyLayer,checkTemplLayer);
+}  
+
+});
+
+} 
+
+
+
+function checkInterRouteProcess(buff,buff2,sdate,edate,checkFlyLayer,checkTemplLayer)
+    {
+       //fdt=covertTime(new Date());
+          
+       var    distance =1000;
+       var units = "meters";
+       var wh="sdate >= timestamp'"+ sdate+"' And sdate <= timestamp'"+edate
+      +"' Or edate >= timestamp'"+ sdate+"' And edate <= timestamp'"+edate
+      +"' Or  sdate <= timestamp'"+ sdate+"' And edate >= timestamp'"+edate+ "'"
+;
+     // alert(wh)
+      /*flyVecLayer*/ checkFlyLayer.queryFeatures({
+        geometry: buff,
+        // distance and units will be null if basic query selected
+        distance: distance,
+        units: units,
+        where : wh,
+        spatialRelationship: "intersects",
+        returnGeometry: true,
+        returnQueryGeometry: true,
+        outFields: ["*"],
+      })
+      .then(function(featureSet) {
+        
+      
+     
+        if(featureSet.features.length>0)
+        {
+       
+       
+         
+          for (var m=0;m<featureSet.features.length;m++)
+          {
+           var rgeom=featureSet.features[m].geometry;
+           var path1=[];
+           var part=[];
+           var rgeom1=rgeom;
+           var bufcon=rgeom;
+           if (rgeom.type=="polyline")
+           {
+            for(let s=1;s<rgeom.paths[0].length-1;s++)
+             part.push([rgeom.paths[0][s][0],rgeom.paths[0][s][1],rgeom.paths[0][s][2]]);
+             path1.push(part);  
+             rgeom1 = new POLYLINE({
+                 paths : path1,
+                 hasZ: true,
+                 hasM: true,
+                 spatialReference: { wkid: 4326 }
+
+           });
+           bufcon=GEOMETRYENGINE.geodesicBuffer(rgeom1, 500, "meters");
+           }
+            
+           var inter = GEOMETRYENGINE.intersect(buff,bufcon);
+           //var nm="";
+           var owid=featureSet.features[m].getAttribute("ownerid");
+           var edt=new Date(featureSet.features[m].getAttribute("edate")).toLocaleString();
+           var sdt=new Date(featureSet.features[m].getAttribute("sdate")).toLocaleString();
+       
+          if (inter!=null)
+          {
+           let Att = {
+            start  : sdt,
+            finish : edt,
+            owner : getUserName(owid)
+           };
+            if (inter instanceof Array) 
+              {
+                
+                for (var j=0;j<inter.length;j++)
+                {
+                 var gg= new GRAPHIC({
+                     geometry: inter[j],
+                     symbol: selectSymbol.fillSymbolIntersect,
+                     spatialReference : { wkid: 4326 }
+                   });
+                   gg. attributes = Att;
+
+                   gg.popupTemplate=templateBufferRoute;
+                   bufferLayer.add(gg);  
+                 }    
+                
+             }
+         else 
+         {  
+
+            gg = new GRAPHIC({
+                geometry: inter,
+                symbol: selectSymbol.fillSymbolIntersect,
+                spatialReference : { wkid: 4326 }
+                   });
+                  gg. attributes = Att;
+             gg.popupTemplate=templateBufferRoute;           
+             bufferLayer.add(gg);       
+
+         }
+
+
+
+
+          
+        
+       // });
+         }
+     //  });
+        
+        }
+       }
+        
+
+      });
+
+
+
+    
+
+   }
+}
+
