@@ -163,7 +163,17 @@ var restrictLayer = new FeatureLayer({
      symbol: webDronActive,
   };
 
-  var punktsLayer = new FeatureLayer({
+  flyZoneLayer = new FeatureLayer({
+    title: "Зоны заявок",  
+    url: sourceFlyghtZone,
+    outFields: ["*"],
+    //renderer:zoneRendererFly,
+    //popupTemplate :templateZoneFly,
+    hasZ:true,
+    returnZ: true
+      });
+
+   punktsLayer = new FeatureLayer({
      url:  sourceFlyghtPunkts,
     renderer: markerRendererPunkts,
     listMode: "hide",

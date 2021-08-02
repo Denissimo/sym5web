@@ -577,4 +577,10 @@ require(
           return st;
          }
    
-         
+         function setTimeSliderWatch()
+{
+
+   timeSlider.watch("timeExtent", function () { 
+       flyZoneLayer.definitionExpression=buildDefinitionQueryFly();
+  });
+}
