@@ -14,7 +14,7 @@ function setTimeSliderWatch()
 {
 
    timeSlider.watch("timeExtent", function () { 
-    flyZoneLayer.definitionExpression=buildDefinitionQueryFly();
+       flyZoneLayer.definitionExpression=buildDefinitionQueryFly();
   });
 }
 
@@ -72,9 +72,9 @@ function setFlightSidebar()
  els[0].innerText="Заявки на полеты";
  
         
-   //      document
-   //        .getElementById("checkFlight")
-   //        .addEventListener("click", myCheckFlight); 
+         document
+           .getElementById("checkFlight")
+           .addEventListener("click", myCheckFlight); 
           
           
                    
@@ -354,12 +354,22 @@ function changeExtent (geom)
                 $.cookie("xMax", ext.xmax+(ext.xmax-ext.xmin));
                 $.cookie("yMax", ext.ymax+(ext.ymax-ext.ymin));            
                 $.cookie("wkid", wkd);            
-               
-                if(layerManual.graphics.length>0)
-                 document.getElementById("createRoute").disabled=false
-                else
-                 document.getElementById("createRoute").disabled=true
-                 }
+                
+                if(route==="Tracks")
+                   {
+                 if(layerManual.graphics.length>0)
+                    document.getElementById("createRoute").disabled=false
+                  else
+                    document.getElementById("createRoute").disabled=true
+                  } 
+                
+                if(route==="Flights")
+                   {
+                
+                    buttonEnabled();
+                   } 
+                
+                  }
 
                  function clean(withBuffer)
                  {
@@ -1255,7 +1265,17 @@ function changeExtent (geom)
             } 
            function buttonEnabled(rid)
            {
-            try{ 
+
+            if( route==="Flights" )
+            {
+              document.getElementById("checkFlight").disabled=false;
+              document.getElementById("resetFlight").disabled=false; 
+              document.getElementById("cancelFlight").disabled=false; 
+
+            }  
+
+            if( route==="Tracks" ) 
+            { 
             n=document.getElementById("N"+rid).value ;
             t=document.getElementById("T"+rid).value ;
             
@@ -1268,9 +1288,10 @@ function changeExtent (geom)
              document.getElementById("saveRouteAs").disabled=false;
              document.getElementById("importGeometry").disabled=false;
              $.cookie("idRoute",rid);  
-             $.cookie("typeRoute",t);  
+             $.cookie("typeRoute",t);
+             
             }
-            catch{}
+            
             }      
 /*export*/ function getDetailZone(routeid,flag)
 {
@@ -2166,7 +2187,8 @@ function removeSelectSeg(rid,numb){
                          //getRouteName(rd);
                            
                         changeExtent(featureSet.features[0].geometry);
-                        getDetailZone(idRoute,true);
+                        if( route ==="Tracks" ) 
+                                     getDetailZone(idRoute,true);
                       
                            }
                           
@@ -2241,7 +2263,7 @@ function removeSelectSeg(rid,numb){
                      idRoute=featureSet.features[0].getAttribute("routeid");
                      
                      
-                     
+                     }
                     
                      changeExtent(lin);
                     
@@ -2251,8 +2273,9 @@ function removeSelectSeg(rid,numb){
                 
                      
                      
-                     }
-                     getDetailRoute(idRoute,true); 
+                    
+                     if( route==="Tracks" ) 
+                      getDetailRoute(idRoute,true); 
                     
                      
                    });
@@ -2345,19 +2368,62 @@ function removeSelectSeg(rid,numb){
           
     for (var i=0;i<glb.length;i++)
     {
-    /*
-       document
-       .getElementById(glb[i][0]+glb[i][1])
-       .addEventListener("click", cancelFly); //событие отмены полета
+    
+      // document
+     //  .getElementById(glb[i][0]+glb[i][1])
+     //  .addEventListener("click", cancelFly); //событие отмены полета
         
        document
-       .getElementById("P"+glb[i][0])
+       .getElementById(glb[i][0])
        .addEventListener("click",  eventFlyDetal); //событие просмотра полета
-   */;
+   ;
     }
 
    }       
-   
+   function eventFlyDetal(event){
+
+    var gld=event.target.id;
+
+    var allApplication = apiData(
+      apiUrl,
+      '/application/'+gld,
+      token
+  );
+
+  allApplication.then(function (response) {
+      console.log(response);
+      let dt=response.application.start.date;
+      dt=new Date(dt);
+      timeSlider.values=[dt];
+      typeFly=response.track.type;
+      $.cookie("typeRoute",typeFly);
+      idFly=response.id;
+      idRoute=response.track.id;
+      if(typeFly==2)
+      {
+           detalFlyght(flyVecLayer,0,typeFly,gld);
+           queryRoad(null,idRoute);
+      }
+      else{
+            detalFlyght(flyZoneLayer,0,typeFly,gld)
+            queryRoad(null,idRoute);
+         }
+  });
+
+  function detalFlyght (detalLayer,reg,tp,gld) { return }
+      
+            
+            
+           
+       
+     return;  
+  
+
+ }
+
+
+
+
    function makeNewFlight()
         {
           if(idRoute=="")
@@ -2368,7 +2434,8 @@ function removeSelectSeg(rid,numb){
          // var  ownerId=user.id;
           var sdt=timeSlider.values[0];                             //время старта полета
          
-         tp=$.cookie("typeRoute");
+          tp=$.cookie("typeRoute");
+          typeFly=$.cookie("typeRoute");
           var ted=new Date();
           if (ted>sdt)
           {
@@ -3030,7 +3097,11 @@ function createFlyVectors(id){
                  console.log(response);
                  getUserFly(); // формирование панели полетов
                  if (isNew)
+                 {
+                  
+                  
                   alert ("Заявка сформирована. ");
+                 }
     }); 
      
  }
@@ -3165,10 +3236,716 @@ function createFlyVectors(id){
                  document.getElementById("flist").innerHTML=lst; 
                    
                          
-                 addFlyEvent()   // подключение обработчиков событий 
+                 addFlyEvent()    подключение обработчиков событий 
                    */        
                   //});
              
                 //  });
 
     }
+//**************************************************   Cytring Conflict   */
+
+
+/********************************** Check******************************************************************************************* */
+  /*export*/  function myCheckFlight()
+  {
+
+   
+    
+  var      templateBuffer = {
+   
+         title: "Пересечение",
+         content: [
+           {
+             type: "fields",
+             fieldInfos: [
+               {
+                 fieldName: "describe",
+                 label: "Описание"
+               }
+               
+             ]
+           }
+         ]
+       };
+       var      templateBufferRoute = {
+   
+         title: "Пересечение c полетом",
+         returnGeometry : true,
+         content: [
+           {
+             type: "fields",
+             fieldInfos: [
+               {
+                 fieldName: "start",
+                 label: "Старт"
+               }
+               ,
+               {
+                 fieldName: "finish",
+                 label: "Финиш"
+               },
+               {
+                 fieldName: "owner",
+                 label: "Клиент"
+               }
+             ]
+           }
+         ]
+       };
+
+  var checkGeometry;    
+  var checkGeometryZ;
+  
+  var rid=idRoute;
+   if(rid=="") return;
+   
+   bufferLayer.removeAll();
+ 
+   getCheckGeometry(rid)
+   //checkGeometry.spatialReference =srw;
+   
+/*
+   function getUserName(owid)
+{
+    // alert(UsersId);
+     for (let i=0;i<userIds.length;i++)
+         if(userIds[i][0]==owid) return userIds[i][1];
+      return null;      
+}
+*/
+
+function getCheckGeometry(rdd)
+ {
+     
+   checkGeometry=null;
+   checkGeometryZ=null;
+
+     const query = new QUERY(); 
+     query.where = "routeid = '"+rdd+"' And numb >= 0 ";
+     query.outSpatialReference = { wkid: 4326  };
+     query.returnGeometry = true;
+     query.returnZ= true,
+     query.returnM =true,
+     query.orderByFields = ["numb"]
+     query.outFields = [ "*" ];
+   
+     routeVecLayer.queryFeatures(query).then(function(featureSet){
+     var paths=[] 
+     var pts=[]
+  
+      if(featureSet.features.length>0){ 
+       for (var i=0;i<featureSet.features.length;i++)
+      {
+        var m=i;
+        
+       if(i==0) 
+           pts.push(featureSet.features[m].geometry.paths[0][0]);
+       var n=featureSet.features[m].geometry.paths[0].length;
+       for(var k=1;k<n;k++) 
+         pts.push(featureSet.features[m].geometry.paths[0][k]);
+       
+      }
+
+     paths.push(pts)            
+
+
+     checkGeometry  = new POLYLINE({
+     hasZ: true,
+     hasM: true,
+   //  paths: featureSet.features[0].geometry.paths,
+    paths: paths,
+     spatialReference: { wkid: 4326 }
+     });
+    
+
+     changeExtent(checkGeometry); 
+     
+     //featureSet.features[0].geometry;
+     processCheck();
+       }
+       else{
+         
+       query.where ="routeid = '"+rdd+"'";
+       query.orderByFields=["objectid"];
+       zoneLayer.queryFeatures(query).then(function(featureSet){
+         
+       paths=[] 
+       pts=[]
+       
+       if(featureSet.features.length>0){
+         
+       checkGeometry=new POLYGON(
+         {
+           hasZ: true,
+           hasM: false,
+           spatialReference: { wkid: 4326 },
+           rings : featureSet.features[0].geometry.rings
+         });
+         
+
+         changeExtent(checkGeometry);
+
+
+     //featureSet.features[0].geometry;
+     processCheck();
+
+
+       }
+       });
+       }
+       
+         });
+
+       
+   
+  
+ }
+ function processCheck()
+ {
+      
+     var buffer = GEOMETRYENGINE.geodesicBuffer(checkGeometry, 500, "meters");
+     
+    
+     
+     var buffer2 = GEOMETRYENGINE.geodesicBuffer(checkGeometry, 1000, "meters");
+    
+     /*
+       if (checkGeometry.type=="polyline")
+                {
+                  //checkInterFlyght(routeVecLayer,buffer,buffer2,flyVecLayer,routeLayer);  
+               checkInterFlyght(routeVecLayer,buffer,buffer2,flyZoneLayer,zoneLayer);           
+              //    checkInterRoute(buffer,buffer2, flyVecLayer,routeLayer);
+              //    checkInterRoute(buffer,buffer2, flyZoneLayer,zoneLayer);
+                }
+       else { 
+              //checkInterFlyght(zoneLayer,buffer,buffer2,flyVecLayer,routeLayer);  
+               checkInterFlyght(zoneLayer,buffer,buffer2,flyZoneLayer,zoneLayer);           
+              //checkInterZoneRoute(zoneLayer,buffer,buffer2,flyVecLayer,routeLayer)
+             // checkInterZoneRoute(zoneLayer,buffer,buffer2,flyZoneLayer,zoneLayer)
+             }
+             */ 
+       //checkInterRest(buffer,restrictLayer);
+     
+       //checkInterProh(buffer,prohLayer);
+       
+       for(let i=0;i<layerConf.length;i++)
+       if (layerConf[i]!=null)
+       {
+        
+        checkInterProc(buffer,layerConf[i]);
+       }
+       
+       //checkInterProc(buffer,prohLayer);
+       
+       if (checkGeometry.type=="polyline")
+       {
+             hh=prompt("Введите предельно допустимую высоту",50);
+             if(hh==null) hh=50;
+             checkElevation(hh);
+       }
+         
+       
+             interv=window.setInterval(checksMess, 2000);
+       
+
+
+ }
+
+ 
+
+function checksMess()
+{
+
+
+window.clearInterval(interv);
+   if (bufferLayer.graphics.length==0)
+                alert("Нет конфиликтов");
+ 
+   else
+   {
+      console.log(bufferLayer.graphics.length)  ;
+      scene.layers.reorder(bufferLayer, scene.layers.length);
+       alert("Внимание конфиликты !!!");
+   }
+ 
+
+}   
+
+   
+//***************** Контроль  высот */
+    function checkElevation(delt)
+    {
+     var rdd= idRoute; 
+     var whR="routeid = '"+rdd+"' ";  
+      routeVecLayer.queryFeatures({
+        where : whR,
+            returnGeometry: true,
+            orderByFields : ["numb"],
+              outFields: ["*"]
+                                })
+              .then(function(frSet) {
+             var pZ=[];
+             var pSpeed=[];  
+              for(var i=1;i<frSet.features.length;i++)
+               // for (var k=0;k<frSet.features.length;k++)
+                {
+                  if(i>0)//<frSet.features.length-1)
+                  {
+                  //if (frSet.features[k].getAttribute("numb")==i)
+                  // {
+                    pZ.push(frSet.features[i].getAttribute("z1"));
+                    pSpeed.push(frSet.features[i].getAttribute("speed"));
+                   //}
+                  }
+                 }
+                 // else
+                  //if (frSet.features[k].getAttribute("numb")<0)
+                    //{
+                     pZ.push(frSet.features[0].getAttribute("z1"));
+                     pSpeed.push(frSet.features[0].getAttribute("speed"));
+                    //}
+
+                
+                                  
+                
+                var elevGeometry = makeElevGeometry(pZ);
+              processCheckElevation(delt,elevGeometry)
+            });    
+    }
+    function makeElevGeometry(pZ)
+     {
+       var lM=0;
+       let ptsLine=[[]];
+       
+     for(var m=0;m<pZ.length-1;m++)
+     {
+           
+     if (m==0)
+      {
+        var tz=flypts[0][0][2];
+        for (var p=0;p<2;p++)
+        {
+           ptsLine[0].push([flypts[0][0][0],flypts[0][0][1],tz,lM]);          
+           tz= pZ[0];
+           lM=pZ[0];
+        
+       }
+                
+      }
+      
+      var nPt=flypts[m].length;
+      var dz=pZ[m+1]-pZ[m];
+      var dm=flypts[m][nPt-1][3]-flypts[m][0][3];
+      var dzm=dz/dm;
+      var tz1=tz;
+      tz=pZ[m];
+      for (p=1;p<nPt;p++)
+        {
+           //lM=lM+flypts[m][p][3]; 
+      
+           var deltZ=(flypts[m][p][3]-flypts[m][p-1][3])*dzm;
+                        //tz= pHeight+flypts[m][p][2];
+           tz1=tz;
+           tz=tz+deltZ;
+     
+           ptsLine[0].push([flypts[m][p][0],flypts[m][p][1],tz,lM+flypts[m][p][3]]);                 
+       }
+
+      if (m==pZ.length-2)
+      {
+        ptsLine[0].push([flypts[m][nPt-1][0],flypts[m][nPt-1][1],flypts[m][nPt-1][2],lM+flypts[m][nPt-1][3]])
+         
+
+       }
+       lM=lM+flypts[m][nPt-1][3];
+       
+     }
+     //alert(ptsLine[0].length);
+     var elev =
+     new POLYLINE({
+     hasZ: true,
+     hasM: true,
+     paths: ptsLine,
+     spatialReference: { wkid: 4326 }
+     });
+     return elev;
+   }
+
+    function processCheckElevation(delt,elevGeometry) {
+     
+  
+     
+     var pts1=checkGeometry.paths;
+     var pts2=elevGeometry.paths;
+     var sost=0;
+     var outpts=[];
+     var el=[];
+        
+       // alert(pts1[0].length)
+       // alert(pts2[0].length)
+        for (var i=0;i<pts1[0].length;i++)
+         {
+          
+           var flag=false;
+                      
+           if (pts2[0][i+1][2]-pts1[0][i][2] <delt )
+           {
+            if(sost==0)
+            {
+              
+              if(i>0)
+              {
+               var  x=(pts1[0][i][0]+pts1[0][i-1][0])/2;
+               var y=(pts1[0][i][1]+pts1[0][i-1][1])/2;
+               var z=(pts1[0][i][2]+pts1[0][i-1][2])/2;
+               var lM=(pts1[0][i][3]+pts1[0][i-1][3])/2;
+                el.push([x,y,z,lM]);     
+              }
+              sost=1;
+            }
+
+             x=pts1[0][i][0];
+             y=pts1[0][i][1];
+             z=pts1[0][i][2];
+             lM=pts1[0][i][3];
+           
+             el.push([x,y,z,lM]);
+                                                  
+            if(i==pts1[0].length-1) flag=true;
+            
+          }
+          else 
+          {
+           if (sost==1)
+           {
+                x=(pts1[0][i][0]+pts1[0][i-1][0])/2;
+                y=(pts1[0][i][1]+pts1[0][i-1][1])/2;
+                z=(pts1[0][i][2]+pts1[0][i-1][2])/2;
+                lM=(pts1[0][i][3]+pts1[0][i-1][3])/2;
+                el.push([x,y,z,lM]);
+                flag=true;
+           }
+         
+           sost=0;
+           
+          }
+         
+           if (flag)
+           {
+            outpts.push(el);
+           var inter=new POLYLINE({
+                  hasZ: true,
+                  hasM: true,
+                  paths: outpts,
+                  spatialReference: { wkid: 4326 }
+                      })
+             
+                var gg = new GRAPHIC({
+                geometry: inter,
+                symbol: selectSymbol.lineSymbolIntersect,
+                spatialReference : { wkid: 4326 }
+                   });
+                  gg. attributes = {
+                    "describe": "dangerous approach to earth !!! < "+delt
+                  };
+                
+             gg.popupTemplate=templateBuffer;            
+             bufferLayer.add(gg);
+             outpts=[];
+             el=[];
+           }
+         }
+       
+        
+      
+      
+        
+
+    }
+
+
+
+ //*************************** Проверка на запретные зоны
+ //function checkInterRest(buffer,checkLayer) {
+  function checkInterProc(buffer,checkLayer) {
+     
+   var buff = PROJECTION.project(buffer, { wkid: 3857 },PROJECTION.getTransformation(buffer.spatialReference,{ wkid: 3857 })); 
+       
+   var distance = 0;
+   var units = "meters";
+              
+      checkLayer.queryFeatures({
+       // where :"OBJECTID = 2",
+        geometry: buff,
+        // distance and units will be null if basic query selected
+        distarence: distance,
+        units: units,
+        spatialRelationship: "intersects",
+        returnGeometry: true,
+        
+        outFields: ["*"],
+      })
+      .then(function(featureSet) {
+        
+      
+        if(featureSet.features.length>0)
+        {
+        for (var k=0;k<featureSet.features.length;k++)  
+        {
+        
+         var intRestGeometry= new POLYGON({
+        hasZ: false,
+        hasM: false,
+        rings: featureSet.features[k].geometry.rings,
+        spatialReference: { wkid: 3857 }
+        });
+        
+
+        
+        var inter = GEOMETRYENGINE.intersect(buff,intRestGeometry);
+        if (checkLayer.title== layerConf[0].title)
+        var Attrs={
+                  "describe": "Restriction [\n name  : "+featureSet.features[k].getAttribute("name")+"\n identification: "+
+                          featureSet.features[k].getAttribute("identification")+"\n remarks: "+featureSet.features[k].getAttribute("remarks")+
+                  "\n limit : "+featureSet.features[k].getAttribute("limit")+"\n ]"
+                  };
+        if (checkLayer.title==layerConf[1].title)
+        {
+        Attrs= {
+                  "describe": "Prohibite  [\n name  : "+featureSet.features[k].getAttribute("name")+"\n identification: "+
+                          featureSet.features[k].getAttribute("identification")+"\n remarks: "+featureSet.features[k].getAttribute("remarks")+
+                  "\n limit : "+featureSet.features[k].getAttribute("limit")+"\n ]"
+                  }; 
+           }         
+        if (inter instanceof Array) 
+              {
+                
+                for (var j=0;j<inter.length;j++)
+                {
+                 var gg= new GRAPHIC({
+                     geometry: inter[j],
+                     symbol: selectSymbol.fillSymbolIntersect,
+                     spatialReference : { wkid: 3857 }
+                   });
+                  gg. attributes = Attrs;
+                  gg.popupTemplate=templateBuffer;      
+                  bufferLayer.add(gg);  
+                 }    
+                
+             }
+         else if (inter!=null)
+         {  
+            
+            gg = new GRAPHIC({
+                geometry: inter,
+                symbol: selectSymbol.fillSymbolIntersect,
+                spatialReference : { wkid: 3857 }
+                   });
+                   
+           gg.attributes =Attrs 
+            gg.popupTemplate=templateBuffer;      
+             bufferLayer.add(gg);       
+
+         } 
+        }              
+        }
+       
+
+      });
+
+
+    }
+
+    
+
+function checkInterFlyght(baseLayer,buff,buff2,checkFlyLayer,checkTemplLayer) {
+//function checkInterZoneRoute(baseLayer,buff,buff2,checkFlyLayer,checkTemplLayer) {
+var sdt=timeSlider.values[0];
+var startDat= covertTime(sdt);
+var   sd=new Date(startDat)
+let   dt=sdt.getTime()-sd.getTime();
+//alert(dt);
+     //sd.setTime(sd.getTime()+2*dt) ;
+     sd.setTime(sd.getTime()+3*dt) ; 
+startDat= covertTime(sd);//+".000000";
+     sd=new Date(startDat) 
+
+
+var sdate=covertTime(sd);
+
+var orderByFields = ["objectid"]
+var edt=new Date(startDat);
+routeid=idRoute;
+if (baseLayer.title=="My Zone")
+var    whR="routeid = '"+routeid+"'";
+if (baseLayer.title=="My Route")
+{
+ whR="routeid = '"+routeid+"' And numb >= 0"; 
+ orderByFields = ["numb"]
+}
+ var units = "meters";
+baseLayer.queryFeatures({
+where : whR,
+orderByFields:orderByFields,
+units :units,
+returnGeometry: true,
+outSpatialReference : { wkid: 3857  },
+
+outFields: ["*"]
+
+})
+.then(function(featureSet) {
+
+if(featureSet.features.length>0)
+{
+
+if (baseLayer.title=="My Zone")
+{
+var dt=featureSet.features[0].getAttribute("duration");
+edt.setTime(edt.getTime()+dt*60000)
+}
+if (baseLayer.title=="My Route")
+{
+for (var k=0;k<featureSet.features.length;k++) 
+        {
+         var    spd=featureSet.features[k].getAttribute("speed");
+         var  pts=featureSet.features[k].geometry.paths 
+         var nn=pts[0].length-1;
+         var dl=Math.sqrt((pts[0][0][0]-pts[0][nn][0])*(pts[0][0][0]-pts[0][nn][0])+(pts[0][0][1]-pts[0][nn][1])*(pts[0][0][1]-pts[0][nn][1]))
+          
+          let dt=((dl/1000)/spd)*3600000;
+          edt.setTime(edt.getTime()+dt)
+          
+        }
+}
+
+var edate=covertTime(edt)
+checkInterRouteProcess(buff,buff2,sdate,edate,checkFlyLayer,checkTemplLayer);
+}  
+
+});
+
+} 
+
+
+
+function checkInterRouteProcess(buff,buff2,sdate,edate,checkFlyLayer,checkTemplLayer)
+    {
+       //fdt=covertTime(new Date());
+          
+       var    distance =1000;
+       var units = "meters";
+       var wh="sdate >= timestamp'"+ sdate+"' And sdate <= timestamp'"+edate
+      +"' Or edate >= timestamp'"+ sdate+"' And edate <= timestamp'"+edate
+      +"' Or  sdate <= timestamp'"+ sdate+"' And edate >= timestamp'"+edate+ "'"
+;
+     // alert(wh)
+      /*flyVecLayer*/ checkFlyLayer.queryFeatures({
+        geometry: buff,
+        // distance and units will be null if basic query selected
+        distance: distance,
+        units: units,
+        where : wh,
+        spatialRelationship: "intersects",
+        returnGeometry: true,
+        returnQueryGeometry: true,
+        outFields: ["*"],
+      })
+      .then(function(featureSet) {
+        
+      
+     
+        if(featureSet.features.length>0)
+        {
+       
+       
+         
+          for (var m=0;m<featureSet.features.length;m++)
+          {
+           var rgeom=featureSet.features[m].geometry;
+           var path1=[];
+           var part=[];
+           var rgeom1=rgeom;
+           var bufcon=rgeom;
+           if (rgeom.type=="polyline")
+           {
+            for(let s=1;s<rgeom.paths[0].length-1;s++)
+             part.push([rgeom.paths[0][s][0],rgeom.paths[0][s][1],rgeom.paths[0][s][2]]);
+             path1.push(part);  
+             rgeom1 = new POLYLINE({
+                 paths : path1,
+                 hasZ: true,
+                 hasM: true,
+                 spatialReference: { wkid: 4326 }
+
+           });
+           bufcon=GEOMETRYENGINE.geodesicBuffer(rgeom1, 500, "meters");
+           }
+            
+           var inter = GEOMETRYENGINE.intersect(buff,bufcon);
+           //var nm="";
+           var owid=featureSet.features[m].getAttribute("ownerid");
+           var edt=new Date(featureSet.features[m].getAttribute("edate")).toLocaleString();
+           var sdt=new Date(featureSet.features[m].getAttribute("sdate")).toLocaleString();
+       
+          if (inter!=null)
+          {
+           let Att = {
+            start  : sdt,
+            finish : edt,
+            owner : getUserName(owid)
+           };
+            if (inter instanceof Array) 
+              {
+                
+                for (var j=0;j<inter.length;j++)
+                {
+                 var gg= new GRAPHIC({
+                     geometry: inter[j],
+                     symbol: selectSymbol.fillSymbolIntersect,
+                     spatialReference : { wkid: 4326 }
+                   });
+                   gg. attributes = Att;
+
+                   gg.popupTemplate=templateBufferRoute;
+                   bufferLayer.add(gg);  
+                 }    
+                
+             }
+         else 
+         {  
+
+            gg = new GRAPHIC({
+                geometry: inter,
+                symbol: selectSymbol.fillSymbolIntersect,
+                spatialReference : { wkid: 4326 }
+                   });
+                  gg. attributes = Att;
+             gg.popupTemplate=templateBufferRoute;           
+             bufferLayer.add(gg);       
+
+         }
+
+
+
+
+          
+        
+       // });
+         }
+     //  });
+        
+        }
+       }
+        
+
+      });
+
+
+
+    
+
+   }
+}
+

@@ -1,3 +1,4 @@
+var route;
 var scene;
 var token ;
 var apiUrl;
@@ -14,6 +15,7 @@ var CIRCLE;
 var GEOMETRYENGINE;    
 var QUERY;
 
+var flyType;
 var timeSlider;
 var user;
 var view;
@@ -21,8 +23,10 @@ var flyZoneLayer;
 var flyVecLayer;
 var segmentLayer;
 var punktsLayer;
+var layerConf;
 
 var selectLayer; //слой подсветки выбраннных объектов на карте
+var bufferLayer;
 var layerManual;
 require(
     [   "esri/config", //dv
@@ -100,8 +104,8 @@ require(
         apiUrl = '{{ api_url|raw }}';
         var roles = JSON.parse('{{ user.user.roles|json_encode() }}');
         user = JSON.parse('{{ user|json_encode() }}');
-        var route = '{{ route }}';
-        var layerConf=[];
+        route = '{{ route }}';
+        layerConf=[];
 
         MULTIPOINT=Multipoint;
         POINT=Point;
@@ -298,12 +302,14 @@ require(
 
         if(checkRoleRoute("ROLE_OWNER",roles) )
         {
-         if(route==="Flights"||route==="Tracks"  )
-            addLayers2D(FeatureLayer,scene,roles,user.id);   
-          
+         if(route==="Flights" ||route==="Tracks"  )
+         {
+            addLayers2D(FeatureLayer,scene);   
+            layerManual = new GraphicsLayer({listMode:"hide"});
+         }
          if( route==="Tracks" ) 
          {
-         layerManual = new GraphicsLayer({listMode:"hide"}); //слой графики для скетча       
+         
          setTrackSidebar();   
          
         // Sketch widget
@@ -407,6 +413,11 @@ require(
 
 
 
+        bufferLayer = new GraphicsLayer({
+
+          listMode:"hide"
+      });
+      scene.layers.add(bufferLayer);
 
 
 
@@ -425,7 +436,7 @@ require(
             }
             else
              setTimeSliderWatch();
-        
+             
         if(checkRoleRoute("ROLE_OPERATOR",roles))
         {
              

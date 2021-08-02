@@ -62,4 +62,20 @@
   }
 
  }
+
+ static lineSymbolIntersect =
+ {
+    type: "simple-line", // autocasts as SimpleLineSymbol()
+    color: "red",
+    width: 10
+ };
+
+static fillSymbolIntersect =
+ {
+   type: "simple-fill", // autocasts as SimpleLineSymbol()
+   color: "red",
+   width: 2
+ };
+
+
 }

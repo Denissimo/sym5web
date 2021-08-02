@@ -2,7 +2,7 @@ var routeVecLayer;
 var zoneLayer;
 var tableLayer;
 var tableZoneLayer;
-var punktsLayer;
+
 function addSelectLayer(GraphicsLayer,webmap)
        {
          var selectLayer = new GraphicsLayer({
@@ -12,7 +12,7 @@ function addSelectLayer(GraphicsLayer,webmap)
         return selectLayer;
        }
 
-     function addLayers2D(FeatureLayer,webmap,route)
+     function addLayers2D(FeatureLayer,webmap)
      {
           var servicePath = "https://abr-gis-server.airchannel.net/airchannel/rest/services/Dev/VectorDevelop/FeatureServer/";
           
@@ -151,10 +151,11 @@ function addSelectLayer(GraphicsLayer,webmap)
               renderer:lineRenderer,
               title : "Траектории"
                });
+               
  //****************************************************************************************************** */              
-       if( route=="Flights")
+       if( route ==="Flights")
        { 
-
+        
             segmentLayer = new FeatureLayer({
               url:       sourceFlyghtSeg,
               outFields: ["*"],
@@ -173,9 +174,7 @@ function addSelectLayer(GraphicsLayer,webmap)
             returnZ: true
             });
      //****************************************************************************************************** */               
-            
-         //****************************************************************************************************** */                     
-           var restrictLayer = new FeatureLayer({
+      /*
                     url:   "https://abr-gis-server.airchannel.net/airchannel/rest/services/Airspace_Azerbaijan/MapServer/6",
                    title : "Запретные зоны зоны"
                   
@@ -184,22 +183,23 @@ function addSelectLayer(GraphicsLayer,webmap)
                   url:   "https://abr-gis-server.airchannel.net/airchannel/rest/services/Airspace_Azerbaijan/MapServer/5",
                   title : "Опасные зоны"                    
                   });
-         
+        */ 
          //****************************************************************************************************** */              
-               punktsLayer = new FeatureLayer({url: sourceFlyghtPunkts,          
+               punktsLayer = new FeatureLayer({
+                 url: sourceFlyghtPunkts          
                       //popupTemplate:templatePunkts,
-                      hasM:true,
+                     /* hasM:true,
                       hasZ:true,
-                     returnM :true,
-                     returnZ: true,   
-                     title : "Полеты"
+                      returnM :true,
+                      returnZ: true,   
+                     title : "Полеты"*/
                      });
-
-         
+                    
+                    
                   }  
                   
-                  
-
+                 
+                
                   flyZoneLayer = new FeatureLayer({
                     title: "Зоны заявок",  
                     url: sourceFlyghtZone,
@@ -228,13 +228,15 @@ function addSelectLayer(GraphicsLayer,webmap)
                      webmap.layers.add(tableZoneLayer)
                      webmap.layers.add(tableLayer)
                      
-             
+              
                      //webmap.layers.reorder(routeLayer, webmap.layers.length); 
+                     /*
                      if( route=="Flights")
                      { 
                        punktsLayer.definitionExpression="";//                     buildDefinitionQueryPunkts();//timeSlider);
                        webmap.layers.add(punktsLayer);
-                     }
+                     }*/
+
                      
                   
                     
