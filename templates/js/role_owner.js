@@ -10,13 +10,7 @@ var idRoute;
 
 
 
-function setTimeSliderWatch()
-{
 
-   timeSlider.watch("timeExtent", function () { 
-       flyZoneLayer.definitionExpression=buildDefinitionQueryFly();
-  });
-}
 
 
 function eventView(view,sketch,layerManual){
@@ -81,6 +75,14 @@ function setFlightSidebar()
           document
            .getElementById("createFlight")
            .addEventListener("click", makeNewFlight); 
+         
+            document
+       .getElementById("cancelFlight")
+       .addEventListener("click", cancelFly); //событие отмены полета 
+
+       document
+       .getElementById("resetFlight")
+        .addEventListener("click",resetFly);
       
           
       idRoute= $.cookie("idRoute");
@@ -91,13 +93,13 @@ function setFlightSidebar()
         tableLayer.definitionExpression="objectid < 0";
         tableZoneLayer.definitionExpression="objectid < 0";
        
-        document.getElementById("createFlight").disabled=true  
+        document.getElementById("createFlight").disabled=true;  
       }
       else
       {
         tableLayer.definitionExpression="routeid = '"+idRoute+"'";
         tableZoneLayer.definitionExpression="routeid = '"+idRoute+"'";
-        document.getElementById("createFlight").disabled=false
+        document.getElementById("createFlight").disabled=false;
         queryRoad(null,idRoute) ;     
       }
       
@@ -1269,9 +1271,7 @@ function changeExtent (geom)
             if( route==="Flights" )
             {
               document.getElementById("checkFlight").disabled=false;
-              document.getElementById("resetFlight").disabled=false; 
-              document.getElementById("cancelFlight").disabled=false; 
-
+              
             }  
 
             if( route==="Tracks" ) 
@@ -2369,7 +2369,7 @@ function removeSelectSeg(rid,numb){
     for (var i=0;i<glb.length;i++)
     {
     
-      // document
+       // document
      //  .getElementById(glb[i][0]+glb[i][1])
      //  .addEventListener("click", cancelFly); //событие отмены полета
         
@@ -2397,22 +2397,38 @@ function removeSelectSeg(rid,numb){
       timeSlider.values=[dt];
       typeFly=response.track.type;
       $.cookie("typeRoute",typeFly);
+      
       idFly=response.id;
       idRoute=response.track.id;
+      $.cookie("idRoute",idRoute);
       if(typeFly==2)
       {
-           detalFlyght(flyVecLayer,0,typeFly,gld);
+           detalFlyght(flyVecLayer,0,typeFly,response.id);
            queryRoad(null,idRoute);
       }
       else{
-            detalFlyght(flyZoneLayer,0,typeFly,gld)
+            detalFlyght(flyZoneLayer,0,typeFly,response.id)
             queryRoad(null,idRoute);
          }
   });
 
   function detalFlyght (detalLayer,reg,tp,gld) { return }
       
-            
+      let kod=document.getElementById("T"+gld).value;
+      console.log(kod); 
+      if(kod==5 || kod==4)
+        document.getElementById("resetFlight").disabled=true;
+      else 
+       document.getElementById("resetFlight").disabled=false;
+      if(kod==6)
+      {
+        document.getElementById("cancelFlight").disabled=true;
+      }
+      else
+      { 
+       
+       document.getElementById("cancelFlight").disabled=false;
+      }
             
            
        
@@ -3252,47 +3268,8 @@ function createFlyVectors(id){
 
    
     
-  var      templateBuffer = {
-   
-         title: "Пересечение",
-         content: [
-           {
-             type: "fields",
-             fieldInfos: [
-               {
-                 fieldName: "describe",
-                 label: "Описание"
-               }
-               
-             ]
-           }
-         ]
-       };
-       var      templateBufferRoute = {
-   
-         title: "Пересечение c полетом",
-         returnGeometry : true,
-         content: [
-           {
-             type: "fields",
-             fieldInfos: [
-               {
-                 fieldName: "start",
-                 label: "Старт"
-               }
-               ,
-               {
-                 fieldName: "finish",
-                 label: "Финиш"
-               },
-               {
-                 fieldName: "owner",
-                 label: "Клиент"
-               }
-             ]
-           }
-         ]
-       };
+  
+      
 
   var checkGeometry;    
   var checkGeometryZ;
@@ -3410,7 +3387,7 @@ function getCheckGeometry(rdd)
      
      var buffer2 = GEOMETRYENGINE.geodesicBuffer(checkGeometry, 1000, "meters");
     
-     /*
+     
        if (checkGeometry.type=="polyline")
                 {
                   //checkInterFlyght(routeVecLayer,buffer,buffer2,flyVecLayer,routeLayer);  
@@ -3424,7 +3401,7 @@ function getCheckGeometry(rdd)
               //checkInterZoneRoute(zoneLayer,buffer,buffer2,flyVecLayer,routeLayer)
              // checkInterZoneRoute(zoneLayer,buffer,buffer2,flyZoneLayer,zoneLayer)
              }
-             */ 
+              
        //checkInterRest(buffer,restrictLayer);
      
        //checkInterProh(buffer,prohLayer);
@@ -3646,11 +3623,20 @@ window.clearInterval(interv);
                 symbol: selectSymbol.lineSymbolIntersect,
                 spatialReference : { wkid: 4326 }
                    });
+                  let alt; 
+                  for (let j=0;j<outpts[0].length;j++)
+                  { if (j==0) alt=outpts[0][j][2] ;
+                    if(alt>outpts[0][j][2]) alt=outpts[0][j][2] ;
+                  }
                   gg. attributes = {
-                    "describe": "dangerous approach to earth !!! < "+delt
+                    "type" : "Высота",
+                    "name" :  "Ниже предела" ,
+                    "altitude" : alt,
+                    "description": "Высота относительно поверхности земли !!! < "+delt,
+
                   };
                 
-             gg.popupTemplate=templateBuffer;            
+             gg.popupTemplate=templatesPopup.templateBuffer;            
              bufferLayer.add(gg);
              outpts=[];
              el=[];
@@ -3704,20 +3690,31 @@ window.clearInterval(interv);
 
         
         var inter = GEOMETRYENGINE.intersect(buff,intRestGeometry);
-        if (checkLayer.title== layerConf[0].title)
+
+        let desc="";
+        let alt=null; 
+        let nm="";
+        let typ=checkLayer.title
+        try {
+             alt=featureSet.features[k].getAttribute("altitude");
+        }
+        catch{};
+        try {
+          desc=featureSet.features[k].getAttribute("description");
+            }
+          catch{};
+          try {
+            nm=featureSet.features[k].getAttribute("name");
+              }
+          catch{};
+        
         var Attrs={
-                  "describe": "Restriction [\n name  : "+featureSet.features[k].getAttribute("name")+"\n identification: "+
-                          featureSet.features[k].getAttribute("identification")+"\n remarks: "+featureSet.features[k].getAttribute("remarks")+
-                  "\n limit : "+featureSet.features[k].getAttribute("limit")+"\n ]"
+                     "type" :typ,
+                     "name" :nm,
+                     "altitude":alt,      
+                     "description": desc
                   };
-        if (checkLayer.title==layerConf[1].title)
-        {
-        Attrs= {
-                  "describe": "Prohibite  [\n name  : "+featureSet.features[k].getAttribute("name")+"\n identification: "+
-                          featureSet.features[k].getAttribute("identification")+"\n remarks: "+featureSet.features[k].getAttribute("remarks")+
-                  "\n limit : "+featureSet.features[k].getAttribute("limit")+"\n ]"
-                  }; 
-           }         
+                 
         if (inter instanceof Array) 
               {
                 
@@ -3729,7 +3726,7 @@ window.clearInterval(interv);
                      spatialReference : { wkid: 3857 }
                    });
                   gg. attributes = Attrs;
-                  gg.popupTemplate=templateBuffer;      
+                  gg.popupTemplate=templatesPopup.templateBuffer;      
                   bufferLayer.add(gg);  
                  }    
                 
@@ -3744,7 +3741,7 @@ window.clearInterval(interv);
                    });
                    
            gg.attributes =Attrs 
-            gg.popupTemplate=templateBuffer;      
+            gg.popupTemplate=templatesPopup.templateBuffer;      
              bufferLayer.add(gg);       
 
          } 
@@ -3762,24 +3759,24 @@ window.clearInterval(interv);
 function checkInterFlyght(baseLayer,buff,buff2,checkFlyLayer,checkTemplLayer) {
 //function checkInterZoneRoute(baseLayer,buff,buff2,checkFlyLayer,checkTemplLayer) {
 var sdt=timeSlider.values[0];
-var startDat= covertTime(sdt);
+var startDat= convertTime(sdt);
 var   sd=new Date(startDat)
 let   dt=sdt.getTime()-sd.getTime();
 //alert(dt);
      //sd.setTime(sd.getTime()+2*dt) ;
      sd.setTime(sd.getTime()+3*dt) ; 
-startDat= covertTime(sd);//+".000000";
+startDat= convertTime(sd);//+".000000";
      sd=new Date(startDat) 
 
 
-var sdate=covertTime(sd);
+var sdate=convertTime(sd);
 
 var orderByFields = ["objectid"]
 var edt=new Date(startDat);
 routeid=idRoute;
-if (baseLayer.title=="My Zone")
+if (checkGeometry.type=="polygon")
 var    whR="routeid = '"+routeid+"'";
-if (baseLayer.title=="My Route")
+if (checkGeometry.type=="polyline")
 {
  whR="routeid = '"+routeid+"' And numb >= 0"; 
  orderByFields = ["numb"]
@@ -3800,12 +3797,12 @@ outFields: ["*"]
 if(featureSet.features.length>0)
 {
 
-if (baseLayer.title=="My Zone")
+if (checkGeometry.type=="polygon")
 {
 var dt=featureSet.features[0].getAttribute("duration");
 edt.setTime(edt.getTime()+dt*60000)
 }
-if (baseLayer.title=="My Route")
+if (checkGeometry.type=="polyline")
 {
 for (var k=0;k<featureSet.features.length;k++) 
         {
@@ -3820,7 +3817,7 @@ for (var k=0;k<featureSet.features.length;k++)
         }
 }
 
-var edate=covertTime(edt)
+var edate=convertTime(edt)
 checkInterRouteProcess(buff,buff2,sdate,edate,checkFlyLayer,checkTemplLayer);
 }  
 
@@ -3893,8 +3890,8 @@ function checkInterRouteProcess(buff,buff2,sdate,edate,checkFlyLayer,checkTemplL
           {
            let Att = {
             start  : sdt,
-            finish : edt,
-            owner : getUserName(owid)
+            finish : edt
+            //owner : getUserName(owid)
            };
             if (inter instanceof Array) 
               {
@@ -3908,7 +3905,7 @@ function checkInterRouteProcess(buff,buff2,sdate,edate,checkFlyLayer,checkTemplL
                    });
                    gg. attributes = Att;
 
-                   gg.popupTemplate=templateBufferRoute;
+                   gg.popupTemplate=templatesPopup.templateBufferRoute;
                    bufferLayer.add(gg);  
                  }    
                 
@@ -3922,7 +3919,7 @@ function checkInterRouteProcess(buff,buff2,sdate,edate,checkFlyLayer,checkTemplL
                 spatialReference : { wkid: 4326 }
                    });
                   gg. attributes = Att;
-             gg.popupTemplate=templateBufferRoute;           
+             gg.popupTemplate=templatesPopup.templateBufferRoute;           
              bufferLayer.add(gg);       
 
          }
@@ -3948,4 +3945,69 @@ function checkInterRouteProcess(buff,buff2,sdate,edate,checkFlyLayer,checkTemplL
 
    }
 }
+
+function cancelFly() {
+            
+  if (confirm("Вы уверены в отмене полета ?"))
+  {
+  let gld=idFly;  
+  
+  let tp=typeFly
+  if (tp=="2") 
+         modLayerRec(gld,flyVecLayer,"flyid","status",6);
+  else
+        modLayerRec(gld,flyZoneLayer,"flyid","status",6); 
+  let dat ={
+    "statusId": 6
+      
+        }
+
+      updateRecordFlyghtTable(dat,gld,false);
+      
+  return;  
+  
+      }
+
+    }
+    function resetFly() {
+            
+      
+      let gld=idFly;  
+      let tp=typeFly;
+      if (tp=="2") 
+            modLayerRec(gld,flyVecLayer,"flyid","status",3);
+      else
+            modLayerRec(gld,flyZoneLayer,"flyid","status",3); 
+      let dat ={
+        "statusId": 3
+      }
+          
+      
+    
+          updateRecordFlyghtTable(dat,gld,false);
+          
+      return;  
+      
+          }
+    
+        
+    function modLayerRec(gld,modLayer,atrName,atrNameMod,val)
+  {
+
+    modLayer.queryFeatures({
+      where : atrName+" = '"+gld+"'",
+      returnGeometry: true,
+      returnZ : true,
+      returnM : true,
+        outFields: ["*"],
+      }).then(function(ftfSet) {
+         
+         ftfSet.features[0].setAttribute(atrNameMod,val);
+         param2={ updateFeatures: ftfSet.features};
+         updateLayer(modLayer,param2);
+
+      })
+
+
+  } 
 

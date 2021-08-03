@@ -27,6 +27,7 @@ var layerConf;
 
 var selectLayer; //слой подсветки выбраннных объектов на карте
 var bufferLayer;
+
 var layerManual;
 require(
     [   "esri/config", //dv
@@ -302,6 +303,13 @@ require(
 
         if(checkRoleRoute("ROLE_OWNER",roles) )
         {
+            var compassWidget = new Compass({
+                view: view
+              });
+      
+              // Add the Compass widget to the top left corner of the view
+            view.ui.add(compassWidget, "top-left");
+              
          if(route==="Flights" ||route==="Tracks"  )
          {
             addLayers2D(FeatureLayer,scene);   
