@@ -1,4 +1,5 @@
 var route;
+var roles;
 var scene;
 var token ;
 var apiUrl;
@@ -19,16 +20,22 @@ var flyType;
 var timeSlider;
 var user;
 var view;
+var zoneLayerTen;
 var flyZoneLayer;
 var flyVecLayer;
 var segmentLayer;
 var punktsLayer;
+var punktsBeforLayer;
 var layerConf;
 
+
+
+var routeLayer;
 var selectLayer; //слой подсветки выбраннных объектов на карте
 var bufferLayer;
 
 var layerManual;
+var glb=[];
 require(
     [   "esri/config", //dv
         "esri/layers/WebTileLayer", //dv
@@ -103,7 +110,7 @@ require(
         var tokenCookieName = '{{ token_cookie_name }}';
         token = $.cookie(tokenCookieName);
         apiUrl = '{{ api_url|raw }}';
-        var roles = JSON.parse('{{ user.user.roles|json_encode() }}');
+        roles = JSON.parse('{{ user.user.roles|json_encode() }}');
         user = JSON.parse('{{ user|json_encode() }}');
         route = '{{ route }}';
         layerConf=[];
@@ -160,7 +167,11 @@ require(
         
         
         
-
+             let xmn=$.cookie("xMin");            
+             let ymn=$.cookie("yMin");            
+             let xmx=$.cookie("xMax");
+             let ymx=$.cookie("yMax");
+             let wk=$.cookie("wkid");   
         if(checkRoleRoute("ROLE_OPERATOR",roles))
         {
           
@@ -192,6 +203,20 @@ require(
             map: scene,
             container: "map-operator"
         });
+        if (xmn!=null && wk==4326)
+        {
+            view.extent= new EXTENT({
+              
+                           
+                xmin: xmn,
+                ymin: ymn,
+                xmax: xmx,
+                ymax: ymx,
+               spatialReference: {
+               wkid: wk
+                          }
+                });
+        }
         const quality = document.querySelector('.quality-selector');
         quality.addEventListener("change", function (event) {
             changeQualityScene(this.value);
@@ -229,12 +254,8 @@ require(
             container: "map-operator"
              });
          
-             let xmn=$.cookie("xMin");            
-             let ymn=$.cookie("yMin");            
-             let xmx=$.cookie("xMax");
-             let ymx=$.cookie("yMax");
-             let wk=$.cookie("wkid");  
-             console.log(xmn);    
+               
+            // console.log(xmn);    
              if (xmn!=null)
              {
                 view.extent= new EXTENT({
@@ -342,7 +363,8 @@ require(
         }
         else if( route==="Flights" ) 
         {
-            
+            document.getElementById("optionsDiv3d").hidden=true;
+
             setFlightSidebar()
         }
     }  
@@ -420,11 +442,26 @@ require(
         
 
 
+        if(checkRoleRoute("ROLE_OWNER",roles) )
+        {
 
-        bufferLayer = new GraphicsLayer({
+      bufferLayer = new GraphicsLayer({
 
           listMode:"hide"
       });
+    }
+    else    if(checkRoleRoute("ROLE_OPERATOR",roles) )
+    {
+      bufferLayer = new GraphicsLayer({
+        elevationInfo: {
+                  mode:"on-the-ground",
+                  listMode:"hide",
+                  offset : 100
+                }
+
+      }    );
+    }
+
       scene.layers.add(bufferLayer);
 
 
@@ -450,7 +487,9 @@ require(
              
             if(route==="Flights")
              { 
-              addLayers3D(FeatureLayer,scene) 
+              addLayers3D(FeatureLayer,scene)
+              document.getElementById("optionsDiv").hidden=true; 
+              setFlightSidebar();
              }
         }
         else if(checkRoleRoute("ROLE_OWNER",roles))
@@ -590,5 +629,15 @@ require(
 
    timeSlider.watch("timeExtent", function () { 
        flyZoneLayer.definitionExpression=buildDefinitionQueryFly();
+       if (checkRoleRoute("ROLE_OPERATOR",roles))  
+       { 
+        if (idFly!="")
+        {
+            
+            zoneLayerTen.definitionExpression=buildDefinitionQueryFly();
+            punktsBeforLayer.definitionExpression=buildDefinitionBeforQueryPunkts();
+            routeLayer.definitionExpression=buildDefinitionQueryFly();
+        }
+       }
   });
 }

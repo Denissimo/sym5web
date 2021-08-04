@@ -1,18 +1,5 @@
    class selectSymbol{
 
-    static fillSymbolFly =
-    {
-
-      
-        type: "simple-fill", // autocasts as SimpleLineSymbol()
-        color: [128, 128, 128],
-        style : "cross",
-        outline: {  // autocasts as new SimpleLineSymbol()
-          color: [ 128,128, 128 ],
-          width: 2
-           }
-        
-     };
 
      
 
@@ -78,4 +65,19 @@ static fillSymbolIntersect =
  };
 
 
+ static zoneRendererFly = {
+  type: "simple",
+  symbol: {
+
+      
+    type: "simple-fill", // autocasts as SimpleLineSymbol()
+    color: [128, 128, 128],
+    style : "cross",
+    outline: {  // autocasts as new SimpleLineSymbol()
+      color: [ 128,128, 128 ],
+      width: 2
+       }
+    
+ }
+};      
 }

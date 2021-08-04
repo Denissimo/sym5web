@@ -1,15 +1,5 @@
 function addLayers3D(FeatureLayer,scene)
 {
-var restrictLayer = new FeatureLayer({
-    title: "Restricted",
-    url: "https://abr-gis-server.airchannel.net/airchannel/rest/services/Restricted_areas/FeatureServer",
-  });
- 
-  var prohLayer = new FeatureLayer({
-    title: "Prohibite",
-    url: "https://abr-gis-server.airchannel.net/airchannel/rest/services/SPb/Prohibited_areas/FeatureServer",
-  });
-  
     
 
   let servicePath =
@@ -30,7 +20,7 @@ var restrictLayer = new FeatureLayer({
     type: "simple",
     symbol: fillSymbolZone,
   };
-  var zoneLayer = new FeatureLayer({
+  zoneLayer = new FeatureLayer({
       url: sourceFlyghtZone,
       outFields: ["*"],
       hasZ: true,
@@ -42,29 +32,34 @@ var restrictLayer = new FeatureLayer({
       offset: 500,
     },
   });
-  scene.layers.add(zoneLayer);
-
-  //****************************************************************************************************************************************** */
+  //scene.layers.add(zoneLayer);
+   //****************************************************************************************************************************************** */
   
-  var lineSymbolRoute = {
+
+
+
+   var lineSymbolRoute = {
     type: "line-3d",
     symbolLayers: [
       {
         type: "path",
         profile: "circle",
         material: {
-          color: [255, 0, 197],
+          color: [255, 0, 197], //,0.5]
         },
         width: 50, // the width in m
         height: 50, // the height in m
+        cap: "square", //"round"
       },
     ],
   };
- 
+  
   var lineRendererRoute = {
     type: "simple",
     symbol: lineSymbolRoute,
   };
+
+  
   var templateRoute = {
     // autocasts as new PopupTemplate()
     title: "Маршрут",
@@ -87,15 +82,17 @@ var restrictLayer = new FeatureLayer({
       },
     ],
   };
-  var routeLayer = new FeatureLayer({
+   routeLayer = new FeatureLayer({
       url: sourceFlyghtRoute,
-      listMode: "hide",
-      opacity: 0.4,
+      title: "Траектория полета",
+    
       elevationInfo: {
-      mode: "absolute-height",
-      renderer: lineRendererRoute,
-      popupTemplate:templateRoute
-    },
+      mode: "absolute-height"
+      },
+      definitionExpression : " objectid < 0",
+      renderer: lineRendererRoute
+     // popupTemplate:templateRoute
+    
   });
   scene.layers.add(routeLayer);
 
@@ -111,7 +108,7 @@ var restrictLayer = new FeatureLayer({
     symbol: fillSymbolZoneTen,
   };
 
-  var zoneLayerTen = new FeatureLayer({
+   zoneLayerTen = new FeatureLayer({
     
     url: sourceFlyghtZone,
     outFields: ["*"],
@@ -121,11 +118,12 @@ var restrictLayer = new FeatureLayer({
     title: "Полетные зоны",
     elevationInfo: {
       mode: "on-the-ground"
-    }
+    }, definitionExpression : " objectid < 0"
   });
   scene.layers.add(zoneLayerTen);
   
 //******************************************************************************** */
+ /*
   var lineSymbolRouteTen = {
     type: "simple-line", // autocasts as SimpleLineSymbol()
     color: [128, 128, 128],
@@ -144,7 +142,7 @@ var restrictLayer = new FeatureLayer({
     },
    });
   scene.layers.add(routeLayerTen);
-
+*/
 
   
   
@@ -167,12 +165,17 @@ var restrictLayer = new FeatureLayer({
     title: "Зоны заявок",  
     url: sourceFlyghtZone,
     outFields: ["*"],
-    //renderer:zoneRendererFly,
+    renderer: selectSymbol.zoneRendererFly,
     //popupTemplate :templateZoneFly,
+    elevationInfo: {
+      mode: "on-the-ground",
+    },
     hasZ:true,
     returnZ: true
       });
 
+   scene.layers.add(flyZoneLayer);
+   
    punktsLayer = new FeatureLayer({
      url:  sourceFlyghtPunkts,
     renderer: markerRendererPunkts,
@@ -238,7 +241,7 @@ var lineRendererRoute2 = {
   type: "simple",
   symbol: lineSymbolRoute2,
 };
-   var punktsBeforLayer = new FeatureLayer({
+    punktsBeforLayer = new FeatureLayer({
     url: sourceFlyghtSeg,
     renderer: lineRendererRoute2,
     listMode: "hide",
@@ -246,6 +249,7 @@ var lineRendererRoute2 = {
       mode: "absolute-height",
      
     },
+    definitionExpression : " objectid < 0",
     popupTemplate: {
       title: "Полет",
       content: [

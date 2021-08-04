@@ -65,26 +65,19 @@ function setFlightSidebar()
  var els=document.getElementsByClassName("sidebar-title");
  els[0].innerText="Заявки на полеты";
  
-        
-         document
+            document
            .getElementById("checkFlight")
            .addEventListener("click", myCheckFlight); 
-          
-          
-                   
-          document
+           document
            .getElementById("createFlight")
            .addEventListener("click", makeNewFlight); 
-         
             document
-       .getElementById("cancelFlight")
-       .addEventListener("click", cancelFly); //событие отмены полета 
-
-       document
-       .getElementById("resetFlight")
-        .addEventListener("click",resetFly);
+            .getElementById("cancelFlight")
+            .addEventListener("click", cancelFly); //событие отмены полета 
+            document
+           .getElementById("resetFlight")
+           .addEventListener("click",resetFly);
       
-          
       idRoute= $.cookie("idRoute");
       
       if(idRoute==null) idRoute="";
@@ -109,7 +102,7 @@ function setFlightSidebar()
 
 
 var rlb=[];
-var glb=[];
+
 function setTrackSidebar()
 {
 
@@ -323,7 +316,8 @@ sketch.on("create", function(event) {
 
 function changeExtent (geom)
                  {
-               
+                  if(route==="Tracks")
+                  {
                    if (geom.type==="polygon")
                    {
                       console.log(geom.isSelfIntersecting) 
@@ -334,7 +328,7 @@ function changeExtent (geom)
                         return
                       }  
                    }   
-                
+                  }
                    var ext=geom.extent;
                    var wkd=ext.spatialReference.wkid;
                       
@@ -2412,7 +2406,13 @@ function removeSelectSeg(rid,numb){
          }
   });
 
-  function detalFlyght (detalLayer,reg,tp,gld) { return }
+  function detalFlyght (detalLayer,reg,tp,gld) { 
+    /*   !!!!!!!!!!!!!!!!!!!!!!!!!
+    id="R"+gld;
+    lst=
+    document.getElementById(id).innerHTML=lst;
+    */
+    return }
       
       let kod=document.getElementById("T"+gld).value;
       console.log(kod); 
@@ -3200,7 +3200,7 @@ function createFlyVectors(id){
                                       
               var glob= flyght.id;       // glob - GUID полета
               var kod=  flyght.status.id;   
-              if (kod==3 || kod==4)
+            //  if (kod==3 || kod==4)
                glb.push([glob,flyght.track.type.toString()]) ;   // glb -  массив согласованных или на согласовании
 
              // var obj=flyght.application.externalId;//ftfSet.features[i].getAttribute("objectid");
@@ -3833,10 +3833,11 @@ function checkInterRouteProcess(buff,buff2,sdate,edate,checkFlyLayer,checkTemplL
           
        var    distance =1000;
        var units = "meters";
-       var wh="sdate >= timestamp'"+ sdate+"' And sdate <= timestamp'"+edate
-      +"' Or edate >= timestamp'"+ sdate+"' And edate <= timestamp'"+edate
-      +"' Or  sdate <= timestamp'"+ sdate+"' And edate >= timestamp'"+edate+ "'"
-;
+       
+
+var wh="flyid <> '"+idFly+"' And status < 5 And sdate >= timestamp'"+ sdate+"' And sdate <= timestamp'"+edate
++"' Or flyid <> '"+idFly+"' And status < 5  And edate >= timestamp'"+ sdate+"' And edate <= timestamp'"+edate
++"' Or flyid <> '"+idFly+"' And status < 5  And sdate <= timestamp'"+ sdate+"' And edate >= timestamp'"+edate+ "'"; 
      // alert(wh)
       /*flyVecLayer*/ checkFlyLayer.queryFeatures({
         geometry: buff,

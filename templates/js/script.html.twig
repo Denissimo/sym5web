@@ -7,9 +7,10 @@
 {#    {{ dump(user.user.roles) }}#}
 
     {% include('js/common.js') %}
+    {% include('js/selectSymbol.js') %}
     {% include('js/mobile.js') %}
     {% include('js/api.js') %}
-    {% for role in user.user.roles %}
+    {% for role in user.user.roles %} 
         {% if role == 'ROLE_OPERATOR' %}
             {% include('js/role_operator.js') %}
             {% include('js/real.js') %}
@@ -20,7 +21,6 @@
             {% include('js/role_owner.js') %}
             {% include('js/real.js') %}
             {% include('js/appendLayer2D.js') %}
-            {% include('js/selectSymbol.js') %}
             {% include('js/templatesPopup.js') %}
         {% endif %}
     {% endfor %}
