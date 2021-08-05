@@ -15,6 +15,7 @@ var PROJECTION;
 var CIRCLE;
 var GEOMETRYENGINE;    
 var QUERY;
+var FEATUREFILTER;
 
 var flyType;
 var timeSlider;
@@ -44,6 +45,7 @@ require(
         "esri/layers/GraphicsLayer" ,
         "esri/layers/support/LabelClass",//dv
         
+
         "esri/tasks/support/Query",
         "esri/Graphic",
         "esri/geometry/Extent",
@@ -60,6 +62,8 @@ require(
         "esri/WebMap",
         "esri/WebScene",
         
+        "esri/views/layers/support/FeatureFilter",
+
         "esri/widgets/Sketch",
         "esri/widgets/Search",
         "esri/widgets/TimeSlider",
@@ -94,6 +98,9 @@ require(
         SceneView,
         WebMap,
         WebScene,
+
+        FeatureFilter,
+
         Sketch,
         Search,
         TimeSlider,
@@ -126,7 +133,7 @@ require(
         QUERY=Query;
         projection.load();
         PROJECTION=projection;
-        
+        FEATUREFILTER=FeatureFilter;
         
 
         console.log(route);
@@ -318,7 +325,7 @@ require(
              }
            }
          });
-   
+         
 
 
 
@@ -632,12 +639,63 @@ require(
        if (checkRoleRoute("ROLE_OPERATOR",roles))  
        { 
         if (idFly!="")
-        {
-            
+        {  
+           // console.log(timeSlider.stops+" !!!!!");
+          //  if (timeSlider.stops.unit=="minutes")
+           // {
             zoneLayerTen.definitionExpression=buildDefinitionQueryFly();
             punktsBeforLayer.definitionExpression=buildDefinitionBeforQueryPunkts();
             routeLayer.definitionExpression=buildDefinitionQueryFly();
-        }
-       }
-  });
-}
+           // }
+          //  else
+          //  {
+            console.log(timeSlider.values);    
+           /* view.whenLayerView(punktsBeforLayer)
+                     .then(function(layerView) {
+                       var st=timeSlider.timeExtent.start.getTime();
+                          stt= new Date(st);
+                          stt.setTime(stt.getTime()-100+3600000*tmzon);
+                       var defQuery ="tdate < "+ stt.valueOf();
+                       layerView.filter=new FEATUREFILTER(
+                       {
+                         where: defQuery
+                        }
+                        );
+                       layerView.visible=true;
+
+                       });*/
+
+                     // }
+                    }
+                   }
+                  });
+                
+          }
+          
+          function   initTimeSlider(){
+            let d=new Date();    
+            let d2=new Date();  d2.setDate(d2.getDate() + 20); // 10 дней предыдущих 20 последующих
+            let  d1=new Date(); d1.setDate(d1.getDate() + 1);
+            let timeExtent = ({
+                 start: d,
+                  end:  d2
+                          });
+     
+               
+               
+               timeSlider.fullTimeExtent = timeExtent;
+               timeSlider.values= [d,d1];
+               timeSlider.mode = "instant"; // не интервал
+               timeSlider.timeVisible=true;
+               timeSlider. stops= {
+                 interval: {
+                   value: 15,
+                   unit: "minutes"
+                 }
+               }
+            }
+
+                
+           
+             
+            

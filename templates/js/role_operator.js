@@ -3,9 +3,16 @@ var tmzon;
 var idFly="";
 var sd;
 var fd;
+var emulpts=[];
+var dt;
 function setFlightSidebar()
 {
-
+  view.on("click" ,function(event){
+    if (event.button==2)                // правая кнопка - очистка графики
+     {
+      bufferLayer.removeAll();
+     }
+    });
  var els=document.getElementsByClassName("sidebar-title");
  els[0].innerText="Заявки на полеты";
  
@@ -15,6 +22,8 @@ function setFlightSidebar()
            document
            .getElementById("appFlight")
            .addEventListener("click", appFlight); 
+           document.getElementById("resetFlight3d")
+           .addEventListener("click", resetFlight);
             document
             .getElementById("unappFlight")
             .addEventListener("click", unappFlight ); //событие отмены полета 
@@ -26,9 +35,6 @@ function setFlightSidebar()
            getUserFly();
 }
 function checkFlight(){getCheckGeometry(idFly);}
-function appFlight(){;}
-function unappFlight(){;}
-function emulFlight(){;}
 
 function getUserFly()
  {
@@ -97,7 +103,7 @@ function getUserFly()
            
               function makeListFlyghtPanel(response)
               {
-               
+               emptyArray(glb);                
                console.log(response.applications.length);
                for (let i=0;i<response.applications.length;i++) {   
                  
@@ -201,7 +207,7 @@ function getUserFly()
     
        }       
        function eventFlyDetal(event){
-    
+         bufferLayer.removeAll();
         var gld=event.target.id;
     
         var allApplication = apiData(
@@ -212,20 +218,43 @@ function getUserFly()
 
       allApplication.then(function (response) {
         console.log(response);
-        let dt=response.application.start.date;
+        dt=response.application.start.date;
         dt=new Date(dt);
+        timeSlider.stop();
+        initTimeSlider();
         timeSlider.values=[dt];
+      
         typeFly=response.track.type;
         $.cookie("typeRoute",typeFly);
-        
+        let oldFly=idFly;
         idFly=response.id;
         idRoute=response.track.id;
         tmzon=response.application.start.timezone_type;
         sd=response.application.start.date;
         fd=response.application.finish.date;
-        
+      
         $.cookie("idRoute",idRoute);
+        let el= document.getElementById("F"+oldFly);
+        let el2= document.getElementById("F"+idFly);
+        let reg=false;
+        if(el!=null) 
+        {
+          detalFlyght(null,false,-1,response,oldFly);
+        
+        }
+        if(el2!=null)
+      {
+        idFly="";    
+        queryFlight(null,"");
+        reg=true;
+      }
+      else
+      {
+      
+            detalFlyght(flyZoneLayer,true,typeFly,response,response.id)
             queryFlight(idFly);
+         
+      }  
             
 
 
@@ -253,7 +282,29 @@ function getUserFly()
          document.getElementById("cancelFlight").disabled=false;
         }
           */    
+            
+        function detalFlyght (detalLayer,reg,tp,response,fid) { 
+
+          const flighthtml3_1 ='<span class="uav-item-row uav-item-flight" id="'
+          
+          const flighthtml3_2='"><span class="uav-item-desc">Рег.номер БВС</span>';
+          
+          
+          const flighthtml3_3='</span>'; 
+      
+          let lst="";
+          id="R"+fid;
+          if (reg)
+           {
              
+             lst=flighthtml3_1+"F"+response.id+flighthtml3_2+response.user.user.firstname+flighthtml3_3;
+             
+           }
+          console.log(lst); 
+          document.getElementById(id).innerHTML=lst;
+          
+            return ;
+            } 
          
        return;  
     
@@ -264,6 +315,7 @@ function getUserFly()
 
      function queryFlight(fid)
      {
+      bufferLayer.removeAll(); 
       let wH = "flyid = '"+fid+"'";
                         
       flyZoneLayer.queryFeatures({
@@ -290,11 +342,13 @@ function getUserFly()
        //getRouteName(rd);
           
        changeExtent(featureSet.features[0].geometry);
-       
+       buttonEnabled(false);
        
      
           }
-         
+          else
+          buttonEnabled(true);
+              
           });
 
 
@@ -323,7 +377,7 @@ function getUserFly()
   $.cookie("yMax", ext.ymax+(ext.ymax-ext.ymin));            
   $.cookie("wkid", wkd);            
   
-    buttonEnabled();
+    //buttonEnabled();
   
     }
 
@@ -346,16 +400,17 @@ function getUserFly()
 
        return defQuery;
      }
-     function buttonEnabled()
+     function buttonEnabled(reg)
      {
 
       
-       document.getElementById("check3dFlight").disabled=false;
+       document.getElementById("check3dFlight").disabled=reg;
        
-       document.getElementById("appFlight").disabled=false;
-       document.getElementById("unappFlight").disabled=false;
+       document.getElementById("appFlight").disabled=reg;
+       document.getElementById("unappFlight").disabled=reg;
+       document.getElementById("resetFlight3d").disabled=reg;
       
-       document.getElementById("emulFlight").disabled=false;
+       document.getElementById("emulFlight").disabled=reg;
        
       
            
@@ -369,7 +424,7 @@ function getUserFly()
          // checkGeometry=null;
           checkGeometryZ=null;
             const  query= new QUERY(); 
-            query.where = "flyid = '"+idFly+"';// And numb >= 0 ";
+            query.where = "flyid = '"+idFly+"'";// And numb >= 0 ";
             query.outSpatialReference = { wkid: 4326  };
             query.returnGeometry = true;
             query.returnZ= true,
@@ -404,8 +459,8 @@ function getUserFly()
             
             //featureSet.features[0].geometry;
             */
-            paths=[]; 
-            pts=[];
+            let paths=[]; 
+            let pts=[];
             
             
             query.returnM =false,
@@ -833,3 +888,175 @@ function getUserFly()
 
 
     }
+    function unappFlight() {
+            
+      //if (confirm("Вы уверены в отмене полета ?"))
+     // {
+      let gld=idFly;  
+      let tp=typeFly
+      if (tp=="2") 
+             modLayerRec(gld,routeLayer,"flyid","status",6);
+             modLayerRec(gld,flyZoneLayer,"flyid","status",6); 
+      let dat ={
+        "statusId": 5
+          
+            }
+    
+          updateRecordFlyghtTable(dat,gld);
+          
+      return;  
+      
+         
+    
+        }
+        function appFlight() {
+                
+          
+          let gld=idFly;  
+          let tp=typeFly;
+          if (tp=="2") 
+                modLayerRec(gld,routeLayer,"flyid","status",3);
+                modLayerRec(gld,flyZoneLayer,"flyid","status",3); 
+          let dat ={
+            "statusId": 4
+          }
+              
+          
+        
+              updateRecordFlyghtTable(dat,gld);
+              
+          return;  
+          
+              }
+              function resetFlight() {
+            
+      
+                let gld=idFly;  
+                let tp=typeFly;
+                if (tp=="2") 
+                      modLayerRec(gld,routeLayer,"flyid","status",3);
+                      modLayerRec(gld,flyZoneLayer,"flyid","status",3); 
+                let dat ={
+                  "statusId": 3
+                }
+                    
+                
+              
+                    updateRecordFlyghtTable(dat,gld);
+                    
+                return;  
+                
+                    }
+            
+        function modLayerRec(gld,modLayer,atrName,atrNameMod,val)
+      {
+    
+        modLayer.queryFeatures({
+          where : atrName+" = '"+gld+"'",
+          returnGeometry: true,
+          returnZ : true,
+          returnM : true,
+            outFields: ["*"],
+          }).then(function(ftfSet) {
+             
+             ftfSet.features[0].setAttribute(atrNameMod,val);
+             param2={ updateFeatures: ftfSet.features};
+             updateLayer(modLayer,param2);
+    
+          })
+    
+    
+      } 
+      function updateRecordFlyghtTable(dat,flid) {
+      
+        apiModFlight= apiData(apiUrl, "/application/"+flid, token, 'PUT', dat);
+  
+        apiModFlight.then(function (response) {
+             console.log(response);
+             getUserFly(); // формирование панели полетов
+      
+}); 
+ 
+}
+function updateLayer(lay,params,message=null) {
+  lay
+         .applyEdits(params)
+         .then(function(editsResult){ 
+         if(message!=null)
+           alert(message);  
+
+       })
+         .catch(function(error) {
+             alert( error.name);
+            alert( error.message);
+           
+         });
+
+}
+
+
+function emulFlight()
+        {
+         // checkGeometry=null;
+          
+            const  query= new QUERY(); 
+            query.where = "flyid = '"+idFly+"'"  ;// And numb >= 0 ";
+            query.outSpatialReference = { wkid: 4326  };
+            query.returnGeometry = true;
+            query.returnZ= true,
+            query.orderByFields = ["tdate"],
+            query.outFields = [ "*" ];
+            
+            console.log("++++") 
+              
+            emptyArray(emulpts);
+            
+            query.returnM =false;
+            punktsLayer.queryFeatures(query).then(function(featureSet){
+              console.log(featureSet.features.length+"  !!!!"); 
+              if (featureSet.features.length>0){
+                timeSlider.values=[dt]
+                for(k=0;k<featureSet.features.length;k++) 
+                  emulpts.push([featureSet.features[k].geometry,featureSet.features[k].getAttribute("tdate")]);
+                 
+           
+            //changeExtent2(checkGeometryZ.extent);
+            
+              }
+              setTimeSlider(sd,fd);
+              timeSlider.play();
+             });
+            
+              
+              
+          
+
+        }
+        
+        function setTimeSlider(tm,fm)
+        {
+          
+       
+         let st0=new Date(tm); 
+         let st1=new Date(tm);
+         
+          timeSlider.values=[st0];
+          st2=new Date(fm);
+          st2.setSeconds(st2.getSeconds()+10) 
+         
+          timeExtent = ({
+          start: st1,
+          end:  st2
+        });
+        let val= parseInt((st2.getTime()-st1.getTime())/1000);
+        alert(val);
+        timeSlider.stops= {
+            count: 100 
+          }
+        
+        timeSlider.fullTimeExtent=timeExtent;
+        timeSlider.playRate=1000;
+        timeSlider.loop=true;
+         
+        }
+

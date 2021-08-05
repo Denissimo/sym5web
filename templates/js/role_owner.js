@@ -2391,35 +2391,46 @@ function removeSelectSeg(rid,numb){
       timeSlider.values=[dt];
       typeFly=response.track.type;
       $.cookie("typeRoute",typeFly);
-      
+      let oldFly=idFly;
       idFly=response.id;
       idRoute=response.track.id;
       $.cookie("idRoute",idRoute);
+      let el= document.getElementById("F"+oldFly);
+      
+      let el2= document.getElementById("F"+idFly);
+      let reg=false;
+      if(el!=null) 
+      {
+        detalFlyght(null,false,-1,response,oldFly);
+        
+      }      
+      if(el2!=null)
+      {
+        idFly="";    
+        queryRoad(null,"");
+        reg=true;
+      }
+      else
+      {
       if(typeFly==2)
       {
-           detalFlyght(flyVecLayer,0,typeFly,response.id);
+           detalFlyght(flyVecLayer,true,typeFly,response,response.id);
            queryRoad(null,idRoute);
       }
       else{
-            detalFlyght(flyZoneLayer,0,typeFly,response.id)
+            detalFlyght(flyZoneLayer,true,typeFly,response,response.id)
             queryRoad(null,idRoute);
          }
-  });
+      }
 
-  function detalFlyght (detalLayer,reg,tp,gld) { 
-    /*   !!!!!!!!!!!!!!!!!!!!!!!!!
-    id="R"+gld;
-    lst=
-    document.getElementById(id).innerHTML=lst;
-    */
-    return }
+  
       
       let kod=document.getElementById("T"+gld).value;
       console.log(kod); 
       if(kod==5 || kod==4)
         document.getElementById("resetFlight").disabled=true;
       else 
-       document.getElementById("resetFlight").disabled=false;
+       document.getElementById("resetFlight").disabled=reg;
       if(kod==6)
       {
         document.getElementById("cancelFlight").disabled=true;
@@ -2427,13 +2438,37 @@ function removeSelectSeg(rid,numb){
       else
       { 
        
-       document.getElementById("cancelFlight").disabled=false;
+       document.getElementById("cancelFlight").disabled=reg;
       }
-            
-           
+      document.getElementById("createFlight").disabled=reg;      
+      document.getElementById("checkFlight").disabled=reg;      
+
+    });         
        
      return;  
   
+     function detalFlyght (detalLayer,reg,tp,response,fid) { 
+
+      const flighthtml3_1 ='<span class="uav-item-row uav-item-flight" id="'
+      
+      const flighthtml3_2='"><span class="uav-item-desc">Рег.номер БВС</span>';
+      
+      
+      const flighthtml3_3='</span>'; 
+  
+      let lst="";
+      id="R"+fid;
+      if (reg)
+       {
+         
+         lst=flighthtml3_1+"F"+response.id+flighthtml3_2+response.user.user.firstname+flighthtml3_3;
+         
+       }
+       console.log(lst); 
+      document.getElementById(id).innerHTML=lst;
+      
+      return ;
+        }
 
  }
 
@@ -3956,8 +3991,7 @@ function cancelFly() {
   let tp=typeFly
   if (tp=="2") 
          modLayerRec(gld,flyVecLayer,"flyid","status",6);
-  else
-        modLayerRec(gld,flyZoneLayer,"flyid","status",6); 
+         modLayerRec(gld,flyZoneLayer,"flyid","status",6); 
   let dat ={
     "statusId": 6
       
@@ -3977,7 +4011,6 @@ function cancelFly() {
       let tp=typeFly;
       if (tp=="2") 
             modLayerRec(gld,flyVecLayer,"flyid","status",3);
-      else
             modLayerRec(gld,flyZoneLayer,"flyid","status",3); 
       let dat ={
         "statusId": 3
