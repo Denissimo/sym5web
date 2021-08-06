@@ -74,7 +74,8 @@ require(
         "esri/widgets/LayerList",
         "esri/widgets/Locate",
         "esri/tasks/Geoprocessor",
-        "esri/widgets/Compass"
+        "esri/widgets/Compass",
+        "esri/widgets/Legend"
     ],
 
     function (
@@ -111,7 +112,8 @@ require(
         LayerList,
         Locate,
         Geoprocessor,
-        Compass
+        Compass,
+        Legend
     ) {
        
         
@@ -407,6 +409,9 @@ require(
           index: 4
       });
 
+      
+    
+
         // Basemap gallery stack
         const basemapGallery = new BasemapGallery({
             view: view,
@@ -512,7 +517,7 @@ require(
          addMobail(WebTileLayer,GroupLayer,esriConfig,scene);
 
 
-
+        
         
         
        
@@ -560,9 +565,24 @@ require(
     }
   });
   
+/*
+  const legend = new Legend({
+    view: view
+    layerInfos: [
+      {
+        layer: featureLayer,
+        title: "NY Educational Attainment"
+      }
+    ]
+  });
 
+  const bgExpandLegend = new Expand({
+    view: view,
+    content: legend
+});
 
-
+  view.ui.add(bgExpandLegend, "top-left");
+*/
 
     });
 
