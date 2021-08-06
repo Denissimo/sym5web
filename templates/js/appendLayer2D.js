@@ -205,8 +205,8 @@ function addSelectLayer(GraphicsLayer,webmap)
                     title: "Зоны заявок",  
                     url: sourceFlyghtZone,
                     outFields: ["*"],
-                    renderer:selectSymbol.zoneRendererFly,
-                    popupTemplate :templateZoneFly,
+                    renderer: selectSymbol.unicumRendererZone,
+                    popupTemplate :templatesPopup.templateZoneFly,
                     hasZ:true,
                     returnZ: true
                       });   //     let defQ=buildDefinitionQuery();  

@@ -16,6 +16,7 @@ var CIRCLE;
 var GEOMETRYENGINE;    
 var QUERY;
 var FEATUREFILTER;
+var GRAPHICSLAYER;
 
 var flyType;
 var timeSlider;
@@ -134,7 +135,7 @@ require(
         projection.load();
         PROJECTION=projection;
         FEATUREFILTER=FeatureFilter;
-        
+        GRAPHICSLAYER = GraphicsLayer;
 
         console.log(route);
         console.log(roles);
@@ -167,7 +168,7 @@ require(
         );
 
         setAircraft.then(function (response) {
-            console.log(response);
+            
         });
         */
         esriConfig.portalUrl = "https://abr-gis-portal.airchannel.net/portal";
@@ -262,7 +263,7 @@ require(
              });
          
                
-            // console.log(xmn);    
+              
              if (xmn!=null)
              {
                 view.extent= new EXTENT({
@@ -460,9 +461,10 @@ require(
     else    if(checkRoleRoute("ROLE_OPERATOR",roles) )
     {
       bufferLayer = new GraphicsLayer({
+        listMode:"hide",
         elevationInfo: {
                   mode:"on-the-ground",
-                  listMode:"hide",
+                  
                   offset : 100
                 }
 
@@ -640,16 +642,64 @@ require(
        { 
         if (idFly!="")
         {  
-           // console.log(timeSlider.stops+" !!!!!");
-          //  if (timeSlider.stops.unit=="minutes")
-           // {
+           
+        
+           
             zoneLayerTen.definitionExpression=buildDefinitionQueryFly();
             punktsBeforLayer.definitionExpression=buildDefinitionBeforQueryPunkts();
             routeLayer.definitionExpression=buildDefinitionQueryFly();
+            if (emulpts.length>0) {
+                 
+              let ind=-1;
+              //dronLayer.removeAll();
+              let dd=new Date(timeSlider.values[0]);
+              dd=dd.getTime()+tmzon*3600000
+              //let dd2=convertTime(emulpts[0][1]);
+
+              for(let i=0;i<emulpts.length;i++)
+              {
+                //let dd3=new Date(emulpts[i][1]);  
+                if(emulpts[i][1]>dd)
+                {
+                 
+                  break;
+                }
+                 ind=i; 
+              
+                }
+             /*   
+             if(ind>=0)  
+              punktsLayer.definitionExpression="objectid = "+emulpts[ind][2].toString(); 
+             else
+               punktsLayer.definitionExpression="objectid < 0 "; 
+             */
+            
+              if(ind>=0)
+              {
+                if(dronLayer.graphics.length==0)
+                {
+                gg=new GRAPHIC(
+                    {
+                      geometry : emulpts[ind][0],
+                      symbol:webDronActive
+                   
+                    })
+                   dronLayer.add(gg); 
+                  }
+                 else
+                 {
+
+                  dronLayer.graphics.getItemAt(0).geometry=emulpts[ind][0];
+
+                 }
+                    
+
+              }
+            }
            // }
           //  else
           //  {
-            console.log(timeSlider.values);    
+               
            /* view.whenLayerView(punktsBeforLayer)
                      .then(function(layerView) {
                        var st=timeSlider.timeExtent.start.getTime();

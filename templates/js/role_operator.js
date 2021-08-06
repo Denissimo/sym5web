@@ -22,8 +22,13 @@ function setFlightSidebar()
            document
            .getElementById("appFlight")
            .addEventListener("click", appFlight); 
+
            document.getElementById("resetFlight3d")
            .addEventListener("click", resetFlight);
+
+            document.getElementById("refreshFlights3d") 
+            .addEventListener("click",getUserFly);
+
             document
             .getElementById("unappFlight")
             .addEventListener("click", unappFlight ); //событие отмены полета 
@@ -89,7 +94,7 @@ function getUserFly()
       apiIntervalFlights= apiData(apiUrl, "/application/interval/"+stara+"/"+enda, token);
       
       apiIntervalFlights.then(function (response) {
-           console.log(response);
+           
            makeListFlyghtPanel(response); // формирование панели полетов
           });
 
@@ -104,7 +109,7 @@ function getUserFly()
               function makeListFlyghtPanel(response)
               {
                emptyArray(glb);                
-               console.log(response.applications.length);
+               
                for (let i=0;i<response.applications.length;i++) {   
                  
                 if(response.applications[i].application.start.date >= stDt)
@@ -208,6 +213,7 @@ function getUserFly()
        }       
        function eventFlyDetal(event){
          bufferLayer.removeAll();
+         dronLayer.removeAll();
         var gld=event.target.id;
     
         var allApplication = apiData(
@@ -217,7 +223,7 @@ function getUserFly()
       );
 
       allApplication.then(function (response) {
-        console.log(response);
+      
         dt=response.application.start.date;
         dt=new Date(dt);
         timeSlider.stop();
@@ -234,6 +240,7 @@ function getUserFly()
         fd=response.application.finish.date;
       
         $.cookie("idRoute",idRoute);
+        emptyArray(emulpts);
         let el= document.getElementById("F"+oldFly);
         let el2= document.getElementById("F"+idFly);
         let reg=false;
@@ -300,7 +307,7 @@ function getUserFly()
              lst=flighthtml3_1+"F"+response.id+flighthtml3_2+response.user.user.firstname+flighthtml3_3;
              
            }
-          console.log(lst); 
+          
           document.getElementById(id).innerHTML=lst;
           
             return ;
@@ -515,7 +522,7 @@ function getUserFly()
          //checkInterRoute(buffer,buffer2,sdt,fdt,routeLayer);
          
          
-         console.log("Checked")  
+          
              checkInterRoute(buffer,sdt,fdt,zoneLayer);
     
             for(let i=0;i<layerConf.length;i++)
@@ -531,7 +538,7 @@ function getUserFly()
               if(hh==null) hh=50; 
               checkElevation(hh);
           }
-              console.log("Checked2")     
+                
     
 
         window.setTimeout(checksMess, 2000); 
@@ -612,7 +619,7 @@ function getUserFly()
             finish : edt.toString()
            // owner :  getUserName(owid)
            };
-          console.log(inter); 
+          
           if (inter instanceof Array) 
             {
               
@@ -687,7 +694,7 @@ function getUserFly()
       view.map.ground.queryElevation(evalGeometry, { returnSampleInfo: true })
            // Successfully sampled all points
         .then(function(result) {
-          // Print result of each sampled point to the console
+          
            geom4=result.geometry;
            pts1=geom4.paths;
            pts2=evalGeometry.paths;
@@ -895,8 +902,8 @@ function getUserFly()
       let gld=idFly;  
       let tp=typeFly
       if (tp=="2") 
-             modLayerRec(gld,routeLayer,"flyid","status",6);
-             modLayerRec(gld,flyZoneLayer,"flyid","status",6); 
+             modLayerRec(gld,routeLayer,"flyid","status",5);
+             modLayerRec(gld,flyZoneLayer,"flyid","status",5); 
       let dat ={
         "statusId": 5
           
@@ -915,8 +922,8 @@ function getUserFly()
           let gld=idFly;  
           let tp=typeFly;
           if (tp=="2") 
-                modLayerRec(gld,routeLayer,"flyid","status",3);
-                modLayerRec(gld,flyZoneLayer,"flyid","status",3); 
+                modLayerRec(gld,routeLayer,"flyid","status",4);
+                modLayerRec(gld,flyZoneLayer,"flyid","status",4); 
           let dat ={
             "statusId": 4
           }
@@ -972,7 +979,7 @@ function getUserFly()
         apiModFlight= apiData(apiUrl, "/application/"+flid, token, 'PUT', dat);
   
         apiModFlight.then(function (response) {
-             console.log(response);
+            
              getUserFly(); // формирование панели полетов
       
 }); 
@@ -1007,17 +1014,17 @@ function emulFlight()
             query.orderByFields = ["tdate"],
             query.outFields = [ "*" ];
             
-            console.log("++++") 
+    
               
             emptyArray(emulpts);
             
             query.returnM =false;
             punktsLayer.queryFeatures(query).then(function(featureSet){
-              console.log(featureSet.features.length+"  !!!!"); 
+              
               if (featureSet.features.length>0){
                 timeSlider.values=[dt]
                 for(k=0;k<featureSet.features.length;k++) 
-                  emulpts.push([featureSet.features[k].geometry,featureSet.features[k].getAttribute("tdate")]);
+                  emulpts.push([featureSet.features[k].geometry,featureSet.features[k].getAttribute("tdate"),featureSet.features[k].getAttribute("objectid")]);
                  
            
             //changeExtent2(checkGeometryZ.extent);
@@ -1049,9 +1056,9 @@ function emulFlight()
           end:  st2
         });
         let val= parseInt((st2.getTime()-st1.getTime())/1000);
-        alert(val);
+        
         timeSlider.stops= {
-            count: 100 
+            count: val 
           }
         
         timeSlider.fullTimeExtent=timeExtent;

@@ -56,6 +56,30 @@ class templatesPopup{
           }
         ]
       };
-
+      static      templateZoneFly = {
+        
+        title: "Полетные зоны",
+        returnGeometry : true,
+        content: [
+          {
+            type: "fields",
+            fieldInfos: [
+              {
+                fieldName: "sdate",
+                label: "Старт"
+              }
+              ,
+              {
+                fieldName: "edate",
+                label: "Финиш"
+              },
+              {
+                fieldName: "status",
+                label: "Статус"
+              }
+            ]
+          }
+        ]
+      };
 
 }

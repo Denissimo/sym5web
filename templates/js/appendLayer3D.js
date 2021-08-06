@@ -1,7 +1,9 @@
+var dronLayer;
+var webDronActive;
+var markerRendererPunkts
 function addLayers3D(FeatureLayer,scene)
 {
     
-
   let servicePath =
   "https://abr-gis-server.airchannel.net/airchannel/rest/services/Dev/VectorDevelop2/FeatureServer/";
  
@@ -147,7 +149,7 @@ function addLayers3D(FeatureLayer,scene)
   
   
   //***************************************************************************** */
-  var webDronActive = {
+   webDronActive = {
     type: "web-style", // autocasts as new WebStyleSymbol()
     styleUrl:
       "https://abr-gis-portal.airchannel.net/portal/sharing/rest/content/items/bb7b64a19ac9455d97ac219080a0e978/data",
@@ -156,7 +158,7 @@ function addLayers3D(FeatureLayer,scene)
   };
 
 
-  var markerRendererPunkts = {
+   markerRendererPunkts = {
     type: "simple",
      symbol: webDronActive,
   };
@@ -165,8 +167,8 @@ function addLayers3D(FeatureLayer,scene)
     title: "Зоны заявок",  
     url: sourceFlyghtZone,
     outFields: ["*"],
-    renderer: selectSymbol.zoneRendererFly,
-    //popupTemplate :templateZoneFly,
+    renderer: selectSymbol.unicumRendererZone,
+    popupTemplate :templatesPopup.templateZoneFly,
     elevationInfo: {
       mode: "on-the-ground",
     },
@@ -180,9 +182,11 @@ function addLayers3D(FeatureLayer,scene)
      url:  sourceFlyghtPunkts,
     renderer: markerRendererPunkts,
     listMode: "hide",
+    
     outFields : ["*"],
     elevationInfo: {
       mode: "absolute-height",
+      offset : 30,
       featureReduction: {
         type: "selection",
       },
@@ -265,5 +269,30 @@ var lineRendererRoute2 = {
       ],
     },
   });
+
+
+
+  var markerRendererDron = {
+    type: "simple",
+   /* symbol: markerSymbolPunkts*/
+    symbol:webDronActive
+    
+     };
+
+     
+
   scene.layers.add(punktsBeforLayer);
+
+
+    dronLayer = new  GRAPHICSLAYER({
+       listMode:"hide",
+ //      renderer:markerRendererPunkts,
+       elevationInfo: {
+              mode:"absolute-height",
+         
+              offset : 50
+            }
+
+  });
+  scene.layers.add(dronLayer);
 }

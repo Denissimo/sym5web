@@ -77,6 +77,8 @@ function setFlightSidebar()
             document
            .getElementById("resetFlight")
            .addEventListener("click",resetFly);
+           document.getElementById("refreshFlights") 
+            .addEventListener("click", getUserFly);
       
       idRoute= $.cookie("idRoute");
       
@@ -245,9 +247,9 @@ function eventSketch(sketch,layerManual){
 sketch.on("create", function(event) {
     // при создании нового объекта вся предыдущая графика вычищается 
     if (event.state === "start" || event.tool==="point") {   
-     console.log("start");               
+                 
      clean(true);     
-     console.log("start2");  
+  
     }
      if (event.state === "complete") {
        if ( event.tool==="point") layerManual.add(event.graphic) ; 
@@ -264,8 +266,8 @@ sketch.on("create", function(event) {
               }
               catch{break;}
             }
-           console.log(EXTENT) ; 
-           console.log(PROJECTION) ;
+           
+          
            var circ=makeCircle(layerManual.graphics.getItemAt(0).geometry,rz,layerManual);
            changeExtent(circ);
              
@@ -320,7 +322,7 @@ function changeExtent (geom)
                   {
                    if (geom.type==="polygon")
                    {
-                      console.log(geom.isSelfIntersecting) 
+                      
                       if (geom.isSelfIntersecting) 
                       {
                         alert("Некорректная геометрия") 
@@ -375,7 +377,7 @@ function changeExtent (geom)
                       idRoute="";
                       getUserRoute("");
                      }
-                     console.log("clear"); 
+                  
                      layerManual.graphics.removeAll();
                      document
                      .getElementById("createRoute").disabled=true
@@ -916,7 +918,7 @@ function changeExtent (geom)
       function checkRouteName(isNew)
     {
       
-      console.log(idRoute);
+    
       if(isNew)
       {
       if (idRoute != "")  // наименование маршрута
@@ -925,7 +927,7 @@ function changeExtent (geom)
        return false;
        }
       }
-     console.log(nameRoute); 
+     
      let newName=nameRoute;  
      //if (nameRoute=="")  // наименование маршрута
      // {
@@ -977,12 +979,12 @@ function changeExtent (geom)
                      }
                     };
      //               );
-     console.log(dt);     
-     console.log(token);         
+         
+              
       apiNewTrack= apiData(apiUrl, "/track/add", token, 'POST', dt);
       
       apiNewTrack.then(function (response) {
-        console.log(response);
+        
         functVect(response.id);
     });
 
@@ -1029,7 +1031,7 @@ function changeExtent (geom)
       apiModTrack= apiData(apiUrl, "/track/"+routeid, token, 'PUT', dat);
       
       apiModTrack.then(function (response) {
-        console.log(response);
+        
         getUserRoute(routeid);
         alert(Message );
       });
@@ -1088,7 +1090,7 @@ function changeExtent (geom)
            
              function makeListRoutePanel(response)
              {
-              console.log(response.tracks);
+              
               for (let i=0;i<response.tracks.length;i++) {     
                  
                 if(response.tracks[i].isFinal)
@@ -1191,7 +1193,7 @@ function changeExtent (geom)
           let gld=trackid;
           
           let tps=document.getElementById("T"+gld).value;
-          //console.log(tps);
+          
           let tp=parseInt(tps);
           
                 if (tp<2)
@@ -1401,7 +1403,7 @@ function changeExtent (geom)
   const routhtml5='></div></p></div>';
   const routhtml6='></div>'
   
-  console.log(routeid);
+  
   if (flag)
   {
 
@@ -1486,7 +1488,7 @@ function changeExtent (geom)
                     
                      var rid=idRoute;
                      let stat=document.getElementById("T"+rid).value;
-                     console.log("!! "+nameRoute);
+                     
                      createRecordRouteTable(stat, nameRoute,copyRouteAs);
                      
                   }
@@ -1955,9 +1957,9 @@ function mySaveRoute(event)
                         
                        layerManual.add(imGr);
                        changeExtent(pol);
-                       //console.log(layerManual.graphics.length);
+                      
                        getDetailZone(rid,false);
-                       //console.log(layerManual.graphics.length);
+                    
                        queryRoad(null,"");  
                       });
                     
@@ -2199,7 +2201,7 @@ function removeSelectSeg(rid,numb){
                    //getRouteName(rd);
                     
                 
-                   console.log(rd+" ??")
+                  
                    var whh="routeid = '"+rd+"' And numb >= 0 ";  
                    routeVecLayer.queryFeatures({
                      where : whh,
@@ -2385,7 +2387,7 @@ function removeSelectSeg(rid,numb){
   );
 
   allApplication.then(function (response) {
-      console.log(response);
+      
       let dt=response.application.start.date;
       dt=new Date(dt);
       timeSlider.values=[dt];
@@ -2426,7 +2428,7 @@ function removeSelectSeg(rid,numb){
   
       
       let kod=document.getElementById("T"+gld).value;
-      console.log(kod); 
+
       if(kod==5 || kod==4)
         document.getElementById("resetFlight").disabled=true;
       else 
@@ -2464,7 +2466,7 @@ function removeSelectSeg(rid,numb){
          lst=flighthtml3_1+"F"+response.id+flighthtml3_2+response.user.user.firstname+flighthtml3_3;
          
        }
-       console.log(lst); 
+       
       document.getElementById(id).innerHTML=lst;
       
       return ;
@@ -2525,7 +2527,7 @@ function removeSelectSeg(rid,numb){
             apiNewFlight= apiData(apiUrl, "/application/add", token, 'POST', dat);
       
             apiNewFlight.then(function (response) {
-                 console.log(response);
+              
                  createFlyVectors(response.id);
                   
     });
@@ -2779,7 +2781,7 @@ function createFlyVectors(id){
   
   // Successfully sampled all points
     .then(function(result) {
-    // Print result of each sampled point to the console
+    
     var geom4=result.geometry;
     var sd=new Date(startDat)
        
@@ -3051,21 +3053,12 @@ function createFlyVectors(id){
                      addFeatures: [flyZone]
                       }; 
             
-                      console.log("add bufferzone");     
+                          
                       flyZoneLayer
                       .applyEdits(param3)
                       .then(function(editsResult) {
                          
-                     
-                        //######################################################################
-                        if(editsResult.addFeatureResults.length>0)
-                        {
-                                
-                          console.log("bufferzone OK");  
-                       }
-          
-          
-                        //####################################################################
+                     ;
           
                        })
                       .catch(function(error) {
@@ -3145,7 +3138,7 @@ function createFlyVectors(id){
             apiModFlight= apiData(apiUrl, "/application/"+flid, token, 'PUT', dat);
       
             apiModFlight.then(function (response) {
-                 console.log(response);
+                 
                  getUserFly(); // формирование панели полетов
                  if (isNew)
                  {
@@ -3198,7 +3191,7 @@ function createFlyVectors(id){
       apiUserFlight= apiData(apiUrl, "/application/user/"+user.id.toString(), token);
       
       apiUserFlight.then(function (response) {
-           console.log(response);
+          
            makeListFlyghtPanel(response); // формирование панели полетов
           });
 
@@ -3476,7 +3469,7 @@ window.clearInterval(interv);
  
    else
    {
-      console.log(bufferLayer.graphics.length)  ;
+      
       scene.layers.reorder(bufferLayer, scene.layers.length);
        alert("Внимание конфиликты !!!");
    }

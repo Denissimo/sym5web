@@ -79,5 +79,75 @@ static fillSymbolIntersect =
        }
     
  }
-};      
+};   
+
+static  unicumRendererZone = {
+  type: "unique-value",  // autocasts as new UniqueValueRenderer()
+  field: "status",
+  defaultSymbol: { type: "simple-fill" },  // autocasts as new SimpleFillSymbol()
+  uniqueValueInfos: [{
+    // All features with value of "North" will be blue
+    value: 3,
+    symbol: {
+      type: "simple-fill",  // autocasts as new SimpleFillSymbol()
+      color: [128, 128, 128],
+      style : "cross",
+      outline: {  // autocasts as new SimpleLineSymbol()
+        color: [ 128,128, 128 ],
+        width: 2
+         }
+    }
+  }, {
+    // All features with value of "East" will be green
+    value: 4,
+    symbol: {
+      type: "simple-fill",  // autocasts as new SimpleFillSymbol()
+      color: [0, 128, 0],
+      style : "cross",
+      outline: {  // autocasts as new SimpleLineSymbol()
+        color: [ 128,128,128  ],
+        width: 2
+         }
+    }
+  }, {
+    // All features with value of "South" will be red
+    value: 6,
+    symbol: {
+      type: "simple-fill",  // autocasts as new SimpleFillSymbol()
+      color: [128, 64, 0],
+      style : "cross",
+      outline: {  // autocasts as new SimpleLineSymbol()
+        color: [ 128,128, 128 ],
+        width: 2
+         }
+    }
+  }, {
+    // All features with value of "South" will be red
+    value: 7,
+    symbol: {
+      type: "simple-fill",  // autocasts as new SimpleFillSymbol()
+      color: [255, 255, 255],
+      style : "cross",
+      outline: {  // autocasts as new SimpleLineSymbol()
+        color: [ 128,128, 128 ],
+        width: 2
+         }
+    }
+  }, {
+    // All features with value of "West" will be yellow
+    value: 5,
+    symbol: {
+      type: "simple-fill",  // autocasts as new SimpleFillSymbol()
+      color: [128, 0, 0],
+      style : "cross",
+      outline: {  // autocasts as new SimpleLineSymbol()
+        color: [ 128,128, 128 ],
+        width: 2
+         }
+    }
+  }]
+}
+
+
+
 }
