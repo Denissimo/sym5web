@@ -565,6 +565,7 @@ require(
     }
   });
   
+
 /*
   const legend = new Legend({
     view: view
@@ -663,19 +664,20 @@ require(
         if (idFly!="")
         {  
            
-        
+          if (emulpts.length==0) {
            
             zoneLayerTen.definitionExpression=buildDefinitionQueryFly();
-            punktsBeforLayer.definitionExpression=buildDefinitionBeforQueryPunkts();
+            //punktsBeforLayer.definitionExpression=buildDefinitionBeforQueryPunkts();
             routeLayer.definitionExpression=buildDefinitionQueryFly();
-            if (emulpts.length>0) {
-                 
+          } 
+           if  (emulpts.length>0) {
+             // punktsBeforLayer.definitionExpression=buildDefinitionBeforQueryPunkts();   !!!!!!!!!!!!!!!!!  
               let ind=-1;
-              //dronLayer.removeAll();
+              
               let dd=new Date(timeSlider.values[0]);
               dd=dd.getTime()+tmzon*3600000
               //let dd2=convertTime(emulpts[0][1]);
-
+              let kf=0.0
               for(let i=0;i<emulpts.length;i++)
               {
                 //let dd3=new Date(emulpts[i][1]);  
@@ -685,8 +687,14 @@ require(
                   break;
                 }
                  ind=i; 
-              
+                 
+                 
                 }
+
+                if(ind>=0 && ind<emulpts.length-1)
+                 {
+                    kf=1.0-((emulpts[ind+1][1]-dd)/(emulpts[ind+1][1]-emulpts[ind][1]));
+                 }
              /*   
              if(ind>=0)  
               punktsLayer.definitionExpression="objectid = "+emulpts[ind][2].toString(); 
@@ -696,21 +704,87 @@ require(
             
               if(ind>=0)
               {
+                let geom=emulpts[ind][0];
+                let wk=geom.spatialReference.wkid;
+
                 if(dronLayer.graphics.length==0)
                 {
-                gg=new GRAPHIC(
+                let gDron=new GRAPHIC(
                     {
                       geometry : emulpts[ind][0],
                       symbol:webDronActive
                    
                     })
-                   dronLayer.add(gg); 
+                let dronPath=[];
+                dronPath.push([emulpts[ind][0].x,emulpts[ind][0].y,emulpts[ind][0].z-50]);
+                dronPath.push([emulpts[ind][0].x,emulpts[ind][0].y,emulpts[ind][0].z+1-50]);
+                     
+                let gPath=new GRAPHIC({
+                  geometry :new POLYLINE({
+                   hasZ: true, 
+                   paths:[dronPath],
+                   spatialReference :{wkid:wk}
+                  }),
+                  symbol:selectSymbol.emulSymbolRoute 
+                });
+                       
+                   dronLayer.add(gDron); 
+                   dronLayer.add(gPath);
+                   
                   }
-                 else
+
+                  else
                  {
+                  
+                
+                  let x0=emulpts[ind][0].x; let y0=emulpts[ind][0].y;  let z0=emulpts[ind][0].z;
+                  let x1=emulpts[ind][0].x; let y1=emulpts[ind][0].y; let z1=emulpts[ind][0].z; 
+                  if(ind<emulpts.length-1)
+                  {  x1=emulpts[ind+1][0].x; y1=emulpts[ind+1][0].y;  z1=emulpts[ind+1][0].z; }
 
-                  dronLayer.graphics.getItemAt(0).geometry=emulpts[ind][0];
+                  x0=x0+kf*(x1-x0);y0=y0+kf*(y1-y0);z0=z0+kf*(z1-z0);
 
+                  gDron=new POINT({
+                   x:x0,
+                   y:y0,
+                   z:z0,
+                   spatialReference :{wkid:wk}
+                  });
+
+                  let dronPath=[];
+                  if(emulpts[0][1]==dd)
+                  {
+                    
+                    let el=[];
+                    el.push(emulpts[ind][0].x);el.push(emulpts[ind][0].y);el.push(emulpts[ind][0].z-50);
+                    dronPath.push(el);
+                    emptyArray(el);
+                    el.push(emulpts[ind][0].x);el.push(emulpts[ind][0].y);el.push(emulpts[ind][0].z+1-50);
+                    dronPath.push(el);
+                  } 
+                  else 
+                   {
+                     for(let k=0;k<dronLayer.graphics.getItemAt(1).geometry.paths[0].length;k++)
+                     {
+                       let el=[];
+                       el.push(dronLayer.graphics.getItemAt(1).geometry.paths[0][k][0]);
+                       el.push(dronLayer.graphics.getItemAt(1).geometry.paths[0][k][1]);
+                       el.push(dronLayer.graphics.getItemAt(1).geometry.paths[0][k][2]);
+                       dronPath.push(el);
+                     }
+                       let el=[];el.push(x0);el.push(y0);el.push(z0-50);
+                       dronPath.push(el);  
+
+                   }   
+                  gPath=new POLYLINE({
+                    hasZ: true,
+                    paths : [dronPath],
+                    spatialReference :{wkid:wk}
+                  })
+                  console.log(dronLayer.graphics.getItemAt(1).geometry);
+
+                  dronLayer.graphics.getItemAt(0).geometry=gDron; //emulpts[ind][0];
+                  dronLayer.graphics.getItemAt(1).geometry=gPath;  
                  }
                     
 
