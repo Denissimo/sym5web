@@ -212,8 +212,12 @@ function getUserFly()
     
        }       
        function eventFlyDetal(event){
+         
+         emptyArray(emulpts);
          bufferLayer.removeAll();
+         console.log(dronLayer.graphics.length);
          dronLayer.removeAll();
+         console.log(dronLayer.graphics.length);
         var gld=event.target.id;
     
         var allApplication = apiData(
@@ -1015,7 +1019,7 @@ function emulFlight()
             query.outFields = [ "*" ];
             
     
-              
+            dronLayer.removeAll();  
             emptyArray(emulpts);
             
             query.returnM =false;
@@ -1055,14 +1059,14 @@ function emulFlight()
           start: st1,
           end:  st2
         });
-        let val= parseInt((st2.getTime()-st1.getTime())/1000);
-        
+        let val= parseInt((st2.getTime()-st1.getTime())/250);
+        if(val>5000) val=5000; 
         timeSlider.stops= {
             count: val 
           }
-        
+    
         timeSlider.fullTimeExtent=timeExtent;
-        timeSlider.playRate=1000;
+        timeSlider.playRate=250;
         timeSlider.loop=true;
          
         }

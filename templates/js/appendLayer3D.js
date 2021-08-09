@@ -1,4 +1,5 @@
 var dronLayer;
+
 var webDronActive;
 var markerRendererPunkts
 function addLayers3D(FeatureLayer,scene)
@@ -294,5 +295,7 @@ var lineRendererRoute2 = {
             }
 
   });
+  
   scene.layers.add(dronLayer);
+  
 }

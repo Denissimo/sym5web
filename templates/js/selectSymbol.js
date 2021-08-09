@@ -81,6 +81,30 @@ static fillSymbolIntersect =
  }
 };   
 
+
+static emulSymbolRoute = {
+ 
+    type: "line-3d",
+    symbolLayers: [
+      {
+        type: "path",
+        profile: "circle",
+        material: {
+          color: [255, 235, 30], //,0.5]
+        },
+        width: 60, // the width in m
+        height: 60, // the height in m
+        cap: "round"//"square", //"round"
+      },
+    ],
+};
+
+
+
+
+
+
+
 static  unicumRendererZone = {
   type: "unique-value",  // autocasts as new UniqueValueRenderer()
   field: "status",
