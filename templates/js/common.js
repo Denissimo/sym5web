@@ -1,4 +1,5 @@
 var route;
+var roles;
 var scene;
 var token ;
 var apiUrl;
@@ -14,20 +15,29 @@ var PROJECTION;
 var CIRCLE;
 var GEOMETRYENGINE;    
 var QUERY;
+var FEATUREFILTER;
+var GRAPHICSLAYER;
 
 var flyType;
 var timeSlider;
 var user;
 var view;
+var zoneLayerTen;
 var flyZoneLayer;
 var flyVecLayer;
 var segmentLayer;
 var punktsLayer;
+var punktsBeforLayer;
 var layerConf;
 
+
+
+var routeLayer;
 var selectLayer; //слой подсветки выбраннных объектов на карте
 var bufferLayer;
+
 var layerManual;
+var glb=[];
 require(
     [   "esri/config", //dv
         "esri/layers/WebTileLayer", //dv
@@ -36,6 +46,7 @@ require(
         "esri/layers/GraphicsLayer" ,
         "esri/layers/support/LabelClass",//dv
         
+
         "esri/tasks/support/Query",
         "esri/Graphic",
         "esri/geometry/Extent",
@@ -52,6 +63,8 @@ require(
         "esri/WebMap",
         "esri/WebScene",
         
+        "esri/views/layers/support/FeatureFilter",
+
         "esri/widgets/Sketch",
         "esri/widgets/Search",
         "esri/widgets/TimeSlider",
@@ -61,7 +74,8 @@ require(
         "esri/widgets/LayerList",
         "esri/widgets/Locate",
         "esri/tasks/Geoprocessor",
-        "esri/widgets/Compass"
+        "esri/widgets/Compass",
+        "esri/widgets/Legend"
     ],
 
     function (
@@ -86,6 +100,9 @@ require(
         SceneView,
         WebMap,
         WebScene,
+
+        FeatureFilter,
+
         Sketch,
         Search,
         TimeSlider,
@@ -95,14 +112,15 @@ require(
         LayerList,
         Locate,
         Geoprocessor,
-        Compass
+        Compass,
+        Legend
     ) {
        
         
         var tokenCookieName = '{{ token_cookie_name }}';
         token = $.cookie(tokenCookieName);
         apiUrl = '{{ api_url|raw }}';
-        var roles = JSON.parse('{{ user.user.roles|json_encode() }}');
+        roles = JSON.parse('{{ user.user.roles|json_encode() }}');
         user = JSON.parse('{{ user|json_encode() }}');
         route = '{{ route }}';
         layerConf=[];
@@ -118,8 +136,8 @@ require(
         QUERY=Query;
         projection.load();
         PROJECTION=projection;
-        
-        
+        FEATUREFILTER=FeatureFilter;
+        GRAPHICSLAYER = GraphicsLayer;
 
         console.log(route);
         console.log(roles);
@@ -152,14 +170,18 @@ require(
         );
 
         setAircraft.then(function (response) {
-            console.log(response);
+            
         });
         */
         esriConfig.portalUrl = "https://abr-gis-portal.airchannel.net/portal";
         
         
         
-
+             let xmn=$.cookie("xMin");            
+             let ymn=$.cookie("yMin");            
+             let xmx=$.cookie("xMax");
+             let ymx=$.cookie("yMax");
+             let wk=$.cookie("wkid");   
         if(checkRoleRoute("ROLE_OPERATOR",roles))
         {
           
@@ -191,6 +213,20 @@ require(
             map: scene,
             container: "map-operator"
         });
+        if (xmn!=null && wk==4326)
+        {
+            view.extent= new EXTENT({
+              
+                           
+                xmin: xmn,
+                ymin: ymn,
+                xmax: xmx,
+                ymax: ymx,
+               spatialReference: {
+               wkid: wk
+                          }
+                });
+        }
         const quality = document.querySelector('.quality-selector');
         quality.addEventListener("change", function (event) {
             changeQualityScene(this.value);
@@ -228,12 +264,8 @@ require(
             container: "map-operator"
              });
          
-             let xmn=$.cookie("xMin");            
-             let ymn=$.cookie("yMin");            
-             let xmx=$.cookie("xMax");
-             let ymx=$.cookie("yMax");
-             let wk=$.cookie("wkid");  
-             console.log(xmn);    
+               
+              
              if (xmn!=null)
              {
                 view.extent= new EXTENT({
@@ -296,12 +328,19 @@ require(
              }
            }
          });
-   
+         
 
 
 
         if(checkRoleRoute("ROLE_OWNER",roles) )
         {
+            var compassWidget = new Compass({
+                view: view
+              });
+      
+              // Add the Compass widget to the top left corner of the view
+            view.ui.add(compassWidget, "top-left");
+              
          if(route==="Flights" ||route==="Tracks"  )
          {
             addLayers2D(FeatureLayer,scene);   
@@ -334,7 +373,8 @@ require(
         }
         else if( route==="Flights" ) 
         {
-            
+            document.getElementById("optionsDiv3d").hidden=true;
+
             setFlightSidebar()
         }
     }  
@@ -368,6 +408,9 @@ require(
           position: "top-left",
           index: 4
       });
+
+      
+    
 
         // Basemap gallery stack
         const basemapGallery = new BasemapGallery({
@@ -412,11 +455,27 @@ require(
         
 
 
+        if(checkRoleRoute("ROLE_OWNER",roles) )
+        {
 
-        bufferLayer = new GraphicsLayer({
+      bufferLayer = new GraphicsLayer({
 
           listMode:"hide"
       });
+    }
+    else    if(checkRoleRoute("ROLE_OPERATOR",roles) )
+    {
+      bufferLayer = new GraphicsLayer({
+        listMode:"hide",
+        elevationInfo: {
+                  mode:"on-the-ground",
+                  
+                  offset : 100
+                }
+
+      }    );
+    }
+
       scene.layers.add(bufferLayer);
 
 
@@ -442,7 +501,9 @@ require(
              
             if(route==="Flights")
              { 
-              addLayers3D(FeatureLayer,scene) 
+              addLayers3D(FeatureLayer,scene)
+              document.getElementById("optionsDiv").hidden=true; 
+              setFlightSidebar();
              }
         }
         else if(checkRoleRoute("ROLE_OWNER",roles))
@@ -456,7 +517,7 @@ require(
          addMobail(WebTileLayer,GroupLayer,esriConfig,scene);
 
 
-
+        
         
         
        
@@ -504,9 +565,24 @@ require(
     }
   });
   
+/*
+  const legend = new Legend({
+    view: view
+    layerInfos: [
+      {
+        layer: featureLayer,
+        title: "NY Educational Attainment"
+      }
+    ]
+  });
 
+  const bgExpandLegend = new Expand({
+    view: view,
+    content: legend
+});
 
-
+  view.ui.add(bgExpandLegend, "top-left");
+*/
 
     });
 
@@ -582,5 +658,114 @@ require(
 
    timeSlider.watch("timeExtent", function () { 
        flyZoneLayer.definitionExpression=buildDefinitionQueryFly();
-  });
-}
+       if (checkRoleRoute("ROLE_OPERATOR",roles))  
+       { 
+        if (idFly!="")
+        {  
+           
+        
+           
+            zoneLayerTen.definitionExpression=buildDefinitionQueryFly();
+            punktsBeforLayer.definitionExpression=buildDefinitionBeforQueryPunkts();
+            routeLayer.definitionExpression=buildDefinitionQueryFly();
+            if (emulpts.length>0) {
+                 
+              let ind=-1;
+              //dronLayer.removeAll();
+              let dd=new Date(timeSlider.values[0]);
+              dd=dd.getTime()+tmzon*3600000
+              //let dd2=convertTime(emulpts[0][1]);
+
+              for(let i=0;i<emulpts.length;i++)
+              {
+                //let dd3=new Date(emulpts[i][1]);  
+                if(emulpts[i][1]>dd)
+                {
+                 
+                  break;
+                }
+                 ind=i; 
+              
+                }
+             /*   
+             if(ind>=0)  
+              punktsLayer.definitionExpression="objectid = "+emulpts[ind][2].toString(); 
+             else
+               punktsLayer.definitionExpression="objectid < 0 "; 
+             */
+            
+              if(ind>=0)
+              {
+                if(dronLayer.graphics.length==0)
+                {
+                gg=new GRAPHIC(
+                    {
+                      geometry : emulpts[ind][0],
+                      symbol:webDronActive
+                   
+                    })
+                   dronLayer.add(gg); 
+                  }
+                 else
+                 {
+
+                  dronLayer.graphics.getItemAt(0).geometry=emulpts[ind][0];
+
+                 }
+                    
+
+              }
+            }
+           // }
+          //  else
+          //  {
+               
+           /* view.whenLayerView(punktsBeforLayer)
+                     .then(function(layerView) {
+                       var st=timeSlider.timeExtent.start.getTime();
+                          stt= new Date(st);
+                          stt.setTime(stt.getTime()-100+3600000*tmzon);
+                       var defQuery ="tdate < "+ stt.valueOf();
+                       layerView.filter=new FEATUREFILTER(
+                       {
+                         where: defQuery
+                        }
+                        );
+                       layerView.visible=true;
+
+                       });*/
+
+                     // }
+                    }
+                   }
+                  });
+                
+          }
+          
+          function   initTimeSlider(){
+            let d=new Date();    
+            let d2=new Date();  d2.setDate(d2.getDate() + 20); // 10 дней предыдущих 20 последующих
+            let  d1=new Date(); d1.setDate(d1.getDate() + 1);
+            let timeExtent = ({
+                 start: d,
+                  end:  d2
+                          });
+     
+               
+               
+               timeSlider.fullTimeExtent = timeExtent;
+               timeSlider.values= [d,d1];
+               timeSlider.mode = "instant"; // не интервал
+               timeSlider.timeVisible=true;
+               timeSlider. stops= {
+                 interval: {
+                   value: 15,
+                   unit: "minutes"
+                 }
+               }
+            }
+
+                
+           
+             
+            

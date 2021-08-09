@@ -115,11 +115,12 @@ function addSelectLayer(GraphicsLayer,webmap)
               symbol: fillSymbol
             };      
             
-            var zoneRendererFly = {
+            /*
+             zoneRendererFly = {
               type: "simple",
               symbol: selectSymbol.fillSymbolFly
             };      
-
+                 */
             
 
           zoneLayer = new FeatureLayer({
@@ -141,7 +142,7 @@ function addSelectLayer(GraphicsLayer,webmap)
              type: "simple",
             symbol: lineSymbol
            };
-        var routeLayer = new FeatureLayer({
+          routeLayer = new FeatureLayer({
               url:         sourceTrackRoute,
               outFields: ["*"],
               hasM:true,
@@ -204,8 +205,8 @@ function addSelectLayer(GraphicsLayer,webmap)
                     title: "Зоны заявок",  
                     url: sourceFlyghtZone,
                     outFields: ["*"],
-                    renderer:zoneRendererFly,
-                    popupTemplate :templateZoneFly,
+                    renderer: selectSymbol.unicumRendererZone,
+                    popupTemplate :templatesPopup.templateZoneFly,
                     hasZ:true,
                     returnZ: true
                       });   //     let defQ=buildDefinitionQuery();  
