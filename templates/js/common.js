@@ -25,9 +25,7 @@ var view;
 var zoneLayerTen;
 var flyZoneLayer;
 var flyVecLayer;
-//var segmentLayer;
-//var punktsLayer;
-//var punktsBeforLayer;
+
 var layerConf;
 
 
@@ -667,22 +665,19 @@ require(
           if (emulpts.length==0) {
            
             zoneLayerTen.definitionExpression=buildDefinitionQueryFly();
-            //punktsBeforLayer.definitionExpression=buildDefinitionBeforQueryPunkts();
             routeLayer.definitionExpression=buildDefinitionQueryFly();
           } 
            if  (emulpts.length>0) {
-             // punktsBeforLayer.definitionExpression=buildDefinitionBeforQueryPunkts();   !!!!!!!!!!!!!!!!!  
+
               let ind=-1;
               
               let dd=new Date(timeSlider.values[0]).getTime();
              
-             //  dd=dd.getTime()+tmzon*3600000$$$$$$$$$$$$$$$$$$$$$$$$
-              //let dd2=convertTime(emulpts[0][1]);
               let kf=0.0
              
               for(let i=0;i<emulpts.length;i++)
               {
-                //let dd3=new Date(emulpts[i][1]);  
+
                 if(emulpts[i][1]>dd)
                 {
              
@@ -697,12 +692,6 @@ require(
                  {
                     kf=1.0-((emulpts[ind+1][1]-dd)/(emulpts[ind+1][1]-emulpts[ind][1]));
                  }
-             /*   
-             if(ind>=0)  
-              punktsLayer.definitionExpression="objectid = "+emulpts[ind][2].toString(); 
-             else
-               punktsLayer.definitionExpression="objectid < 0 "; 
-             */
             
               if(ind>=0)
               {
@@ -792,26 +781,7 @@ require(
 
               }
             }
-           // }
-          //  else
-          //  {
                
-           /* view.whenLayerView(punktsBeforLayer)
-                     .then(function(layerView) {
-                       var st=timeSlider.timeExtent.start.getTime();
-                          stt= new Date(st);
-                          stt.setTime(stt.getTime()-100+3600000*tmzon);
-                       var defQuery ="tdate < "+ stt.valueOf();
-                       layerView.filter=new FEATUREFILTER(
-                       {
-                         where: defQuery
-                        }
-                        );
-                       layerView.visible=true;
-
-                       });*/
-
-                     // }
                     }
                    }
                   });

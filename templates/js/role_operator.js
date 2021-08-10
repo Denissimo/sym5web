@@ -43,13 +43,7 @@ function checkFlight(){getCheckGeometry(idFly);}
 
 function getUserFly()
  {
-        
-    
-
-
-
-
-  
+   
   var stats= ["Черновик","Шаблон","На утверждении","Подтверждена","Отклонена","Отменена","Выполняется"];
           
   const flighthtml0 ='<li class="uav-list-item"><div class="uav-item-header">\
@@ -132,10 +126,10 @@ function getUserFly()
                                       
               var glob= flyght.id;       // glob - GUID полета
               var kod=  flyght.status.id;   
-             // if (kod==3 || kod==4)
+           
               glb.push([glob,flyght.track.type.toString()]) ;   // glb -  массив согласованных или на согласовании
 
-             // var obj=flyght.application.externalId;//ftfSet.features[i].getAttribute("objectid");
+   
               var sdat=flyght.application.start.date; //ftfSet.features[i].getAttribute("startdate");
               var  fdat=flyght.application.finish.date;//ftfSet.features[i].getAttribute("finishdate");
               
@@ -155,25 +149,7 @@ function getUserFly()
               lst=lst+flighthtml4;
               lst=lst+"R"+glob;
               lst=lst+flighthtml4_2;
-              /*
-              if (numb==0)
-              {
-               lst=lst+trackhtml5;
-               lst=lst+"S"+rlob;
-               lst=lst+trackhtml6;
-              }
-              lst=lst+trackhtml7;
-              lst=lst+"P"+rlob;
-              lst=lst+trackhtml8;
-              lst=lst+trackhtml9;
-              lst=lst+"I"+rlob;
-              lst=lst+trackhtml10;
-              if(numb==0)
-              {
-               lst=lst+trackhtml11;
-               lst=lst+"D"+rlob;
-               lst=lst+trackhtml12;
-              }*/
+           
                lst=lst+flighthtml12_2;
                lst=lst+"T"+glob;
                lst=lstlst=lst+flighthtml12_3;
@@ -182,15 +158,7 @@ function getUserFly()
                
                lst=lst+flighthtml13;
             }
-                 /* 
-                 document.getElementById("flist").innerHTML=lst; 
-                   
-                         
-                 addFlyEvent()    подключение обработчиков событий 
-                   */        
-                  //});
-             
-                //  });
+           
 
     }
   
@@ -200,9 +168,7 @@ function getUserFly()
         for (var i=0;i<glb.length;i++)
         {
         
-           // document
-         //  .getElementById(glb[i][0]+glb[i][1])
-         //  .addEventListener("click", cancelFly); //событие отмены полета
+           
             
            document
            .getElementById(glb[i][0])
@@ -274,25 +240,7 @@ function getUserFly()
         
     });
   
-    /*
-    function detalFlyght (detalLayer,reg,tp,gld) { return }
         
-         let kod=document.getElementById("T"+gld).value;
-         
-        if(kod==7)
-           document.getElementById("unresetFlight").disabled=true;
-        else 
-         document.getElementById("resetFlight").disabled=false;
-        if(kod==6)
-        {
-          document.getElementById("cancelFlight").disabled=true;
-        }
-        else
-        { 
-         
-         document.getElementById("cancelFlight").disabled=false;
-        }
-          */    
             
         function detalFlyght (detalLayer,reg,tp,response,fid) { 
 
@@ -346,11 +294,6 @@ function getUserFly()
        
         flyZoneLayer.definitionExpression="flyid = '"+fid+"'";
        
-       // featureTableZone.selectRows(featureSet.features);
-        
-      //  featureTableZone.refresh(); 
-      // getRouteRecord(rd,getRouteName);
-       //getRouteName(rd);
           
        changeExtent(featureSet.features[0].geometry);
        buttonEnabled(false);
@@ -392,25 +335,7 @@ function getUserFly()
   
     }
 
-   /*function buildDefinitionBeforQueryPunkts(){
-
-        
-      var st=timeSlider.timeExtent.start.getTime();
-      
-     
-      stt= new Date(st);
-      
-      stt.setTime(stt.getTime()-100+3600000*tmzon);
-      startDt=convertTime(stt);
-        
-      
-       
-       var defQuery ="tdate < timestamp'"+ startDt+"' And flyid = '"+idFly+ "'";
-       
-       //var defQuery ="relationships/0/status = 4";
-
-       return defQuery;
-     }*/
+   
      function buttonEnabled(reg)
      {
 
@@ -441,35 +366,7 @@ function getUserFly()
             query.returnZ= true,
             
             query.outFields = [ "*" ];
-            /* 
-            routeLayerTen.queryFeatures(query).then(function(featureSet){
-             paths=[] 
-             pts=[] 
-             if (featureSet.features.length>0){
-             
-             for(k=1;k<featureSet.features[0].geometry.paths[0].length-1;k++) 
-                pts.push(featureSet.features[0].geometry.paths[0][k]);
-            
-
-            paths.push(pts)            
-
-            var checkSdate=featureSet.features[0].getAttribute("sdate");
-  
-            //alert(checkSdate);
-            
-            checkGeometry  = new Polyline({
-             hasZ: true,
-            hasM: true,
-          //  paths: featureSet.features[0].geometry.paths,
-           paths: paths,
-            spatialReference: { wkid: 4326 }
-            });
-            checkInd=0;
-            
-          }   
-            
-            //featureSet.features[0].geometry;
-            */
+   
             let paths=[]; 
             let pts=[];
             
@@ -519,13 +416,6 @@ function getUserFly()
          fdtm.setTime(fdtm.getTime()-100+3600000*tmzon);
          fdt=convertTime(new Date(fdtm));
 
-       
-
-
-
-         //checkInterRoute(buffer,buffer2,sdt,fdt,routeLayer);
-         
-         
           
              checkInterRoute(buffer,sdt,fdt,zoneLayer);
     
@@ -1022,26 +912,6 @@ function emulFlight()
             dronLayer.removeAll();  
             emptyArray(emulpts);
             
-            //query.returnM =false;
-           /* if (typeFly!=2)             //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-            {
-            punktsLayer.queryFeatures(query).then(function(featureSet){
-              
-              if (featureSet.features.length>0){
-                timeSlider.values=[dt]
-                for(k=0;k<featureSet.features.length;k++) 
-                  emulpts.push([featureSet.features[k].geometry,featureSet.features[k].getAttribute("tdate"),featureSet.features[k].getAttribute("objectid")]);
-                 
-           
-            //changeExtent2(checkGeometryZ.extent);
-            
-              }
-              setTimeSlider(sd,fd);
-              timeSlider.play();
-             });
-            }
-            else
-            {*/
               query.returnM= true;
               query.orderByFields=["objectid"],
               routeLayer.queryFeatures(query).then(function(featureSet){
@@ -1065,11 +935,7 @@ function emulFlight()
                 timeSlider.play();
                });
 
-            //}
-              
-              
-          
-
+   
         }
         
         function setTimeSlider(tm,fm)

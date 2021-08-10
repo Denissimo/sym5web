@@ -20,8 +20,6 @@ function addSelectLayer(GraphicsLayer,webmap)
           var sourceTrackZone=servicePath+"4";
           var sourceFlyghtZone=servicePath+"5"; 
           var sourceFlyghtRoute=servicePath+"2";
-        //  var sourceFlyghtSeg=servicePath+"3";
-        //  var sourceFlyghtPunkts=servicePath+"0";
           
 
           var      templateZoneFly = {
@@ -115,12 +113,6 @@ function addSelectLayer(GraphicsLayer,webmap)
               symbol: fillSymbol
             };      
             
-            /*
-             zoneRendererFly = {
-              type: "simple",
-              symbol: selectSymbol.fillSymbolFly
-            };      
-                 */
             
 
           zoneLayer = new FeatureLayer({
@@ -157,15 +149,6 @@ function addSelectLayer(GraphicsLayer,webmap)
        if( route ==="Flights")
        { 
         
-           /* segmentLayer = new FeatureLayer({
-              url:       sourceFlyghtSeg,
-              outFields: ["*"],
-              hasM:true,
-              hasZ:true,
-              returnM :true,
-              returnZ: true
-                  });   */
-   //****************************************************************************************************** */              
             flyVecLayer = new FeatureLayer({
             url: sourceFlyghtRoute,
             outFields: ["*"],
@@ -174,23 +157,6 @@ function addSelectLayer(GraphicsLayer,webmap)
             returnM :true,
             returnZ: true
             });
-     //****************************************************************************************************** */               
-      /*
-                    url:   "https://abr-gis-server.airchannel.net/airchannel/rest/services/Airspace_Azerbaijan/MapServer/6",
-                   title : "Запретные зоны зоны"
-                  
-                  });
-            var prohLayer = new FeatureLayer({
-                  url:   "https://abr-gis-server.airchannel.net/airchannel/rest/services/Airspace_Azerbaijan/MapServer/5",
-                  title : "Опасные зоны"                    
-                  });
-        */ 
-         //****************************************************************************************************** */              
-             /*  punktsLayer = new FeatureLayer({
-                 url: sourceFlyghtPunkts          
-                      //popupTemplate:templatePunkts,
-                     
-                     });*/
                     
                     
                   }  
@@ -225,20 +191,5 @@ function addSelectLayer(GraphicsLayer,webmap)
                      webmap.layers.add(tableZoneLayer)
                      webmap.layers.add(tableLayer)
                      
-              
-                     //webmap.layers.reorder(routeLayer, webmap.layers.length); 
-                     /*
-                     if( route=="Flights")
-                     { 
-                       punktsLayer.definitionExpression="";//                     buildDefinitionQueryPunkts();//timeSlider);
-                       webmap.layers.add(punktsLayer);
-                     }*/
-
-                     
-                  
-                    
-                 
-
-
     
      }

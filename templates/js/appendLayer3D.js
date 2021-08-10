@@ -10,8 +10,6 @@ function addLayers3D(FeatureLayer,scene)
  
   let sourceFlyghtZone = servicePath + "5";
   let sourceFlyghtRoute = servicePath + "2";
-  //let sourceFlyghtSeg = servicePath + "3";
-  //let sourceFlyghtPunkts = servicePath + "0";
   
   var fillSymbolZone = {
     type: "simple-fill", // autocasts as SimpleLineSymbol()
@@ -35,8 +33,6 @@ function addLayers3D(FeatureLayer,scene)
       offset: 500,
     },
   });
-  //scene.layers.add(zoneLayer);
-   //****************************************************************************************************************************************** */
   
 
 
@@ -125,29 +121,6 @@ function addLayers3D(FeatureLayer,scene)
   });
   scene.layers.add(zoneLayerTen);
   
-//******************************************************************************** */
- /*
-  var lineSymbolRouteTen = {
-    type: "simple-line", // autocasts as SimpleLineSymbol()
-    color: [128, 128, 128],
-    width: 2,
-  };
-  var lineRendererRouteTen = {
-    type: "simple",
-    symbol: lineSymbolRouteTen,
-  };
-  var routeLayerTen = new FeatureLayer({
-     url: sourceFlyghtRoute,
-    title: "Траектории полетов",
-    renderer: lineRendererRouteTen,
-    elevationInfo: {
-      mode: "on-the-ground",
-    },
-   });
-  scene.layers.add(routeLayerTen);
-*/
-
-  
   
   //***************************************************************************** */
    webDronActive = {
@@ -158,12 +131,7 @@ function addLayers3D(FeatureLayer,scene)
     name: "drone_active",
   };
 
- /*
-   markerRendererPunkts = {
-    type: "simple",
-     symbol: webDronActive,
-  };
-*/
+
   flyZoneLayer = new FeatureLayer({
     title: "Зоны заявок",  
     url: sourceFlyghtZone,
@@ -179,23 +147,6 @@ function addLayers3D(FeatureLayer,scene)
 
    scene.layers.add(flyZoneLayer);
    
-   /*punktsLayer = new FeatureLayer({
-     url:  sourceFlyghtPunkts,
-    renderer: markerRendererPunkts,
-    listMode: "hide",
-    
-    outFields : ["*"],
-    elevationInfo: {
-      mode: "absolute-height",
-      offset : 30,
-      featureReduction: {
-        type: "selection",
-      },
-     
-    },
-    definitionExpression : " objectid < 0"
-  });
-  scene.layers.add(punktsLayer);*/
 
   //********************************************************************************************************** */
   
@@ -206,83 +157,9 @@ function addLayers3D(FeatureLayer,scene)
     //"https://abr-gis-portal.airchannel.net/portal/sharing/rest/content/items/209758da27ef4d53a7a7049f3283393e",
     name: "drone_other",
   };
- /*
-  var markerRendererOtherPunkts = {
-    type: "simple",
-    
-    symbol: webDronOther,
-  };
 
-  var punktsOtherLayer = new FeatureLayer({
-  
-    url: sourceFlyghtPunkts,
-    renderer: markerRendererOtherPunkts,
-    listMode: "hide",
-    elevationInfo: {
-      mode: "absolute-height",
-         },
-    outFields : ["*"],
-    definitionExpression : " objectid < 0"
-  });*/
- // scene.layers.add(punktsOtherLayer);
- //******************************************************************************************************************** */
- /*var lineSymbolRoute2 = {
-  type: "line-3d",
-  symbolLayers: [
-    {
-      type: "path",
-      profile: "circle",
-      material: {
-        color: [255, 235, 30], //,0.5]
-      },
-      width: 60, // the width in m
-      height: 60, // the height in m
-      cap: "square", //"round"
-    },
-  ],
-};*/
 
-/*var lineRendererRoute2 = {
-  type: "simple",
-  symbol: lineSymbolRoute2,
-};*/
-    /*punktsBeforLayer = new FeatureLayer({
-    url: sourceFlyghtSeg,
-    renderer: lineRendererRoute2,
-    listMode: "hide",
-    elevationInfo: {
-      mode: "absolute-height",
-     
-    },
-    definitionExpression : " objectid < 0",
-    popupTemplate: {
-      title: "Полет",
-      content: [
-        {
-          type: "fields",
-          fieldInfos: [
-            {
-              fieldName: "relationships/0/status",
-              visible: true,
-            },
-          ],
-        },
-      ],
-    },
-  });
-*/
 
-  /*
-  var markerRendererDron = {
-    type: "simple",
-    symbol: markerSymbolPunkts
-    symbol:webDronActive
-    
-     };
-*/
-     
-
-  //scene.layers.add(punktsBeforLayer);
 
 
     dronLayer = new  GRAPHICSLAYER({
