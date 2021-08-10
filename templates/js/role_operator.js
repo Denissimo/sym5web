@@ -392,7 +392,7 @@ function getUserFly()
   
     }
 
-   function buildDefinitionBeforQueryPunkts(){
+   /*function buildDefinitionBeforQueryPunkts(){
 
         
       var st=timeSlider.timeExtent.start.getTime();
@@ -410,7 +410,7 @@ function getUserFly()
        //var defQuery ="relationships/0/status = 4";
 
        return defQuery;
-     }
+     }*/
      function buttonEnabled(reg)
      {
 

@@ -25,9 +25,9 @@ var view;
 var zoneLayerTen;
 var flyZoneLayer;
 var flyVecLayer;
-var segmentLayer;
-var punktsLayer;
-var punktsBeforLayer;
+//var segmentLayer;
+//var punktsLayer;
+//var punktsBeforLayer;
 var layerConf;
 
 

@@ -1,7 +1,7 @@
 var dronLayer;
 
 var webDronActive;
-var markerRendererPunkts
+//var markerRendererPunkts
 function addLayers3D(FeatureLayer,scene)
 {
     
@@ -10,8 +10,8 @@ function addLayers3D(FeatureLayer,scene)
  
   let sourceFlyghtZone = servicePath + "5";
   let sourceFlyghtRoute = servicePath + "2";
-  let sourceFlyghtSeg = servicePath + "3";
-  let sourceFlyghtPunkts = servicePath + "0";
+  //let sourceFlyghtSeg = servicePath + "3";
+  //let sourceFlyghtPunkts = servicePath + "0";
   
   var fillSymbolZone = {
     type: "simple-fill", // autocasts as SimpleLineSymbol()
@@ -158,12 +158,12 @@ function addLayers3D(FeatureLayer,scene)
     name: "drone_active",
   };
 
-
+ /*
    markerRendererPunkts = {
     type: "simple",
      symbol: webDronActive,
   };
-
+*/
   flyZoneLayer = new FeatureLayer({
     title: "Зоны заявок",  
     url: sourceFlyghtZone,
@@ -179,7 +179,7 @@ function addLayers3D(FeatureLayer,scene)
 
    scene.layers.add(flyZoneLayer);
    
-   punktsLayer = new FeatureLayer({
+   /*punktsLayer = new FeatureLayer({
      url:  sourceFlyghtPunkts,
     renderer: markerRendererPunkts,
     listMode: "hide",
@@ -195,7 +195,7 @@ function addLayers3D(FeatureLayer,scene)
     },
     definitionExpression : " objectid < 0"
   });
-  scene.layers.add(punktsLayer);
+  scene.layers.add(punktsLayer);*/
 
   //********************************************************************************************************** */
   
@@ -206,10 +206,10 @@ function addLayers3D(FeatureLayer,scene)
     //"https://abr-gis-portal.airchannel.net/portal/sharing/rest/content/items/209758da27ef4d53a7a7049f3283393e",
     name: "drone_other",
   };
-
+ /*
   var markerRendererOtherPunkts = {
     type: "simple",
-    /* symbol: markerSymbolPunkts*/
+    
     symbol: webDronOther,
   };
 
@@ -223,10 +223,10 @@ function addLayers3D(FeatureLayer,scene)
          },
     outFields : ["*"],
     definitionExpression : " objectid < 0"
-  });
-  scene.layers.add(punktsOtherLayer);
+  });*/
+ // scene.layers.add(punktsOtherLayer);
  //******************************************************************************************************************** */
- var lineSymbolRoute2 = {
+ /*var lineSymbolRoute2 = {
   type: "line-3d",
   symbolLayers: [
     {
@@ -240,13 +240,13 @@ function addLayers3D(FeatureLayer,scene)
       cap: "square", //"round"
     },
   ],
-};
+};*/
 
-var lineRendererRoute2 = {
+/*var lineRendererRoute2 = {
   type: "simple",
   symbol: lineSymbolRoute2,
-};
-    punktsBeforLayer = new FeatureLayer({
+};*/
+    /*punktsBeforLayer = new FeatureLayer({
     url: sourceFlyghtSeg,
     renderer: lineRendererRoute2,
     listMode: "hide",
@@ -270,24 +270,24 @@ var lineRendererRoute2 = {
       ],
     },
   });
+*/
 
-
-
+  /*
   var markerRendererDron = {
     type: "simple",
-   /* symbol: markerSymbolPunkts*/
+    symbol: markerSymbolPunkts
     symbol:webDronActive
     
      };
-
+*/
      
 
-  scene.layers.add(punktsBeforLayer);
+  //scene.layers.add(punktsBeforLayer);
 
 
     dronLayer = new  GRAPHICSLAYER({
        listMode:"hide",
- //      renderer:markerRendererPunkts,
+ 
        elevationInfo: {
               mode:"absolute-height",
          

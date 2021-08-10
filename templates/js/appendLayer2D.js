@@ -20,8 +20,8 @@ function addSelectLayer(GraphicsLayer,webmap)
           var sourceTrackZone=servicePath+"4";
           var sourceFlyghtZone=servicePath+"5"; 
           var sourceFlyghtRoute=servicePath+"2";
-          var sourceFlyghtSeg=servicePath+"3";
-          var sourceFlyghtPunkts=servicePath+"0";
+        //  var sourceFlyghtSeg=servicePath+"3";
+        //  var sourceFlyghtPunkts=servicePath+"0";
           
 
           var      templateZoneFly = {
@@ -157,14 +157,14 @@ function addSelectLayer(GraphicsLayer,webmap)
        if( route ==="Flights")
        { 
         
-            segmentLayer = new FeatureLayer({
+           /* segmentLayer = new FeatureLayer({
               url:       sourceFlyghtSeg,
               outFields: ["*"],
               hasM:true,
               hasZ:true,
               returnM :true,
               returnZ: true
-                  });   
+                  });   */
    //****************************************************************************************************** */              
             flyVecLayer = new FeatureLayer({
             url: sourceFlyghtRoute,
@@ -186,15 +186,11 @@ function addSelectLayer(GraphicsLayer,webmap)
                   });
         */ 
          //****************************************************************************************************** */              
-               punktsLayer = new FeatureLayer({
+             /*  punktsLayer = new FeatureLayer({
                  url: sourceFlyghtPunkts          
                       //popupTemplate:templatePunkts,
-                     /* hasM:true,
-                      hasZ:true,
-                      returnM :true,
-                      returnZ: true,   
-                     title : "Полеты"*/
-                     });
+                     
+                     });*/
                     
                     
                   }  

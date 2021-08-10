@@ -2788,9 +2788,9 @@ function createFlyVectors(id){
        
     var td=sd;
     
-     var lM=0;
+   //  var lM=0;
      var dl=0;
-     var addFeat=[];
+    // var addFeat=[];
      var svetofor=1
 
      let tdt= new Date(startDat);
@@ -2826,13 +2826,15 @@ function createFlyVectors(id){
         break; 
        }
        
-       lM=lM+dl;
+      // lM=lM+dl;
        
-        
+      /*  
        var featurePunkt=getPunkt(geom4.points[ind][0],geom4.points[ind][1],geom4.points[ind][2]+200,lM,td,user.id.toString(),flyid,routeid,{ wkid: 4326 }) ;
        
        
        addFeat.push(featurePunkt);
+      */
+      
        ptsLine[0].push([geom4.points[ind][0],geom4.points[ind][1],geom4.points[ind][2]+200,td.getTime()/1000-tdt0])
        dl=0;
       }
@@ -2842,9 +2844,9 @@ function createFlyVectors(id){
      if (flag) break;
     }
     
-         if (addFeat.length>0)
+         if (ptsLine[0].length>0)
          {
-          var paramP = {
+          /*var paramP = {
                   addFeatures: addFeat
                 }; 
             punktsLayer
@@ -2858,7 +2860,7 @@ function createFlyVectors(id){
                 
               });
   
-            }
+            }*/
             sd=new Date(startDat)
   
             let lin1=
@@ -2887,7 +2889,7 @@ function createFlyVectors(id){
                   flyVecLayer
              .applyEdits(param2)
              .then(function(editsResult) {;});
-
+           }
 
     })
   
@@ -2903,7 +2905,7 @@ function createFlyVectors(id){
    {
   
             routeid = idRoute;
-             flyid =idFly;
+            flyid =idFly;
              
         
          let tdt= new Date(startDat);
@@ -2911,10 +2913,10 @@ function createFlyVectors(id){
          let zmin2=9000;
          let zmax2=-500;
             
-          var   addFeat=[];
-          var   addSegment=[];
+         // var   addFeat=[];
+        //  var   addSegment=[];
     
-             let lM=0;
+            // let lM=0;
              var ptsLine=[[]];
   
               for(let m=0;m<pZ.length-1;m++)
@@ -2927,17 +2929,17 @@ function createFlyVectors(id){
                  var tz=flypts[0][0][2];
                  for (let p=0;p<2;p++)
                  {
-                    var featurePunkts =  getPunkt(flypts[0][0][0],flypts[0][0][1],tz,lM,tdt,user.id.toString(),flyid,routeid,{ wkid: 4326 }) ;
+                    //var featurePunkts =  getPunkt(flypts[0][0][0],flypts[0][0][1],tz,lM,tdt,user.id.toString(),flyid,routeid,{ wkid: 4326 }) ;
                     ptsLine[0].push([flypts[0][0][0],flypts[0][0][1],tz,tdt.getTime()/1000-tdt0]);//lM]);$$$$$$$$$$$          
-                    addFeat.push(featurePunkts);
+                   // addFeat.push(featurePunkts);
                     tz= pZ[0];
                     tdt.setTime(tdt.getTime()+10000);
-                    lM=pZ[0];
+                   // lM=pZ[0];
                     
                 }
                 
-                var featureSegment =  getSegment(flypts[0][0][0],flypts[0][0][1],tz,lM,tdt,user.id.toString(),flyid,routeid,flypts[0][0][0],flypts[0][0][1],flypts[0][0][2],0) ;
-                addSegment.push(featureSegment);
+               // var featureSegment =  getSegment(flypts[0][0][0],flypts[0][0][1],tz,lM,tdt,user.id.toString(),flyid,routeid,flypts[0][0][0],flypts[0][0][1],flypts[0][0][2],0) ;
+               // addSegment.push(featureSegment);
                }
                
                var nPt=flypts[m].length;
@@ -2955,11 +2957,11 @@ function createFlyVectors(id){
                     //tz= pHeight+flypts[m][p][2];
                     tz1=tz;
                     tz=tz+deltZ;
-                    featurePunkts =  getPunkt(flypts[m][p][0],flypts[m][p][1],tz,lM+flypts[m][p][3],tdt,user.id.toString(),flyid,routeid,{ wkid: 4326 }) ;
-                    featureSegment =  getSegment(flypts[m][p][0],flypts[m][p][1],tz,lM+flypts[m][p][3],tdt,user.id.toString(),flyid,routeid,flypts[m][p-1][0],flypts[m][p-1][1],tz1,lM+flypts[m][p-1][3]) ;
+                 //   featurePunkts =  getPunkt(flypts[m][p][0],flypts[m][p][1],tz,lM+flypts[m][p][3],tdt,user.id.toString(),flyid,routeid,{ wkid: 4326 }) ;
+                 //   featureSegment =  getSegment(flypts[m][p][0],flypts[m][p][1],tz,lM+flypts[m][p][3],tdt,user.id.toString(),flyid,routeid,flypts[m][p-1][0],flypts[m][p-1][1],tz1,lM+flypts[m][p-1][3]) ;
                     ptsLine[0].push([flypts[m][p][0],flypts[m][p][1],tz,tdt.getTime()/1000-tdt0]);//lM+flypts[m][p][3]]); $$$$$$$$$$$                 
-                    addFeat.push(featurePunkts);
-                    addSegment.push(featureSegment);
+                   // addFeat.push(featurePunkts);
+                  //  addSegment.push(featureSegment);
                     if(zmin2>tz) zmin2=tz;
                     if(zmax2<tz) zmax2=tz;
                 }
@@ -2969,20 +2971,20 @@ function createFlyVectors(id){
              
                  tdt.setTime(tdt.getTime()+10000);
                  
-                 featurePunkts =  getPunkt(flypts[m][nPt-1][0],flypts[m][nPt-1][1],flypts[m][nPt-1][2],lM+flypts[m][nPt-1][3]+pZ[m],tdt,user.id.toString(),flyid,routeid,{ wkid: 4326 }) ;
-                 featureSegment =  getSegment(flypts[m][nPt-1][0],flypts[m][nPt-1][1],flypts[m][nPt-1][2],lM+flypts[m][nPt-1][3]+pZ[m],tdt,user.id.toString(),flyid,routeid,flypts[m][nPt-1][0],flypts[m][nPt-1][1],tz,lM+flypts[m][nPt-1][3]) ;
+                 //featurePunkts =  getPunkt(flypts[m][nPt-1][0],flypts[m][nPt-1][1],flypts[m][nPt-1][2],lM+flypts[m][nPt-1][3]+pZ[m],tdt,user.id.toString(),flyid,routeid,{ wkid: 4326 }) ;
+                 //featureSegment =  getSegment(flypts[m][nPt-1][0],flypts[m][nPt-1][1],flypts[m][nPt-1][2],lM+flypts[m][nPt-1][3]+pZ[m],tdt,user.id.toString(),flyid,routeid,flypts[m][nPt-1][0],flypts[m][nPt-1][1],tz,lM+flypts[m][nPt-1][3]) ;
                  ptsLine[0].push([flypts[m][nPt-1][0],flypts[m][nPt-1][1],flypts[m][nPt-1][2],tdt.getTime()/1000-tdt0]);//lM+flypts[m][nPt-1][3]])$$$$$$$$$$$$$$$
-                 addFeat.push(featurePunkts);
-                 addSegment.push(featureSegment);
+                 //addFeat.push(featurePunkts);
+                 //addSegment.push(featureSegment);
                     
   
                 }
-                lM=lM+flypts[m][nPt-1][3];
+               // lM=lM+flypts[m][nPt-1][3];
   
               }
               
             
-            var param = {
+            /*var param = {
                   addFeatures: addFeat
                 }; 
             punktsLayer
@@ -2994,9 +2996,9 @@ function createFlyVectors(id){
                   alert("punk "+ error.name);
                  alert( error.message);
                 
-              });
+              });*/
              
-              var paramS = {
+              /*var paramS = {
                   addFeatures: addSegment
                 }; 
             segmentLayer
@@ -3008,7 +3010,7 @@ function createFlyVectors(id){
                   alert("seg "+ error.name);
                  alert( error.message);
                 
-              });
+              });*/
   
   
              let sd=new Date(startDat)
@@ -3124,7 +3126,7 @@ function createFlyVectors(id){
   
         
     // Формирование пункта      
-     function getPunkt(x1,y1,z1,m1,dt1,owi,flyi,roi,wk) 
+    /* function getPunkt(x1,y1,z1,m1,dt1,owi,flyi,roi,wk) 
      {
        
       var featurePunkt = new GRAPHIC();
@@ -3148,9 +3150,9 @@ function createFlyVectors(id){
                                                  
   
       return featurePunkt;
-     }
+     }*/
    // Формирование сегмента
-     function getSegment(x1,y1,z1,m1,dt1,owi,flyi,roi,x2,y2,z2,m2) 
+   /*  function getSegment(x1,y1,z1,m1,dt1,owi,flyi,roi,x2,y2,z2,m2) 
      {
        
       var featurePunkt = new GRAPHIC();
@@ -3170,7 +3172,7 @@ function createFlyVectors(id){
                                                  };
   
       return featurePunkt
-     }
+     }*/
     }
   
     function updateRecordFlyghtTable(dat,flid,isNew) {
