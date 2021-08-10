@@ -970,7 +970,7 @@ function changeExtent (geom)
     
     function createRecordRouteTable(tp,nm,functVect) {
       
-      dt= 
+     let dt= 
       //JSON.stringify(
         {"track": {
                        "type": tp,
@@ -1111,7 +1111,7 @@ function changeExtent (geom)
                    var rlob=track.id;
                    var nm=track.name;
                    var kod=track.type;
-                   var dt=track.createdAt.date;
+                   let dt=track.createdAt.date;
                    var numb=track.applicationsNumber;
                    rlb.push(rlob) ; 
                    lst=lst+trackhtml0;
@@ -2751,6 +2751,7 @@ function createFlyVectors(id){
    {
     let paths=[]
     let pts=[]
+
      for (var l=0;l<geoms.length;l++)
      {
      if (geoms[l]!=null) 
@@ -2791,7 +2792,13 @@ function createFlyVectors(id){
      var dl=0;
      var addFeat=[];
      var svetofor=1
-     
+
+     let tdt= new Date(startDat);
+     let tdt0=tdt.getTime()/1000;
+        
+      
+        
+     var ptsLine=[[]]; 
      
    
      for(;;)
@@ -2826,6 +2833,7 @@ function createFlyVectors(id){
        
        
        addFeat.push(featurePunkt);
+       ptsLine[0].push([geom4.points[ind][0],geom4.points[ind][1],geom4.points[ind][2]+200,td.getTime()/1000-tdt0])
        dl=0;
       }
      } 
@@ -2851,6 +2859,36 @@ function createFlyVectors(id){
               });
   
             }
+            sd=new Date(startDat)
+  
+            let lin1=
+             new POLYLINE({
+             hasZ: true,
+             hasM: true,
+             paths: ptsLine,
+             spatialReference: { wkid: 4326 }
+             });
+ 
+             let  flyRout=new GRAPHIC();
+             flyRout.geometry=lin1;
+             flyRout.attributes = {
+                                "ownerid": user.id.toString(),
+                                "sdate": convertTime(sd),
+                                "edate" : convertTime(fdt) ,
+                                "flyid":  flyid,
+                                "routeid" : routeid,
+                                "status" :3
+                                            };
+ 
+              const param2 = {
+                    addFeatures: [flyRout]
+                     };  
+                     
+                  flyVecLayer
+             .applyEdits(param2)
+             .then(function(editsResult) {;});
+
+
     })
   
   // Failed to sample (e.g. service unavailable)
@@ -2869,6 +2907,7 @@ function createFlyVectors(id){
              
         
          let tdt= new Date(startDat);
+         let tdt0=tdt.getTime()/1000;
          let zmin2=9000;
          let zmax2=-500;
             
@@ -2889,7 +2928,7 @@ function createFlyVectors(id){
                  for (let p=0;p<2;p++)
                  {
                     var featurePunkts =  getPunkt(flypts[0][0][0],flypts[0][0][1],tz,lM,tdt,user.id.toString(),flyid,routeid,{ wkid: 4326 }) ;
-                    ptsLine[0].push([flypts[0][0][0],flypts[0][0][1],tz,lM]);          
+                    ptsLine[0].push([flypts[0][0][0],flypts[0][0][1],tz,tdt.getTime()/1000-tdt0]);//lM]);$$$$$$$$$$$          
                     addFeat.push(featurePunkts);
                     tz= pZ[0];
                     tdt.setTime(tdt.getTime()+10000);
@@ -2918,7 +2957,7 @@ function createFlyVectors(id){
                     tz=tz+deltZ;
                     featurePunkts =  getPunkt(flypts[m][p][0],flypts[m][p][1],tz,lM+flypts[m][p][3],tdt,user.id.toString(),flyid,routeid,{ wkid: 4326 }) ;
                     featureSegment =  getSegment(flypts[m][p][0],flypts[m][p][1],tz,lM+flypts[m][p][3],tdt,user.id.toString(),flyid,routeid,flypts[m][p-1][0],flypts[m][p-1][1],tz1,lM+flypts[m][p-1][3]) ;
-                    ptsLine[0].push([flypts[m][p][0],flypts[m][p][1],tz,lM+flypts[m][p][3]]);                 
+                    ptsLine[0].push([flypts[m][p][0],flypts[m][p][1],tz,tdt.getTime()/1000-tdt0]);//lM+flypts[m][p][3]]); $$$$$$$$$$$                 
                     addFeat.push(featurePunkts);
                     addSegment.push(featureSegment);
                     if(zmin2>tz) zmin2=tz;
@@ -2932,7 +2971,7 @@ function createFlyVectors(id){
                  
                  featurePunkts =  getPunkt(flypts[m][nPt-1][0],flypts[m][nPt-1][1],flypts[m][nPt-1][2],lM+flypts[m][nPt-1][3]+pZ[m],tdt,user.id.toString(),flyid,routeid,{ wkid: 4326 }) ;
                  featureSegment =  getSegment(flypts[m][nPt-1][0],flypts[m][nPt-1][1],flypts[m][nPt-1][2],lM+flypts[m][nPt-1][3]+pZ[m],tdt,user.id.toString(),flyid,routeid,flypts[m][nPt-1][0],flypts[m][nPt-1][1],tz,lM+flypts[m][nPt-1][3]) ;
-                 ptsLine[0].push([flypts[m][nPt-1][0],flypts[m][nPt-1][1],flypts[m][nPt-1][2],lM+flypts[m][nPt-1][3]])
+                 ptsLine[0].push([flypts[m][nPt-1][0],flypts[m][nPt-1][1],flypts[m][nPt-1][2],tdt.getTime()/1000-tdt0]);//lM+flypts[m][nPt-1][3]])$$$$$$$$$$$$$$$
                  addFeat.push(featurePunkts);
                  addSegment.push(featureSegment);
                     
@@ -3015,6 +3054,7 @@ function createFlyVectors(id){
   
                })
               .catch(function(error) {
+                  alert("???????") 
                   alert( error.name);
                  alert( error.message);
                 
@@ -3827,7 +3867,7 @@ if(featureSet.features.length>0)
 
 if (checkGeometry.type=="polygon")
 {
-var dt=featureSet.features[0].getAttribute("duration");
+let dt=featureSet.features[0].getAttribute("duration");
 edt.setTime(edt.getTime()+dt*60000)
 }
 if (checkGeometry.type=="polyline")

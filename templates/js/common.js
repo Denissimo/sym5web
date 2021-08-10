@@ -674,16 +674,18 @@ require(
              // punktsBeforLayer.definitionExpression=buildDefinitionBeforQueryPunkts();   !!!!!!!!!!!!!!!!!  
               let ind=-1;
               
-              let dd=new Date(timeSlider.values[0]);
-              dd=dd.getTime()+tmzon*3600000
+              let dd=new Date(timeSlider.values[0]).getTime();
+             
+             //  dd=dd.getTime()+tmzon*3600000$$$$$$$$$$$$$$$$$$$$$$$$
               //let dd2=convertTime(emulpts[0][1]);
               let kf=0.0
+             
               for(let i=0;i<emulpts.length;i++)
               {
                 //let dd3=new Date(emulpts[i][1]);  
                 if(emulpts[i][1]>dd)
                 {
-                 
+             
                   break;
                 }
                  ind=i; 
@@ -781,7 +783,7 @@ require(
                     paths : [dronPath],
                     spatialReference :{wkid:wk}
                   })
-                  console.log(dronLayer.graphics.getItemAt(1).geometry);
+                  //console.log(dronLayer.graphics.getItemAt(1).geometry);
 
                   dronLayer.graphics.getItemAt(0).geometry=gDron; //emulpts[ind][0];
                   dronLayer.graphics.getItemAt(1).geometry=gPath;  

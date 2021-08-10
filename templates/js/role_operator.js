@@ -1015,14 +1015,16 @@ function emulFlight()
             query.outSpatialReference = { wkid: 4326  };
             query.returnGeometry = true;
             query.returnZ= true,
-            query.orderByFields = ["tdate"],
+            query.orderByFields = ["tdate","objectid"],
             query.outFields = [ "*" ];
             
     
             dronLayer.removeAll();  
             emptyArray(emulpts);
             
-            query.returnM =false;
+            //query.returnM =false;
+           /* if (typeFly!=2)             //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+            {
             punktsLayer.queryFeatures(query).then(function(featureSet){
               
               if (featureSet.features.length>0){
@@ -1037,7 +1039,33 @@ function emulFlight()
               setTimeSlider(sd,fd);
               timeSlider.play();
              });
-            
+            }
+            else
+            {*/
+              query.returnM= true;
+              query.orderByFields=["objectid"],
+              routeLayer.queryFeatures(query).then(function(featureSet){
+              
+                if (featureSet.features.length>0){
+                  timeSlider.values=[dt]
+                  for(k=0;k<featureSet.features[0].geometry.paths[0].length;k++)
+                  { 
+                    let pt=new POINT({
+                      x:featureSet.features[0].geometry.paths[0][k][0],
+                      y:featureSet.features[0].geometry.paths[0][k][1],
+                      z:featureSet.features[0].geometry.paths[0][k][2],
+                      spatialReference :{wkid :4326}
+                           });
+
+                    emulpts.push([pt,featureSet.features[0].geometry.paths[0][k][3]*1000+dt.getTime()]);
+                    }
+
+                }
+                setTimeSlider(sd,fd);
+                timeSlider.play();
+               });
+
+            //}
               
               
           
