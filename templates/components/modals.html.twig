@@ -127,29 +127,7 @@
                                     <h6 class="form-title">
                                         Конструкция
                                     </h6>
-
-                                    <div class="col-md-4">
-                                        <div class="form-row">
-                                            <div class="form-input">
-                                                <label class="input-label" for="numberOfEngines">Количество двигателей</label>
-                                                <input type="number" class="form-control" id="numberOfEngines"
-                                                       name="numberOfEngines" placeholder="4">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-row">
-                                            <div class="form-input">
-                                                <label class="input-label" for="engine">Тип двигателя</label>
-                                                <select class="form-select" aria-label="Выберите тип" id="engine" name="engine">
-                                                    {% for engine in engine %}
-                                                        <option value="{{ engine.id }}">{{ engine.name }}</option>
-                                                    {% endfor %}
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
+                                    <div class="col-md-3">
                                         <div class="form-row">
                                             <div class="form-input">
                                                 <label class="input-label" for="controlSystem">Система управления</label>
@@ -158,6 +136,34 @@
                                                     <option class="controlSystemOption" value="2">Радиокомандная</option>
                                                     <option class="controlSystemOption" value="3">Гибридная</option>
                                                 </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-row">
+                                            <div class="form-input">
+                                                <label class="input-label" for="landingSiteLength">Длина взлётной площ.,
+                                                    м</label>
+                                                <input type="text" class="form-control" id="landingSiteLength"
+                                                       name="landingSiteLength">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-row">
+                                            <div class="form-input">
+                                                <label class="input-label" for="landingSiteWidth">Ширина взлётной площ.,
+                                                    м</label>
+                                                <input type="text" class="form-control" id="landingSiteWidth"
+                                                       name="landingSiteWidth">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-row">
+                                            <div class="form-input">
+                                                <label class="input-label" for="responderType">Тип ответчика</label>
+                                                <input type="text" class="form-control" id="responderType" name="responderType">
                                             </div>
                                         </div>
                                     </div>
@@ -212,36 +218,9 @@
 
 
                                 </div>
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="form-row">
-                                            <div class="form-input">
-                                                <label class="input-label" for="landingSiteLength">Длина взлётной площадки,
-                                                    м</label>
-                                                <input type="text" class="form-control" id="landingSiteLength"
-                                                       name="landingSiteLength">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-row">
-                                            <div class="form-input">
-                                                <label class="input-label" for="landingSiteWidth">Ширина взлётной площадки,
-                                                    м</label>
-                                                <input type="text" class="form-control" id="landingSiteWidth"
-                                                       name="landingSiteWidth">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-row">
-                                            <div class="form-input">
-                                                <label class="input-label" for="responderType">Тип ответчика</label>
-                                                <input type="text" class="form-control" id="responderType" name="responderType">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+{#                                {% block modals %}#}
+{#                                    {% include('components/engine_complects.html.twig') %}#}
+{#                                {% endblock %}#}
                             </div>
                         </div>
                         <div class="tab-pane fade" id="registration" role="tabpanel" aria-labelledby="registration-tab">
@@ -407,10 +386,7 @@
                     <button type="submit" class="btn btn-green">Сохранить</button>
                 </div>
             </form>
-
-
         </div>
-
     </div>
 </div>
-</div>
+{#</div>#}

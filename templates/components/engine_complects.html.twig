@@ -1,0 +1,41 @@
+<div class="modal fade" id="modalEngineComplect_{{ aircraftData.aircraft.id }}" data-bs-backdrop="static"
+     data-bs-keyboard="false" tabindex="-1"
+     aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Двигатели БВС</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="container">
+            {% if aircraftData.aircraft.aircraftEngineComplects is defined and aircraftData.aircraft.aircraftEngineComplects|length > 0 %}
+
+
+                {% for engineComplect in aircraftData.aircraft.aircraftEngineComplects %}
+                    <div class="row">
+                        <div class="col-4 offset-3">{{ engineComplect.aircraftEngine.name }}</div>
+                        <div class="col-2">{{ engineComplect.number }}</div>
+                        <div class="col-1">
+                            <button class="btn btn-small btn-outline btn-aircraft-edit"
+                                    id="btn-engine_delete_{{ engineComplect.id }}"><i class="fa fa-trash"
+                                                                                      aria-hidden="true"></i>
+                            </button>
+                        </div>
+                    </div>
+                {% endfor %}
+
+        </div>
+        {% else %}
+            <div class="row">
+                <div class="col-4 offset-3">Двигатели не указаны</div>
+                <div class="col-1">
+                    <button class="btn btn-small btn-outline btn-aircraft-add"><i class="fa fa-plus" aria-hidden="true"></i>
+                    </button>
+                </div>
+            </div>
+        {% endif %}
+        </div>
+    </div>
+
+</div>
+

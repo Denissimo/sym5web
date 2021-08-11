@@ -3,6 +3,7 @@
 namespace App\Api\Content\Aircraft;
 
 use App\Api\Content\AircraftClassificator\AircraftCategoryUnit;
+use App\Api\Content\AircraftClassificator\AircraftEngineComplectUnit;
 use App\Api\Content\AircraftClassificator\AircraftEngineUnit;
 use App\Api\Content\AircraftClassificator\AircraftMassUnit;
 use App\Api\Content\Document\UserDocument;
@@ -155,6 +156,10 @@ class AircraftUnit
     public $engine;
 
     /**
+     * @var AircraftEngineComplectUnit[]
+     */
+    public $aircraftEngineComplects;
+    /**
      * @var AircraftMassUnit
      */
     public $mass;
@@ -203,6 +208,12 @@ class AircraftUnit
         $this->mass = new AircraftMassUnit($aircraft->mass);
         $this->registrationStatus = $aircraft->registrationStatus;
         $this->userDocuments = $this->listUserDocuments($aircraft);
+        $this->aircraftEngineComplects = [];
+        if (is_array($aircraft->aircraftEngineComplects)) {
+            foreach ($aircraft->aircraftEngineComplects as $engineComplect) {
+                $this->aircraftEngineComplects[$engineComplect->id] = new AircraftEngineComplectUnit($engineComplect);
+            }
+        }
     }
 
     /**

@@ -45,6 +45,7 @@
                                     <th>Категория БВС, кг</th>
                                     <th>Статус регистрации</th>
                                     <th></th>
+{#                                    <th></th>#}
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -127,10 +128,19 @@
                                             <button data-bs-toggle="modal" data-bs-target="#modalUav"
                                                     class="btn btn-small btn-outline btn-aircraft-edit"
                                                     id="btn-edit_{{ aircraft.id }}" data-aircraft-id="{{ aircraft.id }}"
-                                                    data-aircraft="{{ aircraft|json_encode() }}"><i class="fa fa-cogs" aria-hidden="true"></i>
+                                                    data-aircraft="{{ aircraft|json_encode() }}"><i class="fa fa-edit" aria-hidden="true"></i>
+                                            </button>
+{#                                        </td>#}
+{#                                        <td>#}
+                                            <button data-bs-toggle="modal" data-bs-target="#modalEngineComplect_{{ aircraft.id }}"
+                                                    class="btn btn-small btn-outline btn-aircraft-edit"
+                                                    id="btn-engine_edit_{{ aircraft.id }}" ><i class="fa fa-cogs" aria-hidden="true"></i>
                                             </button>
                                         </td>
                                     </tr>
+                                    {% set aircraftData = {'aircraft': aircraft} %}
+{#                                    {{ dump(aircraftData.aircraft.id) }}#}
+                                    {% include 'components/engine_complects.html.twig' with aircraftData %}
                                 {% endfor %}
 
                                 </tbody>
