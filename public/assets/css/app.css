@@ -68,6 +68,9 @@
     padding: .5rem
 }
 
+.btn-aircraft-edit{
+    display: inline-block;
+}
 .notification {
     border-radius: 100%;
     display: block;
