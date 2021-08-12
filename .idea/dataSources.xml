@@ -6,14 +6,12 @@
       <synchronize>true</synchronize>
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
       <jdbc-url>jdbc:sqlite:C:\OpenServer\domains\sym5web\public\proxy\proxy.sqlite</jdbc-url>
-      <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
     <data-source source="LOCAL" name="yandex" uuid="25045a56-15f6-4dfc-b043-4aa40cce4a2f">
       <driver-ref>postgresql</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
-      <jdbc-url>jdbc:postgresql://arcpsql.airchannel.net:5432/postgres</jdbc-url>
-      <working-dir>$ProjectFileDir$</working-dir>
+      <jdbc-url>jdbc:postgresql://arcpsql.airchannel.net:5432/utmdata_develop</jdbc-url>
     </data-source>
   </component>
 </project>

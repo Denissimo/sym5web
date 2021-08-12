@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Api\Content\Aircraft\AircraftList;
+use App\Api\Content\Aircraft\AircraftData;
 use App\Service\Client;
 use App\Service\ClientAuth;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -106,7 +106,7 @@ class ContentController extends BaseController
             sprintf('/my/data/aircrafts/%d', $page)
         );
 
-        $aircraftList = new AircraftList($myAircrafts);
+        $aircraftList = new AircraftData($myAircrafts);
 
         return $this->render('uav.html.twig', [
             'user' => $this->user,
@@ -150,66 +150,6 @@ class ContentController extends BaseController
     public function buildTestUserData(Request $request, Client $client, string $tokenCookieName): Response
     {
         return $this->requestAuthorized($request, $client, $tokenCookieName, '/my/userdata');
-    }
-
-    private function requestAuthorized(
-        Request $request,
-        Client $client,
-        string $tokenCookieName,
-        $path,
-        $json = null,
-        $method = 'GET'
-    )
-    {
-        try {
-            $token = $request->cookies->get($tokenCookieName);
-            return $client->sendJson(
-                $path,
-                $json,
-                $method,
-                [
-                    'Authorization' => sprintf(
-                        'Bearer %s',
-                        $token
-                    )
-                ]
-            );
-        } catch (AccessDeniedException $e) {
-//            return $this->redirectToRoute('login');
-
-            return $this->buildError($e);
-        } catch (BadRequestHttpException $e) {
-
-            return $this->buildError($e);
-        } catch (Exception $e) {
-
-            return $this->buildError($e);
-        }
-    }
-
-    private function requestUnauthorized(
-        Client $client,
-        $path,
-        $json = null,
-        $method = 'GET'
-    )
-    {
-        try {
-            return  $client->sendJson(
-                $path,
-                $json,
-                $method
-            );
-        } catch (AccessDeniedException $e) {
-
-            return $this->buildError($e);
-        } catch (BadRequestHttpException $e) {
-
-            return $this->buildError($e);
-        } catch (Exception $e) {
-
-            return $this->buildError($e);
-        }
     }
 
     public function testAuth(Request $request, ClientAuth $client, string $tokenCookieName)
@@ -259,19 +199,7 @@ class ContentController extends BaseController
         ]);
     }
 
-    private function buildError(Throwable $e)
-    {
-        $errorMessage = $e->getMessage();
-        $errorCode = $e->getCode();
 
-//            return $this->redirectToRoute('login');
-        return $this->render('base.html.twig', [
-                'data' => '',
-                'message' => $errorMessage,
-                'code' => $errorCode
-            ]
-        );
-    }
 
     public function buildFormJs(
         Request $request,

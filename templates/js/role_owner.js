@@ -7,6 +7,7 @@ var profil=[];
 var tabName=[];
 var nameRoute;
 var idRoute;
+var idAircraft;
 
 
 
@@ -2447,6 +2448,8 @@ function removeSelectSeg(rid,numb){
 
    function makeNewFlight()
         {
+            idAircraft = $("#aircraftChoice").val();
+
           if(idRoute=="")
           {
             alert("Маршрут не выбран");
@@ -2489,14 +2492,16 @@ function removeSelectSeg(rid,numb){
                 }
               },
               "statusId": 1,
+                "aircraftId": idAircraft,
               "trackId": idRoute//"4c5d793e-fb8d-46cb-b645-613198ebeae0"  
 
             };
             apiNewFlight= apiData(apiUrl, "/application/add", token, 'POST', dat);
       
             apiNewFlight.then(function (response) {
-              
-                 createFlyVectors(response.id);
+                $("#createFlightModalCard").modal("hide");
+
+                createFlyVectors(response.id);
                   
     });
             

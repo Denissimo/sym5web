@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Api\Content\Aircraft\AircraftList;
 use App\Api\Content\User\User;
+use App\Service\Client;
 use Symfony\Component\HttpFoundation\Request;
 
 class ArcgisController extends BaseController
@@ -52,13 +54,23 @@ class ArcgisController extends BaseController
         ]);
     }
 
-    public function buildFlights(Request $request, string $tokenCookieName, string $userdataSessionName)
+    public function buildFlights(Request $request, Client $client, string $tokenCookieName, string $userdataSessionName)
     {
         $this->loadUserData($request, $tokenCookieName, $userdataSessionName);
+
+        $myAircraftList = $this->requestAuthorized(
+            $request,
+            $client,
+            $tokenCookieName,
+            '/my/list/aircrafts'
+        );
+
+        $aircraftList = new AircraftList($myAircraftList);
 
         return $this->render('flights.html.twig', [
             'user' => $this->user,
             'route' => 'Flights',
+            'aircraftList' => $aircraftList->getAircrafts(),
             'use_arcgis' => true
         ]);
     }

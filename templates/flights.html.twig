@@ -19,16 +19,44 @@
         </div>
 
     </main>
-    
+
      <div id="optionsDiv" style="position: absolute; bottom: 17px; width: 100%; padding: 20px 0; z-index: 1;text-align: center;" >
       <button id="refreshFlights" style ="background: white; padding: 7px; border: 1px solid #005e95;  font-size: 0.8em;  margin: 5px; color: #005e95;">Обновить список</button>
-      <button disabled id="createFlight" style ="background: white; padding: 7px; border: 1px solid #005e95;  font-size: 0.8em;  margin: 5px; color: #005e95;">Создать заявку</button>
+      <button  id="createFlightModal"
+              style ="background: white; padding: 7px; border: 1px solid #005e95;  font-size: 0.8em;  margin: 5px; color: #005e95;"
+              data-bs-toggle="modal" data-bs-target="#createFlightModalCard">
+      Создать заявку</button>
       <button disabled id="cancelFlight" style ="background: white; padding: 7px; border: 1px solid #005e95;  font-size: 0.8em;  margin: 5px; color: #005e95;">Отменить заявку</button>
       <button disabled id="resetFlight" style ="background: white; padding: 7px; border: 1px solid #005e95;  font-size: 0.8em;  margin: 5px; color: #005e95;">Восстановить заявку</button>
       <button disabled id="checkFlight" style ="background: white; padding: 7px; border: 1px solid #005e95;  font-size: 0.8em;  margin: 5px; color: #005e95;">Проверка на конфликты</button>
-      
-
     </div>
+    <!-- Modal -->
+    <div class="modal fade" id="createFlightModalCard" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Создание заявки</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <label for="aircraftChoice" class="form-label">Выберите БВС из списка</label>
+                    <select id="aircraftChoice" class="form-select" size="{{ aircraftList|length }}" name="aircraftId" style="height: 200px">
+                        {% set aircrftSelected = " selected" %}
+                        {% for id, aircraft in aircraftList %}
+                            <option{{ aircrftSelected }} value="{{ id }}">{{ aircraft.type ~ " " ~ aircraft.serialNumber ~ " " ~ aircraft.registrationNumber }}</option>
+                        {% set aircrftSelected = "" %}
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                    <button type="button" id="createFlight" class="btn btn-green">Создать заявку</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <div id="optionsDiv3d" style="position: absolute; bottom: 17px; width: 100%; padding: 20px 0; z-index: 1;text-align: center;" >
       <button id="refreshFlights3d" style ="background: white; padding: 7px; border: 1px solid #005e95;  font-size: 0.8em;  margin: 5px; color: #005e95;">Обновить список</button>
       <button disabled id="appFlight" style ="background: white; padding: 7px; border: 1px solid #005e95;  font-size: 0.8em;  margin: 5px; color: #005e95;">Подтвердить заявку</button>
@@ -36,7 +64,7 @@
       <button disabled id="resetFlight3d" style ="background: white; padding: 7px; border: 1px solid #005e95;  font-size: 0.8em;  margin: 5px; color: #005e95;">Восстановить заявку</button>
       <button disabled id="emulFlight" style ="background: white; padding: 7px; border: 1px solid #005e95;  font-size: 0.8em;  margin: 5px; color: #005e95;">Эмуляция полета</button>
       <button disabled id="check3dFlight" style ="background: white; padding: 7px; border: 1px solid #005e95;  font-size: 0.8em;  margin: 5px; color: #005e95;">Проверка на конфликты</button>
-      
+
 
     </div>
 
