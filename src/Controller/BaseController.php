@@ -8,7 +8,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Finder\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Exception;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Throwable;
 
@@ -39,36 +38,40 @@ class BaseController extends AbstractController
         $this->requestStack = $requestStack;
     }
 
-    /**
-     * @param Request $request
-     * @param string $tokenCookieName
-     *
-     * @return $this
-     *
-     * @throws Exception
-     */
     protected function loadUserData(Request $request, string $tokenCookieName, string $userdataSessionName)
     {
-        $session = $this->requestStack->getSession();
-        $userData = $session->get($userdataSessionName);
-        if ($userData) {
+        try {
+            $session = $this->requestStack->getSession();
+            $userData = $session->get($userdataSessionName);
+            if ($userData) {
+                $this->user = new User($userData->user);
+
+                return $this;
+            }
+            $token = $request->cookies->get($tokenCookieName);
+
+
+            $userData = $this->client->sendJson(
+                '/my/userdata',
+                null,
+                'GET',
+                ['Authorization' => sprintf('Bearer %s', $token)]
+            );
+
+            $session->set($userdataSessionName, $userData);
             $this->user = new User($userData->user);
+        } catch (AccessDeniedException $e) {
 
-            return  $this;
+            return false;
+        } catch (BadRequestHttpException $e) {
+
+            return false;
+        } catch (Throwable $e) {
+
+            return false;
         }
-        $token = $request->cookies->get($tokenCookieName);
 
-        $userData = $this->client->sendJson(
-            '/my/userdata',
-            null,
-            'GET',
-            ['Authorization' => sprintf('Bearer %s', $token)]
-        );
-
-        $session->set($userdataSessionName, $userData);
-        $this->user = new User($userData->user);
-
-        return $this;
+        return true;
     }
 
     protected function dropSessionUserData(string $userdataSessionName)
@@ -108,7 +111,7 @@ class BaseController extends AbstractController
         } catch (BadRequestHttpException $e) {
 
             return $this->buildError($e);
-        } catch (Exception $e) {
+        } catch (Throwable $e) {
 
             return $this->buildError($e);
         }
@@ -122,7 +125,7 @@ class BaseController extends AbstractController
     )
     {
         try {
-            return  $client->sendJson(
+            return $client->sendJson(
                 $path,
                 $json,
                 $method
@@ -133,7 +136,7 @@ class BaseController extends AbstractController
         } catch (BadRequestHttpException $e) {
 
             return $this->buildError($e);
-        } catch (Exception $e) {
+        } catch (Throwable $e) {
 
             return $this->buildError($e);
         }
