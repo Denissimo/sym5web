@@ -6,6 +6,7 @@ use App\Api\Content\Aircraft\AircraftList;
 use App\Api\Content\User\User;
 use App\Service\Client;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class ArcgisController extends BaseController
 {
@@ -19,8 +20,8 @@ class ArcgisController extends BaseController
 
     public function buildAirSituation(Request $request, string $tokenCookieName, string $userdataSessionName)
     {
-        $userDataLoaded = $this->loadUserData($request, $tokenCookieName, $userdataSessionName);
-        if (!$userDataLoaded) {
+        $this->loadUserData($request, $tokenCookieName, $userdataSessionName);
+        if ($this->responseCode != Response::HTTP_OK) {
             return $this->redirectToRoute('login');
         }
         return $this->render('airsituation.html.twig', [
@@ -32,8 +33,8 @@ class ArcgisController extends BaseController
 
     public function buildTracks(Request $request, string $tokenCookieName, string $userdataSessionName)
     {
-        $userDataLoaded = $this->loadUserData($request, $tokenCookieName, $userdataSessionName);
-        if (!$userDataLoaded) {
+        $this->loadUserData($request, $tokenCookieName, $userdataSessionName);
+        if ($this->responseCode != Response::HTTP_OK) {
             return $this->redirectToRoute('login');
         }
 
@@ -50,9 +51,10 @@ class ArcgisController extends BaseController
 
     public function buildFlights(Request $request, Client $client, string $tokenCookieName, string $userdataSessionName)
     {
-        $userDataLoaded = $this->loadUserData($request, $tokenCookieName, $userdataSessionName);
-
-
+        $this->loadUserData($request, $tokenCookieName, $userdataSessionName);
+        if ($this->responseCode != Response::HTTP_OK) {
+            return $this->redirectToRoute('login');
+        }
 
         $myAircraftList = $this->requestAuthorized(
             $request,
@@ -60,6 +62,10 @@ class ArcgisController extends BaseController
             $tokenCookieName,
             '/my/list/aircrafts'
         );
+        
+        if ($this->responseCode != Response::HTTP_OK) {
+            return $this->redirectToRoute('login');
+        }
 
         $aircraftList = new AircraftList($myAircraftList);
 
@@ -74,8 +80,8 @@ class ArcgisController extends BaseController
 
     public function buildArchive(Request $request, string $tokenCookieName, string $userdataSessionName)
     {
-        $userDataLoaded = $this->loadUserData($request, $tokenCookieName, $userdataSessionName);
-        if (!$userDataLoaded) {
+        $this->loadUserData($request, $tokenCookieName, $userdataSessionName);
+        if ($this->responseCode != Response::HTTP_OK) {
             return $this->redirectToRoute('login');
         }
 
@@ -94,8 +100,8 @@ class ArcgisController extends BaseController
     )
     {
         $route = $request->query->get('route') ?? self::DEFAULT_ROUTE;
-        $userDataLoaded = $this->loadUserData($request, $tokenCookieName, $userdataSessionName);
-        if (!$userDataLoaded) {
+        $this->loadUserData($request, $tokenCookieName, $userdataSessionName);
+        if ($this->responseCode != Response::HTTP_OK) {
             return $this->redirectToRoute('login');
         }
 

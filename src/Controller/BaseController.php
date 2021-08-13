@@ -6,8 +6,10 @@ use App\Api\Content\User\User;
 use App\Service\Client;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Finder\Exception\AccessDeniedException;
+use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Throwable;
 
@@ -26,6 +28,11 @@ class BaseController extends AbstractController
      * @var Client
      */
     protected $client;
+
+    /**
+     * @var int
+     */
+    protected $responseCode = Response::HTTP_OK;
 
     /**
      * BaseController constructor.
@@ -61,12 +68,15 @@ class BaseController extends AbstractController
             $session->set($userdataSessionName, $userData);
             $this->user = new User($userData->user);
         } catch (AccessDeniedException $e) {
+            $this->responseCode = $e->getCode();
 
             return false;
         } catch (BadRequestHttpException $e) {
+            $this->responseCode = $e->getCode();
 
             return false;
         } catch (Throwable $e) {
+            $this->responseCode = $e->getCode();
 
             return false;
         }
@@ -105,13 +115,15 @@ class BaseController extends AbstractController
                 ]
             );
         } catch (AccessDeniedException $e) {
-//            return $this->redirectToRoute('login');
+            $this->responseCode = $e->getCode();
 
             return $this->buildError($e);
         } catch (BadRequestHttpException $e) {
+            $this->responseCode = $e->getCode();
 
             return $this->buildError($e);
         } catch (Throwable $e) {
+            $this->responseCode = $e->getCode();
 
             return $this->buildError($e);
         }
@@ -131,12 +143,15 @@ class BaseController extends AbstractController
                 $method
             );
         } catch (AccessDeniedException $e) {
+            $this->responseCode = $e->getCode();
 
             return $this->buildError($e);
         } catch (BadRequestHttpException $e) {
+            $this->responseCode = $e->getCode();
 
             return $this->buildError($e);
         } catch (Throwable $e) {
+            $this->responseCode = $e->getCode();
 
             return $this->buildError($e);
         }

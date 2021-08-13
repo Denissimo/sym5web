@@ -50,8 +50,8 @@ class ContentController extends BaseController
 
     public function buildIndex(Request $request, string $tokenCookieName, string $userdataSessionName)
     {
-        $userDataLoaded = $this->loadUserData($request, $tokenCookieName, $userdataSessionName);
-        if (!$userDataLoaded) {
+        $this->loadUserData($request, $tokenCookieName, $userdataSessionName);
+        if ($this->responseCode != Response::HTTP_OK) {
             return $this->redirectToRoute('login');
         }
 
@@ -75,8 +75,8 @@ class ContentController extends BaseController
         int $page
     )
     {
-        $userDataLoaded = $this->loadUserData($request, $tokenCookieName, $userdataSessionName);
-        if (!$userDataLoaded) {
+        $this->loadUserData($request, $tokenCookieName, $userdataSessionName);
+        if ($this->responseCode != Response::HTTP_OK) {
             return $this->redirectToRoute('login');
         }
 
@@ -123,8 +123,8 @@ class ContentController extends BaseController
 
     public function buildProfile(Request $request, string $tokenCookieName, string $userdataSessionName)
     {
-        $userDataLoaded = $this->loadUserData($request, $tokenCookieName, $userdataSessionName);
-        if (!$userDataLoaded) {
+        $this->loadUserData($request, $tokenCookieName, $userdataSessionName);
+        if ($this->responseCode != Response::HTTP_OK) {
             return $this->redirectToRoute('login');
         }
 
