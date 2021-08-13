@@ -2346,9 +2346,12 @@ function removeSelectSeg(rid,numb){
 
    }       
    function eventFlyDetal(event){
-
-    var gld=event.target.id;
-
+    var gld;
+    if(event==null)
+      gld=idFly
+    else
+     gld=event.target.id;
+  //  alert(gld);
     var allApplication = apiData(
       apiUrl,
       '/application/'+gld,
@@ -2420,6 +2423,11 @@ function removeSelectSeg(rid,numb){
   
      function detalFlyght (detalLayer,reg,tp,response,fid) { 
 
+      const flighthtml2 ='<span class="uav-item-row uav-item-date-start"><span class="uav-item-desc">Старт</span>';
+      const flighthtml2_2 ='</span>\
+       <span class="uav-item-row uav-item-date-start"><span class="uav-item-desc">Финиш</span>';
+      const flighthtml2_3='</span>'; 
+
       const flighthtml3_1 ='<span class="uav-item-row uav-item-flight" id="'
       
       const flighthtml3_2='"><span class="uav-item-desc">Рег.номер БВС</span>';
@@ -2432,7 +2440,17 @@ function removeSelectSeg(rid,numb){
       if (reg)
        {
          
-         lst=flighthtml3_1+"F"+response.id+flighthtml3_2+response.user.user.firstname+flighthtml3_3;
+        let sdat=response.application.start.date; //ftfSet.features[i].getAttribute("startdate");
+        let  fdat=response.application.finish.date;//ftfSet.features[i].getAttribute("finishdate");
+         
+       
+        lst=lst+flighthtml2;
+        lst=lst+sdat;
+        lst=lst+flighthtml2_2;
+        lst=lst+fdat;     
+        lst=lst+flighthtml2_3;       
+
+         lst=lst+flighthtml3_1+"F"+response.id+flighthtml3_2+response.user.user.firstname+flighthtml3_3;
          
        }
        
@@ -2448,8 +2466,14 @@ function removeSelectSeg(rid,numb){
 
    function makeNewFlight()
         {
-            idAircraft = $("#aircraftChoice").val();
-
+          var ted=new Date();
+          if (ted>sdt)
+          {
+            alert("Неверное время  старта ");
+            return; 
+          }
+           idAircraft = $("#aircraftChoice").val();
+            
           if(idRoute=="")
           {
             alert("Маршрут не выбран");
@@ -2460,12 +2484,7 @@ function removeSelectSeg(rid,numb){
          
           tp=$.cookie("typeRoute");
           typeFly=$.cookie("typeRoute");
-          var ted=new Date();
-          if (ted>sdt)
-          {
-            alert("Неверное время  старта ");
-            return; 
-          }
+          
 
                   idFly="";            // новый полет
           
@@ -2492,7 +2511,7 @@ function removeSelectSeg(rid,numb){
                 }
               },
               "statusId": 1,
-                "aircraftId": idAircraft,
+              "aircraftId": idAircraft,
               "trackId": idRoute//"4c5d793e-fb8d-46cb-b645-613198ebeae0"  
 
             };
@@ -3122,6 +3141,11 @@ function createFlyVectors(id){
                  }
                  document.getElementById("uav-realtimelist").innerHTML=lst;
                  addFlyEvent();
+
+                // if(idFly!=null && idFly!="" )  // getRouteRecord(viewRid,evRouteDetal);
+                //    eventFlyDetal(null); 
+                //else 
+                //  buttonDisabled();
                  
  
               }
@@ -3149,10 +3173,10 @@ function createFlyVectors(id){
               lst=lst+flighthtml1_1;
               lst=lst+flighthtml2;
               lst=lst+nm;
-              lst=lst+flighthtml3;
+            /*  lst=lst+flighthtml3;
               lst=lst+sdat;
               lst=lst+flighthtml3_2;
-              lst=lst+fdat;
+              lst=lst+fdat;*/      //$$$$$$$$$$$$$$$$$$$$                          
               lst=lst+flighthtml4;
               lst=lst+"R"+glob;
               lst=lst+flighthtml4_2;

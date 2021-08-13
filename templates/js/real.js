@@ -15,6 +15,19 @@ function addReal(FeatureLayer,LabelClass,Geoprocessor,scene,isOwner){
           ],
         },
       });
+      const realLabelClass2d = new LabelClass({
+        labelExpressionInfo: {
+          expression:
+            "$feature.boardNumber+TextFormatting.NewLine +'Скорость :'+ $feature.Speed+TextFormatting.NewLine +'Высота :'+ $feature.Altitude+TextFormatting.NewLine +'Курс :'+ $feature.Heading",
+             },
+        symbol: {
+                    
+              type: "text", // autocasts as new TextSymbol3DLayer()
+              color: [255, 0, 0] ,
+              size: 12 // points
+            
+        },
+      });
       var templateReal = {
         // autocasts as new PopupTemplate()
         title: "{BoardNumber}",
@@ -59,20 +72,35 @@ function addReal(FeatureLayer,LabelClass,Geoprocessor,scene,isOwner){
      url: gpUrl
      });      
      
-    var realLayer ;
+     
+      
+    
     if (isOwner)  
     {
+      realAllLayer =new FeatureLayer({
+        url:"https://abr-gis-server.airchannel.net/airchannel/rest/services/Hosted/AllFlightReal/FeatureServer/0",
+        popupTemplate: templateReal,
+        labelingInfo: [realLabelClass2d]
+       // renderer:selectSymbol.realMarkerRenderer
+      }); 
     realLayer= new FeatureLayer({
        url: "https://abr-gis-server.airchannel.net/airchannel/rest/services/Hosted/TruckLastBJTime/FeatureServer",
        popupTemplate: templateReal,
        title: "Выполняющиеся полеты",
-       spatialReference : {wkid :4326},
-       labelingInfo: [realLabelClass]
+       //add.spatialReference : {wkid :4326},
+       labelingInfo: [realLabelClass2d]
         //350000}//,
        });
+       
       }
       else
       {
+        realAllLayer =new FeatureLayer({
+          url:"https://abr-gis-server.airchannel.net/airchannel/rest/services/Hosted/AllFlightReal/FeatureServer/0",
+          labelingInfo: [realLabelClass],
+          popupTemplate: templateReal,
+          renderer:selectSymbol.realMarkerRenderer
+        });
         realLayer= new FeatureLayer({
            url: "https://abr-gis-server.airchannel.net/airchannel/rest/services/Hosted/TruckLastBJTime/FeatureServer",
            popupTemplate: templateReal,
@@ -82,18 +110,24 @@ function addReal(FeatureLayer,LabelClass,Geoprocessor,scene,isOwner){
            mode: "relative-to-ground",   
             }, //350000}//,
            });
+        //   scene.layers.add(realLayer);
           }
+     scene.layers.add(realAllLayer);  
+    realAllLayer.definitionExpression=buildDefinitionQueryReal();      
    scene.layers.add(realLayer);
    
-   return realLayer;
+   
 }  
 function refreshRealLayer(FeatureLayer,scene,tit,isOwner)
 {  var lays=[];
+  
    getLayersByTitle(FeatureLayer,scene.allLayers,[tit] ,lays);
+   
    let realLay=lays[0];
-   let url=realLay.url;
    let templateReal=realLay.popupTemplate;
-   let labInfo=realLay.labelingInfo[0];
+   let labInfo=realLay.labelingInfo[0]; 
+   console.log(realLay);
+   let url=realLay.url;
    
    let title=realLay.title;
    var newRealLayer;
@@ -104,12 +138,13 @@ function refreshRealLayer(FeatureLayer,scene,tit,isOwner)
       popupTemplate:templateReal,
       title : title,
       labelingInfo:[labInfo],
-      spatialReference : {wkid :4326},
+      //spatialReference : {wkid :4326},
       useTimeView : false 
 
    })}
    else
    {
+    
     newRealLayer=new FeatureLayer({
     url:url,
     popupTemplate:templateReal,
@@ -123,7 +158,7 @@ function refreshRealLayer(FeatureLayer,scene,tit,isOwner)
    scene.remove(realLay);
    scene.layers.add(newRealLayer);
    makeRealFlyght(newRealLayer); 
-   
+   scene.layers.reorder(realAllLayer, scene.layers.length);
 
 }
 function makeRealFlyght(realLayer)
@@ -135,7 +170,7 @@ function makeRealFlyght(realLayer)
           outFields: ["*"],
         })
         .then(function(featureSet) {
-          console.log(featureSet.features.length);  
+          //console.log(featureSet.features.length);  
           makeListRealFlyght(featureSet.features);
 
          });
@@ -274,7 +309,7 @@ function makeListRealFlyght(feats)
         bth2s=(bth2.toString()).replaceAll(',', ' ');
         bths=bths+bth2s+" 00 00 ";
         data=data+" fe "+bth4[0]+" "+trIds+" 00 4c "+bths+"cc cc"
-        console.log(data);
+        
         return data
 
          function bytesToHexString(bytes){
@@ -324,6 +359,19 @@ function makeListRealFlyght(feats)
 
       }                          
 
-         
+      function buildDefinitionQueryReal()/*timeSlider)*/ {   // показывать точки полетов в суточном интервале от установленной даты
+    
+        let et=timeSlider.timeExtent.end.getTime();
+        let st=timeSlider.timeExtent.start.getTime();
+        let ett= new Date(et); ett.setDate(ett.getDate()+1)
+        let stt= new Date(st); stt.setDate(stt.getDate()-1)
+        
+        let startDt=convertTime(stt);//st;
+        let endDt=convertTime(ett);//et
+        console.log(startDt);
+        console.log(endDt);
+        let defQuery ="EndTime >= timestamp'"+ startDt+"' And EndTime <= timestamp'"+endDt+ "'";
+       return defQuery;
+     }    
         
 
