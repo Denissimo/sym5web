@@ -19,13 +19,10 @@ class ArcgisController extends BaseController
 
     public function buildAirSituation(Request $request, string $tokenCookieName, string $userdataSessionName)
     {
-        $cookieChecker = $request->cookies->get($tokenCookieName);
-
-        if (!$cookieChecker) {
+        $userDataLoaded = $this->loadUserData($request, $tokenCookieName, $userdataSessionName);
+        if (!$userDataLoaded) {
             return $this->redirectToRoute('login');
         }
-        $this->loadUserData($request, $tokenCookieName, $userdataSessionName);
-
         return $this->render('airsituation.html.twig', [
             'user' => $this->user,
             'route' => 'AirSituation',
@@ -35,13 +32,10 @@ class ArcgisController extends BaseController
 
     public function buildTracks(Request $request, string $tokenCookieName, string $userdataSessionName)
     {
-        $cookieChecker = $request->cookies->get($tokenCookieName);
-
-        if (!$cookieChecker) {
+        $userDataLoaded = $this->loadUserData($request, $tokenCookieName, $userdataSessionName);
+        if (!$userDataLoaded) {
             return $this->redirectToRoute('login');
         }
-
-        $this->loadUserData($request, $tokenCookieName, $userdataSessionName);
 
         if ($this->user->hasRole(User::ROLE_OPERATOR)) {
             return $this->redirectToRoute('index');
@@ -56,7 +50,9 @@ class ArcgisController extends BaseController
 
     public function buildFlights(Request $request, Client $client, string $tokenCookieName, string $userdataSessionName)
     {
-        $this->loadUserData($request, $tokenCookieName, $userdataSessionName);
+        $userDataLoaded = $this->loadUserData($request, $tokenCookieName, $userdataSessionName);
+
+
 
         $myAircraftList = $this->requestAuthorized(
             $request,
@@ -78,7 +74,10 @@ class ArcgisController extends BaseController
 
     public function buildArchive(Request $request, string $tokenCookieName, string $userdataSessionName)
     {
-        $this->loadUserData($request, $tokenCookieName, $userdataSessionName);
+        $userDataLoaded = $this->loadUserData($request, $tokenCookieName, $userdataSessionName);
+        if (!$userDataLoaded) {
+            return $this->redirectToRoute('login');
+        }
 
         return $this->render('archive.html.twig', [
             'user' => $this->user,
@@ -95,7 +94,10 @@ class ArcgisController extends BaseController
     )
     {
         $route = $request->query->get('route') ?? self::DEFAULT_ROUTE;
-        $this->loadUserData($request, $tokenCookieName, $userdataSessionName);
+        $userDataLoaded = $this->loadUserData($request, $tokenCookieName, $userdataSessionName);
+        if (!$userDataLoaded) {
+            return $this->redirectToRoute('login');
+        }
 
         $response = $this->render('js/script.html.twig', [
             'user' => $this->user,

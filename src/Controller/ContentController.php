@@ -50,7 +50,10 @@ class ContentController extends BaseController
 
     public function buildIndex(Request $request, string $tokenCookieName, string $userdataSessionName)
     {
-        $this->loadUserData($request, $tokenCookieName, $userdataSessionName);
+        $userDataLoaded = $this->loadUserData($request, $tokenCookieName, $userdataSessionName);
+        if (!$userDataLoaded) {
+            return $this->redirectToRoute('login');
+        }
 
         return $this->render('index.html.twig', [
             'user' => $this->user,
@@ -72,10 +75,8 @@ class ContentController extends BaseController
         int $page
     )
     {
-        $cookieChecker = $request->cookies->get($tokenCookieName);
-        $this->loadUserData($request, $tokenCookieName, $userdataSessionName);
-
-        if (!$cookieChecker) {
+        $userDataLoaded = $this->loadUserData($request, $tokenCookieName, $userdataSessionName);
+        if (!$userDataLoaded) {
             return $this->redirectToRoute('login');
         }
 
@@ -122,7 +123,10 @@ class ContentController extends BaseController
 
     public function buildProfile(Request $request, string $tokenCookieName, string $userdataSessionName)
     {
-        $this->loadUserData($request, $tokenCookieName, $userdataSessionName);
+        $userDataLoaded = $this->loadUserData($request, $tokenCookieName, $userdataSessionName);
+        if (!$userDataLoaded) {
+            return $this->redirectToRoute('login');
+        }
 
         return $this->render('profile.html.twig', [
             'user' => $this->user,
