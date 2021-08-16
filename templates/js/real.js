@@ -1,4 +1,41 @@
+var flightsBoard=[];
 function addReal(FeatureLayer,LabelClass,Geoprocessor,scene,isOwner){
+
+    var stt= new Date();
+                
+    var stDt=convertTime(stt);
+    let d=new Date();
+    d.setDate(d.getDate() - 1);
+    let d2=new Date();
+    d2.setDate(d2.getDate() + 1);
+    let m1=String(d.getMonth() + 1).padStart(2, '0');
+    let day1 = String(d.getDate()).padStart(2, '0');
+    let m2=String(d2.getMonth() + 1).padStart(2, '0');
+    let day2 = String(d2.getDate()).padStart(2, '0');
+  
+    stara=(d.getFullYear()).toString()+m1+day1+"000000";
+    enda=(d2.getFullYear()).toString()+m2+day2+"000000"; 
+    console.log(stara);
+    console.log(enda);
+  var     lst="";
+  apiIntervalFlights= apiData(apiUrl, "/application/interval/"+stara+"/"+enda, token);
+  
+  apiIntervalFlights.then(function (response) {
+       
+    for (let i=0;i<response.applications.length;i++) {   
+                 
+      if(response.applications[i].application.start.date >= stDt)
+        if(response.applications[i].status.id ==4 ||response.applications[i].status.id ==7)
+
+          flightsBoard.pop([response.applications[i].id,response.applications[i].aircraft.id,response.applications[i].application.start,response.applications[i].application.finish]);
+
+        ;
+    }
+  });
+
+
+
+
     const realLabelClass = new LabelClass({
         labelExpressionInfo: {
           expression:
@@ -73,10 +110,17 @@ function addReal(FeatureLayer,LabelClass,Geoprocessor,scene,isOwner){
      });      
      
      
-      
+     let servicePath =
+     "https://abr-gis-server.airchannel.net/airchannel/rest/services/Dev/VectorDevelop2/FeatureServer/";
+      servicePath = "https://abr-gis-server.airchannel.net/airchannel/rest/services/Dev/VectorDevelop/FeatureServer/";
+    
+     let sourceFlyghtZone = servicePath + "5";  
     
     if (isOwner)  
     {
+      servicePath = "https://abr-gis-server.airchannel.net/airchannel/rest/services/Dev/VectorDevelop/FeatureServer/";
+      sourceFlyghtZone = servicePath + "5";
+
       realAllLayer =new FeatureLayer({
         url:"https://abr-gis-server.airchannel.net/airchannel/rest/services/Hosted/AllFlightReal/FeatureServer/0",
         popupTemplate: templateReal,
@@ -112,12 +156,32 @@ function addReal(FeatureLayer,LabelClass,Geoprocessor,scene,isOwner){
            });
         //   scene.layers.add(realLayer);
           }
+
      scene.layers.add(realAllLayer);  
     realAllLayer.definitionExpression=buildDefinitionQueryReal();      
    scene.layers.add(realLayer);
    
-   
+   flyZoneLayer = new FeatureLayer({
+    title: "Зона текущего полета",  
+    url: sourceFlyghtZone,
+    outFields: ["*"],
+    renderer: selectSymbol.unicumRendererZone,
+    definitionExpression :"objectid < 0",
+    popupTemplate :templatesPopup.templateZoneFly,
+    elevationInfo: {
+      mode: "on-the-ground",
+    },
+    hasZ:true,
+    returnZ: true
+      });
+
+   scene.layers.add(flyZoneLayer);
+    
+   window.setInterval(realPath, 20000);   
 }  
+
+
+
 function refreshRealLayer(FeatureLayer,scene,tit,isOwner)
 {  var lays=[];
   
@@ -166,6 +230,7 @@ function makeRealFlyght(realLayer)
         
         realLayer.queryFeatures({
           where : "",
+          
           returnGeometry: true,
           outFields: ["*"],
         })
@@ -363,7 +428,7 @@ function makeListRealFlyght(feats)
     
         let et=timeSlider.timeExtent.end.getTime();
         let st=timeSlider.timeExtent.start.getTime();
-        let ett= new Date(et); ett.setDate(ett.getDate()+1)
+        let ett= new Date();// ett.setDate(ett.getDate()+1)
         let stt= new Date(st); stt.setDate(stt.getDate()-1)
         
         let startDt=convertTime(stt);//st;
@@ -373,5 +438,93 @@ function makeListRealFlyght(feats)
         let defQuery ="EndTime >= timestamp'"+ startDt+"' And EndTime <= timestamp'"+endDt+ "'";
        return defQuery;
      }    
-        
+     
+     function buildDefinitionQueryPlan()/*timeSlider)*/ {
+     defExp ="objectid < 0 "
+     for (let i=0;i<flightsBoard.length;i++)
+     defExp=defExp+" Or flyid = '"+flightsBoard[i][1]+"'";
+     return defExp;
+     }
+     function realPath()
+     {
+       realAllLayer.queryFeatures({ where : buildDefinitionQueryReal(),
+       returnGeometry: true,
+       //returnZ : true,
+       orderByFields : ["BoardNumber","objectid"],
+       outFields: ["BoardNumber","objectid","Altitude"]}).then(function(featureSet) {
+         if (featureSet.features.length>0){ 
+         makeGeometryRealFlyght(featureSet.features);
+         flyZoneLayer.definitionExpression=(buildDefinitionQueryPlan);
+         }
+        });;
+     
+     
+     
+     
+     }
+     
+     function makeGeometryRealFlyght(feats)
+     {
+       bufferLayer.graphics.removeAll();
+       let name="";
+         
+       let paths=[];
+       let names=[];
+       let dt0;
+       let pth=[];
+       for (let i=0;i<=feats.length;i++)
+       {
+         if (name=="")
+         {
+            
+           name=getFlyhtByBoard(feats[i].getAttribute("BoardNumber"),feats[i].getAttribute("CreateTime"));
+           z=feats[i].getAttribute("Altitude");
+           dt=0;
+           dt0=feats[i].getAttribute("CreateTime").getTime()/1000;            
+           pth.push([[feats[i].geometry.x,feats[i].geometry.y,z],dt]);
+         }
+         else
+         
+          if (name==getFlyhtByBoard(feats[i].getAttribute("BoardNumber"),feats[i].getAttribute("CreateTime")))
+            {
+            dt=feats[i].getAttribute("CreateTime").getTime()/1000 -dt0;
+             pth.push([[feats[i].geometry.xfeats[i].geometry.y,feats[i].geometry.z],dt]);
+            }
+          else
+           { 
+           paths.push([pth,name]);   
+           name=getFlyhtByBoard(feats[i].getAttribute("BoardNumber"),feats[i].getAttribute("CreateTime"));
+           let lin=new POLYLINE({
+             paths :[pth],
+             spatialReference :{wkid:4326}
+           });
+           let gg= new GRAPHIC({
+             geometry : lin,
+             symbol : selectSymbol.lineSymbol
+           })
+           bufferLayer.add(gg);
+           emptyArray(pth);
+           }
+       }
 
+           bufferLayer.add(gg);
+           emptyArray(pth);
+
+     
+     
+     
+     }
+     
+     function getFlyhtByBoard(bid,btime){
+     
+              for (let i=0;i<flightsBoard.length;i++)
+              { 
+                tm1=flightsBoard[i][2].date;
+                tm2=flightsBoard[i][2].date;
+                if (bid==flightsBoard[i][1] && tm1<=btime && tm2>=btime )
+                   return flightsBoard[i][0];
+              }
+              return "unknow";
+     
+     }
+     

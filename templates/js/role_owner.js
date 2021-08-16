@@ -2499,7 +2499,7 @@ function removeSelectSeg(rid,numb){
 //формирование заявки
             
             
-            
+            console.log(idAircraft);
             let dat =
             
             {
