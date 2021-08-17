@@ -1,8 +1,8 @@
-var flightsBoard=[];
+var flightsBoard;
 function addReal(FeatureLayer,LabelClass,Geoprocessor,scene,isOwner){
 
     var stt= new Date();
-                
+     stt.setTime(stt.getTime()-800000000);            
     var stDt=convertTime(stt);
     let d=new Date();
     d.setDate(d.getDate() - 1);
@@ -22,15 +22,22 @@ function addReal(FeatureLayer,LabelClass,Geoprocessor,scene,isOwner){
   
   apiIntervalFlights.then(function (response) {
        
+    flightsBoard=[];
     for (let i=0;i<response.applications.length;i++) {   
                  
       if(response.applications[i].application.start.date >= stDt)
+      {
+        
         if(response.applications[i].status.id ==4 ||response.applications[i].status.id ==7)
-
-          flightsBoard.pop([response.applications[i].id,response.applications[i].aircraft.id,response.applications[i].application.start,response.applications[i].application.finish]);
-
-        ;
+         {
+           
+          flightsBoard.push([response.applications[i].id,response.applications[i].aircraft.id,response.applications[i].application.start,response.applications[i].application.finish]);
+         } 
+        
+      }
+    
     }
+   // console.log(flightsBoard);
   });
 
 
@@ -166,15 +173,16 @@ function addReal(FeatureLayer,LabelClass,Geoprocessor,scene,isOwner){
     url: sourceFlyghtZone,
     outFields: ["*"],
     renderer: selectSymbol.unicumRendererZone,
-    definitionExpression :"objectid < 0",
-    popupTemplate :templatesPopup.templateZoneFly,
+    
+    definitionExpression:"objectid < 0",
+    //popupTemplate :templatesPopup.templateZoneFly,
     elevationInfo: {
       mode: "on-the-ground",
     },
     hasZ:true,
     returnZ: true
       });
-
+      flyZoneLayer.definitionExpression="objectid <0" ;
    scene.layers.add(flyZoneLayer);
     
    window.setInterval(realPath, 20000);   
@@ -424,37 +432,51 @@ function makeListRealFlyght(feats)
 
       }                          
 
-      function buildDefinitionQueryReal()/*timeSlider)*/ {   // показывать точки полетов в суточном интервале от установленной даты
-    
-        let et=timeSlider.timeExtent.end.getTime();
-        let st=timeSlider.timeExtent.start.getTime();
-        let ett= new Date();// ett.setDate(ett.getDate()+1)
-        let stt= new Date(st); stt.setDate(stt.getDate()-1)
-        
-        let startDt=convertTime(stt);//st;
-        let endDt=convertTime(ett);//et
-        console.log(startDt);
-        console.log(endDt);
-        let defQuery ="EndTime >= timestamp'"+ startDt+"' And EndTime <= timestamp'"+endDt+ "'";
-       return defQuery;
-     }    
      
-     function buildDefinitionQueryPlan()/*timeSlider)*/ {
-     defExp ="objectid < 0 "
-     for (let i=0;i<flightsBoard.length;i++)
-     defExp=defExp+" Or flyid = '"+flightsBoard[i][1]+"'";
+     function buildDefinitionQueryReal()/*timeSlider)*/ {   // показывать точки полетов в суточном интервале от установленной даты
+    
+      let et=timeSlider.timeExtent.end.getTime();
+      let st=timeSlider.timeExtent.start.getTime();
+      let ett= new Date(); ett.setTime(ett.getTime()+10000)
+      let stt= new Date(st); stt.setTime(ett.getTime()-3600000)
+      
+      let startDt=convertTime(stt);//st;
+      let endDt=convertTime(ett);//et
+     // console.log(startDt);
+     // console.log(endDt);
+      let defQuery ="CreateTime >= timestamp'"+ startDt+"' And CreateTime <= timestamp'"+endDt+ "'";
+     return defQuery;
+   }
+   
+
+
+
+     function buildDefinitionQueryPlan(paths)/*timeSlider)*/ {
+     let defExp ="objectid < 0";
+     let exx=[];
+    // exx.push(defExp); 
+     if (paths==null) return defExp;
+     let ss=defExp;
+     for (let i=0;i<paths.length;i++)
+       exx.push("flyid = '"+paths[i][1]+"'");
+      //ss=ss+" Or flyid = '"+paths[i][1]+"'";
+     defExp=exx.join(' Or '); 
+     defExp="flyid = "+paths[i][1]+"'";
      return defExp;
      }
      function realPath()
      {
+       realAllLayer.definitionExpression=buildDefinitionQueryReal();
        realAllLayer.queryFeatures({ where : buildDefinitionQueryReal(),
        returnGeometry: true,
        //returnZ : true,
        orderByFields : ["BoardNumber","objectid"],
-       outFields: ["BoardNumber","objectid","Altitude"]}).then(function(featureSet) {
+       outFields: ["BoardNumber","objectid","Altitude","CreateTime"]}).then(function(featureSet) {
+        // console.log(featureSet.features.length);
          if (featureSet.features.length>0){ 
          makeGeometryRealFlyght(featureSet.features);
-         flyZoneLayer.definitionExpression=(buildDefinitionQueryPlan);
+         flyZoneLayer.definitionExpression=buildDefinitionQueryPlan(null);
+         //console.log(flyZoneLayer.definitionExpression);
          }
         });;
      
@@ -472,7 +494,8 @@ function makeListRealFlyght(feats)
        let names=[];
        let dt0;
        let pth=[];
-       for (let i=0;i<=feats.length;i++)
+       console.log(feats.length);
+       for (let i=0;i<feats.length;i++)
        {
          if (name=="")
          {
@@ -480,34 +503,50 @@ function makeListRealFlyght(feats)
            name=getFlyhtByBoard(feats[i].getAttribute("BoardNumber"),feats[i].getAttribute("CreateTime"));
            z=feats[i].getAttribute("Altitude");
            dt=0;
-           dt0=feats[i].getAttribute("CreateTime").getTime()/1000;            
-           pth.push([[feats[i].geometry.x,feats[i].geometry.y,z],dt]);
+           dt0=feats[i].getAttribute("CreateTime")/1000;            
+           pth.push([feats[i].geometry.x,feats[i].geometry.y,z,dt]);
+           paths.push([pth,name]);
          }
          else
          
           if (name==getFlyhtByBoard(feats[i].getAttribute("BoardNumber"),feats[i].getAttribute("CreateTime")))
             {
-            dt=feats[i].getAttribute("CreateTime").getTime()/1000 -dt0;
-             pth.push([[feats[i].geometry.xfeats[i].geometry.y,feats[i].geometry.z],dt]);
+            z=feats[i].getAttribute("Altitude");  
+            dt=feats[i].getAttribute("CreateTime")/1000 -dt0;
+            pth.push([feats[i].geometry.x,feats[i].geometry.y,z,dt]);
+            
+            
             }
           else
            { 
-           paths.push([pth,name]);   
+            
+              
            name=getFlyhtByBoard(feats[i].getAttribute("BoardNumber"),feats[i].getAttribute("CreateTime"));
+           paths.push([pth,name]);
            let lin=new POLYLINE({
              paths :[pth],
              spatialReference :{wkid:4326}
            });
            let gg= new GRAPHIC({
              geometry : lin,
-             symbol : selectSymbol.lineSymbol
+             symbol : selectSymbol.lineSymbolPigg
            })
            bufferLayer.add(gg);
            emptyArray(pth);
            }
        }
-
+        console.log(pth.length);
+        lin=new POLYLINE({
+        paths :[pth],
+        spatialReference :{wkid:4326}
+      });
+       gg= new GRAPHIC({
+        geometry : lin,
+        symbol : selectSymbol.lineSymbolPigg
+       });
            bufferLayer.add(gg);
+           flyZoneLayer.definitionExpression=buildDefinitionQueryPlan(paths);
+           console.log(flyZoneLayer.definitionExpression);
            emptyArray(pth);
 
      
@@ -516,13 +555,20 @@ function makeListRealFlyght(feats)
      }
      
      function getFlyhtByBoard(bid,btime){
-     
+         
+     //console.log(flightsBoard);
               for (let i=0;i<flightsBoard.length;i++)
               { 
+     
                 tm1=flightsBoard[i][2].date;
-                tm2=flightsBoard[i][2].date;
-                if (bid==flightsBoard[i][1] && tm1<=btime && tm2>=btime )
+                tm2=flightsBoard[i][3].date;
+     
+                let tm=convertTime(new Date(btime+3600000*3));
+                if (bid==flightsBoard[i][1] && tm1<=tm && tm2>=tm )
+                 {
+     
                    return flightsBoard[i][0];
+                  }
               }
               return "unknow";
      

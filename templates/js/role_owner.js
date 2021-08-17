@@ -2672,7 +2672,7 @@ function createFlyVectors(id){
               if (dd<2000)
               {
                  
-                 rf.push(10-dd);    
+                 rf.push(-10);    
               }
               else 
                while (dd-2000>0)
@@ -2687,11 +2687,13 @@ function createFlyVectors(id){
               
              
               var bufferIn=[];
-              var bufferI
+              var bufferI;
               for (let j=0;j<rf.length;j++)
               {
+                //alert(rf[j])
                 bufferI =
                  GEOMETRYENGINE.geodesicBuffer(pol,rf[j], "meters");
+                //alert(1111); 
                  bufferIn.push(bufferI);
                  
               }

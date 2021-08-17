@@ -23,6 +23,11 @@
       }
       
     };
+    static lineSymbolPigg = {
+      type: "simple-line", // autocasts as SimpleLineSymbol()
+      color: [255, 0, 197],
+      width: 2
+     };  
   static lineSymbol =
        {
         type: "simple-line",
@@ -49,6 +54,24 @@
   }
 
  }
+
+ static realMarkerRenderer = {
+  type: "simple",
+  symbol: {
+
+    type: "simple-marker", // autocasts as SimpleLineSymbol()
+    color: [255, 0, 0],
+    style : "circle",
+    outline: {  // autocasts as new SimpleLineSymbol()
+      color: [ 0,255, 0 ],
+      width: 2
+       }
+    
+ }
+};   
+
+
+
 
  static lineSymbolIntersect =
  {
