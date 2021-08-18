@@ -23,6 +23,16 @@
       }
       
     };
+    static fillSymbolGreen = {
+      type: "simple-fill", // autocasts as SimpleLineSymbol()
+      color: [0, 256, 0],
+      style : "cross",
+      outline: {  // autocasts as new SimpleLineSymbol()
+        color: [ 128,128, 128 ],
+        width: 2
+      }
+      
+    };
     static lineSymbolPigg = {
       type: "simple-line", // autocasts as SimpleLineSymbol()
       color: [255, 0, 197],

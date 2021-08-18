@@ -32,6 +32,7 @@ function addReal(FeatureLayer,LabelClass,Geoprocessor,scene,isOwner){
          {
            
           flightsBoard.push([response.applications[i].id,response.applications[i].aircraft.id,response.applications[i].application.start,response.applications[i].application.finish]);
+          addFlyZone(response.applications[i].id,flightsBoard.length-1);
          } 
         
       }
@@ -150,12 +151,13 @@ function addReal(FeatureLayer,LabelClass,Geoprocessor,scene,isOwner){
           url:"https://abr-gis-server.airchannel.net/airchannel/rest/services/Hosted/AllFlightReal/FeatureServer/0",
           labelingInfo: [realLabelClass],
           popupTemplate: templateReal,
+          title: "Выполняющиеся полеты",
           renderer:selectSymbol.realMarkerRenderer
         });
         realLayer= new FeatureLayer({
            url: "https://abr-gis-server.airchannel.net/airchannel/rest/services/Hosted/TruckLastBJTime/FeatureServer",
            popupTemplate: templateReal,
-           title: "Выполняющиеся полеты",
+           title: "Текущее местоположеение",
            labelingInfo: [realLabelClass],
            elevationInfo: {
            mode: "relative-to-ground",   
@@ -183,7 +185,8 @@ function addReal(FeatureLayer,LabelClass,Geoprocessor,scene,isOwner){
     returnZ: true
       });
       flyZoneLayer.definitionExpression="objectid <0" ;
-   scene.layers.add(flyZoneLayer);
+      bufferLayer.title="Текущие полеты";
+  // scene.layers.add(flyZoneLayer);
     
    window.setInterval(realPath, 20000);   
 }  
@@ -438,7 +441,7 @@ function makeListRealFlyght(feats)
       let et=timeSlider.timeExtent.end.getTime();
       let st=timeSlider.timeExtent.start.getTime();
       let ett= new Date(); ett.setTime(ett.getTime()+10000)
-      let stt= new Date(st); stt.setTime(ett.getTime()-3600000)
+      let stt= new Date(st); stt.setTime(ett.getTime()-1800000)
       
       let startDt=convertTime(stt);//st;
       let endDt=convertTime(ett);//et
@@ -489,27 +492,30 @@ function makeListRealFlyght(feats)
      {
        bufferLayer.graphics.removeAll();
        let name="";
-         
+       let zon=null;  
        let paths=[];
        let names=[];
        let dt0;
        let pth=[];
-       console.log(feats.length);
+       //console.log(feats.length);
        for (let i=0;i<feats.length;i++)
        {
          if (name=="")
          {
             
-           name=getFlyhtByBoard(feats[i].getAttribute("BoardNumber"),feats[i].getAttribute("CreateTime"));
+           el=getFlyhtByBoard(feats[i].getAttribute("BoardNumber"),feats[i].getAttribute("CreateTime"));
+           name=el[0];
+           zon=el[4];
            z=feats[i].getAttribute("Altitude");
            dt=0;
            dt0=feats[i].getAttribute("CreateTime")/1000;            
            pth.push([feats[i].geometry.x,feats[i].geometry.y,z,dt]);
            paths.push([pth,name]);
+           
          }
          else
          
-          if (name==getFlyhtByBoard(feats[i].getAttribute("BoardNumber"),feats[i].getAttribute("CreateTime")))
+          if (name==getFlyhtByBoard(feats[i].getAttribute("BoardNumber"),feats[i].getAttribute("CreateTime"))[0])
             {
             z=feats[i].getAttribute("Altitude");  
             dt=feats[i].getAttribute("CreateTime")/1000 -dt0;
@@ -520,8 +526,10 @@ function makeListRealFlyght(feats)
           else
            { 
             
-              
-           name=getFlyhtByBoard(feats[i].getAttribute("BoardNumber"),feats[i].getAttribute("CreateTime"));
+           //console.log("name = "+ name);   
+           el=getFlyhtByBoard(feats[i].getAttribute("BoardNumber"),feats[i].getAttribute("CreateTime"));
+           name=el[0];
+           zon=el[4];
            paths.push([pth,name]);
            let lin=new POLYLINE({
              paths :[pth],
@@ -532,10 +540,23 @@ function makeListRealFlyght(feats)
              symbol : selectSymbol.lineSymbolPigg
            })
            bufferLayer.add(gg);
+           if (zon!=null)
+            bufferLayer.add(zon);
+
+         //   console.log("!!   "+pth.length); 
            emptyArray(pth);
+
+           dt=0;
+           dt0=feats[i].getAttribute("CreateTime")/1000;            
+           pth.push([feats[i].geometry.x,feats[i].geometry.y,z,dt]);
+           paths.push([pth,name]);
+
            }
        }
-        console.log(pth.length);
+        
+       // console.log("??  "+pth.length);
+       // console.log("name = "+ name);   
+       // console.log(zon);
         lin=new POLYLINE({
         paths :[pth],
         spatialReference :{wkid:4326}
@@ -545,8 +566,9 @@ function makeListRealFlyght(feats)
         symbol : selectSymbol.lineSymbolPigg
        });
            bufferLayer.add(gg);
-           flyZoneLayer.definitionExpression=buildDefinitionQueryPlan(paths);
-           console.log(flyZoneLayer.definitionExpression);
+           if (zon!=null)
+            bufferLayer.add(zon);
+          
            emptyArray(pth);
 
      
@@ -567,10 +589,35 @@ function makeListRealFlyght(feats)
                 if (bid==flightsBoard[i][1] && tm1<=tm && tm2>=tm )
                  {
      
-                   return flightsBoard[i][0];
+                   return flightsBoard[i];
                   }
               }
-              return "unknow";
+              return ["unknow","",null,null,null];
      
      }
-     
+     function addFlyZone(fid,ind)
+     {
+      console.log("Zone "+fid); 
+      flyZoneLayer.queryFeatures({ where : "flyid = '"+fid+"'",
+        returnGeometry: true,
+        returnZ : true,
+        outFields: ["*"]}).then(function(featureSet) {
+           console.log("Zone "+featureSet.features.length);
+          if (featureSet.features.length>0){ 
+          let gr =new GRAPHIC({
+                geometry: featureSet.features[0].geometry,
+                attributes :featureSet.features[0].attributes,
+                spatialReference :{wkid:4326},
+                symbol:selectSymbol.fillSymbolGreen,
+                popupTemplate : templatesPopup.templateZoneFly
+          }); 
+          
+          flightsBoard[ind].push(gr);
+
+          }
+         });
+
+
+
+
+     }
