@@ -62,15 +62,22 @@
     margin-right: 6px
 }
 
+.form-item-icon {
+    border-radius: 16px;
+    border: #b1c908 1px solid;
+
+}
+
 .btn.uav-btn-more {
     border: 1px solid #e7eaf3;
     font-size: .8rem;
     padding: .5rem
 }
 
-.btn-aircraft-edit{
+.btn-aircraft-edit {
     display: inline-block;
 }
+
 .notification {
     border-radius: 100%;
     display: block;
@@ -151,6 +158,12 @@
 
 .nav-tabs .nav-link.active {
     border-bottom: 2px solid #b1c908
+}
+
+a.active {
+    border: 2px solid #b1c908;
+    border-radius: 5px;
+    background: #e0f5af;
 }
 
 .badge {
@@ -481,7 +494,7 @@
     border-radius: 0;
     flex: 0;
     font-size: .8rem;
-    margin-right: .2rem;
+    /*margin-right: .2rem;*/
     margin-top: .1rem;
     white-space: nowrap
 }
@@ -822,14 +835,22 @@ img {
     font-size: .8rem
 }
 
-.label_invisible{
+.label_invisible {
     display: none;
 }
-.footer-alert{
+
+.footer-alert {
     position: absolute;
     width: 40%;
     top: 300px;
-    left:30%;
+    left: 30%;
 }
 
+.form-container-rounded {
+    border: #A0A0A0 1px solid;
+    border-radius: 5px;
+    -webkit-box-shadow: 7px 7px 5px 0px rgba(50, 50, 50, 0.25);
+    -moz-box-shadow: 7px 7px 5px 0px rgba(50, 50, 50, 0.25);
+    box-shadow: 7px 7px 5px 0px rgba(50, 50, 50, 0.25);
+}
 

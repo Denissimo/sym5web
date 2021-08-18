@@ -1,0 +1,241 @@
+<!-- Steps UAV -->
+<div class="row">
+        <div class="col-8 offset-2">
+            <div class="row m-3">
+                <div class="col-12 form-container-rounded">
+                    <nav class="navbar navbar-expand-md navbar-light bg-light rounded-3 mt-2 mb-2">
+                        <div class="container-fluid">
+                            <a class="navbar-brand" href="#">
+                                <img src="/assets/images/icon__drone.svg" alt="" class="form-item-icon">
+                            </a>
+                            <div class="collapse navbar-collapse justify-content-md-center">
+                                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                                    <li class="nav-item">
+                                        <a class="nav-link{% if step == 'basic' %} active{% endif %}" aria-current="page" href="/edit/uav/{{ aircraftId }}/basic">Основные сведения</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link{% if step == 'construction' %} active{% endif %}" href="/edit/uav/{{ aircraftId }}/construction">Конструкция</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link{% if step == 'engines' %} active{% endif %}" href="/edit/uav/{{ aircraftId }}/engines">Двигатели</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link{% if step == 'registration' %} active{% endif %}" href="/edit/uav/{{ aircraftId }}/registration">Регистрация</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link{% if step == 'insurance' %} active{% endif %}" href="/edit/uav/{{ aircraftId }}/insurance">Страховка</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link{% if step == 'trackers' %} active{% endif %}" href="/edit/uav/{{ aircraftId }}/trackers">Трекеры</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link{% if step == 'doсuments' %} active{% endif %}" href="/edit/uav/{{ aircraftId }}/doсuments">Документы</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </nav>
+                    <form action="/" method="post">
+                        {% if step == 'basic' %}
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-row">
+                                        <div class="form-input">
+                                            <label class="input-label" for="type">Наименование (тип) *</label>
+                                            <input type="text" class="form-control" id="type" name="type"
+                                                   placeholder="Беспилотник" required>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-row">
+                                        <div class="form-input">
+                                            <label class="input-label" for="manufacturer">Изготовитель БВС</label>
+                                            <input type="text" class="form-control" id="manufacturer"
+                                                   name="manufacturer"
+                                                   placeholder="Cобственная сборка">
+                                            {# <p class="form-desc">Для самостоятельно собранных БВС, указывается «собственная сборка»</p> #}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="form-row">
+                                        <div class="form-input">
+                                            <label class="input-label" for="serialNumber">Серийный номер *</label>
+                                            <input type="text" class="form-control" id="serialNumber"
+                                                   name="serialNumber" required>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+
+                                <div class="col-md-6">
+                                    <div class="form-row">
+                                        <div class="form-input">
+                                            <label class="input-label" for="category">Катекгория</label>
+                                            <select class="form-select" aria-label="Выберите тип" id="category"
+                                                    name="category">
+                                                 {% for category in category %}
+                                                 <option value="{{ category.id }}">{{ category.name }}</option>
+                                                 {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="form-row">
+                                        <div class="form-input">
+                                            <label class="input-label" for="takeoffMass">Макс. взлетная масса, кг
+                                                *</label>
+                                            <input type="text" class="form-control" id="takeoffMass"
+                                                   name="takeoffMass" required>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="form-row form-column">
+                                        <div class="form-input">
+                                            <label class="input-label" for="maxWeight">Категория БВС (Масса)</label>
+                                        </div>
+                                         {% for mass in mass %}
+                                         <div class="label_invisible mass_category_label mt-2"
+                                         data-mass-id="{{ mass.id }}" data-mass-min="{{ mass.massMin }}"
+                                         data-mass-max="{{ mass.massMax }}" id="labelMass{{ mass.id }}">
+                                         {{ mass.name }}
+                                         </div>
+                                         {% endfor %}
+                                        <input type="hidden" name="mass" id="mass" value="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-row">
+                                        <div class="form-input">
+                                            <label class="input-label" for="otherParams">Прочие параметры</label>
+                                            <input type="text" class="form-control" id="otherParams"
+                                                   name="otherParams">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% elseif step == 'construction' %}
+                            <div class="row">
+                                <h6 class="form-title">
+                                    Конструкция
+                                </h6>
+                                <div class="col-md-3">
+                                    <div class="form-row">
+                                        <div class="form-input">
+                                            <label class="input-label" for="controlSystem">Система управления</label>
+                                            <select class="form-select" aria-label="Выберите систему" id="controlSystem" name="controlSystem">
+                                                <option class="controlSystemOption" value="1">Программная</option>
+                                                <option class="controlSystemOption" value="2">Радиокомандная</option>
+                                                <option class="controlSystemOption" value="3">Гибридная</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-row">
+                                        <div class="form-input">
+                                            <label class="input-label" for="landingSiteLength">Длина взлётной площ.,
+                                                м</label>
+                                            <input type="text" class="form-control" id="landingSiteLength"
+                                                   name="landingSiteLength">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-row">
+                                        <div class="form-input">
+                                            <label class="input-label" for="landingSiteWidth">Ширина взлётной площ.,
+                                                м</label>
+                                            <input type="text" class="form-control" id="landingSiteWidth"
+                                                   name="landingSiteWidth">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-row">
+                                        <div class="form-input">
+                                            <label class="input-label" for="responderType">Тип ответчика</label>
+                                            <input type="text" class="form-control" id="responderType" name="responderType">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-row form-column">
+                                        <div class="form-input">
+                                            <label class="input-label" for="categoryUav">Тип каналов
+                                                связи/управления</label>
+                                        </div>
+{#                                        {% for channelKey, channelName in aircrafts.loadChannels %}#}
+{#                                            <div class="form-check form-switch">#}
+{#                                                <input class="form-check-input channel" type="checkbox"#}
+{#                                                       id="channel_{{ channelKey }}"#}
+{#                                                       name="channels" data-channel-id="{{ channelKey }}">#}
+{#                                                <label class="form-check-label"#}
+{#                                                       for="channel_{{ channelKey }}">{{ channelName }}</label>#}
+{#                                            </div>#}
+{#                                        {% endfor %}#}
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-row form-column">
+                                        <div class="form-input">
+                                            <label class="input-label" for="categoryUav">Особенности запуска</label>
+                                        </div>
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="isHandStart"
+                                                   name="isHandStart">
+                                            <label class="form-check-label" for="isHandStart">Запуск с рук</label>
+                                        </div>
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="isVerticalStart"
+                                                   name="isVerticalStart">
+                                            <label class="form-check-label" for="isVerticalStart">Вертикальный взлёт</label>
+                                        </div>
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="isCatapultStart"
+                                                   name="isCatapultStart">
+                                            <label class="form-check-label" for="isCatapultStart">Катапультный старт</label>
+                                        </div>
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="isParachuteLanding"
+                                                   name="isParachuteLanding">
+                                            <label class="form-check-label" for="isParachuteLanding">Посадка на
+                                                парашюте</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        {% elseif step == 'engines' %}
+                            <p>value is "engines"</p>
+                        {% elseif step == 'registration' %}
+                            <p>value is "registration"</p>
+                        {% elseif step == 'insurance' %}
+                            <p>value is "insurance"</p>
+                        {% elseif step == 'trackers' %}
+                            <p>value is "trackers"</p>
+                        {% elseif step == 'doсuments' %}
+                            <p>value is "doсuments"</p>
+                        {% endif %}
+                        <div class="input-group mb-3">
+                            <button type="submit" class="btn btn-green">Сохранить</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+</div>
+{# </div> #}

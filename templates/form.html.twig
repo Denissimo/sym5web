@@ -1,0 +1,20 @@
+{% block styles %}
+    {% include('header.html.twig') %}
+{% endblock %}
+
+
+    {% block content %}
+        <div class="container-fluid">
+            {% include('nav.html.twig') %}
+        </div>
+    {% endblock %}
+    {% block modals %}
+        <div class="container-fluid">
+            {% include('components/form_uav.html.twig') %}
+        </div>
+    {% endblock %}
+
+
+    {% block footer %}
+        {% include('footer.html.twig') %}
+    {% endblock %}

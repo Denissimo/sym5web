@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Api\Content\Aircraft\AircraftClassifierData;
 use App\Api\Content\Aircraft\AircraftData;
 use App\Service\Client;
 use App\Service\ClientAuth;
@@ -225,5 +226,70 @@ class ContentController extends BaseController
         $response->headers->set('Content-Type', 'text/plain');
 
         return $response;
+    }
+
+    public function buildEditForm(
+        Request $request,
+        Client $client,
+        string $tokenCookieName,
+        string $userdataSessionName,
+        string $aircraftId,
+        string $step
+    )
+    {
+        $this->loadUserData($request, $tokenCookieName, $userdataSessionName);
+        if ($this->responseCode != Response::HTTP_OK) {
+            return $this->redirectToRoute('login');
+        }
+        $route = $request->query->get('route') ?? ArcgisController::DEFAULT_ROUTE;
+
+        $aircrafClassifiers = $this->requestUnauthorized(
+            $client,
+            '/classifiers/aircraft/'
+        );
+        $aircrafClassifiersData = new AircraftClassifierData(
+            $aircrafClassifiers->category,
+            $aircrafClassifiers->engine,
+            $aircrafClassifiers->mass,
+            $aircrafClassifiers->statuses
+        );
+
+        $response = $this->render('form.html.twig', [
+            'user' => $this->user,
+            'route' => $route,
+            'category' => $aircrafClassifiersData->getCategory(),
+            'engine' => $aircrafClassifiersData->getEngine(),
+            'mass' => $aircrafClassifiersData->getMass(),
+            'statuses' => $aircrafClassifiersData->getStatuses(),
+            'token_cookie_name' => $tokenCookieName,
+            'aircraftId' => $aircraftId,
+            'step' => $step,
+            'use_arcgis' => false
+        ]);
+
+        return $response;
+    }
+
+    private function loadCommonAircraftData(Client $client)
+    {
+        $aircraftCategory = $this->requestUnauthorized(
+            $client,
+            '/classifiers/aircraft_category/'
+        );
+
+        $aircraftEngine = $this->requestUnauthorized(
+            $client,
+            '/classifiers/aircraft_engine/'
+        );
+
+        $aircraftMass = $this->requestUnauthorized(
+            $client,
+            '/classifiers/aircraft_mass/'
+        );
+
+        $aircraftStatuses = $this->requestUnauthorized(
+            $client,
+            '/classifiers/aircraft_status/'
+        );
     }
 }
