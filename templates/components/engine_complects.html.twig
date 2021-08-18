@@ -8,32 +8,29 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="container">
-            {% if aircraftData.aircraft.aircraftEngineComplects is defined and aircraftData.aircraft.aircraftEngineComplects|length > 0 %}
-
-
-                {% for engineComplect in aircraftData.aircraft.aircraftEngineComplects %}
+                {% if aircraftData.aircraft.engineTypes is defined and aircraftData.aircraft.engineTypes|length > 0 %}
+                {% for engineType in aircraftData.aircraft.engineTypes %}
+                    {% set fieldId = "engine_aircraft_" ~ aircraftData.aircraft.id ~ "_type_" ~ engineType.id %}
                     <div class="row">
-                        <div class="col-4 offset-3">{{ engineComplect.aircraftEngine.name }}</div>
-                        <div class="col-2">{{ engineComplect.number }}</div>
-                        <div class="col-1">
-                            <button class="btn btn-small btn-outline btn-aircraft-edit"
-                                    id="btn-engine_delete_{{ engineComplect.id }}"><i class="fa fa-trash"
-                                                                                      aria-hidden="true"></i>
-                            </button>
+                        <div class="col-6 offset-2">
+                            <label for="{{ fieldId }}" class="col-form-label">{{ engineType.name }}</label>
                         </div>
+                        <div class="col-1">
+                            <input type="text" id="{{ fieldId }}" class="form-control" value="{{ engineType.number }}">
+                        </div>
+{#                        <div class="col-4 offset-3">{{ engineType.name }}</div>#}
+{#                        <div class="col-2">{{ engineType.number }}</div>#}
+{#                        <div class="col-1">#}
+{#                            <button class="btn btn-small btn-outline btn-aircraft-edit"#}
+{#                                    id="btn-engine_delete_{{ engineType.id }}"><i class="fa fa-trash"#}
+{#                                                                                  aria-hidden="true"></i>#}
+{#                            </button>#}
+{#                        </div>#}
                     </div>
                 {% endfor %}
 
-        </div>
-        {% else %}
-            <div class="row">
-                <div class="col-4 offset-3">Двигатели не указаны</div>
-                <div class="col-1">
-                    <button class="btn btn-small btn-outline btn-aircraft-add"><i class="fa fa-plus" aria-hidden="true"></i>
-                    </button>
-                </div>
             </div>
-        {% endif %}
+            {% endif %}
         </div>
     </div>
 

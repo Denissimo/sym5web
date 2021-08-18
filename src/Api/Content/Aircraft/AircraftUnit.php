@@ -4,6 +4,7 @@ namespace App\Api\Content\Aircraft;
 
 use App\Api\Content\AircraftClassificator\AircraftCategoryUnit;
 use App\Api\Content\AircraftClassificator\AircraftEngineComplectUnit;
+use App\Api\Content\AircraftClassificator\AircraftEngineTypeUnit;
 use App\Api\Content\AircraftClassificator\AircraftEngineUnit;
 use App\Api\Content\AircraftClassificator\AircraftMassUnit;
 use App\Api\Content\Document\UserDocument;
@@ -156,6 +157,11 @@ class AircraftUnit
     public $engine;
 
     /**
+     * @var AircraftEngineTypeUnit[]
+     */
+    public $engineTypes;
+
+    /**
      * @var AircraftEngineComplectUnit[]
      */
     public $aircraftEngineComplects;
@@ -205,10 +211,17 @@ class AircraftUnit
         $this->airchannelId = $aircraft->airchannelId ?? null;
         $this->category = new AircraftCategoryUnit($aircraft->category);
         $this->engine = new AircraftEngineUnit($aircraft->engine);
+        $this->engine = new AircraftEngineUnit($aircraft->engine);
         $this->mass = new AircraftMassUnit($aircraft->mass);
         $this->registrationStatus = $aircraft->registrationStatus;
         $this->userDocuments = $this->listUserDocuments($aircraft);
+        $this->engineTypes = [];
         $this->aircraftEngineComplects = [];
+        if (is_array($aircraft->engineTypes)) {
+            foreach ($aircraft->engineTypes as $engineType) {
+                $this->engineTypes[$engineType->id] = new AircraftEngineTypeUnit($engineType);
+            }
+        }
         if (is_array($aircraft->aircraftEngineComplects)) {
             foreach ($aircraft->aircraftEngineComplects as $engineComplect) {
                 $this->aircraftEngineComplects[$engineComplect->id] = new AircraftEngineComplectUnit($engineComplect);
