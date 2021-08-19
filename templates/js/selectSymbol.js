@@ -68,13 +68,13 @@
  static realMarkerRenderer = {
   type: "simple",
   symbol: {
-
+    size :3, 
     type: "simple-marker", // autocasts as SimpleLineSymbol()
     color: [255, 0, 0],
     style : "circle",
     outline: {  // autocasts as new SimpleLineSymbol()
       color: [ 0,255, 0 ],
-      width: 2
+      width: 1
        }
     
  }

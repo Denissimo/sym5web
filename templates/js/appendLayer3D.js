@@ -131,11 +131,27 @@ function addLayers3D(FeatureLayer,scene)
     name: "drone_active",
   };
 
+  const statArcade = document.getElementById("status-dict").text;
+  const realLabelClassZone = new LABELCLASS({
+    labelExpressionInfo: {
+      expression: "$feature.status"
+         },
+    symbol: {
+                
+          type: "text", // autocasts as new TextSymbol3DLayer()
+          color: [255, 0, 0] ,
+          size: 20 // points
+        
+    },
+  }); 
+ 
+
 
   flyZoneLayer = new FeatureLayer({
     title: "Зоны заявок",  
     url: sourceFlyghtZone,
     outFields: ["*"],
+  //  labelingInfo: [realLabelClassZone],
     renderer: selectSymbol.unicumRendererZone,
     popupTemplate :templatesPopup.templateZoneFly,
     elevationInfo: {

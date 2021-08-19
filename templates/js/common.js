@@ -17,6 +17,7 @@ var GEOMETRYENGINE;
 var QUERY;
 var FEATUREFILTER;
 var GRAPHICSLAYER;
+var LABELCLASS
 
 var flyType;
 var timeSlider;
@@ -137,7 +138,7 @@ require(
         PROJECTION=projection;
         FEATUREFILTER=FeatureFilter;
         GRAPHICSLAYER = GraphicsLayer;
-
+        LABELCLASS=LabelClass;  
         console.log(route);
         console.log(roles);
         console.log(user); 
@@ -499,7 +500,7 @@ require(
 
             {
                 
-               addReal(FeatureLayer,LabelClass,Geoprocessor,scene,checkRoleRoute("ROLE_OWNER",roles));
+              addReal(FeatureLayer,LabelClass,Geoprocessor,scene,checkRoleRoute("ROLE_OWNER",roles));
               makeRealFlyght(realLayer);
               var realTitle=realLayer.title;
              

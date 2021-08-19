@@ -256,7 +256,7 @@ function getUserFly()
           
           const flighthtml3_2='"><span class="uav-item-desc">Рег.номер БВС</span>';
           
-          
+          const flighthtml3_4='<span class="uav-item-desc">Пользователь</span>';
           const flighthtml3_3='</span>'; 
       
           let lst="";
@@ -271,8 +271,13 @@ function getUserFly()
             lst=lst+sdat;
             lst=lst+flighthtml2_2;
             lst=lst+fdat;     
-             lst=lst+flighthtml2_3;
-             lst=lst+flighthtml3_1+"F"+response.id+flighthtml3_2+response.user.user.firstname+flighthtml3_3;
+            lst=lst+flighthtml2_3;
+            let rnumb="unknow";
+         if ( response.aircraft!= null)
+                rnumb= response.aircraft.serialNumber;
+         if (rnumb==null) rnumb="unknow";
+         lst=lst+flighthtml3_1+"F"+response.id+flighthtml3_2+rnumb;//
+         lst=lst+flighthtml3_4+ response.user.user.username+flighthtml3_3;
              
            }
           

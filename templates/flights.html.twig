@@ -6,6 +6,15 @@
     {% include('nav.html.twig') %}
 {% endblock %}
 
+<script type="text/plain" id="status-dict">
+      var DEG = $feature.STATUS;
+      var DIR = When(DEG == "3", "На подтверждении",
+        DEG == "4", "Подтвержден",
+        DEG == "5", "Отклонен",
+        DEG == "6", "Отменен" ); 
+      
+      return DIR;
+    </script>
 <div class="page page-map">
 
     <main class="map-container" id="map-operator">

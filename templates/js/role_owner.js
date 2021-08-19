@@ -2439,7 +2439,7 @@ function removeSelectSeg(rid,numb){
 
       const flighthtml3_1 ='<span class="uav-item-row uav-item-flight" id="'
       
-      const flighthtml3_2='"><span class="uav-item-desc">Рег.номер БВС</span>';
+      const flighthtml3_2='"><span class="uav-item-desc">Сер.номер БВС</span>';
       
       
       const flighthtml3_3='</span>'; 
@@ -2458,8 +2458,12 @@ function removeSelectSeg(rid,numb){
         lst=lst+flighthtml2_2;
         lst=lst+fdat;     
         lst=lst+flighthtml2_3;       
-
-         lst=lst+flighthtml3_1+"F"+response.id+flighthtml3_2+response.user.user.firstname+flighthtml3_3;
+        console.log(response);
+        let rnumb="unknow";
+        if ( response.aircraft!= null)
+                rnumb= response.aircraft.serialNumber;
+        if (rnumb==null) rnumb="unknow";
+         lst=lst+flighthtml3_1+"F"+response.id+flighthtml3_2+rnumb+flighthtml3_3;;//response.user.user.firstname+flighthtml3_3;
          
        }
        
@@ -2942,11 +2946,11 @@ function createFlyVectors(id){
                for (let p=1;p<nPt;p++)
                  {
        
-                   var  delt=(flypts[m][p][3]-flypts[m][p-1][3])/(pSpeed[m]/3600);
+                   var  delt=(flypts[m][p][3]-flypts[m][p-1][3])/(pSpeed[m]/3600); //delt в миллисек.
                   // alert(flypts[m][p][3]+"!!!");
                   // alert(flypts[m][p-1][3]+"???");
                    var deltZ=(flypts[m][p][3]-flypts[m][p-1][3])*dzm;
-                    tdt.setTime(tdt.getTime()+delt*1000);
+                    tdt.setTime(tdt.getTime()+delt);
                    
                    tz1=tz;
                     tz=tz+deltZ;
