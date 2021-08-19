@@ -59,7 +59,7 @@
                                     {% else %}
                                         {% set registrationName = 'Unknown' %}
                                     {% endif %}
-                                    <tr>
+                                    <tr data-aircraft="{{ aircraft|json_encode() }}" id="tr_{{ aircraft.id }}">
                                         <td>
                                             {% if aircraft.userDocuments[0].uploadDocuments[0] is defined and aircraft.userDocuments[0].uploadDocuments[0] is not empty %}
                                                 {% set doc = aircraft.userDocuments[0].uploadDocuments[0] %}
@@ -128,12 +128,12 @@
                                             <button data-bs-toggle="modal" data-bs-target="#modalUav"
                                                     class="btn btn-small btn-outline btn-aircraft-edit"
                                                     id="btn-edit_{{ aircraft.id }}" data-aircraft-id="{{ aircraft.id }}"
-                                                    data-aircraft="{{ aircraft|json_encode() }}"><i class="fa fa-edit" aria-hidden="true"></i>
+                                                    ><i class="fa fa-edit" aria-hidden="true"></i>
                                             </button>
 {#                                        </td>#}
 {#                                        <td>#}
                                             <button data-bs-toggle="modal" data-bs-target="#modalEngineComplect_{{ aircraft.id }}"
-                                                    class="btn btn-small btn-outline btn-aircraft-edit"
+                                                    class="btn btn-small btn-outline btn-aircraft-edit" data-aircraft-id="{{ aircraft.id }}"
                                                     id="btn-engine_edit_{{ aircraft.id }}" ><i class="fa fa-cogs" aria-hidden="true"></i>
                                             </button>
                                         </td>

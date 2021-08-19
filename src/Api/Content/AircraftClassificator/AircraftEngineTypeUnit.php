@@ -12,6 +12,11 @@ class AircraftEngineTypeUnit
     public $id;
 
     /**
+     * @var int
+     */
+    public $complectId;
+
+    /**
      * @var string
      */
     public $name;
@@ -25,7 +30,6 @@ class AircraftEngineTypeUnit
      */
     public $number;
 
-
     /**
      * AircraftEngine constructor.
      *
@@ -37,5 +41,6 @@ class AircraftEngineTypeUnit
         $this->name = $engine->name;
         $this->shortName = $engine->shortName;
         $this->number = $engine->number;
+        $this->complectId = $engine->complectId;
     }
 }
