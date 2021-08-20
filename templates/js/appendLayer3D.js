@@ -131,7 +131,7 @@ function addLayers3D(FeatureLayer,scene)
     name: "drone_active",
   };
 
-  const statArcade = document.getElementById("status-dict").text;
+  
   const realLabelClassZone = new LABELCLASS({
     labelExpressionInfo: {
       expression: "$feature.status"
@@ -151,7 +151,7 @@ function addLayers3D(FeatureLayer,scene)
     title: "Зоны заявок",  
     url: sourceFlyghtZone,
     outFields: ["*"],
-  //  labelingInfo: [realLabelClassZone],
+    labelingInfo: [realLabelClassZone],
     renderer: selectSymbol.unicumRendererZone,
     popupTemplate :templatesPopup.templateZoneFly,
     elevationInfo: {

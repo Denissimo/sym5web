@@ -1,5 +1,6 @@
 var flightsBoard;
 var glids;
+var idRealDet;
 function addReal(FeatureLayer,LabelClass,Geoprocessor,scene,isOwner){
 
     var stt= new Date();
@@ -18,7 +19,8 @@ function addReal(FeatureLayer,LabelClass,Geoprocessor,scene,isOwner){
     enda=(d2.getFullYear()).toString()+m2+day2+"000000"; 
     console.log(stara);
     console.log(enda);
-  var     lst="";
+     idRealDet  ="";
+
   apiIntervalFlights= apiData(apiUrl, "/application/interval/"+stara+"/"+enda, token);
   
   apiIntervalFlights.then(function (response) {
@@ -33,14 +35,14 @@ function addReal(FeatureLayer,LabelClass,Geoprocessor,scene,isOwner){
         if(response.applications[i].status.id ==4 ||response.applications[i].status.id ==7)
          {
            
-          flightsBoard.push([response.applications[i].id,response.applications[i].aircraft.id,response.applications[i].application.start,response.applications[i].application.finish]);
+          flightsBoard.push([response.applications[i]]);//[response.applications[i].id,response.applications[i].aircraft.id,response.applications[i].application.start,response.applications[i].application.finish]);
           addFlyZone(response.applications[i].id,flightsBoard.length-1);
          } 
         
       }
     
     }
-   // console.log(flightsBoard);
+   
   });
 
 
@@ -283,14 +285,10 @@ function makeListRealFlyght(feats)
           <button class="btn uav-btn-more" id="';
           
           const flightrealhtml0_1_1='">Подробнее</button>\
-        </div>\
-        <div class="uav-item-body">\
-          <span class="uav-item-row uav-item-flight"><span class="uav-item-desc" id="';  
-          const flightrealhtml0_2 ='">Номер полета</span>';
-          const flightrealhtml1 ='</span>\
-          <span class="uav-item-row uav-item-date-start"><span class="uav-item-desc">Дата начала полета</span>14.12.2020 16:30</span>\
-          <span class="uav-item-row uav-item-date-end"><span class="uav-item-desc">Дата окончания полета</span>14.12.2020 16:30</span>\
-        </div>\
+           </div>  <div class="uav-item-body" id="';
+          const flightrealhtml0_1_2='">'
+          
+        const flightrealhtml1 ='</div>\
         <div class="uav-item-footer">\
           <button class="btn btn-uav-small">Стоп</button>\
           <button class="btn btn-uav-small" id="';
@@ -310,7 +308,7 @@ function makeListRealFlyght(feats)
            {
 
              panRealFlyght(feats[i]);
-             console.log(glids);
+             
           }
           document.getElementById("uav-realtimelist").innerHTML=lst;
 
@@ -326,13 +324,15 @@ function makeListRealFlyght(feats)
               lst=lst+flightrealhtml0;
               lst=lst+"S"+nid;
               lst=lst+flightrealhtml0_1;
-              lst=lst+"B"+glid;
+              lst=lst+glid;
               lst=lst+flightrealhtml0_1_1;
-              lst=lst+"F"+nid;
+              lst=lst+"B"+glid;
+              lst=lst+flightrealhtml0_1_2;
+              /*lst=lst+"F"+nid;
               lst=lst+flightrealhtml0_2;
-              lst=lst+"";//nid; 
+              lst=lst+"";//nid; */
               lst=lst+flightrealhtml1;
-              lst=lst+glid;                    
+              lst=lst+"C"+glid;                    
               lst=lst+flightrealhtml2;
              
           }
@@ -343,11 +343,11 @@ function makeListRealFlyght(feats)
           for (i=0;i<glids.length;i++)
           {
              document
-             .getElementById(glids[i][0])
+             .getElementById("C"+glids[i][0])
              .addEventListener("click", eventFlyRealSend);
              document
-             .getElementById("B"+glids[i][0])
-             .addEventListener("click", evDetailFlyReal);
+             .getElementById(glids[i][0])
+             .addEventListener("click", eventDetailFlyReal);
               apiAircraft= apiData(apiUrl, "/aircraft/"+glids[i][1], token);
               apiAircraft.then(function (response) {
                 try{  
@@ -356,18 +356,69 @@ function makeListRealFlyght(feats)
                 catch{}
               });
           }
+          if(idRealDet!="")
+          {
+            
+           let nid="";
+            for(let i=0;i<glids.length;i++)
+               if(glids[i][0]==idRealDet) nid=glids[i][1];   
+               if(nid!="") 
+              {   let tm=(new Date()).getTime();
+                  let fl=getFlyhtByBoard(nid,tm);
+                  if (fl!=null)
+                      detalRealFlyght(idRealDet,fl[0],true);
+               }
+           }
          }
          function eventDetailFlyReal(event)
         {
-          let bid= event.target.id;
-         /*
-          let el= document.getElementById("F"+idFly);
-        let reg=false;
-        if(el!=null) 
-        {
-          detalFlyght(null,false,-1,response,oldFly);
-        }*/
+          let glid= event.target.id;
+          if(idRealDet!="" && idRealDet!=glid)
+            detalRealFlyght(idRealDet,null,false); 
+          let nid="";
+          for(let i=0;i<glids.length;i++)
+               if(glids[i][0]==glid) nid=glids[i][1];   
+          let el= document.getElementById("D"+glid);
+          if(nid!="") 
+          {   let tm=(new Date()).getTime();
+              let fl=getFlyhtByBoard(nid,tm);
+              if (fl!=null)
+                   detalRealFlyght(glid,fl[0],(el==null));
+              if(el!=null) idRealDet="";     
+          }
+         
       }
+      function detalRealFlyght(glid,fl,reg)
+      {  lst="";
+          console.log(glid);
+          let el= document.getElementById("B"+glid);
+          const flightrealhtml0_1_3='<span class="uav-item-row uav-item-flight"><span class="uav-item-desc">Пользователь: ';  
+          const flightrealhtml0_2 ='</span>';
+          const flightrealhtml0_3 ='</span> <span class="uav-item-row uav-item-date-start"><span class="uav-item-desc">Время старта</span>';
+          const flightrealhtml0_3_1='</span>\
+          <span class="uav-item-row uav-item-date-end"><span class="uav-item-desc">Время финиша</span>';
+          const flightrealhtml0_3_2='</span>';
+          const flightrealhtml0_4='<input type="hidden" id="';
+          const flightrealhtml0_5='"></input>';
+       if (reg)
+       {
+          idRealDet=glid; 
+          lst=lst+flightrealhtml0_1_3;
+          lst=lst+fl.user.user.username;
+          lst=lst+flightrealhtml0_2;
+          lst=lst+flightrealhtml0_3;
+          lst=lst+fl.application.start.date;
+          lst=lst+flightrealhtml0_3_1;
+          lst=lst+fl.application.finish.date;
+          lst=lst+flightrealhtml0_3_2;
+          lst=lst+flightrealhtml0_4;
+          lst=lst+"D"+glid;
+          lst=lst+flightrealhtml0_5;
+       }   
+       el.innerHTML=lst;
+
+      }
+
          function eventFlyRealSend(event)
         {
 
@@ -529,11 +580,11 @@ function makeListRealFlyght(feats)
        orderByFields : ["BoardNumber","objectid"],
        outFields: ["BoardNumber","objectid","Altitude","CreateTime"]}).then(function(featureSet) {
         // console.log(featureSet.features.length);
-         if (featureSet.features.length>0){ 
+         
          makeGeometryRealFlyght(featureSet.features);
          //flyZoneLayer.definitionExpression=buildDefinitionQueryPlan(null);
          //console.log(flyZoneLayer.definitionExpression);
-         }
+         
         });;
      
      
@@ -543,9 +594,10 @@ function makeListRealFlyght(feats)
      
      function makeGeometryRealFlyght(feats)
      {
+       
        bufferLayer.graphics.removeAll();
        //realLayer.graphics.removeAll();  
-
+       if(feats.length==null) return;
        let name="";
        let zon=null;  
        let paths=[];
@@ -557,10 +609,15 @@ function makeListRealFlyght(feats)
        {
          if (name=="")
          {
-            
-           el=getFlyhtByBoard(feats[i].getAttribute("BoardNumber"),feats[i].getAttribute("CreateTime"));
-           name=el[0];
-           zon=el[4];
+           name="unknow"; 
+           let el=getFlyhtByBoard(feats[i].getAttribute("BoardNumber"),feats[i].getAttribute("CreateTime"));
+           if(el!=null)
+            {
+             name=el[0].id;
+             zon=el[1];
+            }
+           else 
+             zon=null;
            z=feats[i].getAttribute("Altitude");
            dt=0;
            dt0=feats[i].getAttribute("CreateTime")/1000;            
@@ -569,46 +626,50 @@ function makeListRealFlyght(feats)
            
          }
          else
-         
-          if (name==getFlyhtByBoard(feats[i].getAttribute("BoardNumber"),feats[i].getAttribute("CreateTime"))[0])
-            {
-            z=feats[i].getAttribute("Altitude");  
-            dt=feats[i].getAttribute("CreateTime")/1000 -dt0;
-            pth.push([feats[i].geometry.x,feats[i].geometry.y,z,dt]);
-            
-            
-            }
-          else
-           { 
-            
-           //console.log("name = "+ name);   
-           el=getFlyhtByBoard(feats[i].getAttribute("BoardNumber"),feats[i].getAttribute("CreateTime"));
-           name=el[0];
-           zon=el[4];
-           paths.push([pth,name]);
-           let lin=new POLYLINE({
-             paths :[pth],
-             spatialReference :{wkid:4326}
-           });
-           let gg= new GRAPHIC({
-             geometry : lin,
-             symbol : selectSymbol.lineSymbolPigg
-           })
-           bufferLayer.add(gg);
-           if (zon!=null)
-            bufferLayer.add(zon);
+          { 
+            let nameNew="unknow";
+            let el=getFlyhtByBoard(feats[i].getAttribute("BoardNumber"),feats[i].getAttribute("CreateTime"));
+            if(el!=null) nameNew=el[0].id;
+            if (name==nameNew)
+              {
+               z=feats[i].getAttribute("Altitude");  
+               dt=feats[i].getAttribute("CreateTime")/1000 -dt0;
+               pth.push([feats[i].geometry.x,feats[i].geometry.y,z,dt]);
+                 
+              }
+           else
+            { 
+             //let el=getFlyhtByBoard(feats[i].getAttribute("BoardNumber"),feats[i].getAttribute("CreateTime"));
+               name=nameNew;
+               zon=null;
+               if (el!=null) 
+                  zon=el[1];
+             
+                paths.push([pth,name]);
+                let lin=new POLYLINE({
+                     paths :[pth],
+                     spatialReference :{wkid:4326}
+                    });
+                let gg= new GRAPHIC({
+                   geometry : lin,
+                   symbol : selectSymbol.lineSymbolPigg
+                  });
+                bufferLayer.add(gg);
+                if (zon!=null)
+                  bufferLayer.add(zon);
+                
+          //   console.log("!!   "+pth.length); 
+                  emptyArray(pth);
+      
+                dt=0;
+                dt0=feats[i].getAttribute("CreateTime")/1000;            
+                pth.push([feats[i].geometry.x,feats[i].geometry.y,z,dt]);
+                paths.push([pth,name]);
 
-         //   console.log("!!   "+pth.length); 
-           emptyArray(pth);
+             }
 
-           dt=0;
-           dt0=feats[i].getAttribute("CreateTime")/1000;            
-           pth.push([feats[i].geometry.x,feats[i].geometry.y,z,dt]);
-           paths.push([pth,name]);
-
-           }
+        }
        }
-        
        // console.log("??  "+pth.length);
        // console.log("name = "+ name);   
        // console.log(zon);
@@ -633,21 +694,21 @@ function makeListRealFlyght(feats)
      
      function getFlyhtByBoard(bid,btime){
          
-     //console.log(flightsBoard);
+     
               for (let i=0;i<flightsBoard.length;i++)
               { 
-                tmz=flightsBoard[i][2].timezone_type;
-                tm1=flightsBoard[i][2].date;
-                tm2=flightsBoard[i][3].date;
+                tmz=flightsBoard[i][0].application.start.timezone_type;
+                tm1=flightsBoard[i][0].application.start.date;
+                tm2=flightsBoard[i][0].application.finish.date;
      
                 let tm=convertTime(new Date(btime+3600000*tmz));
-                if (bid==flightsBoard[i][1] && tm1<=tm && tm2>=tm )
+                if (bid==flightsBoard[i][0].aircraft.id && tm1<=tm && tm2>=tm )
                  {
      
                    return flightsBoard[i];
                   }
               }
-              return ["unknow","",null,null,null];
+              return null;
      
      }
      function addFlyZone(fid,ind)
@@ -672,16 +733,20 @@ function makeListRealFlyght(feats)
           }
          });
 
-      
+      /*
       apiAppl= apiData(apiUrl, "/application/"+fid, token);
       apiAppl.then(function (response) {
         //console.log("!!!  "+response.aircraft.serialNumber);  
         if (document.getElementById("F"+flightsBoard[ind][1])!=null)
         document.getElementById("F"+flightsBoard[ind][1]).innerText="Пользователь :"+response.user.user.username;
+        if (document.getElementById("T"+flightsBoard[ind][1])!=null)
+        document.getElementById("T"+flightsBoard[ind][1]).innerText="Время старта :"+response.application.start.date;
+        if (document.getElementById("E"+flightsBoard[ind][1])!=null)
+        document.getElementById("E"+flightsBoard[ind][1]).innerText="Время финиша :"+response.application.finish.date;;
         //console.log("????  "+response.aircraft.serialNumber); 
         
         
-      });
+      });*/
   
 
 
