@@ -17,6 +17,7 @@ var GEOMETRYENGINE;
 var QUERY;
 var FEATUREFILTER;
 var GRAPHICSLAYER;
+var LABELCLASS
 
 var flyType;
 var timeSlider;
@@ -29,7 +30,8 @@ var flyVecLayer;
 var layerConf;
 
 
-
+var realAllLayer;
+var realLayer;
 var routeLayer;
 var selectLayer; //слой подсветки выбраннных объектов на карте
 var bufferLayer;
@@ -136,7 +138,7 @@ require(
         PROJECTION=projection;
         FEATUREFILTER=FeatureFilter;
         GRAPHICSLAYER = GraphicsLayer;
-
+        LABELCLASS=LabelClass;  
         console.log(route);
         console.log(roles);
         console.log(user); 
@@ -326,8 +328,21 @@ require(
              }
            }
          });
-         
-
+        
+         if(route === "Flights" || route === "Tracks")
+         {
+          
+          let vl=$.cookie("timeVal");
+          if (vl!=null) 
+          {
+            let vd=   new Date();
+               vd.setTime(vl);
+                        
+            if (vl>=timeSlider.fullTimeExtent.start.getTime() && vl <=timeSlider.fullTimeExtent.end.getTime() )
+           
+             timeSlider.values=[vd];
+          }
+         }  
 
 
         if(checkRoleRoute("ROLE_OWNER",roles) )
@@ -485,9 +500,10 @@ require(
 
             {
                 
-              var realLayer=addReal(FeatureLayer,LabelClass,Geoprocessor,scene,checkRoleRoute("ROLE_OWNER",roles));
+              addReal(FeatureLayer,LabelClass,Geoprocessor,scene,checkRoleRoute("ROLE_OWNER",roles));
               makeRealFlyght(realLayer);
               var realTitle=realLayer.title;
+             
               window.setInterval(refreshRealLayer, 60000,FeatureLayer,scene,realTitle,checkRoleRoute("ROLE_OWNER",roles));
               
             }
@@ -513,7 +529,7 @@ require(
         }
         
          addMobail(WebTileLayer,GroupLayer,esriConfig,scene);
-
+         
 
         
         
@@ -536,7 +552,8 @@ require(
            
           }, function(error){
             
-          });      
+          }); 
+               
         //************************************************************************************************************** */}
         if(checkRoleRoute("ROLE_OWNER",roles))
           view.popup.watch("visible", function(vis) {
@@ -635,6 +652,7 @@ require(
             let st=timeSlider.timeExtent.start.getTime();
             let ett= new Date(et); ett.setDate(ett.getDate()+1)
             let stt= new Date(st);
+            
             let startDt=convertTime(stt);//st;
             let endDt=convertTime(ett);//et
             let defQuery ="sdate >= timestamp'"+ startDt+"' And edate <= timestamp'"+endDt+ "'";
@@ -654,9 +672,12 @@ require(
    
          function setTimeSliderWatch()
 {
-
-   timeSlider.watch("timeExtent", function () { 
+     
+     timeSlider.watch("timeExtent", function () { 
        flyZoneLayer.definitionExpression=buildDefinitionQueryFly();
+       
+       
+       $.cookie("timeVal",timeSlider.values[0].getTime());
        if (checkRoleRoute("ROLE_OPERATOR",roles))  
        { 
         if (idFly!="")

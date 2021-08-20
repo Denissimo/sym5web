@@ -142,10 +142,12 @@ function getUserFly()
               lst=lst+flighthtml1_1;
               lst=lst+flighthtml2;
               lst=lst+nm;
+              /*
               lst=lst+flighthtml3;
               lst=lst+sdat;
               lst=lst+flighthtml3_2;
               lst=lst+fdat;
+              */
               lst=lst+flighthtml4;
               lst=lst+"R"+glob;
               lst=lst+flighthtml4_2;
@@ -244,19 +246,38 @@ function getUserFly()
             
         function detalFlyght (detalLayer,reg,tp,response,fid) { 
 
+          const flighthtml2 ='<span class="uav-item-row uav-item-date-start"><span class="uav-item-desc">Старт</span>';
+          const flighthtml2_2 ='</span>\
+          <span class="uav-item-row uav-item-date-start"><span class="uav-item-desc">Финиш</span>';
+         const flighthtml2_3='</span>'; 
+
+
           const flighthtml3_1 ='<span class="uav-item-row uav-item-flight" id="'
           
           const flighthtml3_2='"><span class="uav-item-desc">Рег.номер БВС</span>';
           
-          
+          const flighthtml3_4='<span class="uav-item-desc">Пользователь</span>';
           const flighthtml3_3='</span>'; 
       
           let lst="";
           id="R"+fid;
           if (reg)
            {
+            let sdat=response.application.start.date; //ftfSet.features[i].getAttribute("startdate");
+            let  fdat=response.application.finish.date;//ftfSet.features[i].getAttribute("finishdate");
              
-             lst=flighthtml3_1+"F"+response.id+flighthtml3_2+response.user.user.firstname+flighthtml3_3;
+           
+            lst=lst+flighthtml2;
+            lst=lst+sdat;
+            lst=lst+flighthtml2_2;
+            lst=lst+fdat;     
+            lst=lst+flighthtml2_3;
+            let rnumb="unknow";
+         if ( response.aircraft!= null)
+                rnumb= response.aircraft.serialNumber;
+         if (rnumb==null) rnumb="unknow";
+         lst=lst+flighthtml3_1+"F"+response.id+flighthtml3_2+rnumb;//
+         lst=lst+flighthtml3_4+ response.user.user.username+flighthtml3_3;
              
            }
           

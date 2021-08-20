@@ -125,14 +125,14 @@ function addSelectLayer(GraphicsLayer,webmap)
               });         
   //****************************************************************************************************** */                   
                
-          var lineSymbol = {
+         /* var selectSymbol.lineSymbol = {
              type: "simple-line", // autocasts as SimpleLineSymbol()
              color: [255, 0, 197],
              width: 1
-            };
+            };*/
           var lineRenderer = {
              type: "simple",
-            symbol: lineSymbol
+            symbol: selectSymbol.lineSymbolPigg
            };
           routeLayer = new FeatureLayer({
               url:         sourceTrackRoute,
