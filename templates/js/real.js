@@ -81,7 +81,7 @@ function addReal(FeatureLayer,LabelClass,Geoprocessor,scene,isOwner){
       });
       var templateReal = {
         // autocasts as new PopupTemplate()
-        title: "{BoardNumber}",
+        title: "{serial}",
         content: [
           {
             // It is also possible to set the fieldInfos outside of the content
@@ -90,7 +90,7 @@ function addReal(FeatureLayer,LabelClass,Geoprocessor,scene,isOwner){
             type: "fields",
             fieldInfos: [
               {
-                fieldName: "altitude",
+                fieldName: "Altitude",
                 label: "Высота",
                 format: {
                   places: 0,
@@ -98,7 +98,7 @@ function addReal(FeatureLayer,LabelClass,Geoprocessor,scene,isOwner){
                 },
               },
               {
-                fieldName: "speed",
+                fieldName: "Speed",
                 label: "Скорость",
                 format: {
                   places: 0,
@@ -106,7 +106,7 @@ function addReal(FeatureLayer,LabelClass,Geoprocessor,scene,isOwner){
                 },
               },
               {
-                fieldName: "heading",
+                fieldName: "Heading",
                 label: "Курс",
                 format: {
                   places: 0,
@@ -136,16 +136,18 @@ function addReal(FeatureLayer,LabelClass,Geoprocessor,scene,isOwner){
       sourceFlyghtZone = servicePath + "5";
 
       realAllLayer =new FeatureLayer({
-        url:"https://abr-gis-server.airchannel.net/airchannel/rest/services/Hosted/AllFlightReal/FeatureServer/0",
+      //  url:"https://abr-gis-server.airchannel.net/airchannel/rest/services/Hosted/AllFlightReal/FeatureServer/0",
+        url:"https://abr-gis-server.airchannel.net/airchannel/rest/services/Hosted/realFlights/FeatureServer/0",
         popupTemplate: templateReal,
        // labelingInfo: [realLabelClass2d],
 
         renderer:selectSymbol.realMarkerRenderer
       }); 
     realLayer= new FeatureLayer({
-       url: "https://abr-gis-server.airchannel.net/airchannel/rest/services/Hosted/TruckLastBJTime/FeatureServer",
+     //  url: "https://abr-gis-server.airchannel.net/airchannel/rest/services/Hosted/TruckLastBJTime/FeatureServer",
+       url: "https://abr-gis-server.airchannel.net/airchannel/rest/services/Hosted/LastBortEvent/FeatureServer/0",
        popupTemplate: templateReal,
-       title: "Выполняющиеся полеты",
+       title: "Текущее местоположение",
        //add.spatialReference : {wkid :4326},
        labelingInfo: [realLabelClass2d]
         //350000}//,
@@ -155,20 +157,25 @@ function addReal(FeatureLayer,LabelClass,Geoprocessor,scene,isOwner){
       else
       {
         realAllLayer =new FeatureLayer({
-          url:"https://abr-gis-server.airchannel.net/airchannel/rest/services/Hosted/AllFlightReal/FeatureServer/0",
+          //url:"https://abr-gis-server.airchannel.net/airchannel/rest/services/Hosted/AllFlightReal/FeatureServer/0",
+          url:"https://abr-gis-server.airchannel.net/airchannel/rest/services/Hosted/realFlights/FeatureServer/0",
           //labelingInfo: [realLabelClass],
           popupTemplate: templateReal,
           title: "Выполняющиеся полеты",
+          elevationInfo: {
+            mode: "relative-to-ground",   
+             },
           renderer:selectSymbol.realMarkerRenderer
         });
         realLayer= new FeatureLayer({
-           url: "https://abr-gis-server.airchannel.net/airchannel/rest/services/Hosted/TruckLastBJTime/FeatureServer",
+           //url: "https://abr-gis-server.airchannel.net/airchannel/rest/services/Hosted/TruckLastBJTime/FeatureServer",
+           url: "https://abr-gis-server.airchannel.net/airchannel/rest/services/Hosted/LastBortEvent/FeatureServer/0",
            popupTemplate: templateReal,
            title: "Текущее местоположеение",
            labelingInfo: [realLabelClass],
            elevationInfo: {
            mode: "relative-to-ground",   
-            }, //350000}//,
+            } //350000}//,
            });
         //   scene.layers.add(realLayer);
           }
@@ -265,7 +272,7 @@ function makeRealFlyght(realLayer)
           where : "",
           
           returnGeometry: true,
-          outFields: ["*"],
+          outFields: ["serial","ownerid","globalid","bplaid"],
         })
         .then(function(featureSet) {
           //console.log(featureSet.features.length);  
@@ -318,7 +325,7 @@ function makeListRealFlyght(feats)
           function panRealFlyght(feat)
           {
               let glid=feat.getAttribute("globalid");
-              let nid=feat.getAttribute("boardnumber");
+              let nid=feat.getAttribute("bplaid");
               
               glids.push([glid,nid]);
               lst=lst+flightrealhtml0;
@@ -577,8 +584,8 @@ function makeListRealFlyght(feats)
        realAllLayer.queryFeatures({ where : buildDefinitionQueryReal(),
        returnGeometry: true,
        //returnZ : true,
-       orderByFields : ["BoardNumber","objectid"],
-       outFields: ["BoardNumber","objectid","Altitude","CreateTime"]}).then(function(featureSet) {
+       orderByFields : ["bplaid","objectid"],
+       outFields: ["bplaid","serial","objectid","Altitude","CreateTime"]}).then(function(featureSet) {
         // console.log(featureSet.features.length);
          
          makeGeometryRealFlyght(featureSet.features);
@@ -610,7 +617,7 @@ function makeListRealFlyght(feats)
          if (name=="")
          {
            name="unknow"; 
-           let el=getFlyhtByBoard(feats[i].getAttribute("BoardNumber"),feats[i].getAttribute("CreateTime"));
+           let el=getFlyhtByBoard(feats[i].getAttribute("bplaid"),feats[i].getAttribute("CreateTime"));
            if(el!=null)
             {
              name=el[0].id;
@@ -628,7 +635,7 @@ function makeListRealFlyght(feats)
          else
           { 
             let nameNew="unknow";
-            let el=getFlyhtByBoard(feats[i].getAttribute("BoardNumber"),feats[i].getAttribute("CreateTime"));
+            let el=getFlyhtByBoard(feats[i].getAttribute("bplaid"),feats[i].getAttribute("CreateTime"));
             if(el!=null) nameNew=el[0].id;
             if (name==nameNew)
               {
