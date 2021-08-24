@@ -504,7 +504,7 @@ require(
               makeRealFlyght(realLayer);
               var realTitle=realLayer.title;
              
-              window.setInterval(refreshRealLayer, 60000,FeatureLayer,scene,realTitle,checkRoleRoute("ROLE_OWNER",roles));
+              window.setInterval(refreshRealLayer, 20000,FeatureLayer,scene,realTitle,checkRoleRoute("ROLE_OWNER",roles));
               
             }
             else
