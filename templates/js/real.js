@@ -17,8 +17,8 @@ function addReal(FeatureLayer,LabelClass,Geoprocessor,scene,isOwner){
   
     stara=(d.getFullYear()).toString()+m1+day1+"000000";
     enda=(d2.getFullYear()).toString()+m2+day2+"000000"; 
-    console.log(stara);
-    console.log(enda);
+    //console.log(stara);
+   // console.log(enda);
      idRealDet  ="";
 
   apiIntervalFlights= apiData(apiUrl, "/application/interval/"+stara+"/"+enda, token);
@@ -81,7 +81,7 @@ function addReal(FeatureLayer,LabelClass,Geoprocessor,scene,isOwner){
       });
       var templateReal = {
         // autocasts as new PopupTemplate()
-        title: "{BoardNumber}",
+        title: "{serial}",
         content: [
           {
             // It is also possible to set the fieldInfos outside of the content
@@ -90,7 +90,7 @@ function addReal(FeatureLayer,LabelClass,Geoprocessor,scene,isOwner){
             type: "fields",
             fieldInfos: [
               {
-                fieldName: "altitude",
+                fieldName: "Altitude",
                 label: "Высота",
                 format: {
                   places: 0,
@@ -98,7 +98,7 @@ function addReal(FeatureLayer,LabelClass,Geoprocessor,scene,isOwner){
                 },
               },
               {
-                fieldName: "speed",
+                fieldName: "Speed",
                 label: "Скорость",
                 format: {
                   places: 0,
@@ -106,7 +106,7 @@ function addReal(FeatureLayer,LabelClass,Geoprocessor,scene,isOwner){
                 },
               },
               {
-                fieldName: "heading",
+                fieldName: "Heading",
                 label: "Курс",
                 format: {
                   places: 0,
@@ -136,16 +136,18 @@ function addReal(FeatureLayer,LabelClass,Geoprocessor,scene,isOwner){
       sourceFlyghtZone = servicePath + "5";
 
       realAllLayer =new FeatureLayer({
-        url:"https://abr-gis-server.airchannel.net/airchannel/rest/services/Hosted/AllFlightReal/FeatureServer/0",
+      //  url:"https://abr-gis-server.airchannel.net/airchannel/rest/services/Hosted/AllFlightReal/FeatureServer/0",
+        url:"https://abr-gis-server.airchannel.net/airchannel/rest/services/Hosted/realFlights/FeatureServer/0",
         popupTemplate: templateReal,
        // labelingInfo: [realLabelClass2d],
 
         renderer:selectSymbol.realMarkerRenderer
       }); 
     realLayer= new FeatureLayer({
-       url: "https://abr-gis-server.airchannel.net/airchannel/rest/services/Hosted/TruckLastBJTime/FeatureServer",
+     //  url: "https://abr-gis-server.airchannel.net/airchannel/rest/services/Hosted/TruckLastBJTime/FeatureServer",
+       url: "https://abr-gis-server.airchannel.net/airchannel/rest/services/Hosted/LastBortEvent/FeatureServer/0",
        popupTemplate: templateReal,
-       title: "Выполняющиеся полеты",
+       title: "Текущее местоположение",
        //add.spatialReference : {wkid :4326},
        labelingInfo: [realLabelClass2d]
         //350000}//,
@@ -155,25 +157,30 @@ function addReal(FeatureLayer,LabelClass,Geoprocessor,scene,isOwner){
       else
       {
         realAllLayer =new FeatureLayer({
-          url:"https://abr-gis-server.airchannel.net/airchannel/rest/services/Hosted/AllFlightReal/FeatureServer/0",
+          //url:"https://abr-gis-server.airchannel.net/airchannel/rest/services/Hosted/AllFlightReal/FeatureServer/0",
+          url:"https://abr-gis-server.airchannel.net/airchannel/rest/services/Hosted/realFlights/FeatureServer/0",
           //labelingInfo: [realLabelClass],
           popupTemplate: templateReal,
           title: "Выполняющиеся полеты",
+          elevationInfo: {
+            mode: "relative-to-ground",   
+             },
           renderer:selectSymbol.realMarkerRenderer
         });
         realLayer= new FeatureLayer({
-           url: "https://abr-gis-server.airchannel.net/airchannel/rest/services/Hosted/TruckLastBJTime/FeatureServer",
+           //url: "https://abr-gis-server.airchannel.net/airchannel/rest/services/Hosted/TruckLastBJTime/FeatureServer",
+           url: "https://abr-gis-server.airchannel.net/airchannel/rest/services/Hosted/LastBortEvent/FeatureServer/0",
            popupTemplate: templateReal,
-           title: "Текущее местоположеение",
+           title: "Текущее местоположение",
            labelingInfo: [realLabelClass],
            elevationInfo: {
            mode: "relative-to-ground",   
-            }, //350000}//,
+            } //350000}//,
            });
         //   scene.layers.add(realLayer);
           }
 
-     scene.layers.add(realAllLayer);  
+   scene.layers.add(realAllLayer);  
    realAllLayer.definitionExpression=buildDefinitionQueryReal();      
    scene.layers.add(realLayer);
    
@@ -203,27 +210,30 @@ function addReal(FeatureLayer,LabelClass,Geoprocessor,scene,isOwner){
 function refreshRealLayer(FeatureLayer,scene,tit,isOwner)
 {  var lays=[];
   
-  console.log(glids);
+
   
   for (var i=0;i<glids.length;i++)
   {
-      console.log(glids[i][1]);
+   
+      if(glids[i][1]!= null)
+      {
       apiAircraft= apiData(apiUrl, "/aircraft/"+glids[i][1], token);
       apiAircraft.then(function (response) {
-        //console.log("!!!  "+response.aircraft.serialNumber);  
+       
         if (document.getElementById("S"+response.id)!=null)
         document.getElementById("S"+response.id).innerText=response.aircraft.serialNumber;
-        //console.log("????  "+response.aircraft.serialNumber); 
+      
         
         
       });
+    }
   }
    getLayersByTitle(FeatureLayer,scene.allLayers,[tit] ,lays);
    
    let realLay=lays[0];
    let templateReal=realLay.popupTemplate;
    let labInfo=realLay.labelingInfo[0]; 
-   console.log(realLay);
+ 
    let url=realLay.url;
    
    let title=realLay.title;
@@ -254,6 +264,7 @@ function refreshRealLayer(FeatureLayer,scene,tit,isOwner)
  })}
    scene.remove(realLay);
    scene.layers.add(newRealLayer);
+   newRealLayer.definitionExpression=buildDefinitionQueryReal();
    makeRealFlyght(newRealLayer); 
    scene.layers.reorder(realAllLayer, scene.layers.length);
    
@@ -262,13 +273,13 @@ function makeRealFlyght(realLayer)
        {
         
         realLayer.queryFeatures({
-          where : "",
+          where : buildDefinitionQueryReal(),
           
           returnGeometry: true,
-          outFields: ["*"],
+          outFields: ["serial","ownerid","globalid","bplaid"],
         })
         .then(function(featureSet) {
-          //console.log(featureSet.features.length);  
+     
           makeListRealFlyght(featureSet.features);
 
          });
@@ -281,7 +292,7 @@ function makeListRealFlyght(feats)
           const flightrealhtml0 ='<li class="uav-list-item"><div class="uav-item-header">\
           <span class="uav-item-status">В полёте</span>\
           <span class="uav-item-desc" id="';
-          const flightrealhtml0_1 ='"></span>\
+          const flightrealhtml0_1 ='">Unknow</span>\
           <button class="btn uav-btn-more" id="';
           
           const flightrealhtml0_1_1='">Подробнее</button>\
@@ -318,7 +329,7 @@ function makeListRealFlyght(feats)
           function panRealFlyght(feat)
           {
               let glid=feat.getAttribute("globalid");
-              let nid=feat.getAttribute("boardnumber");
+              let nid=feat.getAttribute("bplaid");
               
               glids.push([glid,nid]);
               lst=lst+flightrealhtml0;
@@ -348,13 +359,18 @@ function makeListRealFlyght(feats)
              document
              .getElementById(glids[i][0])
              .addEventListener("click", eventDetailFlyReal);
+             if(glids[i][1]!=null)
+             { 
+             
               apiAircraft= apiData(apiUrl, "/aircraft/"+glids[i][1], token);
               apiAircraft.then(function (response) {
                 try{  
                 document.getElementById("S"+response.id).innerText=response.aircraft.serialNumber;
                 }
                 catch{}
-              });
+              });}
+              
+
           }
           if(idRealDet!="")
           {
@@ -390,7 +406,7 @@ function makeListRealFlyght(feats)
       }
       function detalRealFlyght(glid,fl,reg)
       {  lst="";
-          console.log(glid);
+        
           let el= document.getElementById("B"+glid);
           const flightrealhtml0_1_3='<span class="uav-item-row uav-item-flight"><span class="uav-item-desc">Пользователь: ';  
           const flightrealhtml0_2 ='</span>';
@@ -549,9 +565,8 @@ function makeListRealFlyght(feats)
       
       let startDt=convertTime(stt);//st;
       let endDt=convertTime(ett);//et
-     // console.log(startDt);
-     // console.log(endDt);
-      let defQuery ="CreateTime >= timestamp'"+ startDt+"' And CreateTime <= timestamp'"+endDt+ "'";
+    
+      let defQuery ="CreateTime >= timestamp'"+ startDt+"' And EndTime >= timestamp'"+endDt+ "'";
      return defQuery;
    }
    
@@ -577,13 +592,12 @@ function makeListRealFlyght(feats)
        realAllLayer.queryFeatures({ where : buildDefinitionQueryReal(),
        returnGeometry: true,
        //returnZ : true,
-       orderByFields : ["BoardNumber","objectid"],
-       outFields: ["BoardNumber","objectid","Altitude","CreateTime"]}).then(function(featureSet) {
-        // console.log(featureSet.features.length);
+       orderByFields : ["bplaid","objectid"],
+       outFields: ["bplaid","serial","objectid","Altitude","CreateTime"]}).then(function(featureSet) {
+    
          
          makeGeometryRealFlyght(featureSet.features);
-         //flyZoneLayer.definitionExpression=buildDefinitionQueryPlan(null);
-         //console.log(flyZoneLayer.definitionExpression);
+        ;
          
         });;
      
@@ -604,13 +618,13 @@ function makeListRealFlyght(feats)
        let names=[];
        let dt0;
        let pth=[];
-       //console.log(feats.length);
+    
        for (let i=0;i<feats.length;i++)
        {
          if (name=="")
          {
            name="unknow"; 
-           let el=getFlyhtByBoard(feats[i].getAttribute("BoardNumber"),feats[i].getAttribute("CreateTime"));
+           let el=getFlyhtByBoard(feats[i].getAttribute("bplaid"),feats[i].getAttribute("CreateTime"));
            if(el!=null)
             {
              name=el[0].id;
@@ -628,7 +642,7 @@ function makeListRealFlyght(feats)
          else
           { 
             let nameNew="unknow";
-            let el=getFlyhtByBoard(feats[i].getAttribute("BoardNumber"),feats[i].getAttribute("CreateTime"));
+            let el=getFlyhtByBoard(feats[i].getAttribute("bplaid"),feats[i].getAttribute("CreateTime"));
             if(el!=null) nameNew=el[0].id;
             if (name==nameNew)
               {
@@ -658,7 +672,7 @@ function makeListRealFlyght(feats)
                 if (zon!=null)
                   bufferLayer.add(zon);
                 
-          //   console.log("!!   "+pth.length); 
+         
                   emptyArray(pth);
       
                 dt=0;
@@ -670,9 +684,7 @@ function makeListRealFlyght(feats)
 
         }
        }
-       // console.log("??  "+pth.length);
-       // console.log("name = "+ name);   
-       // console.log(zon);
+     
         lin=new POLYLINE({
         paths :[pth],
         spatialReference :{wkid:4326}
@@ -713,12 +725,12 @@ function makeListRealFlyght(feats)
      }
      function addFlyZone(fid,ind)
      {
-      console.log("Zone "+fid); 
+     //console.log("Zone "+fid); 
       flyZoneLayer.queryFeatures({ where : "flyid = '"+fid+"'",
         returnGeometry: true,
         returnZ : true,
         outFields: ["*"]}).then(function(featureSet) {
-           console.log("Zone "+featureSet.features.length);
+        //   console.log("Zone "+featureSet.features.length);
           if (featureSet.features.length>0){ 
           let gr =new GRAPHIC({
                 geometry: featureSet.features[0].geometry,
@@ -733,20 +745,7 @@ function makeListRealFlyght(feats)
           }
          });
 
-      /*
-      apiAppl= apiData(apiUrl, "/application/"+fid, token);
-      apiAppl.then(function (response) {
-        //console.log("!!!  "+response.aircraft.serialNumber);  
-        if (document.getElementById("F"+flightsBoard[ind][1])!=null)
-        document.getElementById("F"+flightsBoard[ind][1]).innerText="Пользователь :"+response.user.user.username;
-        if (document.getElementById("T"+flightsBoard[ind][1])!=null)
-        document.getElementById("T"+flightsBoard[ind][1]).innerText="Время старта :"+response.application.start.date;
-        if (document.getElementById("E"+flightsBoard[ind][1])!=null)
-        document.getElementById("E"+flightsBoard[ind][1]).innerText="Время финиша :"+response.application.finish.date;;
-        //console.log("????  "+response.aircraft.serialNumber); 
-        
-        
-      });*/
+    
   
 
 
