@@ -54,16 +54,8 @@ function addReal(FeatureLayer,LabelClass,Geoprocessor,scene,isOwner){
             //"$feature.boardNumber+TextFormatting.NewLine +"
             "'Скорость :'+ $feature.Speed+TextFormatting.NewLine +'Высота :'+ $feature.Altitude+TextFormatting.NewLine +'Курс :'+ $feature.Heading",
         },
-        symbol: {
-          type: "label-3d", // autocasts as new LabelSymbol3D()
-          symbolLayers: [
-            {
-              type: "text", // autocasts as new TextSymbol3DLayer()
-              material: { color: [255, 0, 0] },
-              size: 12, // points
-            },
-          ],
-        },
+         symbol: mySymbols.labelTextSymbol3D 
+        
       });
       const realLabelClass2d = new LabelClass({
         labelExpressionInfo: {
@@ -71,13 +63,8 @@ function addReal(FeatureLayer,LabelClass,Geoprocessor,scene,isOwner){
             //"$feature.boardNumber+TextFormatting.NewLine +"
             "'Скорость :'+ $feature.Speed+TextFormatting.NewLine +'Высота :'+ $feature.Altitude+TextFormatting.NewLine +'Курс :'+ $feature.Heading",
              },
-        symbol: {
-                    
-              type: "text", // autocasts as new TextSymbol3DLayer()
-              color: [255, 0, 0] ,
-              size: 12 // points
-            
-        },
+             symbol:mySymbols.labelTextSymbol
+        
       });
       var templateReal = {
         // autocasts as new PopupTemplate()
@@ -141,7 +128,7 @@ function addReal(FeatureLayer,LabelClass,Geoprocessor,scene,isOwner){
         popupTemplate: templateReal,
        // labelingInfo: [realLabelClass2d],
 
-        renderer:selectSymbol.realMarkerRenderer
+        renderer: selectSymbol.realMarkerRenderer
       }); 
     realLayer= new FeatureLayer({
      //  url: "https://abr-gis-server.airchannel.net/airchannel/rest/services/Hosted/TruckLastBJTime/FeatureServer",
@@ -183,7 +170,7 @@ function addReal(FeatureLayer,LabelClass,Geoprocessor,scene,isOwner){
    scene.layers.add(realAllLayer);  
    realAllLayer.definitionExpression=buildDefinitionQueryReal();      
    scene.layers.add(realLayer);
-   
+   realLayer.definitionExpression=buildDefinitionQueryReal();
    flyZoneLayer = new FeatureLayer({
     title: "Зона текущего полета",  
     url: sourceFlyghtZone,
@@ -666,7 +653,7 @@ function makeListRealFlyght(feats)
                     });
                 let gg= new GRAPHIC({
                    geometry : lin,
-                   symbol : selectSymbol.lineSymbolPigg
+                   symbol : mySymbols.lineSymbolPigg
                   });
                 bufferLayer.add(gg);
                 if (zon!=null)
@@ -691,7 +678,7 @@ function makeListRealFlyght(feats)
       });
        gg= new GRAPHIC({
         geometry : lin,
-        symbol : selectSymbol.lineSymbolPigg
+        symbol : mySymbols.lineSymbolPigg
        });
            bufferLayer.add(gg);
            if (zon!=null)
@@ -736,7 +723,7 @@ function makeListRealFlyght(feats)
                 geometry: featureSet.features[0].geometry,
                 attributes :featureSet.features[0].attributes,
                 spatialReference :{wkid:4326},
-                symbol:selectSymbol.fillSymbolGreen,
+                symbol:mySymbols.fillSymbolGreen,
                 popupTemplate : templatesPopup.templateZoneFly
           }); 
           

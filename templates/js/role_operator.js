@@ -542,7 +542,7 @@ function getUserFly()
               {
               gg= new GRAPHIC({
                    geometry: inter[j],
-                   symbol: selectSymbol.fillSymbolIntersect,
+                   symbol: mySymbols.fillSymbolIntersect,
                    spatialReference : {wkid:4326}
                  });
                 gg.attributes = Att;
@@ -559,7 +559,7 @@ function getUserFly()
 
           gg = new GRAPHIC({
               geometry: inter,
-              symbol: selectSymbol.fillSymbolIntersect,
+              symbol: mySymbols.fillSymbolIntersect,
               spatialReference : {wkid:4326}
                  });
                  
@@ -679,7 +679,7 @@ function getUserFly()
            
           gg = new GRAPHIC({
               geometry: inter,
-              symbol: selectSymbol.lineSymbolIntersect,
+              symbol: mySymbols.lineSymbolIntersect,
               spatialReference : { wkid: 4326 }
                          });
           let alt; 
@@ -777,7 +777,7 @@ function getUserFly()
                 {
                 gg= new GRAPHIC({
                      geometry: inter[j],
-                     symbol: selectSymbol.fillSymbolIntersect,
+                     symbol: mySymbols.fillSymbolIntersect,
                      spatialReference: { wkid: 4326 }
                    });
                   gg. attributes = Attrs;
@@ -792,7 +792,7 @@ function getUserFly()
 
             gg = new GRAPHIC({
                 geometry: inter,
-                symbol: selectSymbol.fillSymbolIntersect,
+                symbol: mySymbols.fillSymbolIntersect,
                 spatialReference : { wkid: 4326 }
                    });
                    

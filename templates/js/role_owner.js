@@ -412,7 +412,7 @@ function changeExtent (geom)
               
                     var circGraphic=new GRAPHIC({
                       geometry:circ,
-                      symbol:selectSymbol.fillSymbolGray,
+                      symbol:mySymbols.fillSymbolGray,
 
                     });
                      
@@ -897,12 +897,13 @@ function changeExtent (geom)
    
        lin = PROJECTION.project(lin, { wkid: 3857 },PROJECTION.getTransformation(lin.spatialReference,{ wkid: 3857 }));    
        lineGraphic.geometry=lin;
+      /*
        lineSymbol3 = {
         type: "simple-line", // autocasts as SimpleLineSymbol()
         color: [128, 128, 128],
         width: 2
-      };
-       lineGraphic.symbol=lineSymbol3;
+      };*/
+       lineGraphic.symbol=mySymbols.lineSymbolGray;
        layerManual.add(lineGraphic);
        return lineGraphic.geometry;
        
@@ -1902,7 +1903,7 @@ function mySaveRoute(event)
                       lin = GEOMETRYENGINE.generalize(lin,10,false,"meters"); 
                       let imGr=new GRAPHIC({
                          geometry:lin,
-                         symbol:selectSymbol.lineSymbolGray
+                         symbol:mySymbols.lineSymbolGray
 
                       });
                       
@@ -1931,7 +1932,7 @@ function mySaveRoute(event)
                         pol = PROJECTION.project(ftfSet.features[0].geometry, { wkid: 3857 },PROJECTION.getTransformation(ftfSet.features[0].geometry.spatialReference,{ wkid: 3857 }));     
                         let imGr=new GRAPHIC({
                           geometry:pol,
-                          symbol:selectSymbol.fillSymbolGray
+                          symbol:mySymbols.fillSymbolGray
                         });
                         
                        layerManual.add(imGr);
@@ -2284,7 +2285,7 @@ function removeSelectSeg(rid,numb){
                       var ll=new GRAPHIC(
                          {
                            geometry :ftfSet.features[0].geometry,
-                           symbol : selectSymbol.lineSymbol,
+                           symbol : mySymbols.lineSymbol,
                            attributes : {
                             "routeid": rid,
                             "numb":  numb
@@ -3565,7 +3566,7 @@ window.clearInterval(interv);
              
                 var gg = new GRAPHIC({
                 geometry: inter,
-                symbol: selectSymbol.lineSymbolIntersect,
+                symbol: mySymbols.lineSymbolIntersect,
                 spatialReference : { wkid: 4326 }
                    });
                   let alt; 
@@ -3667,7 +3668,7 @@ window.clearInterval(interv);
                 {
                  var gg= new GRAPHIC({
                      geometry: inter[j],
-                     symbol: selectSymbol.fillSymbolIntersect,
+                     symbol: mySymbols.fillSymbolIntersect,
                      spatialReference : { wkid: 3857 }
                    });
                   gg. attributes = Attrs;
@@ -3681,7 +3682,7 @@ window.clearInterval(interv);
             
             gg = new GRAPHIC({
                 geometry: inter,
-                symbol: selectSymbol.fillSymbolIntersect,
+                symbol: mySymbols.fillSymbolIntersect,
                 spatialReference : { wkid: 3857 }
                    });
                    
@@ -3846,7 +3847,7 @@ var wh="flyid <> '"+idFly+"' And status < 5 And sdate >= timestamp'"+ sdate+"' A
                 {
                  var gg= new GRAPHIC({
                      geometry: inter[j],
-                     symbol: selectSymbol.fillSymbolIntersect,
+                     symbol: mySymbols.fillSymbolIntersect,
                      spatialReference : { wkid: 4326 }
                    });
                    gg. attributes = Att;
@@ -3861,7 +3862,7 @@ var wh="flyid <> '"+idFly+"' And status < 5 And sdate >= timestamp'"+ sdate+"' A
 
             gg = new GRAPHIC({
                 geometry: inter,
-                symbol: selectSymbol.fillSymbolIntersect,
+                symbol: mySymbols.fillSymbolIntersect,
                 spatialReference : { wkid: 4326 }
                    });
                   gg. attributes = Att;

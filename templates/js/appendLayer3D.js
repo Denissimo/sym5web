@@ -11,15 +11,15 @@ function addLayers3D(FeatureLayer,scene)
   let sourceFlyghtZone = servicePath + "5";
   let sourceFlyghtRoute = servicePath + "2";
   
-  var fillSymbolZone = {
+  /*var fillSymbolZone = {
     type: "simple-fill", // autocasts as SimpleLineSymbol()
     color: [255, 0, 197, 0.2],
     width: 2,
-  };
+  };*/
 
   var zoneRenderer = {
     type: "simple",
-    symbol: fillSymbolZone,
+    symbol: mySymbols.fillSymbolZone,
   };
   zoneLayer = new FeatureLayer({
       url: sourceFlyghtZone,
@@ -37,7 +37,7 @@ function addLayers3D(FeatureLayer,scene)
 
 
 
-   var lineSymbolRoute = {
+  /* var lineSymbolRoute = {
     type: "line-3d",
     symbolLayers: [
       {
@@ -51,11 +51,11 @@ function addLayers3D(FeatureLayer,scene)
         cap: "square", //"round"
       },
     ],
-  };
+  };*/
   
   var lineRendererRoute = {
     type: "simple",
-    symbol: lineSymbolRoute,
+    symbol: mySymbols.lineSymbolRoute,
   };
 
   
@@ -96,15 +96,15 @@ function addLayers3D(FeatureLayer,scene)
   scene.layers.add(routeLayer);
 
   //**************************************************************************************************************************************************** */
-  var fillSymbolZoneTen = {
+ /* var fillSymbolZoneTen = {
     type: "simple-fill",
     color: [128, 128, 128, 0.2],
     style: "solid",
-  };
+  };*/
 
   var zoneRendererTen = {
     type: "simple",
-    symbol: fillSymbolZoneTen,
+    symbol: mySymbol.fillSymbolZoneTen,
   };
 
    zoneLayerTen = new FeatureLayer({
@@ -123,26 +123,26 @@ function addLayers3D(FeatureLayer,scene)
   
   
   //***************************************************************************** */
-   webDronActive = {
+  /* webDronActive = {
     type: "web-style", // autocasts as new WebStyleSymbol()
     styleUrl:
       "https://abr-gis-portal.airchannel.net/portal/sharing/rest/content/items/bb7b64a19ac9455d97ac219080a0e978/data",
 
     name: "drone_active",
   };
-
+*/
   
   const realLabelClassZone = new LABELCLASS({
     labelExpressionInfo: {
       expression: "$feature.status"
          },
-    symbol: {
+    symbol: mySymbols.labelTextSymbol3D/*  {
                 
           type: "text", // autocasts as new TextSymbol3DLayer()
           color: [255, 0, 0] ,
           size: 20 // points
         
-    },
+    }*/
   }); 
  
 

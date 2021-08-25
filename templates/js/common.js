@@ -566,11 +566,11 @@ require(
               
              let graphic2=graphic.clone();    
              if (graphic2.geometry.type==="polygon")
-                graphic2.symbol=selectSymbol.fillSymbol;
+                graphic2.symbol=mySymbols.fillSymbolSelect;
              if (graphic2.geometry.type==="polyline")
-                graphic2.symbol=selectSymbol.lineSymbol;   
+                graphic2.symbol=mySymbols.lineSymbolSelect;   
              if (graphic2.geometry.type==="point")
-                 graphic2.symbol=selectSymbol.markerSymbol;   
+                 graphic2.symbol=mySymbols.markerSymbolSelect;   
                  
                  selectLayer.graphics.removeAll();
                  selectLayer.graphics.add(graphic2);
@@ -724,7 +724,7 @@ require(
                 let gDron=new GRAPHIC(
                     {
                       geometry : emulpts[ind][0],
-                      symbol:webDronActive
+                      symbol:mySymbols.webDronActive
                    
                     })
                 let dronPath=[];
@@ -737,7 +737,7 @@ require(
                    paths:[dronPath],
                    spatialReference :{wkid:wk}
                   }),
-                  symbol:selectSymbol.emulSymbolRoute 
+                  symbol:mySymbols.emulSymbolRoute 
                 });
                        
                    dronLayer.add(gDron); 

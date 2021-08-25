@@ -58,16 +58,16 @@ function addSelectLayer(GraphicsLayer,webmap)
                 });
     
 
-
+          /*
           lineSymbolTable = {
             type: "simple-line", // autocasts as SimpleLineSymbol()
             color: [0, 255, 0],
             width: 2
           };
-  
+       */
            var lineRendererTable = {
                type: "simple",
-               symbol: lineSymbolTable
+               symbol: mySymbols.lineSymbolTable
             };
 
              tableLayer = new FeatureLayer({
@@ -79,7 +79,7 @@ function addSelectLayer(GraphicsLayer,webmap)
             
 
   //****************************************************************************************************** */              
-          fillSymbolSelectZone =
+      /*    fillSymbolSelectZone =
          {
            type: "simple-fill", 
            color: [ 255,0, 197, 0.2 ],
@@ -89,10 +89,10 @@ function addSelectLayer(GraphicsLayer,webmap)
                  width: 3
                    }
          };
-
+*/
            var zoneRendererTable = {
                     type: "simple",
-                    symbol: fillSymbolSelectZone
+                    symbol: mySymbols.fillSymbolSelectZone
                   };    
 
             tableZoneLayer = new FeatureLayer({
@@ -102,15 +102,15 @@ function addSelectLayer(GraphicsLayer,webmap)
             listMode :"hide" });
     
     //****************************************************************************************************** */              
-           var fillSymbol = {
+           /*var fillSymbol = {
             type: "simple-fill", // autocasts as SimpleLineSymbol()
              color: [255, 0, 197,0.2],
              width: 2
             };
-
+*/
           var zoneRenderer = {
               type: "simple",
-              symbol: fillSymbol
+              symbol: mySymbols.fillSymbolZone
             };      
             
             
@@ -132,7 +132,7 @@ function addSelectLayer(GraphicsLayer,webmap)
             };*/
           var lineRenderer = {
              type: "simple",
-            symbol: selectSymbol.lineSymbolPigg
+            symbol: mySymbols.lineSymbolPigg
            };
           routeLayer = new FeatureLayer({
               url:         sourceTrackRoute,
