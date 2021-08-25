@@ -6,7 +6,7 @@ use App\Api\Content\User\User;
 use App\Service\Client;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Finder\Exception\AccessDeniedException;
-use Symfony\Component\HttpClient\HttpClient;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
@@ -35,14 +35,25 @@ class BaseController extends AbstractController
     protected $responseCode = Response::HTTP_OK;
 
     /**
-     * BaseController constructor.
-     *
-     * @param Client $client
+     * @var LoggerInterface
      */
-    public function __construct(Client $client, RequestStack $requestStack)
+    protected $logger;
+
+    /**
+     * BaseController constructor.
+     * @param Client $client
+     * @param RequestStack $requestStack
+     * @param LoggerInterface $logger
+     */
+    public function __construct(
+        Client $client,
+        RequestStack $requestStack,
+        LoggerInterface $logger
+    )
     {
         $this->client = $client;
         $this->requestStack = $requestStack;
+        $this->logger = $logger;
     }
 
     protected function loadUserData(Request $request, string $tokenCookieName, string $userdataSessionName)
