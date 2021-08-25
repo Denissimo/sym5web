@@ -84,7 +84,7 @@ function addLayers3D(FeatureLayer,scene)
     hasZ:true,
     returnZ: true
       });
-
+   flyZoneLayer.definitionExpression=  buildDefinitionQueryFly() ;
    scene.layers.add(flyZoneLayer);
    
 

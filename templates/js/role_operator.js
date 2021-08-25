@@ -1,5 +1,5 @@
 console.log('role_operator');
-var tmzon;
+
 var idFly="";
 var sd;
 var fd;
@@ -869,52 +869,8 @@ function getUserFly()
                 return;  
                 
                     }
-            
-        function modLayerRec(gld,modLayer,atrName,atrNameMod,val)
-      {
-    
-        modLayer.queryFeatures({
-          where : atrName+" = '"+gld+"'",
-          returnGeometry: true,
-          returnZ : true,
-          returnM : true,
-            outFields: ["*"],
-          }).then(function(ftfSet) {
-             
-             ftfSet.features[0].setAttribute(atrNameMod,val);
-             param2={ updateFeatures: ftfSet.features};
-             updateLayer(modLayer,param2);
-    
-          })
-    
-    
-      } 
-      function updateRecordFlyghtTable(dat,flid) {
-      
-        apiModFlight= apiData(apiUrl, "/application/"+flid, token, 'PUT', dat);
-  
-        apiModFlight.then(function (response) {
-            
-             getUserFly(); // формирование панели полетов
-      
-}); 
- 
-}
-function updateLayer(lay,params,message=null) {
-  lay
-         .applyEdits(params)
-         .then(function(editsResult){ 
-         if(message!=null)
-           alert(message);  
 
-       })
-         .catch(function(error) {
-             alert( error.name);
-            alert( error.message);
-           
-         });
-
-}
+    
 
 
 function emulFlight()

@@ -3,6 +3,7 @@ var roles;
 var scene;
 var token ;
 var apiUrl;
+var tmzon;
 
 var GEOPROCESSOR;
 var POLYLINE;
@@ -831,8 +832,41 @@ require(
                  }
                }
             }
+            function modLayerRec(gld,modLayer,atrName,atrNameMod,val)
+            {
+          
+              modLayer.queryFeatures({
+                where : atrName+" = '"+gld+"'",
+                returnGeometry: true,
+                returnZ : true,
+                returnM : true,
+                  outFields: ["*"],
+                }).then(function(ftfSet) {
+                   
+                   ftfSet.features[0].setAttribute(atrNameMod,val);
+                   param2={ updateFeatures: ftfSet.features};
+                   updateLayer(modLayer,param2);
+          
+                })
+          
+          
+            }
 
-                
-           
+            function updateRecordFlyghtTable(dat,flid,isNew=false) {
+              emptyArray(glb);
+              apiModFlight= apiData(apiUrl, "/application/"+flid, token, 'PUT', dat);
+        
+              apiModFlight.then(function (response) {
+                   
+                   getUserFly(); // формирование панели полетов
+                   if (isNew)
+                   {
+                   
+                    alert ("Заявка сформирована. ");
+                   }
+      }); 
+       
+   } 
+   
              
             

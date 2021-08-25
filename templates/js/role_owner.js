@@ -2305,6 +2305,7 @@ function removeSelectSeg(rid,numb){
                    }
                   
                 }
+                
                 function updateLayer(lay,params,message=null) {
                   lay
                          .applyEdits(params)
@@ -2378,6 +2379,7 @@ function removeSelectSeg(rid,numb){
       let oldFly=idFly;
       idFly=response.id;
       idRoute=response.track.id;
+      tmzon=response.application.start.timezone_type;
       $.cookie("idRoute",idRoute);
       let el= document.getElementById("F"+oldFly);
       
@@ -3090,22 +3092,7 @@ function createFlyVectors(id){
    
     }
   
-    function updateRecordFlyghtTable(dat,flid,isNew) {
-            emptyArray(glb);
-            apiModFlight= apiData(apiUrl, "/application/"+flid, token, 'PUT', dat);
-      
-            apiModFlight.then(function (response) {
-                 
-                 getUserFly(); // формирование панели полетов
-                 if (isNew)
-                 {
-                  
-                  
-                  alert ("Заявка сформирована. ");
-                 }
-    }); 
-     
- }
+    
  
  /*export*/ function getUserFly()
  {
@@ -3149,8 +3136,8 @@ function createFlyVectors(id){
       
       apiUserFlight.then(function (response) {
           
-           makeListFlyghtPanel(response); // формирование панели полетов
-          });
+       makeListFlyghtPanel(response); // формирование панели полетов
+        });
 
 
       
@@ -3196,7 +3183,8 @@ function createFlyVectors(id){
              // var obj=flyght.application.externalId;//ftfSet.features[i].getAttribute("objectid");
               var sdat=flyght.application.start.date; //ftfSet.features[i].getAttribute("startdate");
               var  fdat=flyght.application.finish.date;//ftfSet.features[i].getAttribute("finishdate");
-               
+              tmzon=flyght.application.start.timezone_type;
+              
               lst=lst+flighthtml0;
               lst=lst+stats[kod-1];
               lst=lst+flighthtml1;
@@ -3935,24 +3923,4 @@ function cancelFly() {
       
           }
     
-        
-    function modLayerRec(gld,modLayer,atrName,atrNameMod,val)
-  {
-
-    modLayer.queryFeatures({
-      where : atrName+" = '"+gld+"'",
-      returnGeometry: true,
-      returnZ : true,
-      returnM : true,
-        outFields: ["*"],
-      }).then(function(ftfSet) {
-         
-         ftfSet.features[0].setAttribute(atrNameMod,val);
-         param2={ updateFeatures: ftfSet.features};
-         updateLayer(modLayer,param2);
-
-      })
-
-
-  } 
-
+  
