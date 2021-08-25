@@ -5,17 +5,11 @@ namespace App\Controller;
 use App\Api\Content\Aircraft\AircraftData;
 use App\Service\Client;
 use App\Service\ClientAuth;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Finder\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use App\Service\ContentLoader;
 use stdClass;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use App\Api\Content\Aircraft\AircraftUnit;
-use Throwable;
-use Exception;
 
 class ContentController extends BaseController
 {
@@ -75,29 +69,18 @@ class ContentController extends BaseController
         int $page
     )
     {
+        $time = time();
+        $this->logger->info(sprintf('buildUavPaginated Start: %d', time() - $time ), [
+            'source' => 'front'
+        ]);
         $this->loadUserData($request, $tokenCookieName, $userdataSessionName);
         if ($this->responseCode != Response::HTTP_OK) {
             return $this->redirectToRoute('login');
         }
 
-        $aircraftCategory = $this->requestUnauthorized(
+        $aircraftClassifiers = $this->requestUnauthorized(
             $client,
-            '/classifiers/aircraft_category/'
-        );
-
-        $aircraftEngine = $this->requestUnauthorized(
-            $client,
-            '/classifiers/aircraft_engine/'
-        );
-
-        $aircraftMass = $this->requestUnauthorized(
-            $client,
-            '/classifiers/aircraft_mass/'
-        );
-
-        $aircraftStatuses = $this->requestUnauthorized(
-            $client,
-            '/classifiers/aircraft_status/'
+            '/classifiers/aircraft/'
         );
 
         $myAircrafts = $this->requestAuthorized(
@@ -109,12 +92,16 @@ class ContentController extends BaseController
 
         $aircraftList = new AircraftData($myAircrafts);
 
+        $this->logger->info(sprintf('buildUavPaginated Finish: %d', time() - $time ), [
+            'source' => 'front'
+        ]);
+
         return $this->render('uav.html.twig', [
             'user' => $this->user,
-            'category' => $aircraftCategory->category,
-            'engine' => $aircraftEngine->engine,
-            'mass' => $aircraftMass->mass,
-            'statuses' => $aircraftStatuses->status,
+            'category' => $aircraftClassifiers->category,
+            'engine' => $aircraftClassifiers->engine,
+            'mass' => $aircraftClassifiers->mass,
+            'statuses' => $aircraftClassifiers->statuses,
             'aircrafts' => $aircraftList,
             'route' => 'UAV',
             'use_arcgis' => false

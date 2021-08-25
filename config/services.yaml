@@ -8,6 +8,7 @@ parameters:
     auth_url: '%env(AUTH_URL)%'
     token_cookie_name: '%env(TOKEN_COOKIE_NAME)%'
     userdata_session_name: '%env(USERDATA_SESSION_NAME)%'
+#    common_log_path: '%kernel.project_dir%/../../logs'
 
 services:
     # default configuration for services in *this* file
@@ -19,6 +20,7 @@ services:
             string $authUrl: '%auth_url%'
             string $tokenCookieName: '%token_cookie_name%'
             string $userdataSessionName: '%userdata_session_name%'
+#            string $commonLogPath: '%common_log_path%'
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
