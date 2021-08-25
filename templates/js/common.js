@@ -173,7 +173,7 @@ require(
             
         });
         */
-        esriConfig.portalUrl = "https://abr-gis-portal.airchannel.net/portal";
+        esriConfig.portalUrl = webPaths.portalUrl //"https://abr-gis-portal.airchannel.net/portal";
         
         
         
@@ -190,8 +190,8 @@ require(
                
                 var map  = new WebMap({
                 portalItem: {
-                   id:  "4e1ce0dd127c4cadabd554b808d059b4",
-                   portal: "https://abr-gis-portal.airchannel.net/portal"
+                   id:  webPaths.mapId  ,  //  "4e1ce0dd127c4cadabd554b808d059b4",
+                   portal: webPaths.portalUrl   //    "https://abr-gis-portal.airchannel.net/portal"
                         }
                  
                }); 
@@ -204,8 +204,8 @@ require(
 
              scene = new WebScene({
             portalItem: {
-                id: "4c4de937a5d148f18cfa76b23c873766",
-                portal: "https://abr-gis-portal.airchannel.net/portal"
+                id: webPaths.sceneId  ,  //  "4c4de937a5d148f18cfa76b23c873766",
+                portal: webPaths.portalUrl //   "https://abr-gis-portal.airchannel.net/portal"
             },
         });
         
@@ -251,8 +251,8 @@ require(
             
             scene = new WebMap({
                portalItem: {
-                  id:  "4e1ce0dd127c4cadabd554b808d059b4",
-                  portal: "https://abr-gis-portal.airchannel.net/portal"
+                  id:  webPaths.mapId  ,//"4e1ce0dd127c4cadabd554b808d059b4",
+                  portal: webPaths.portalUrl //    "https://abr-gis-portal.airchannel.net/portal"
                        },
                 ground : "world-elevation"  
                 

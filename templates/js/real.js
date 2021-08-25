@@ -104,27 +104,27 @@ function addReal(FeatureLayer,LabelClass,Geoprocessor,scene,isOwner){
           },
         ],
       };
-     var gpUrl =
-      "https://abr-gis-server.airchannel.net/airchannel/rest/services/Dev/SendTracker/GPServer/SendTracker";
+     var gpUrl =webPaths.urlSendTracke,
+     // "https://abr-gis-server.airchannel.net/airchannel/rest/services/Dev/SendTracker/GPServer/SendTracker";
      GEOPROCESSOR = new Geoprocessor({
      url: gpUrl
      });      
      
      
-     let servicePath =
-     "https://abr-gis-server.airchannel.net/airchannel/rest/services/Dev/VectorDevelop2/FeatureServer/";
-      servicePath = "https://abr-gis-server.airchannel.net/airchannel/rest/services/Dev/VectorDevelop/FeatureServer/";
+     let servicePath =webPaths.servicePath;
+     //"https://abr-gis-server.airchannel.net/airchannel/rest/services/Dev/VectorDevelop2/FeatureServer/";
+     // servicePath = "https://abr-gis-server.airchannel.net/airchannel/rest/services/Dev/VectorDevelop/FeatureServer/";
     
      let sourceFlyghtZone = servicePath + "5";  
     
     if (isOwner)  
     {
-      servicePath = "https://abr-gis-server.airchannel.net/airchannel/rest/services/Dev/VectorDevelop/FeatureServer/";
+      //servicePath = "https://abr-gis-server.airchannel.net/airchannel/rest/services/Dev/VectorDevelop/FeatureServer/";
       sourceFlyghtZone = servicePath + "5";
 
       realAllLayer =new FeatureLayer({
       //  url:"https://abr-gis-server.airchannel.net/airchannel/rest/services/Hosted/AllFlightReal/FeatureServer/0",
-        url:"https://abr-gis-server.airchannel.net/airchannel/rest/services/Hosted/realFlights/FeatureServer/0",
+        url: webPaths.urlRealAll,         //"https://abr-gis-server.airchannel.net/airchannel/rest/services/Hosted/realFlights/FeatureServer/0",
         popupTemplate: templateReal,
        // labelingInfo: [realLabelClass2d],
 
@@ -132,7 +132,7 @@ function addReal(FeatureLayer,LabelClass,Geoprocessor,scene,isOwner){
       }); 
     realLayer= new FeatureLayer({
      //  url: "https://abr-gis-server.airchannel.net/airchannel/rest/services/Hosted/TruckLastBJTime/FeatureServer",
-       url: "https://abr-gis-server.airchannel.net/airchannel/rest/services/Hosted/LastBortEvent/FeatureServer/0",
+       url:  webPaths.urlRealLast,  //   "https://abr-gis-server.airchannel.net/airchannel/rest/services/Hosted/LastBortEvent/FeatureServer/0",
        popupTemplate: templateReal,
        title: "Текущее местоположение",
        //add.spatialReference : {wkid :4326},
@@ -145,7 +145,7 @@ function addReal(FeatureLayer,LabelClass,Geoprocessor,scene,isOwner){
       {
         realAllLayer =new FeatureLayer({
           //url:"https://abr-gis-server.airchannel.net/airchannel/rest/services/Hosted/AllFlightReal/FeatureServer/0",
-          url:"https://abr-gis-server.airchannel.net/airchannel/rest/services/Hosted/realFlights/FeatureServer/0",
+          url: webPaths.urlRealAll,//   "https://abr-gis-server.airchannel.net/airchannel/rest/services/Hosted/realFlights/FeatureServer/0",
           //labelingInfo: [realLabelClass],
           popupTemplate: templateReal,
           title: "Выполняющиеся полеты",
@@ -156,7 +156,7 @@ function addReal(FeatureLayer,LabelClass,Geoprocessor,scene,isOwner){
         });
         realLayer= new FeatureLayer({
            //url: "https://abr-gis-server.airchannel.net/airchannel/rest/services/Hosted/TruckLastBJTime/FeatureServer",
-           url: "https://abr-gis-server.airchannel.net/airchannel/rest/services/Hosted/LastBortEvent/FeatureServer/0",
+           url:  webPaths.urlRealLast,// "https://abr-gis-server.airchannel.net/airchannel/rest/services/Hosted/LastBortEvent/FeatureServer/0",
            popupTemplate: templateReal,
            title: "Текущее местоположение",
            labelingInfo: [realLabelClass],

@@ -58,13 +58,7 @@ function addSelectLayer(GraphicsLayer,webmap)
                 });
     
 
-          /*
-          lineSymbolTable = {
-            type: "simple-line", // autocasts as SimpleLineSymbol()
-            color: [0, 255, 0],
-            width: 2
-          };
-       */
+         
            var lineRendererTable = {
                type: "simple",
                symbol: mySymbols.lineSymbolTable
@@ -79,17 +73,7 @@ function addSelectLayer(GraphicsLayer,webmap)
             
 
   //****************************************************************************************************** */              
-      /*    fillSymbolSelectZone =
-         {
-           type: "simple-fill", 
-           color: [ 255,0, 197, 0.2 ],
-           style: "solid",
-           outline: {  // autocasts as new SimpleLineSymbol()
-                 color: [ 0,255, 0 ],
-                 width: 3
-                   }
-         };
-*/
+    
            var zoneRendererTable = {
                     type: "simple",
                     symbol: mySymbols.fillSymbolSelectZone
@@ -102,12 +86,7 @@ function addSelectLayer(GraphicsLayer,webmap)
             listMode :"hide" });
     
     //****************************************************************************************************** */              
-           /*var fillSymbol = {
-            type: "simple-fill", // autocasts as SimpleLineSymbol()
-             color: [255, 0, 197,0.2],
-             width: 2
-            };
-*/
+         
           var zoneRenderer = {
               type: "simple",
               symbol: mySymbols.fillSymbolZone
@@ -125,11 +104,7 @@ function addSelectLayer(GraphicsLayer,webmap)
               });         
   //****************************************************************************************************** */                   
                
-         /* var selectSymbol.lineSymbol = {
-             type: "simple-line", // autocasts as SimpleLineSymbol()
-             color: [255, 0, 197],
-             width: 1
-            };*/
+       
           var lineRenderer = {
              type: "simple",
             symbol: mySymbols.lineSymbolPigg
