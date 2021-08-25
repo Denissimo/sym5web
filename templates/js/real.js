@@ -125,7 +125,7 @@ function addReal(FeatureLayer,LabelClass,Geoprocessor,scene,isOwner){
       realAllLayer =new FeatureLayer({
       //  url:"https://abr-gis-server.airchannel.net/airchannel/rest/services/Hosted/AllFlightReal/FeatureServer/0",
         url: webPaths.urlRealAll,         //"https://abr-gis-server.airchannel.net/airchannel/rest/services/Hosted/realFlights/FeatureServer/0",
-        popupTemplate: templateReal,
+        popupTemplate: templatesPopup.templateReal,
        // labelingInfo: [realLabelClass2d],
 
         renderer: myRenderers.realMarkerRenderer
@@ -133,7 +133,7 @@ function addReal(FeatureLayer,LabelClass,Geoprocessor,scene,isOwner){
     realLayer= new FeatureLayer({
      //  url: "https://abr-gis-server.airchannel.net/airchannel/rest/services/Hosted/TruckLastBJTime/FeatureServer",
        url:  webPaths.urlRealLast,  //   "https://abr-gis-server.airchannel.net/airchannel/rest/services/Hosted/LastBortEvent/FeatureServer/0",
-       popupTemplate: templateReal,
+       popupTemplate: templatesPopup.templateReal,
        title: "Текущее местоположение",
        //add.spatialReference : {wkid :4326},
        labelingInfo: [realLabelClass2d]
@@ -147,7 +147,7 @@ function addReal(FeatureLayer,LabelClass,Geoprocessor,scene,isOwner){
           //url:"https://abr-gis-server.airchannel.net/airchannel/rest/services/Hosted/AllFlightReal/FeatureServer/0",
           url: webPaths.urlRealAll,//   "https://abr-gis-server.airchannel.net/airchannel/rest/services/Hosted/realFlights/FeatureServer/0",
           //labelingInfo: [realLabelClass],
-          popupTemplate: templateReal,
+          popupTemplate: templatesPopup.templateReal,
           title: "Выполняющиеся полеты",
           elevationInfo: {
             mode: "relative-to-ground",   
@@ -157,7 +157,7 @@ function addReal(FeatureLayer,LabelClass,Geoprocessor,scene,isOwner){
         realLayer= new FeatureLayer({
            //url: "https://abr-gis-server.airchannel.net/airchannel/rest/services/Hosted/TruckLastBJTime/FeatureServer",
            url:  webPaths.urlRealLast,// "https://abr-gis-server.airchannel.net/airchannel/rest/services/Hosted/LastBortEvent/FeatureServer/0",
-           popupTemplate: templateReal,
+           popupTemplate: templatesPopup.templateReal,
            title: "Текущее местоположение",
            labelingInfo: [realLabelClass],
            elevationInfo: {

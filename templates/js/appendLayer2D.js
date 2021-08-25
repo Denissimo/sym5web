@@ -22,30 +22,7 @@ function addSelectLayer(GraphicsLayer,webmap)
           var sourceFlyghtRoute=webPaths.servicePath+"2";
           
 
-          var      templateZoneFly = {
-        
-            title: "Полетные зоны",
-            returnGeometry : true,
-            content: [
-              {
-                type: "fields",
-                fieldInfos: [
-                  {
-                    fieldName: "sdate",
-                    label: "Старт"
-                  }
-                  ,
-                  {
-                    fieldName: "edate",
-                    label: "Финиш"
-                  }
-                ]
-              }
-            ]
-          };
-          
-               
-        
+         
             routeVecLayer = new FeatureLayer({
             url:     sourceTrackRoute, 
             

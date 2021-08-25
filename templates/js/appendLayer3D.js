@@ -28,25 +28,7 @@ function addLayers3D(FeatureLayer,scene)
   
 
   
-  var templateRoute = {
-    // autocasts as new PopupTemplate()
-    title: "Маршрут",
-    content: [
-      {
-        type: "fields",
-        fieldInfos: [
-          {
-            fieldName: "sdate",
-            label: "Старт",
-          },
-          {
-            fieldName: "edate",
-            label: "Финиш",
-          },
-        ],
-      },
-    ],
-  };
+  
    routeLayer = new FeatureLayer({
       url: sourceFlyghtRoute,
       title: "Траектория полета",

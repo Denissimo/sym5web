@@ -82,4 +82,45 @@ class templatesPopup{
         ]
       };
 
+
+      static templateReal = {
+        // autocasts as new PopupTemplate()
+        title: "{serial}",
+        content: [
+          {
+            // It is also possible to set the fieldInfos outside of the content
+            // directly in the popupTemplate. If no fieldInfos is specifically set
+            // in the content, it defaults to whatever may be set within the popupTemplate.
+            type: "fields",
+            fieldInfos: [
+              {
+                fieldName: "Altitude",
+                label: "Высота",
+                format: {
+                  places: 0,
+                  digitSeparator: true,
+                },
+              },
+              {
+                fieldName: "Speed",
+                label: "Скорость",
+                format: {
+                  places: 0,
+                  digitSeparator: true,
+                },
+              },
+              {
+                fieldName: "Heading",
+                label: "Курс",
+                format: {
+                  places: 0,
+                  digitSeparator: true,
+                },
+              },
+            ],
+          },
+        ],
+      };
+
+
 }
