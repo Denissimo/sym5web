@@ -556,9 +556,9 @@ $(document).ready(function () {
             },
         };
 
-        console.log(settings.data);
-        // Token Response
-
+        $.ajax(settings).done(function (response) {
+            return response;
+        });
     });
 
     function makeDate(stringDate) {
