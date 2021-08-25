@@ -14,12 +14,12 @@ function addSelectLayer(GraphicsLayer,webmap)
 
      function addLayers2D(FeatureLayer,webmap)
      {
-          var servicePath = "https://abr-gis-server.airchannel.net/airchannel/rest/services/Dev/VectorDevelop/FeatureServer/";
+         // var servicePath = "https://abr-gis-server.airchannel.net/airchannel/rest/services/Dev/VectorDevelop/FeatureServer/";
           
-          var sourceTrackRoute=servicePath+"1";
-          var sourceTrackZone=servicePath+"4";
-          var sourceFlyghtZone=servicePath+"5"; 
-          var sourceFlyghtRoute=servicePath+"2";
+          var sourceTrackRoute=webPaths.servicePath+"1";
+          var sourceTrackZone=webPaths.servicePath+"4";
+          var sourceFlyghtZone=webPaths.servicePath+"5"; 
+          var sourceFlyghtRoute=webPaths.servicePath+"2";
           
 
           var      templateZoneFly = {
@@ -58,40 +58,23 @@ function addSelectLayer(GraphicsLayer,webmap)
                 });
     
 
-         
-           var lineRendererTable = {
-               type: "simple",
-               symbol: mySymbols.lineSymbolTable
-            };
-
              tableLayer = new FeatureLayer({
               url:    sourceTrackRoute,
               outFields: ["*"],
-              renderer :lineRendererTable,
+              renderer :myRenderers.lineRendererTable,
               listMode :"hide"
                 });
             
 
   //****************************************************************************************************** */              
     
-           var zoneRendererTable = {
-                    type: "simple",
-                    symbol: mySymbols.fillSymbolSelectZone
-                  };    
-
             tableZoneLayer = new FeatureLayer({
             url:     sourceTrackZone,
             outFields: ["*"],
-            renderer:zoneRendererTable,
+            renderer: myRenderers.zoneRendererTable,
             listMode :"hide" });
     
     //****************************************************************************************************** */              
-         
-          var zoneRenderer = {
-              type: "simple",
-              symbol: mySymbols.fillSymbolZone
-            };      
-            
             
 
           zoneLayer = new FeatureLayer({
@@ -99,16 +82,12 @@ function addSelectLayer(GraphicsLayer,webmap)
                outFields: ["*"],
                hasZ:true,
                returnZ: true,
-               renderer:zoneRenderer,
+               renderer:myRenderers.zoneRenderer,
                title : "Зоны полетов"
               });         
   //****************************************************************************************************** */                   
                
        
-          var lineRenderer = {
-             type: "simple",
-            symbol: mySymbols.lineSymbolPigg
-           };
           routeLayer = new FeatureLayer({
               url:         sourceTrackRoute,
               outFields: ["*"],
@@ -116,7 +95,7 @@ function addSelectLayer(GraphicsLayer,webmap)
               hasZ:true,
               returnM :true,
               returnZ: true,
-              renderer:lineRenderer,
+              renderer:myRenderers.lineRenderer,
               title : "Траектории"
                });
                
@@ -142,7 +121,7 @@ function addSelectLayer(GraphicsLayer,webmap)
                     title: "Зоны заявок",  
                     url: sourceFlyghtZone,
                     outFields: ["*"],
-                    renderer: selectSymbol.unicumRendererZone,
+                    renderer: myRenderers.unicumRendererZone,
                     popupTemplate :templatesPopup.templateZoneFly,
                     hasZ:true,
                     returnZ: true

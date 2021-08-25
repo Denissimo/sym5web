@@ -5,23 +5,19 @@ var webDronActive;
 function addLayers3D(FeatureLayer,scene)
 {
     
-  let servicePath =
-  "https://abr-gis-server.airchannel.net/airchannel/rest/services/Dev/VectorDevelop2/FeatureServer/";
+ // let servicePath =
+ // "https://abr-gis-server.airchannel.net/airchannel/rest/services/Dev/VectorDevelop2/FeatureServer/";
  
   let sourceFlyghtZone = webPaths.servicePath + "5";
   let sourceFlyghtRoute = webPaths.servicePath + "2";
   
   
 
-  var zoneRenderer = {
-    type: "simple",
-    symbol: mySymbols.fillSymbolZone,
-  };
   zoneLayer = new FeatureLayer({
       url: sourceFlyghtZone,
       outFields: ["*"],
       hasZ: true,
-      renderer:zoneRenderer,
+      renderer:myRenderers.zoneRenderer,
       listMode: "hide",
       returnZ: true,
       elevationInfo: {
@@ -32,20 +28,11 @@ function addLayers3D(FeatureLayer,scene)
   
 
   
-  var lineRendererRoute = {
-    type: "simple",
-    symbol: mySymbols.lineSymbolRoute,
-  };
-
-  
   var templateRoute = {
     // autocasts as new PopupTemplate()
     title: "Маршрут",
     content: [
       {
-        // It is also possible to set the fieldInfos outside of the content
-        // directly in the popupTemplate. If no fieldInfos is specifically set
-        // in the content, it defaults to whatever may be set within the popupTemplate.
         type: "fields",
         fieldInfos: [
           {
@@ -68,26 +55,20 @@ function addLayers3D(FeatureLayer,scene)
       mode: "absolute-height"
       },
       definitionExpression : " objectid < 0",
-      renderer: lineRendererRoute
+      renderer: myRenderers.lineRendererRoute
      // popupTemplate:templateRoute
     
   });
   scene.layers.add(routeLayer);
 
   //**************************************************************************************************************************************************** */
-
-  var zoneRendererTen = {
-    type: "simple",
-    symbol: mySymbols.fillSymbolZoneTen,
-  };
-
    zoneLayerTen = new FeatureLayer({
     
     url: sourceFlyghtZone,
     outFields: ["*"],
     hasZ: true,
     returnZ: true,
-    renderer: zoneRendererTen,
+    renderer: myRenderers.zoneRendererTen,
     title: "Полетные зоны",
     elevationInfo: {
       mode: "on-the-ground"
@@ -113,7 +94,7 @@ function addLayers3D(FeatureLayer,scene)
     url: sourceFlyghtZone,
     outFields: ["*"],
     labelingInfo: [realLabelClassZone],
-    renderer: selectSymbol.unicumRendererZone,
+    renderer: myRenderers.unicumRendererZone,
     popupTemplate :templatesPopup.templateZoneFly,
     elevationInfo: {
       mode: "on-the-ground",

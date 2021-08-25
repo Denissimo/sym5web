@@ -128,7 +128,7 @@ function addReal(FeatureLayer,LabelClass,Geoprocessor,scene,isOwner){
         popupTemplate: templateReal,
        // labelingInfo: [realLabelClass2d],
 
-        renderer: selectSymbol.realMarkerRenderer
+        renderer: myRenderers.realMarkerRenderer
       }); 
     realLayer= new FeatureLayer({
      //  url: "https://abr-gis-server.airchannel.net/airchannel/rest/services/Hosted/TruckLastBJTime/FeatureServer",
@@ -152,7 +152,7 @@ function addReal(FeatureLayer,LabelClass,Geoprocessor,scene,isOwner){
           elevationInfo: {
             mode: "relative-to-ground",   
              },
-          renderer:selectSymbol.realMarkerRenderer
+          renderer:myRenderers.realMarkerRenderer
         });
         realLayer= new FeatureLayer({
            //url: "https://abr-gis-server.airchannel.net/airchannel/rest/services/Hosted/TruckLastBJTime/FeatureServer",
@@ -175,7 +175,7 @@ function addReal(FeatureLayer,LabelClass,Geoprocessor,scene,isOwner){
     title: "Зона текущего полета",  
     url: sourceFlyghtZone,
     outFields: ["*"],
-    renderer: selectSymbol.unicumRendererZone,
+    renderer: myRenderers.unicumRendererZone,
     
     definitionExpression:"objectid < 0",
     //popupTemplate :templatesPopup.templateZoneFly,
