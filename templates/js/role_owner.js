@@ -2306,21 +2306,6 @@ function removeSelectSeg(rid,numb){
                   
                 }
                 
-                function updateLayer(lay,params,message=null) {
-                  lay
-                         .applyEdits(params)
-                         .then(function(editsResult){ 
-                         if(message!=null)
-                           alert(message);  
-                
-                       })
-                         .catch(function(error) {
-                             alert( error.name);
-                            alert( error.message);
-                           
-                         });
-                
-                }
                 function createZone(params,dat,routeid) {
                   zoneLayer
                     .applyEdits(params)

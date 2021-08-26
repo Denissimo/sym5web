@@ -108,8 +108,11 @@ function getUserFly()
                  
                 if(response.applications[i].application.start.date >= stDt)
                   if(response.applications[i].status.id >2) 
-                  
-                    panFlyght(response.applications[i]);
+                    
+                    glb.push([response.applications[i].id,response.applications[i].track.type.toString()]) ; 
+
+                   let ellst= cardHtml.panFlyght(response.applications[i]);
+                   lst=lst+ellst;
                  }
                  document.getElementById("uav-realtimelist").innerHTML=lst;
                  addFlyEvent();
@@ -127,7 +130,7 @@ function getUserFly()
               var glob= flyght.id;       // glob - GUID полета
               var kod=  flyght.status.id;   
            
-              glb.push([glob,flyght.track.type.toString()]) ;   // glb -  массив согласованных или на согласовании
+             // glb.push([glob,flyght.track.type.toString()]) ;   // glb -  массив согласованных или на согласовании
 
    
               var sdat=flyght.application.start.date; //ftfSet.features[i].getAttribute("startdate");
@@ -216,21 +219,21 @@ function getUserFly()
         let el= document.getElementById("F"+oldFly);
         let el2= document.getElementById("F"+idFly);
         let reg=false;
-        if(el!=null) 
-        {
-          detalFlyght(null,false,-1,response,oldFly);
-        
+        if(el!=null)
+        {  let el3=  document.getElementById("R"+oldFly);   
+            el3.innerHTML="";
         }
-        if(el2!=null)
-      {
+      if(el2!=null)
+       {
         idFly="";    
         queryFlight(null,"");
         reg=true;
       }
       else
       {
-      
-            detalFlyght(flyZoneLayer,true,typeFly,response,response.id)
+        let el3= document.getElementById("R"+response.id);
+          ellst=cardHtml.detalFlyght(response);
+          el3.innerHTML=ellst;
             queryFlight(idFly);
          
       }  
@@ -244,7 +247,7 @@ function getUserFly()
   
         
             
-        function detalFlyght (detalLayer,reg,tp,response,fid) { 
+       /* function detalFlyght (response) { 
 
           const flighthtml2 ='<span class="uav-item-row uav-item-date-start"><span class="uav-item-desc">Старт</span>';
           const flighthtml2_2 ='</span>\
@@ -258,11 +261,10 @@ function getUserFly()
           
           const flighthtml3_4='<span class="uav-item-desc">Пользователь</span>';
           const flighthtml3_3='</span>'; 
-      
+          fid=response.id;
           let lst="";
           id="R"+fid;
-          if (reg)
-           {
+          
             let sdat=response.application.start.date; //ftfSet.features[i].getAttribute("startdate");
             let  fdat=response.application.finish.date;//ftfSet.features[i].getAttribute("finishdate");
              
@@ -279,13 +281,13 @@ function getUserFly()
          lst=lst+flighthtml3_1+"F"+response.id+flighthtml3_2+rnumb;//
          lst=lst+flighthtml3_4+ response.user.user.username+flighthtml3_3;
              
-           }
           
-          document.getElementById(id).innerHTML=lst;
           
-            return ;
+          //document.getElementById(id).innerHTML=lst;
+          
+            return  lst;
             } 
-         
+         */
        return;  
     
   
@@ -941,18 +943,4 @@ function emulFlight()
         timeSlider.loop=true;
          
         }
-        function updateLayer(lay,params,message=null) {
-          lay
-                 .applyEdits(params)
-                 .then(function(editsResult){ 
-                 if(message!=null)
-                   alert(message);  
         
-               })
-                 .catch(function(error) {
-                     alert( error.name);
-                    alert( error.message);
-                   
-                 });
-        
-        }

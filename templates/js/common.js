@@ -868,6 +868,22 @@ require(
           
           
             }
+            function updateLayer(lay,params,message=null) {
+              lay
+                     .applyEdits(params)
+                     .then(function(editsResult){ 
+                     if(message!=null)
+                       alert(message);  
+            
+                   })
+                     .catch(function(error) {
+                         alert( error.name);
+                        alert( error.message);
+                       
+                     });
+            
+            }
+    
 
             function updateRecordFlyghtTable(dat,flid,isNew=false) {
               emptyArray(glb);

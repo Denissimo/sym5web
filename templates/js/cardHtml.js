@@ -1,29 +1,108 @@
  class cardHtml{
-     flighthtml = ['<li class="uav-list-item"><div class="uav-item-header"><span class="uav-item-status">',
-  '</span> <button class="btn uav-btn-more" id="',
-  '">Подробнее</button>  </div>  <div class="uav-item-body">',
-  '<span class="uav-item-row uav-item-flight"><span class="uav-item-desc">Наименование</span>',
-  '</span> <span class="uav-item-row uav-item-date-start"><span class="uav-item-desc">Старт</span>',
-  '</span> <span class="uav-item-row uav-item-date-start"><span class="uav-item-desc">Финиш</span>', 
-  '</span> </div> <div class="uav-item-body" id="',
-  '"></div>',
-  '<input type="hidden" id="',
-  '" value="',
-  '"></input>',
-  '</li>'];
+     
+
+
+  static panFlyght(flyght)
+  {
+    var stats= ["Черновик","Шаблон","На утверждении","Подтверждена","Отклонена","Отменена","Выполняется"];
+  
+    var lst="";
+    var flighthtml = [
+     '<li class="uav-list-item">\
+         <div class="uav-item-header">\
+            <span class="uav-item-status">',
+            '</span>\
+            <button class="btn uav-btn-more" id="',
+                                                  '">Подробнее\
+            </button>\
+         </div>\
+         <div class="uav-item-body">',
+            '<span class="uav-item-row uav-item-flight">\
+                <span class="uav-item-desc">Наименование\
+                </span>',
+            '</span>\
+         </div>\
+         <div class="uav-item-body" id="',
+                                         '">\
+         </div>',
+        '<input type="hidden" id="',
+                                   '" value="',
+                                              '">\
+        </input>',
+    '</li>'];
+    
+  
+  var  nm=flyght.track.name;
+  var glob= flyght.id;       // glob - GUID полета
+  var kod=  flyght.status.id;   
+
+   lst=lst+flighthtml[0];
+   lst=lst+stats[kod-1];
+   lst=lst+flighthtml[1];
+   lst=lst+glob;
+   lst=lst+flighthtml[2];
+   lst=lst+flighthtml[3];
+   lst=lst+nm;
+  
+   lst=lst+flighthtml[4];
+   lst=lst+"R"+glob;
+   lst=lst+flighthtml[5];
+
+   lst=lst+flighthtml[6];
+   lst=lst+"T"+glob;
+   lst=lst+flighthtml[7];
+   lst=lst+kod; 
+   lst=lst+flighthtml[8];
+   
+   lst=lst+flighthtml[9];
+   return lst
+}
+
+
+
+
+     
 
 
 
 //detalowner
-   flightdetal =['<span class="uav-item-row uav-item-date-start"><span class="uav-item-desc">Старт</span>',
-                       '</span><span class="uav-item-row uav-item-date-start"><span class="uav-item-desc">Финиш</span>',
-                       '</span>',
-                       '<span class="uav-item-row uav-item-flight" id="',
-                       '"><span class="uav-item-desc">Сер.номер БВС</span>',
-                       '<span class="uav-item-desc">Пользователь</span>',
-                       '</span>'];
+   
+    
+                 static      detalFlyght (response) { 
 
+                 var  flightdetal =
+                 ['<span class="uav-item-row uav-item-date-start"><span class="uav-item-desc">Старт</span>',
+                  '</span><span class="uav-item-row uav-item-date-start"><span class="uav-item-desc">Финиш</span>',
+                  '</span>',
+                  '<span class="uav-item-row uav-item-flight" id="',
+                  '"><span class="uav-item-desc">Сер.номер БВС</span>',
+                  '<span class="uav-item-desc">Пользователь</span>',
+                  '</span>'];
  
+                        
+                        let lst="";
+                        
+                        
+                        let sdat=response.application.start.date; //ftfSet.features[i].getAttribute("startdate");
+                        let  fdat=response.application.finish.date;//ftfSet.features[i].getAttribute("finishdate");
+                           
+                         
+                          lst=lst+flightdetal[0];
+                          lst=lst+sdat;
+                          lst=lst+flightdetal[1];
+                          lst=lst+fdat;     
+                          lst=lst+flightdetal[2];
+                          let rnumb="unknow";
+                          if ( response.aircraft!= null)
+                              rnumb= response.aircraft.serialNumber;
+                          if (rnumb==null) rnumb="unknow";
+                          lst=lst+flightdetal[3]+"F"+response.id+flightdetal[4]+rnumb;//
+                          lst=lst+flightdetal[5]+ response.user.user.username+flightdetal[6];
+                        
+                          return  lst;
+                          }  
+
+
 
 
 
