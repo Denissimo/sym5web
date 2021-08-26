@@ -67,15 +67,16 @@ class BaseController extends AbstractController
                 return $this;
             }
             $token = $request->cookies->get($tokenCookieName);
-
-
-            $userData = $this->client->sendJson(
-                '/my/userdata',
-                null,
-                'GET',
-                ['Authorization' => sprintf('Bearer %s', $token)]
-            );
-
+            if ($token) {
+                $userData = $this->client->sendJson(
+                    '/my/userdata',
+                    null,
+                    'GET',
+                    ['Authorization' => sprintf('Bearer %s', $token)]
+                );
+            } else {
+                $this->responseCode = Response::HTTP_UNAUTHORIZED;
+            }
             $session->set($userdataSessionName, $userData);
             $this->user = new User($userData->user);
         } catch (AccessDeniedException $e) {
@@ -180,5 +181,21 @@ class BaseController extends AbstractController
                 'code' => $errorCode
             ]
         );
+    }
+
+    /**
+     * @param string $message
+     * @param array $data
+     * @param int $time
+     *
+     * @return int
+     */
+    protected function logInfo(string $message, array $data = [], int $time = 0)
+    {
+        $currentTime = time();
+        $delay = $time != 0 ? $currentTime - $time : $time;
+        $this->logger->info(sprintf($message, $delay ), $data);
+
+        return $currentTime;
     }
 }

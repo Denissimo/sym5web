@@ -20,10 +20,23 @@ class ArcgisController extends BaseController
 
     public function buildAirSituation(Request $request, string $tokenCookieName, string $userdataSessionName)
     {
+        $time = $this->logInfo('buildAirSituation Start: %d', [
+            'source' => 'front'
+        ]);
+
         $this->loadUserData($request, $tokenCookieName, $userdataSessionName);
         if ($this->responseCode != Response::HTTP_OK) {
+            $this->logInfo('buildAirSituation Redirect to Login: %d', [
+                'source' => 'front'
+            ], $time);
+
             return $this->redirectToRoute('login');
         }
+
+        $this->logInfo('buildAirSituation Finish: %d', [
+            'source' => 'front'
+        ], $time);
+
         return $this->render('airsituation.html.twig', [
             'user' => $this->user,
             'route' => 'AirSituation',
@@ -51,6 +64,10 @@ class ArcgisController extends BaseController
 
     public function buildFlights(Request $request, Client $client, string $tokenCookieName, string $userdataSessionName)
     {
+        $time = $this->logInfo('buildFlights Start: %d', [
+            'source' => 'front'
+        ]);
+
         $this->loadUserData($request, $tokenCookieName, $userdataSessionName);
         if ($this->responseCode != Response::HTTP_OK) {
             return $this->redirectToRoute('login');
@@ -68,6 +85,10 @@ class ArcgisController extends BaseController
         }
 
         $aircraftList = new AircraftList($myAircraftList);
+
+        $this->logInfo('buildFlights Finish: %d', [
+            'source' => 'front'
+        ], $time);
 
         return $this->render('flights.html.twig', [
             'user' => $this->user,
@@ -99,11 +120,19 @@ class ArcgisController extends BaseController
         string $userdataSessionName
     )
     {
+        $time = $this->logInfo('buildCommonJs Start: %d', [
+            'source' => 'front'
+        ]);
+
         $route = $request->query->get('route') ?? self::DEFAULT_ROUTE;
         $this->loadUserData($request, $tokenCookieName, $userdataSessionName);
         if ($this->responseCode != Response::HTTP_OK) {
             return $this->redirectToRoute('login');
         }
+
+        $this->logInfo('buildCommonJs Finish: %d', [
+            'source' => 'front'
+        ], $time);
 
         $response = $this->render('js/script.html.twig', [
             'user' => $this->user,
