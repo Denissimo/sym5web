@@ -1,8 +1,13 @@
 var flightsBoard;
 var glids;
 var idRealDet;
+var linSymbol;
 function addReal(FeatureLayer,LabelClass,Geoprocessor,scene,isOwner){
-
+    glids=[];  
+    if (isOwner)
+       linSymbol =mySymbols.lineSymbolRoute;
+    else   
+    linSymbol =mySymbols.lineSymbolPigg;
     var stt= new Date();
      stt.setTime(stt.getTime()-800000000);            
     var stDt=convertTime(stt);
@@ -170,7 +175,7 @@ function addReal(FeatureLayer,LabelClass,Geoprocessor,scene,isOwner){
    scene.layers.add(realAllLayer);  
    realAllLayer.definitionExpression=buildDefinitionQueryReal();      
    scene.layers.add(realLayer);
-   realLayer.definitionExpression=buildDefinitionQueryReal();
+   realLayer.definitionExpression=buildDefinitionQueryReal(true);
    flyZoneLayer = new FeatureLayer({
     title: "Зона текущего полета",  
     url: sourceFlyghtZone,
@@ -187,9 +192,10 @@ function addReal(FeatureLayer,LabelClass,Geoprocessor,scene,isOwner){
       });
       flyZoneLayer.definitionExpression="objectid <0" ;
       bufferLayer.title="Текущие полеты";
+      
   // scene.layers.add(flyZoneLayer);
     
-   window.setInterval(realPath, 20000);   
+  // window.setInterval(realPath, 2000);   
 }  
 
 
@@ -201,15 +207,17 @@ function refreshRealLayer(FeatureLayer,scene,tit,isOwner)
   
   for (var i=0;i<glids.length;i++)
   {
-   
+       realPath();
       if(glids[i][1]!= null)
       {
       apiAircraft= apiData(apiUrl, "/aircraft/"+glids[i][1], token);
       apiAircraft.then(function (response) {
        
         if (document.getElementById("S"+response.id)!=null)
+        {
         document.getElementById("S"+response.id).innerText=response.aircraft.serialNumber;
-      
+        
+        }
         
         
       });
@@ -251,7 +259,7 @@ function refreshRealLayer(FeatureLayer,scene,tit,isOwner)
  })}
    scene.remove(realLay);
    scene.layers.add(newRealLayer);
-   newRealLayer.definitionExpression=buildDefinitionQueryReal();
+   newRealLayer.definitionExpression=buildDefinitionQueryReal(true);
    makeRealFlyght(newRealLayer); 
    scene.layers.reorder(realAllLayer, scene.layers.length);
    
@@ -260,7 +268,7 @@ function makeRealFlyght(realLayer)
        {
         
         realLayer.queryFeatures({
-          where : buildDefinitionQueryReal(),
+          where : buildDefinitionQueryReal(true),
           
           returnGeometry: true,
           outFields: ["serial","ownerid","globalid","bplaid"],
@@ -276,69 +284,32 @@ function makeRealFlyght(realLayer)
 
 function makeListRealFlyght(feats)
          {
-          const flightrealhtml0 ='<li class="uav-list-item"><div class="uav-item-header">\
-          <span class="uav-item-status">В полёте</span>\
-          <span class="uav-item-desc" id="';
-          const flightrealhtml0_1 ='">Unknow</span>\
-          <button class="btn uav-btn-more" id="';
-          
-          const flightrealhtml0_1_1='">Подробнее</button>\
-           </div>  <div class="uav-item-body" id="';
-          const flightrealhtml0_1_2='">'
-          
-        const flightrealhtml1 ='</div>\
-        <div class="uav-item-footer">\
-          <button class="btn btn-uav-small">Стоп</button>\
-          <button class="btn btn-uav-small" id="';
-          const flightrealhtml2 ='">Возврат</button>\
-          <button class="btn btn-uav-small">Кружиться</button>\
-          <button class="btn btn-uav-small">Посадить</button>\
-        </div>\
-      </li>'
-
-
             
           var lst="";
-          
-          glids=[]; 
-           emptyArray(glids); 
-           for(let i=0;i<feats.length;i++)
-           {
+          var oldGlids=[];
 
-             panRealFlyght(feats[i]);
+           copyArray(glids,oldGlids); 
+           emptyArray(glids);
+           for(let i=0;i<feats.length;i++)
+             {
+
+               let glid=feats[i].getAttribute("globalid");
+               let nid=feats[i].getAttribute("bplaid");
+               glids.push([glid,nid]);
+               let elLst=cardHtml.panRealFlyght(glid,nid,oldGlids);
+               lst=lst+elLst;
              
           }
           document.getElementById("uav-realtimelist").innerHTML=lst;
-
           addFlyRealEvent(glids);
           
-
-          function panRealFlyght(feat)
-          {
-              let glid=feat.getAttribute("globalid");
-              let nid=feat.getAttribute("bplaid");
-              
-              glids.push([glid,nid]);
-              lst=lst+flightrealhtml0;
-              lst=lst+"S"+nid;
-              lst=lst+flightrealhtml0_1;
-              lst=lst+glid;
-              lst=lst+flightrealhtml0_1_1;
-              lst=lst+"B"+glid;
-              lst=lst+flightrealhtml0_1_2;
-              /*lst=lst+"F"+nid;
-              lst=lst+flightrealhtml0_2;
-              lst=lst+"";//nid; */
-              lst=lst+flightrealhtml1;
-              lst=lst+"C"+glid;                    
-              lst=lst+flightrealhtml2;
-             
-          }
+          
      
         }
         
         function addFlyRealEvent(glids) {
-          for (i=0;i<glids.length;i++)
+          var i=0;
+          for ( i=0;i<glids.length;i++)
           {
              document
              .getElementById("C"+glids[i][0])
@@ -346,51 +317,97 @@ function makeListRealFlyght(feats)
              document
              .getElementById(glids[i][0])
              .addEventListener("click", eventDetailFlyReal);
+
              if(glids[i][1]!=null)
              { 
              
-              apiAircraft= apiData(apiUrl, "/aircraft/"+glids[i][1], token);
-              apiAircraft.then(function (response) {
+               apiAircraft= apiData(apiUrl, "/aircraft/"+glids[i][1], token);
+               apiAircraft.then(function (response) {
                 try{  
+                  
                 document.getElementById("S"+response.id).innerText=response.aircraft.serialNumber;
+                for(let j=0;j<glids.length;j++)  
+                if(glids[j].length==2 &&glids[j][1]==response.id) glids[j].push(response.aircraft.serialNumber);
                 }
                 catch{}
               });}
               
-
           }
+
           if(idRealDet!="")
           {
             
            let nid="";
-            for(let i=0;i<glids.length;i++)
-               if(glids[i][0]==idRealDet) nid=glids[i][1];   
+           for(let i=0;i<glids.length;i++)
+               if(glids[i][0]==idRealDet) 
+               nid=glids[i][1];   
                if(nid!="") 
-              {   let tm=(new Date()).getTime();
-                  let fl=getFlyhtByBoard(nid,tm);
-                  if (fl!=null)
-                      detalRealFlyght(idRealDet,fl[0],true);
+               {   let tm=(new Date()).getTime();
+                   let fl=getFlyhtByBoard(nid,tm);
+                   if (fl!=null){
+                   let eld= document.getElementById("B"+idRealDet);   
+                   let eldet= cardHtml.detalRealFlyght(idRealDet,fl[0],true);
+                   eld.innerHTML=eldet;
+                   }
                }
-           }
+            }
          }
          function eventDetailFlyReal(event)
         {
           let glid= event.target.id;
+           extentToReal(glid);
           if(idRealDet!="" && idRealDet!=glid)
-            detalRealFlyght(idRealDet,null,false); 
+          {
+            let eld= document.getElementById("B"+idRealDet);
+            eld.innerHTML="";
+          }
+                // detalRealFlyght(idRealDet,null,false); 
           let nid="";
           for(let i=0;i<glids.length;i++)
-               if(glids[i][0]==glid) nid=glids[i][1];   
+               if(glids[i][0]==glid) 
+                      nid=glids[i][1];   
           let el= document.getElementById("D"+glid);
           if(nid!="") 
           {   let tm=(new Date()).getTime();
               let fl=getFlyhtByBoard(nid,tm);
               if (fl!=null)
-                   detalRealFlyght(glid,fl[0],(el==null));
+                  {
+                    let eld= document.getElementById("B"+glid); 
+                    let eldet=cardHtml.detalRealFlyght(glid,fl[0],(el==null));
+                    eld.innerHTML=eldet;
+                  } 
               if(el!=null) idRealDet="";     
           }
          
       }
+      function extentToReal(glid)
+      {
+          realLayer.queryFeatures({
+             where : "globalid = '"+glid+"'",
+             returnGeometry: true,
+             outFields: ["serial","ownerid","globalid","bplaid"],
+        })
+        .then(function(featureSet) {
+               
+          if (featureSet.features.length>0)
+          {
+              
+              let geom1=featureSet.features[0].geometry;
+              if(geom1!=null)
+              {
+              let geom=PROJECTION.project(geom1, {wkid :view.extent.spatialReference.wkid},PROJECTION.getTransformation({wkid :4326},{wkid :view.extent.spatialReference.wkid})); 
+              if(geom!=null)
+                 view.extent=view.extent.centerAt(geom);
+              }
+          }
+          
+         });
+        
+          
+       
+
+      }
+
       function detalRealFlyght(glid,fl,reg)
       {  lst="";
         
@@ -543,12 +560,15 @@ function makeListRealFlyght(feats)
       }                          
 
      
-     function buildDefinitionQueryReal()/*timeSlider)*/ {   // показывать точки полетов в суточном интервале от установленной даты
+     function buildDefinitionQueryReal(reg=false)/*timeSlider)*/ {   // показывать точки полетов в суточном интервале от установленной даты
     
       let et=timeSlider.timeExtent.end.getTime();
       let st=timeSlider.timeExtent.start.getTime();
       let ett= new Date(); ett.setTime(ett.getTime()+10000)
-      let stt= new Date(st); stt.setTime(ett.getTime()-1800000)
+      let stt= new Date(st); 
+         stt.setTime(ett.getTime()-1800000)
+      if(reg)
+          stt.setTime(ett.getTime()-36000)
       
       let startDt=convertTime(stt);//st;
       let endDt=convertTime(ett);//et
@@ -578,7 +598,7 @@ function makeListRealFlyght(feats)
        realAllLayer.definitionExpression=buildDefinitionQueryReal();
        realAllLayer.queryFeatures({ where : buildDefinitionQueryReal(),
        returnGeometry: true,
-       //returnZ : true,
+       returnZ : true,
        orderByFields : ["bplaid","objectid"],
        outFields: ["bplaid","serial","objectid","Altitude","CreateTime"]}).then(function(featureSet) {
     
@@ -622,7 +642,7 @@ function makeListRealFlyght(feats)
            z=feats[i].getAttribute("Altitude");
            dt=0;
            dt0=feats[i].getAttribute("CreateTime")/1000;            
-           pth.push([feats[i].geometry.x,feats[i].geometry.y,z,dt]);
+           pth.push([feats[i].geometry.x,feats[i].geometry.y,feats[i].geometry.z,dt]);
            paths.push([pth,name]);
            
          }
@@ -635,7 +655,7 @@ function makeListRealFlyght(feats)
               {
                z=feats[i].getAttribute("Altitude");  
                dt=feats[i].getAttribute("CreateTime")/1000 -dt0;
-               pth.push([feats[i].geometry.x,feats[i].geometry.y,z,dt]);
+               pth.push([feats[i].geometry.x,feats[i].geometry.y,feats[i].geometry.z,dt]);
                  
               }
            else
@@ -649,11 +669,13 @@ function makeListRealFlyght(feats)
                 paths.push([pth,name]);
                 let lin=new POLYLINE({
                      paths :[pth],
+                     hasZ:true,
+                     hasM :true,
                      spatialReference :{wkid:4326}
                     });
                 let gg= new GRAPHIC({
                    geometry : lin,
-                   symbol : mySymbols.lineSymbolPigg
+                   symbol : linSymbol//mySymbols.lineSymbolPigg
                   });
                 bufferLayer.add(gg);
                 if (zon!=null)
@@ -664,7 +686,7 @@ function makeListRealFlyght(feats)
       
                 dt=0;
                 dt0=feats[i].getAttribute("CreateTime")/1000;            
-                pth.push([feats[i].geometry.x,feats[i].geometry.y,z,dt]);
+                pth.push([feats[i].geometry.x,feats[i].geometry.y,feats[i].geometry.z,dt]);
                 paths.push([pth,name]);
 
              }
@@ -674,11 +696,13 @@ function makeListRealFlyght(feats)
      
         lin=new POLYLINE({
         paths :[pth],
+        hasZ:true,
+        hasM :true,
         spatialReference :{wkid:4326}
       });
        gg= new GRAPHIC({
         geometry : lin,
-        symbol : mySymbols.lineSymbolPigg
+        symbol : linSymbol//mySymbols.lineSymbolPigg
        });
            bufferLayer.add(gg);
            if (zon!=null)

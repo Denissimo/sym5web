@@ -227,7 +227,9 @@ require(
                wkid: wk
                           }
                 });
+                
         }
+        
         const quality = document.querySelector('.quality-selector');
         quality.addEventListener("change", function (event) {
             changeQualityScene(this.value);
@@ -479,15 +481,25 @@ require(
     }
     else    if(checkRoleRoute("ROLE_OPERATOR",roles) )
     {
-      bufferLayer = new GraphicsLayer({
+     
+      if(route==="AirSituation"){  bufferLayer = new GraphicsLayer({
         listMode:"hide",
+        hasZ :true,
         elevationInfo: {
-                  mode:"on-the-ground",
-                  
-                  offset : 100
+          mode: "relative-to-ground"                 
+                
                 }
 
-      }    );
+         }    );
+      
+        }
+     
+      else 
+      bufferLayer = new GraphicsLayer({   listMode:"hide",
+        elevationInfo: {  mode:"on-the-ground",
+                          offset : 100
+                       }
+      });
     }
 
       scene.layers.add(bufferLayer);
@@ -505,7 +517,7 @@ require(
               makeRealFlyght(realLayer);
               var realTitle=realLayer.title;
              
-              window.setInterval(refreshRealLayer, 20000,FeatureLayer,scene,realTitle,checkRoleRoute("ROLE_OWNER",roles));
+              window.setInterval(refreshRealLayer, 2000,FeatureLayer,scene,realTitle,checkRoleRoute("ROLE_OWNER",roles));
               
             }
             else
@@ -646,7 +658,12 @@ require(
         while(arr.length > 0) {
           arr.pop();
         } 
-        }   
+        }
+    function copyArray(arr,arrCopy) {
+          for(let i=0;i<arr.length;i++) {
+          arrCopy.push(arr[i]);
+          } 
+          }      
         function buildDefinitionQueryFly()/*timeSlider)*/ {   // показывать точки полетов в суточном интервале от установленной даты
     
             let et=timeSlider.timeExtent.end.getTime();

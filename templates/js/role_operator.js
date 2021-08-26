@@ -941,4 +941,18 @@ function emulFlight()
         timeSlider.loop=true;
          
         }
-
+        function updateLayer(lay,params,message=null) {
+          lay
+                 .applyEdits(params)
+                 .then(function(editsResult){ 
+                 if(message!=null)
+                   alert(message);  
+        
+               })
+                 .catch(function(error) {
+                     alert( error.name);
+                    alert( error.message);
+                   
+                 });
+        
+        }
