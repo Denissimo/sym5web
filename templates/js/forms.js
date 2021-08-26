@@ -10,8 +10,6 @@ $(document).ready(function () {
         $(location).prop("href", url);
     }
 
-    //$('#dp3').datepicker();
-
     $("#takeoffMass").blur(function () {
         setMassCategory();
     });
@@ -83,8 +81,6 @@ $(document).ready(function () {
 
         event.preventDefault();
 
-        // Forms dumps
-        // console.log($(this).serialize());
 
         // Token Response
         // $.ajax(settings).done(function (response) {
@@ -177,7 +173,6 @@ $(document).ready(function () {
 
     // Remove cookie
     $("#logout").click(function (event) {
-        // $.cookie(tokenCookieName, null, { path: "/" });
         $.removeCookie(tokenCookieName, {path: '/'});
         console.log(tokenCookieName);
         var url = "/login";
@@ -205,8 +200,6 @@ $(document).ready(function () {
 
         if (legalRoles.length < 1) {
             console.log('L');
-            // $('.alert').toggleClass('show');
-            // $('.alert').alert('qwe');
             $('.alert_place').html(
                 '<div class="alert alert-danger alert-dismissible fade show" role="alert">\n' +
                 '\t\t\t\t\tChoose at least one <strong id="b_role">legal role and aircraft role</strong>.\n' +

@@ -24,7 +24,15 @@ class ContentController extends BaseController
 
     public function buildLogin(Request $request, string $userdataSessionName)
     {
+        $time = $this->logInfo('buildLogin Start: %d', [
+            'source' => 'front'
+        ]);
+
         $this->dropSessionUserData($userdataSessionName);
+
+        $this->logInfo('buildLogin Finish: %d', [
+            'source' => 'front'
+        ], $time);
 
         return $this->render('login.html.twig', [
             'id' => 155,
@@ -35,6 +43,10 @@ class ContentController extends BaseController
 
     public function buildSignUp(Request $request, ContentLoader $contentLoader)
     {
+        $this->logInfo('buildSignUp: %d', [
+            'source' => 'front'
+        ]);
+
         return $this->render('signup.html.twig', [
             'id' => 155,
             'route' => 'SignUp',
@@ -44,10 +56,18 @@ class ContentController extends BaseController
 
     public function buildIndex(Request $request, string $tokenCookieName, string $userdataSessionName)
     {
+        $time = $this->logInfo('buildIndex Start: %d', [
+            'source' => 'front'
+        ]);
+
         $this->loadUserData($request, $tokenCookieName, $userdataSessionName);
         if ($this->responseCode != Response::HTTP_OK) {
             return $this->redirectToRoute('login');
         }
+
+        $this->logInfo('buildIndex Finish: %d', [
+            'source' => 'front'
+        ], $time);
 
         return $this->render('index.html.twig', [
             'user' => $this->user,
@@ -58,7 +78,7 @@ class ContentController extends BaseController
 
     public function buildUav(Request $request, Client $client, string $tokenCookieName, string $userdataSessionName)
     {
-        return $this->buildUavPaginated($request, $client, $tokenCookieName, $userdataSessionName,1);
+        return $this->buildUavPaginated($request, $client, $tokenCookieName, $userdataSessionName, 1);
     }
 
     public function buildUavPaginated(
@@ -69,8 +89,7 @@ class ContentController extends BaseController
         int $page
     )
     {
-        $time = time();
-        $this->logger->info(sprintf('buildUavPaginated Start: %d', time() - $time ), [
+        $time = $this->logInfo('buildUavPaginated Start: %d', [
             'source' => 'front'
         ]);
         $this->loadUserData($request, $tokenCookieName, $userdataSessionName);
@@ -92,9 +111,10 @@ class ContentController extends BaseController
 
         $aircraftList = new AircraftData($myAircrafts);
 
-        $this->logger->info(sprintf('buildUavPaginated Finish: %d', time() - $time ), [
+        $this->logInfo('buildUavPaginated Finish: %d', [
             'source' => 'front'
-        ]);
+        ],
+            $time);
 
         return $this->render('uav.html.twig', [
             'user' => $this->user,
@@ -110,10 +130,18 @@ class ContentController extends BaseController
 
     public function buildProfile(Request $request, string $tokenCookieName, string $userdataSessionName)
     {
+        $time = $this->logInfo('buildProfile Start: %d', [
+            'source' => 'front'
+        ]);
+
         $this->loadUserData($request, $tokenCookieName, $userdataSessionName);
         if ($this->responseCode != Response::HTTP_OK) {
             return $this->redirectToRoute('login');
         }
+
+        $this->logInfo('buildProfile Finish: %d', [
+            'source' => 'front'
+        ], $time);
 
         return $this->render('profile.html.twig', [
             'user' => $this->user,
@@ -190,8 +218,6 @@ class ContentController extends BaseController
         ]);
     }
 
-
-
     public function buildFormJs(
         Request $request,
         string $tokenCookieName,
@@ -199,6 +225,10 @@ class ContentController extends BaseController
         string $authUrl
     )
     {
+        $time = $this->logInfo('buildFormJs Start: %d', [
+            'source' => 'front'
+        ]);
+
         $route = $request->query->get('route') ?? ArcgisController::DEFAULT_ROUTE;
 
         $response = $this->render('js/form.html.twig', [
@@ -210,6 +240,10 @@ class ContentController extends BaseController
         ]);
 
         $response->headers->set('Content-Type', 'text/plain');
+
+        $this->logInfo('buildFormJs Finish: %d', [
+            'source' => 'front'
+        ], $time);
 
         return $response;
     }
