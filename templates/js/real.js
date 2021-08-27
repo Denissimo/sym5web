@@ -204,10 +204,10 @@ function refreshRealLayer(FeatureLayer,scene,tit,isOwner)
 {  var lays=[];
   
 
-  
+  realPath();
   for (var i=0;i<glids.length;i++)
   {
-       realPath();
+      // realPath();
       if(glids[i][1]!= null)
       {
       apiAircraft= apiData(apiUrl, "/aircraft/"+glids[i][1], token);
@@ -223,9 +223,17 @@ function refreshRealLayer(FeatureLayer,scene,tit,isOwner)
       });
     }
   }
-   getLayersByTitle(FeatureLayer,scene.allLayers,[tit] ,lays);
+  /* getLayersByTitle(FeatureLayer,scene.allLayers,[tit] ,lays);
    
    let realLay=lays[0];
+   
+   realLay.definitionExpression=buildDefinitionQueryReal(true);
+   makeRealFlyght(realLay); */
+   
+   realLayer.definitionExpression=buildDefinitionQueryReal(true);
+   makeRealFlyght(realLayer); 
+   return;
+
    let templateReal=realLay.popupTemplate;
    let labInfo=realLay.labelingInfo[0]; 
  
