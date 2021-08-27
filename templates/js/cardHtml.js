@@ -58,25 +58,21 @@
    return lst
 }
 
-
-
-
-     
-
-
-
-//detalowner
-   
     
-                 static      detalFlyght (response) { 
+                 static      detalFlyght (response,isOperator) { 
 
                  var  flightdetal =
-                 ['<span class="uav-item-row uav-item-date-start"><span class="uav-item-desc">Старт</span>',
-                  '</span><span class="uav-item-row uav-item-date-start"><span class="uav-item-desc">Финиш</span>',
+                 ['<span class="uav-item-row uav-item-date-start">\
+                       <span class="uav-item-desc">Старт</span>',
+                  '</span>\
+                   <span class="uav-item-row uav-item-date-start">\
+                     <span class="uav-item-desc">Финиш</span>',
                   '</span>',
                   '<span class="uav-item-row uav-item-flight" id="',
-                  '"><span class="uav-item-desc">Сер.номер БВС</span>',
-                  '<span class="uav-item-desc">Пользователь</span>',
+                                                                    '">\
+                     <span class="uav-item-desc">Сер.номер БВС</span>',
+                   '<span class="uav-item-row uav-item-flight">\
+                     <span class="uav-item-desc">Пользователь</span>',
                   '</span>'];
  
                         
@@ -96,8 +92,16 @@
                           if ( response.aircraft!= null)
                               rnumb= response.aircraft.serialNumber;
                           if (rnumb==null) rnumb="unknow";
-                          lst=lst+flightdetal[3]+"F"+response.id+flightdetal[4]+rnumb;//
-                          lst=lst+flightdetal[5]+ response.user.user.username+flightdetal[6];
+                          lst=lst+flightdetal[3];
+                          lst=lst+"F"+response.id;
+                          lst=lst+flightdetal[4];
+                          lst=lst+rnumb;//
+                          if (isOperator)
+                          {
+                            lst=lst+flightdetal[5];
+                            lst=lst+ response.user.user.username
+                          }  
+                          lst=lst+flightdetal[6];
                         
                           return  lst;
                           }  
@@ -108,46 +112,222 @@
 
 
 
+       static  panTrack(track){
+        var lst="";  
+        var stats= ["Зональный круговой","Зональный","Линейный"];    
+        var trackhtml =[
+             '<li class="uav-list-item">\
+                  <div class="uav-item-header">\
+                    <span class="uav-item-status">',
+                   '</span>\
+                         <button class="btn uav-btn-more" id="',
+                                                            '">Подробнее\
+                         </button>\
+                   </div>\
+                   <div class="uav-item-body">',
+                       '<span class="uav-item-row uav-item-flight">\
+                           <span class="uav-item-desc">Наименование</span>',
+                       '</span>\
+                        <span class="uav-item-row uav-item-date-start">\
+                            <span class="uav-item-desc">Дата создания</span>',
+                       '</span>\
+                   </div>\
+                   <div class="uav-item-body" id="',
+                                                  '">\
+                   </div>',
+                  '<input type="hidden" id="',
+                                             '" value="',
+                                                        '">\
+                  </input>',
+             '</li>'];
 
-    trackhtml0 =['<li class="uav-list-item"><div class="uav-item-header">  <span class="uav-item-status">',
-          '</span>      <button class="btn uav-btn-more" id="',
-          '">Подробнее</button>          </div>          <div class="uav-item-body">',
-           '<span class="uav-item-row uav-item-flight"><span class="uav-item-desc">Наименование</span>',
-          '</span>  <span class="uav-item-row uav-item-date-start"><span class="uav-item-desc">Дата создания</span>',
-          '</span>               </div>         <div class="uav-item-body" id="',
-          '"></div>',
-          '<input type="hidden" id="',
-          '" value="',
-          '"></input>',
-          '</li>'];
-         
+            
+                     var rlob=track.id;
+                     var nm=track.name;
+                     var kod=track.type;
+                     let dt=track.createdAt.date;
+                     var numb=track.applicationsNumber;
+           // rlb.push(rlob) ; 
+            lst=lst+trackhtml[0];
+            lst=lst+stats[kod];
+            lst=lst+trackhtml[1];
+            lst=lst+rlob;
+            lst=lst+trackhtml[2];
+            lst=lst+trackhtml[3];
+            lst=lst+nm;
+            lst=lst+trackhtml[4];
+            lst=lst+dt;
+            lst=lst+trackhtml[5];
+            lst=lst+"R"+rlob;
+            lst=lst+trackhtml[6];
+        
+             lst=lst+trackhtml[7];
+             lst=lst+"T"+rlob;
+             lst=lst+trackhtml[8];
+             lst=lst+kod; 
+             lst=lst+trackhtml[9];
+             lst=lst+trackhtml[7];
+             lst=lst+"N"+rlob;
+             lst=lst+trackhtml[8];
+             lst=lst+numb; 
+             lst=lst+trackhtml[9];
+             lst=lst+trackhtml[10];
+            
+             return lst;
+
+             }
+
+
+
+       
+    static trackrdetal(feats,ind)
+    {
+ 
+    var trackrdet=[
+       [
+         '<p    <div >\
+                   <label style="width: 50px;font-size:12px;"> Duration</label>\
+                   <label style="width: 50px;font-size:12px;">Radius</label>\
+                   <label style="width: 50px;font-size:12px;">Zmin</label>\
+                   <label style="width: 50px;font-size:12px;">Zmax</label>\
+               </div> ',
+          '<p   <div >\
+               <label style="width: 50px;font-size:12px;"> Duration</label>\
+               <label style="width: 50px;font-size:12px;">Zmin</label>\
+               <label style="width: 50px;font-size:12px;" >Zmax</label>\
+            </div> ',     
+          '<p    <div>\
+           <label style="width: 10px;font-size:12px;">*</label>\
+           <label style="width: 50px;font-size:12px;">  Speed</label>\
+           <label style="width: 50px;font-size:12px;"> Z </label>\
+           <label style="width: 50px;font-size:12px;"> Zmin </label>\
+           <label style="width: 50px;font-size:12px;"> Zmax </label>\
+            </div> '],
+      ['  <div ','  <div ','  <div '],
+
+      ['>  <input style="width: 50px;font-size:12px;"  type="number" id="',
+       '>  <input style="width: 50px;font-size:12px;"  type="number" id="',
+       '>  <input style="width: 50px;font-size:12px;"  type="number" id="'],
+       ['>  <input style="width: 50px;font-size:12px;"  type="hidden" id="',
+       '>  <input style="width: 50px;font-size:12px;"  type="hidden" id="',
+       '>  <input style="width: 50px;font-size:12px;"  type="hidden" id="'],
+
+       ['"   value=','"   value=','"   value='],
+   
+       ['></div>','></div>','></div>']];
+ 
+
+      var routhtml=['  <div >\
+                    <input  type="checkbox" id="',
+                                                '" unchecked ',
+                    '></div></p></div>'];
+       
+
+      let lst=""; 
+      let routeid=feats[0].getAttribute("routeid");
+      let zmin=feats[0].getAttribute("zmin");
+      let zmax=feats[0].getAttribute("zmax");
+      var geom=feats[0].geometry;
+
+      lst=lst+trackrdet[0][ind];
+      
+      lst=lst+trackrdet[1][ind];
+      if (ind==2)
+      {
+             for (let i=0;i<feats.length;i++)
+                    { 
+                    let zmin=Math.round(feats[i].getAttribute("zmin"));
+                    let zmax=Math.round(feats[i].getAttribute("zmax"));
+                    let speed=Math.round(feats[i].getAttribute("speed"));
+                    let z1=Math.round(feats[i].getAttribute("z1"));
+                    lst=lst+trackrdet[1][ind];
+                    lst=lst+routhtml[0];
+                    lst=lst+i.toString()+"CH"+routeid;
+                    lst=lst+routhtml[1];
+                    lst=lst+trackrdet[2][ind];
+                    lst=lst+i.toString()+"SP"+routeid;
+                    lst=lst+trackrdet[4][ind];
+                    lst=lst+speed.toString();
+                    lst=lst+trackrdet[2][ind];
+                    lst=lst+i.toString()+"ZZ"+routeid;
+                    lst=lst+trackrdet[4][ind];
+                    lst=lst+z1.toString();
+                    lst=lst+trackrdet[2][ind];
+                    lst=lst+i.toString()+"ZN"+routeid;
+                    lst=lst+trackrdet[4][ind];
+                    lst=lst+zmin.toString();
+                    lst=lst+" readonly";
+                    lst=lst+trackrdet[2][ind];
+                    lst=lst+i.toString()+"ZX"+routeid;
+                    lst=lst+trackrdet[4][ind];
+                    lst=lst+zmax.toString();
+                    lst=lst+" readonly";
+                    if(i<feats.length-1)                                        
+                      lst=lst+routhtml[2];
+                    
+                    }
+                    
+      } 
+      else
+      {
+        let duration=feats[0].getAttribute("duration");
+        let rad=feats[0].getAttribute("radius");
+        let lat=geom.centroid.y;
+        let lon=geom.centroid.x;
+  
+      lst=lst+trackrdet[2][ind];
+      lst=lst+"DR"+routeid;
+      lst=lst+trackrdet[4][ind];
+      lst=lst+duration.toString();
+      
+      
+      if (ind==0) 
+          lst=lst+trackrdet[2][ind];
+      else 
+          lst=lst+trackrdet[3][ind];   
+      lst=lst+"RD"+routeid;
+      lst=lst+trackrdet[4][ind];
+      lst=lst+rad.toString();
+      
+      lst=lst+trackrdet[3][ind];
+      lst=lst+"LT"+routeid;
+      lst=lst+trackrdet[4][ind];
+      lst=lst+lat.toString();
+      
+      lst=lst+trackrdet[3][ind];
+      lst=lst+"LN"+routeid;
+      lst=lst+trackrdet[4][ind];
+      lst=lst+lon.toString();
+
+
+
+      lst=lst+trackrdet[2][ind];
+      lst=lst+"ZN"+routeid;
+      lst=lst+trackrdet[4][ind];
+      lst=lst+zmin.toString();
+
+      lst=lst+trackrdet[2][ind];
+      lst=lst+"ZX"+routeid;
+      lst=lst+trackrdet[4][ind];
+      lst=lst+zmax.toString();
+      
+      
+      }
+
+      lst=lst+trackrdet[5][ind];
+      
+      return lst;
+    }      
+
+
+
 
   
-       trackrdetal=[['<p   <div >\
-   <label style="width: 50px;font-size:12px;"> Duration</label>\
-   <label style="width: 50px;font-size:12px;">Zmin</label>\
-  <label style="width: 50px;font-size:12px;" >Zmax</label></div> ',
-  '<p    <div > <label style="width: 50px;font-size:12px;"> Duration</label>\
-   <label style="width: 50px;font-size:12px;">Radius</label>\
-   <label style="width: 50px;font-size:12px;">Zmin</label>\
-   <label style="width: 50px;font-size:12px;">Zmax</label></div> ',
-   '<p    <div><label style="width: 10px;font-size:12px;">*</label>\
-    <label style="width: 50px;font-size:12px;">  Speed</label>\
-    <label style="width: 50px;font-size:12px;"> Z </label>\
-     <label style="width: 50px;font-size:12px;"> Zmin </label>\
-     <label style="width: 50px;font-size:12px;"> Zmax </label> </div> '],
-    ['  <div ','  <div ','  <div '],
-    ['>  <input style="width: 50px;font-size:12px;"  type="number" id="',
-    '> <input style="width: 50px;font-size:12px;"  type="hidden" id="',''],
-    ['"   value=','"   value=','"   value='],
-    ['></div></p></div>','></div></p></div>','></div></p></div>']
-    ['></div>','></div>','></div>']];
-
-
   
-  
-    routhtml=['  <div >  <input  type="checkbox" id="',
-            '" unchecked '];
+    routhtml=['  <div >\
+                    <input  type="checkbox" id="',
+                                                '" unchecked ',
+                    '></div></p></div>'];
   
   
   
