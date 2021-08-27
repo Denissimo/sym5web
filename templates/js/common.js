@@ -3,6 +3,7 @@ var roles;
 var scene;
 var token ;
 var apiUrl;
+var tmzon;
 
 var GEOPROCESSOR;
 var POLYLINE;
@@ -173,7 +174,7 @@ require(
             
         });
         */
-        esriConfig.portalUrl = "https://abr-gis-portal.airchannel.net/portal";
+        esriConfig.portalUrl = webPaths.portalUrl //"https://abr-gis-portal.airchannel.net/portal";
         
         
         
@@ -190,8 +191,8 @@ require(
                
                 var map  = new WebMap({
                 portalItem: {
-                   id:  "4e1ce0dd127c4cadabd554b808d059b4",
-                   portal: "https://abr-gis-portal.airchannel.net/portal"
+                   id:  webPaths.mapId  ,  //  "4e1ce0dd127c4cadabd554b808d059b4",
+                   portal: webPaths.portalUrl   //    "https://abr-gis-portal.airchannel.net/portal"
                         }
                  
                }); 
@@ -204,8 +205,8 @@ require(
 
              scene = new WebScene({
             portalItem: {
-                id: "4c4de937a5d148f18cfa76b23c873766",
-                portal: "https://abr-gis-portal.airchannel.net/portal"
+                id: webPaths.sceneId  ,  //  "4c4de937a5d148f18cfa76b23c873766",
+                portal: webPaths.portalUrl //   "https://abr-gis-portal.airchannel.net/portal"
             },
         });
         
@@ -226,7 +227,9 @@ require(
                wkid: wk
                           }
                 });
+                
         }
+        
         const quality = document.querySelector('.quality-selector');
         quality.addEventListener("change", function (event) {
             changeQualityScene(this.value);
@@ -251,8 +254,8 @@ require(
             
             scene = new WebMap({
                portalItem: {
-                  id:  "4e1ce0dd127c4cadabd554b808d059b4",
-                  portal: "https://abr-gis-portal.airchannel.net/portal"
+                  id:  webPaths.mapId  ,//"4e1ce0dd127c4cadabd554b808d059b4",
+                  portal: webPaths.portalUrl //    "https://abr-gis-portal.airchannel.net/portal"
                        },
                 ground : "world-elevation"  
                 
@@ -478,15 +481,25 @@ require(
     }
     else    if(checkRoleRoute("ROLE_OPERATOR",roles) )
     {
-      bufferLayer = new GraphicsLayer({
+     
+      if(route==="AirSituation"){  bufferLayer = new GraphicsLayer({
         listMode:"hide",
+        hasZ :true,
         elevationInfo: {
-                  mode:"on-the-ground",
-                  
-                  offset : 100
+          mode: "relative-to-ground"                 
+                
                 }
 
-      }    );
+         }    );
+      
+        }
+     
+      else 
+      bufferLayer = new GraphicsLayer({   listMode:"hide",
+        elevationInfo: {  mode:"on-the-ground",
+                          offset : 100
+                       }
+      });
     }
 
       scene.layers.add(bufferLayer);
@@ -504,7 +517,7 @@ require(
               makeRealFlyght(realLayer);
               var realTitle=realLayer.title;
              
-              window.setInterval(refreshRealLayer, 20000,FeatureLayer,scene,realTitle,checkRoleRoute("ROLE_OWNER",roles));
+              window.setInterval(refreshRealLayer, 2000,FeatureLayer,scene,realTitle,checkRoleRoute("ROLE_OWNER",roles));
               
             }
             else
@@ -566,11 +579,11 @@ require(
               
              let graphic2=graphic.clone();    
              if (graphic2.geometry.type==="polygon")
-                graphic2.symbol=selectSymbol.fillSymbol;
+                graphic2.symbol=mySymbols.fillSymbolSelect;
              if (graphic2.geometry.type==="polyline")
-                graphic2.symbol=selectSymbol.lineSymbol;   
+                graphic2.symbol=mySymbols.lineSymbolSelect;   
              if (graphic2.geometry.type==="point")
-                 graphic2.symbol=selectSymbol.markerSymbol;   
+                 graphic2.symbol=mySymbols.markerSymbolSelect;   
                  
                  selectLayer.graphics.removeAll();
                  selectLayer.graphics.add(graphic2);
@@ -645,7 +658,12 @@ require(
         while(arr.length > 0) {
           arr.pop();
         } 
-        }   
+        }
+    function copyArray(arr,arrCopy) {
+          for(let i=0;i<arr.length;i++) {
+          arrCopy.push(arr[i]);
+          } 
+          }      
         function buildDefinitionQueryFly()/*timeSlider)*/ {   // показывать точки полетов в суточном интервале от установленной даты
     
             let et=timeSlider.timeExtent.end.getTime();
@@ -724,7 +742,7 @@ require(
                 let gDron=new GRAPHIC(
                     {
                       geometry : emulpts[ind][0],
-                      symbol:webDronActive
+                      symbol:mySymbols.webDronActive
                    
                     })
                 let dronPath=[];
@@ -737,7 +755,7 @@ require(
                    paths:[dronPath],
                    spatialReference :{wkid:wk}
                   }),
-                  symbol:selectSymbol.emulSymbolRoute 
+                  symbol:mySymbols.emulSymbolRoute 
                 });
                        
                    dronLayer.add(gDron); 
@@ -831,8 +849,57 @@ require(
                  }
                }
             }
+            function modLayerRec(gld,modLayer,atrName,atrNameMod,val)
+            {
+          
+              modLayer.queryFeatures({
+                where : atrName+" = '"+gld+"'",
+                returnGeometry: true,
+                returnZ : true,
+                returnM : true,
+                  outFields: ["*"],
+                }).then(function(ftfSet) {
+                   
+                   ftfSet.features[0].setAttribute(atrNameMod,val);
+                   param2={ updateFeatures: ftfSet.features};
+                   updateLayer(modLayer,param2);
+          
+                })
+          
+          
+            }
+            function updateLayer(lay,params,message=null) {
+              lay
+                     .applyEdits(params)
+                     .then(function(editsResult){ 
+                     if(message!=null)
+                       alert(message);  
+            
+                   })
+                     .catch(function(error) {
+                         alert( error.name);
+                        alert( error.message);
+                       
+                     });
+            
+            }
+    
 
-                
-           
+            function updateRecordFlyghtTable(dat,flid,isNew=false) {
+              emptyArray(glb);
+              apiModFlight= apiData(apiUrl, "/application/"+flid, token, 'PUT', dat);
+        
+              apiModFlight.then(function (response) {
+                   
+                   getUserFly(); // формирование панели полетов
+                   if (isNew)
+                   {
+                   
+                    alert ("Заявка сформирована. ");
+                   }
+      }); 
+       
+   } 
+   
              
             

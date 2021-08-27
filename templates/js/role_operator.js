@@ -1,5 +1,5 @@
 console.log('role_operator');
-var tmzon;
+
 var idFly="";
 var sd;
 var fd;
@@ -44,29 +44,6 @@ function checkFlight(){getCheckGeometry(idFly);}
 function getUserFly()
  {
    
-  var stats= ["Черновик","Шаблон","На утверждении","Подтверждена","Отклонена","Отменена","Выполняется"];
-          
-  const flighthtml0 ='<li class="uav-list-item"><div class="uav-item-header">\
-  <span class="uav-item-status">';
-  const flighthtml1 ='</span>\
-  <button class="btn uav-btn-more" id="';
-  const flighthtml1_1='">Подробнее</button>\
-  </div>\
-  <div class="uav-item-body">';
- // <span class="uav-item-row uav-item-reg">123123123123ABBB</span>\
- const flighthtml2='<span class="uav-item-row uav-item-flight"><span class="uav-item-desc">Наименование</span>';
- const flighthtml3 ='</span>\
-  <span class="uav-item-row uav-item-date-start"><span class="uav-item-desc">Старт</span>';
-  const flighthtml3_2 ='</span>\
-  <span class="uav-item-row uav-item-date-start"><span class="uav-item-desc">Финиш</span>'; 
- const flighthtml4='</span>\
-                   </div>\
-                   <div class="uav-item-body" id="';
-  const flighthtml4_2='"></div>';
-  const flighthtml12_2='<input type="hidden" id="';
-  const flighthtml12_3='" value="';
-  const flighthtml12_4='"></input>';
-  const flighthtml13='</li>';
   
 // Нижняя граница периода полетов  
       var stt= new Date();
@@ -105,62 +82,22 @@ function getUserFly()
                emptyArray(glb);                
                
                for (let i=0;i<response.applications.length;i++) {   
-                 
                 if(response.applications[i].application.start.date >= stDt)
-                  if(response.applications[i].status.id >2) 
-                  
-                    panFlyght(response.applications[i]);
+                    if(response.applications[i].status.id >2) 
+                    {
+                         glb.push([response.applications[i].id,response.applications[i].track.type.toString()]) ; 
+                         tmzon=response.applications[i].application.start.timezone_type;
+                         let ellst= cardHtml.panFlyght(response.applications[i]);
+                         lst=lst+ellst;
+                    }
                  }
                  document.getElementById("uav-realtimelist").innerHTML=lst;
                  addFlyEvent();
-                 
- 
+        
               }
               
               
-              function  panFlyght(flyght)
-              {
-              
-              
-              var  nm=flyght.track.name;
-                                      
-              var glob= flyght.id;       // glob - GUID полета
-              var kod=  flyght.status.id;   
-           
-              glb.push([glob,flyght.track.type.toString()]) ;   // glb -  массив согласованных или на согласовании
-
-   
-              var sdat=flyght.application.start.date; //ftfSet.features[i].getAttribute("startdate");
-              var  fdat=flyght.application.finish.date;//ftfSet.features[i].getAttribute("finishdate");
-              
-              tmzon=flyght.application.start.timezone_type; 
-
-              lst=lst+flighthtml0;
-              lst=lst+stats[kod-1];
-              lst=lst+flighthtml1;
-              lst=lst+glob;
-              lst=lst+flighthtml1_1;
-              lst=lst+flighthtml2;
-              lst=lst+nm;
-              /*
-              lst=lst+flighthtml3;
-              lst=lst+sdat;
-              lst=lst+flighthtml3_2;
-              lst=lst+fdat;
-              */
-              lst=lst+flighthtml4;
-              lst=lst+"R"+glob;
-              lst=lst+flighthtml4_2;
-           
-               lst=lst+flighthtml12_2;
-               lst=lst+"T"+glob;
-               lst=lstlst=lst+flighthtml12_3;
-               lst=lst+kod; 
-               lst=lst+flighthtml12_4;
-               
-               lst=lst+flighthtml13;
-            }
-           
+             
 
     }
   
@@ -169,13 +106,10 @@ function getUserFly()
           
         for (var i=0;i<glb.length;i++)
         {
-        
-           
-            
            document
            .getElementById(glb[i][0])
            .addEventListener("click",  eventFlyDetal); //событие просмотра полета
-       ;
+       
         }
     
        }       
@@ -183,18 +117,13 @@ function getUserFly()
          
          emptyArray(emulpts);
          bufferLayer.removeAll();
-         console.log(dronLayer.graphics.length);
          dronLayer.removeAll();
-         console.log(dronLayer.graphics.length);
+      
         var gld=event.target.id;
     
-        var allApplication = apiData(
-          apiUrl,
-          '/application/'+gld,
-          token
-      );
+        var allApplication = apiData(apiUrl,'/application/'+gld, token);
 
-      allApplication.then(function (response) {
+        allApplication.then(function (response) {
       
         dt=response.application.start.date;
         dt=new Date(dt);
@@ -213,84 +142,31 @@ function getUserFly()
       
         $.cookie("idRoute",idRoute);
         emptyArray(emulpts);
+
         let el= document.getElementById("F"+oldFly);
         let el2= document.getElementById("F"+idFly);
         let reg=false;
-        if(el!=null) 
-        {
-          detalFlyght(null,false,-1,response,oldFly);
-        
+        if(el!=null)
+        {  let el3=  document.getElementById("R"+oldFly);   
+            el3.innerHTML="";
         }
         if(el2!=null)
-      {
-        idFly="";    
-        queryFlight(null,"");
-        reg=true;
-      }
+        {
+          idFly="";    
+          queryFlight(null,"");
+          reg=true;
+       }
       else
       {
-      
-            detalFlyght(flyZoneLayer,true,typeFly,response,response.id)
+        let el3= document.getElementById("R"+response.id);
+          ellst=cardHtml.detalFlyght(response,true);
+          el3.innerHTML=ellst;
             queryFlight(idFly);
          
       }  
-            
-
-
-
-                
         
     });
-  
-        
-            
-        function detalFlyght (detalLayer,reg,tp,response,fid) { 
-
-          const flighthtml2 ='<span class="uav-item-row uav-item-date-start"><span class="uav-item-desc">Старт</span>';
-          const flighthtml2_2 ='</span>\
-          <span class="uav-item-row uav-item-date-start"><span class="uav-item-desc">Финиш</span>';
-         const flighthtml2_3='</span>'; 
-
-
-          const flighthtml3_1 ='<span class="uav-item-row uav-item-flight" id="'
-          
-          const flighthtml3_2='"><span class="uav-item-desc">Рег.номер БВС</span>';
-          
-          const flighthtml3_4='<span class="uav-item-desc">Пользователь</span>';
-          const flighthtml3_3='</span>'; 
-      
-          let lst="";
-          id="R"+fid;
-          if (reg)
-           {
-            let sdat=response.application.start.date; //ftfSet.features[i].getAttribute("startdate");
-            let  fdat=response.application.finish.date;//ftfSet.features[i].getAttribute("finishdate");
-             
-           
-            lst=lst+flighthtml2;
-            lst=lst+sdat;
-            lst=lst+flighthtml2_2;
-            lst=lst+fdat;     
-            lst=lst+flighthtml2_3;
-            let rnumb="unknow";
-         if ( response.aircraft!= null)
-                rnumb= response.aircraft.serialNumber;
-         if (rnumb==null) rnumb="unknow";
-         lst=lst+flighthtml3_1+"F"+response.id+flighthtml3_2+rnumb;//
-         lst=lst+flighthtml3_4+ response.user.user.username+flighthtml3_3;
-             
-           }
-          
-          document.getElementById(id).innerHTML=lst;
-          
-            return ;
-            } 
-         
-       return;  
-    
-  
-   
-
+    return;  
      } 
 
      function queryFlight(fid)
@@ -542,7 +418,7 @@ function getUserFly()
               {
               gg= new GRAPHIC({
                    geometry: inter[j],
-                   symbol: selectSymbol.fillSymbolIntersect,
+                   symbol: mySymbols.fillSymbolIntersect,
                    spatialReference : {wkid:4326}
                  });
                 gg.attributes = Att;
@@ -559,7 +435,7 @@ function getUserFly()
 
           gg = new GRAPHIC({
               geometry: inter,
-              symbol: selectSymbol.fillSymbolIntersect,
+              symbol: mySymbols.fillSymbolIntersect,
               spatialReference : {wkid:4326}
                  });
                  
@@ -679,7 +555,7 @@ function getUserFly()
            
           gg = new GRAPHIC({
               geometry: inter,
-              symbol: selectSymbol.lineSymbolIntersect,
+              symbol: mySymbols.lineSymbolIntersect,
               spatialReference : { wkid: 4326 }
                          });
           let alt; 
@@ -777,7 +653,7 @@ function getUserFly()
                 {
                 gg= new GRAPHIC({
                      geometry: inter[j],
-                     symbol: selectSymbol.fillSymbolIntersect,
+                     symbol: mySymbols.fillSymbolIntersect,
                      spatialReference: { wkid: 4326 }
                    });
                   gg. attributes = Attrs;
@@ -792,7 +668,7 @@ function getUserFly()
 
             gg = new GRAPHIC({
                 geometry: inter,
-                symbol: selectSymbol.fillSymbolIntersect,
+                symbol: mySymbols.fillSymbolIntersect,
                 spatialReference : { wkid: 4326 }
                    });
                    
@@ -869,52 +745,8 @@ function getUserFly()
                 return;  
                 
                     }
-            
-        function modLayerRec(gld,modLayer,atrName,atrNameMod,val)
-      {
-    
-        modLayer.queryFeatures({
-          where : atrName+" = '"+gld+"'",
-          returnGeometry: true,
-          returnZ : true,
-          returnM : true,
-            outFields: ["*"],
-          }).then(function(ftfSet) {
-             
-             ftfSet.features[0].setAttribute(atrNameMod,val);
-             param2={ updateFeatures: ftfSet.features};
-             updateLayer(modLayer,param2);
-    
-          })
-    
-    
-      } 
-      function updateRecordFlyghtTable(dat,flid) {
-      
-        apiModFlight= apiData(apiUrl, "/application/"+flid, token, 'PUT', dat);
-  
-        apiModFlight.then(function (response) {
-            
-             getUserFly(); // формирование панели полетов
-      
-}); 
- 
-}
-function updateLayer(lay,params,message=null) {
-  lay
-         .applyEdits(params)
-         .then(function(editsResult){ 
-         if(message!=null)
-           alert(message);  
 
-       })
-         .catch(function(error) {
-             alert( error.name);
-            alert( error.message);
-           
-         });
-
-}
+    
 
 
 function emulFlight()
@@ -985,4 +817,4 @@ function emulFlight()
         timeSlider.loop=true;
          
         }
-
+        

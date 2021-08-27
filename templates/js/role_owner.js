@@ -29,7 +29,8 @@ view.on("click" ,function(event){
     {
       emptyArray(flypts);      
      
-      getDetailRoute(idRoute,false);
+      if (document.getElementById("R"+idRoute)!=null)
+      document.getElementById("R"+idRoute).innerHTML="";
       queryRoad(event,"");
      
      
@@ -412,7 +413,7 @@ function changeExtent (geom)
               
                     var circGraphic=new GRAPHIC({
                       geometry:circ,
-                      symbol:selectSymbol.fillSymbolGray,
+                      symbol:mySymbols.fillSymbolGray,
 
                     });
                      
@@ -897,12 +898,13 @@ function changeExtent (geom)
    
        lin = PROJECTION.project(lin, { wkid: 3857 },PROJECTION.getTransformation(lin.spatialReference,{ wkid: 3857 }));    
        lineGraphic.geometry=lin;
+      /*
        lineSymbol3 = {
         type: "simple-line", // autocasts as SimpleLineSymbol()
         color: [128, 128, 128],
         width: 2
-      };
-       lineGraphic.symbol=lineSymbol3;
+      };*/
+       lineGraphic.symbol=mySymbols.lineSymbolGray;
        layerManual.add(lineGraphic);
        return lineGraphic.geometry;
        
@@ -1091,10 +1093,13 @@ function changeExtent (geom)
               for (let i=0;i<response.tracks.length;i++) {     
                  
                 if(response.tracks[i].isFinal)
+                {
 
-                  
-                  panTrack(response.tracks[i]);
+                  rlb.push(response.tracks[i].id) ; 
+                  let ellst=cardHtml.panTrack(response.tracks[i]);
+                  lst=lst+ellst;
                 }
+              }
 
                 document.getElementById("uav-realtimelist").innerHTML=lst;
                 addRouteEvent();
@@ -1110,7 +1115,7 @@ function changeExtent (geom)
                    var kod=track.type;
                    let dt=track.createdAt.date;
                    var numb=track.applicationsNumber;
-                   rlb.push(rlob) ; 
+                  // rlb.push(rlob) ; 
                    lst=lst+trackhtml0;
                    lst=lst+stats[kod];
                    lst=lst+trackhtml1;
@@ -1183,16 +1188,20 @@ function changeExtent (geom)
                        {
                          let oldrid=idRoute;
                          {
-                          removeSelectSeg(oldrid,"")  
-                          getDetailZone(oldrid,false)
+                          removeSelectSeg(oldrid,"");
+                          if (document.getElementById("R"+oldrid)!=null)  
+                          document.getElementById("R"+oldrid).innerHTML="";
+                          
                          }
-                         getDetailZone(gld,true);
+                         getDetailZone(gld);
                          queryRoad(event,gld);
                      
                        }
                        else
                         {
-                        getDetailZone(gld,false);
+                          if (document.getElementById("R"+gld)!=null)  
+                        document.getElementById("R"+gld).innerHTML="";   
+                        
                         queryRoad(null,"");
                      
                         }
@@ -1207,10 +1216,11 @@ function changeExtent (geom)
                           { 
                            let oldrid=idRoute
                            {
-                           removeSelectSeg(oldrid,"")  
-                           getDetailRoute(oldrid,false) 
+                           removeSelectSeg(oldrid,"") 
+                           if (document.getElementById("R"+oldrid)!=null)  
+                             document.getElementById("R"+oldrid).innerHTML=""; 
                            }
-                           getDetailRoute(gld,true);
+                           getDetailRoute(gld);
                            queryRoad(event,gld);
                      
                           }
@@ -1218,7 +1228,8 @@ function changeExtent (geom)
                               {
                               
                               removeSelectSeg(gld,"");
-                              getDetailRoute(gld,false);
+                              if (document.getElementById("R"+gld)!=null)
+                               document.getElementById("R"+gld).innerHTML="";
                               queryRoad(null,"");
                      
                               }
@@ -1268,126 +1279,46 @@ function changeExtent (geom)
             }
             
             }      
-/*export*/ function getDetailZone(routeid,flag)
+/*export*/ function getDetailZone(routeid)
 {
   var lst="";
   var id="R"+routeid;
   
-  if (flag) buttonEnabled(routeid); 
+  buttonEnabled(routeid); 
 
-  //const routhtml1='<p    class="uav-item-body" <div  class="uav-item-body" style="font-size:12px;">\
-  const routhtml1='<p   <div >\
-   <label style="width: 50px;font-size:12px;"> Duration</label>\
-   <label style="width: 50px;font-size:12px;">Zmin</label>\
-  <label style="width: 50px;font-size:12px;" >Zmax</label></div> ';
-  const routhtml1a='<p    <div > <label style="width: 50px;font-size:12px;"> Duration</label> <label style="width: 50px;font-size:12px;">Radius</label>  <label style="width: 50px;font-size:12px;">Zmin</label> <label style="width: 50px;font-size:12px;">Zmax</label> </div> ';
-  const routhtml2='  <div ';
-  const routhtml3='>  <input style="width: 50px;font-size:12px;"  type="number" id="';
-  const routhtml3a='> <input style="width: 50px;font-size:12px;"  type="hidden" id="';
-  const routhtml4='"   value='
-  const routhtml5='></div></p></div>';
-  const routhtml6='></div>';
-  if (flag)
-  {               
       
     var   whZ="routeid = '"+routeid+"'";
  //statusid > 2 не ЧЕРНОВИК не ШАБЛОН
                    zoneLayer.queryFeatures({
                    where : whZ,
-                 //  orderByFields : ["startdate DESC"],
-                   returnGeometry: true,
+                     returnGeometry: true,
                      outFields: ["*"],
                    })
-                   .then(function(ftfSet) {
-                    let zmin=ftfSet.features[0].getAttribute("zmin");
-                    let zmax=ftfSet.features[0].getAttribute("zmax");
-                    let duration=ftfSet.features[0].getAttribute("duration");
+                   .then(function(ftfSet) 
+                   
+                   {
+                    let tp=1; 
                     let rad=ftfSet.features[0].getAttribute("radius");
-                    var geom=ftfSet.features[0].geometry;
-                    let lat=geom.centroid.y;
-                    let lon=geom.centroid.x;
-                    if (rad>0)
-                     lst=routhtml1a;
-                    else
-                     lst=routhtml1;
-                    lst=lst+routhtml2;
-                    lst=lst+routhtml3;
-                    lst=lst+"DR"+routeid;
-                    lst=lst+routhtml4;
-                    lst=lst+duration.toString();
-                    
-                    
-                    if (rad>0) 
-                          lst=lst+routhtml3;
-                    else 
-                          lst=lst+routhtml3a;   
-                    lst=lst+"RD"+routeid;
-                    lst=lst+routhtml4;
-                    lst=lst+rad.toString();
-                    
-                    lst=lst+routhtml3a;
-                    lst=lst+"LT"+routeid;
-                    lst=lst+routhtml4;
-                    lst=lst+lat.toString();
-                    
-                    lst=lst+routhtml3a;
-                    lst=lst+"LN"+routeid;
-                    lst=lst+routhtml4;
-                    lst=lst+lon.toString();
-
-
-
-                    lst=lst+routhtml3;
-                    lst=lst+"ZN"+routeid;
-                    lst=lst+routhtml4;
-                    lst=lst+zmin.toString();
-
-                    lst=lst+routhtml3;
-                    lst=lst+"ZX"+routeid;
-                    lst=lst+routhtml4;
-                    lst=lst+zmax.toString();
-
-                    lst=lst+routhtml6;
-                    
-                    
-
-
+                    if (rad>0) tp=0;
+                    lst=cardHtml.trackrdetal(ftfSet.features,tp)
                     document.getElementById(id).innerHTML=lst;
-                     const el = document.getElementById(routeid);
-                     el.scrollIntoView({block: "center", inline: "center",behavior: "smooth"}); 
-                   })
+                    const el = document.getElementById(routeid);
+                    el.scrollIntoView({block: "center", inline: "center",behavior: "smooth"}); 
+                   });
                   
 
-  }
-  else{
-    if (document.getElementById(id)!=null) 
-     document.getElementById(id).innerHTML=lst;
-  }
+ 
   
 
 }
 
-/*export*/ function getDetailRoute(routeid,flag)
+/*export*/ function getDetailRoute(routeid)
 {
-  if (flag) buttonEnabled(routeid); 
-  var lst="";
+  buttonEnabled(routeid); 
+ 
   var id="R"+routeid;
-
-  const routhtml1='<p    <div><label style="width: 10px;font-size:12px;">*</label> <label style="width: 50px;font-size:12px;">  Speed</label>  <label style="width: 50px;font-size:12px;"> Z </label>  <label style="width: 50px;font-size:12px;"> Zmin </label>  <label style="width: 50px;font-size:12px;"> Zmax </label> </div> ';
-  const routhtml2='  <div  ';
-  const routhtml8='  <div >  <input  type="checkbox" id="';
-  const routhtml9='" unchecked ';
-  const routhtml3='>  <input style="width: 50px;font-size:12px;" type="number" id="';
-  const routhtml4='"   value=';
-  const routhtml5='></div></p></div>';
-  const routhtml6='></div>'
-  
-  
-  if (flag)
-  {
-
-    var   whR="routeid = '"+routeid+"' And numb>=0 ";
- //statusid > 2 не ЧЕРНОВИК не ШАБЛОН
+  var   whR="routeid = '"+routeid+"' And numb>=0 ";
+ 
                    routeVecLayer.queryFeatures({
                    where : whR,
                    orderByFields : ["numb"],
@@ -1395,62 +1326,22 @@ function changeExtent (geom)
                      outFields: ["*"],
                    })
                    .then(function(ftfSet) {
-                    lst=routhtml1;
-                    lst=lst+routhtml2; 
-                    for (let i=0;i<ftfSet.features.length;i++)
-                    { 
-                    let zmin=Math.round(ftfSet.features[i].getAttribute("zmin"));
-                    let zmax=Math.round(ftfSet.features[i].getAttribute("zmax"));
-                    let speed=Math.round(ftfSet.features[i].getAttribute("speed"));
-                    let z1=Math.round(ftfSet.features[i].getAttribute("z1"));
-                    lst=lst+routhtml2;
-                    lst=lst+routhtml8;
-                    lst=lst+i.toString()+"CH"+routeid;
-                    lst=lst+routhtml9;
-                    lst=lst+routhtml3;
-                    lst=lst+i.toString()+"SP"+routeid;
-                    lst=lst+routhtml4;
-                    lst=lst+speed.toString();
-                    lst=lst+routhtml3;
-                    lst=lst+i.toString()+"ZZ"+routeid;
-                    lst=lst+routhtml4;
-                    lst=lst+z1.toString();
-                    lst=lst+routhtml3;
-                    lst=lst+i.toString()+"ZN"+routeid;
-                    lst=lst+routhtml4;
-                    lst=lst+zmin.toString();
-                    lst=lst+" readonly";
-                    lst=lst+routhtml3;
-                    lst=lst+i.toString()+"ZX"+routeid;
-                    lst=lst+routhtml4;
-                    lst=lst+zmax.toString();
-                    lst=lst+" readonly";
-                    if(i==ftfSet.features.length-1)
-                    {
-                    lst=lst+routhtml6;
-                    
-                    }
-                    else
-                     lst=lst+routhtml5;
-                    
-                    }
+
+                    lst=cardHtml.trackrdetal(ftfSet.features,2)
+                   
                   
                      document.getElementById(id).innerHTML=lst;
+
                      for (let i=0;i<ftfSet.features.length;i++)
                      {
                       document.getElementById(i.toString()+"CH"+routeid).addEventListener("click", changSelectSeg);
-
-
                      }
+                     const el = document.getElementById(routeid);
+                     el.scrollIntoView({block: "center", inline: "center",behavior: "smooth"}); 
+  
                    })
-                   const el = document.getElementById(routeid);
-                   el.scrollIntoView({block: "center", inline: "center",behavior: "smooth"}); 
-
-  }
-  else{
-    if (document.getElementById(id)!=null) 
-     document.getElementById(id).innerHTML=lst;
-  }
+                  
+   
   
 
 }
@@ -1902,13 +1793,15 @@ function mySaveRoute(event)
                       lin = GEOMETRYENGINE.generalize(lin,10,false,"meters"); 
                       let imGr=new GRAPHIC({
                          geometry:lin,
-                         symbol:selectSymbol.lineSymbolGray
+                         symbol:mySymbols.lineSymbolGray
 
                       });
                       
                       layerManual.add(imGr);
                       changeExtent(lin);
-                      getDetailRoute(rid,false);
+                      if (document.getElementById("R"+rid)!=null)  
+                          document.getElementById("R"+rid).innerHTML="";
+                      
                       queryRoad(null,"");
                     }); 
                     
@@ -1931,13 +1824,13 @@ function mySaveRoute(event)
                         pol = PROJECTION.project(ftfSet.features[0].geometry, { wkid: 3857 },PROJECTION.getTransformation(ftfSet.features[0].geometry.spatialReference,{ wkid: 3857 }));     
                         let imGr=new GRAPHIC({
                           geometry:pol,
-                          symbol:selectSymbol.fillSymbolGray
+                          symbol:mySymbols.fillSymbolGray
                         });
                         
                        layerManual.add(imGr);
                        changeExtent(pol);
-                      
-                       getDetailZone(rid,false);
+                       if (document.getElementById("R"+rid)!=null)
+                       document.getElementById("R"+rid).innerHTML="";
                     
                        queryRoad(null,"");  
                       });
@@ -2158,7 +2051,7 @@ function removeSelectSeg(rid,numb){
                            
                         changeExtent(featureSet.features[0].geometry);
                         if( route ==="Tracks" ) 
-                                     getDetailZone(idRoute,true);
+                                     getDetailZone(idRoute);
                       
                            }
                           
@@ -2249,7 +2142,7 @@ function removeSelectSeg(rid,numb){
                      
                     
                      if( route==="Tracks" ) 
-                      getDetailRoute(idRoute,true); 
+                      getDetailRoute(idRoute); 
                     
                      
                    });
@@ -2284,7 +2177,7 @@ function removeSelectSeg(rid,numb){
                       var ll=new GRAPHIC(
                          {
                            geometry :ftfSet.features[0].geometry,
-                           symbol : selectSymbol.lineSymbol,
+                           symbol : mySymbols.lineSymbolSelect,
                            attributes : {
                             "routeid": rid,
                             "numb":  numb
@@ -2304,21 +2197,7 @@ function removeSelectSeg(rid,numb){
                    }
                   
                 }
-                function updateLayer(lay,params,message=null) {
-                  lay
-                         .applyEdits(params)
-                         .then(function(editsResult){ 
-                         if(message!=null)
-                           alert(message);  
                 
-                       })
-                         .catch(function(error) {
-                             alert( error.name);
-                            alert( error.message);
-                           
-                         });
-                
-                }
                 function createZone(params,dat,routeid) {
                   zoneLayer
                     .applyEdits(params)
@@ -2377,16 +2256,18 @@ function removeSelectSeg(rid,numb){
       let oldFly=idFly;
       idFly=response.id;
       idRoute=response.track.id;
+      tmzon=response.application.start.timezone_type;
       $.cookie("idRoute",idRoute);
       let el= document.getElementById("F"+oldFly);
       
       let el2= document.getElementById("F"+idFly);
       let reg=false;
       if(el!=null) 
-      {
-        detalFlyght(null,false,-1,response,oldFly);
-        
-      }      
+        {  let el3=  document.getElementById("R"+oldFly);
+        if (el3!=null)   
+            el3.innerHTML="";
+        }
+            
       if(el2!=null)
       {
         idFly="";    
@@ -2395,15 +2276,14 @@ function removeSelectSeg(rid,numb){
       }
       else
       {
-      if(typeFly==2)
-      {
-           detalFlyght(flyVecLayer,true,typeFly,response,response.id);
-           queryRoad(null,idRoute);
-      }
-      else{
-            detalFlyght(flyZoneLayer,true,typeFly,response,response.id)
-            queryRoad(null,idRoute);
-         }
+      
+           
+            let el3= document.getElementById("R"+response.id);
+                ellst=cardHtml.detalFlyght(response,false);
+                if (el3!=null)
+                el3.innerHTML=ellst;
+                queryRoad(null,idRoute);
+        
       }
 
   
@@ -2430,48 +2310,7 @@ function removeSelectSeg(rid,numb){
        
      return;  
   
-     function detalFlyght (detalLayer,reg,tp,response,fid) { 
-
-      const flighthtml2 ='<span class="uav-item-row uav-item-date-start"><span class="uav-item-desc">Старт</span>';
-      const flighthtml2_2 ='</span>\
-       <span class="uav-item-row uav-item-date-start"><span class="uav-item-desc">Финиш</span>';
-      const flighthtml2_3='</span>'; 
-
-      const flighthtml3_1 ='<span class="uav-item-row uav-item-flight" id="'
-      
-      const flighthtml3_2='"><span class="uav-item-desc">Сер.номер БВС</span>';
-      
-      
-      const flighthtml3_3='</span>'; 
-  
-      let lst="";
-      id="R"+fid;
-      if (reg)
-       {
-         
-        let sdat=response.application.start.date; //ftfSet.features[i].getAttribute("startdate");
-        let  fdat=response.application.finish.date;//ftfSet.features[i].getAttribute("finishdate");
-         
-       
-        lst=lst+flighthtml2;
-        lst=lst+sdat;
-        lst=lst+flighthtml2_2;
-        lst=lst+fdat;     
-        lst=lst+flighthtml2_3;       
-        console.log(response);
-        let rnumb="unknow";
-        if ( response.aircraft!= null)
-                rnumb= response.aircraft.serialNumber;
-        if (rnumb==null) rnumb="unknow";
-         lst=lst+flighthtml3_1+"F"+response.id+flighthtml3_2+rnumb+flighthtml3_3;;//response.user.user.firstname+flighthtml3_3;
-         
-       }
-       
-      document.getElementById(id).innerHTML=lst;
-      
-      return ;
-        }
-
+    
  }
 
 
@@ -3089,55 +2928,12 @@ function createFlyVectors(id){
    
     }
   
-    function updateRecordFlyghtTable(dat,flid,isNew) {
-            emptyArray(glb);
-            apiModFlight= apiData(apiUrl, "/application/"+flid, token, 'PUT', dat);
-      
-            apiModFlight.then(function (response) {
-                 
-                 getUserFly(); // формирование панели полетов
-                 if (isNew)
-                 {
-                  
-                  
-                  alert ("Заявка сформирована. ");
-                 }
-    }); 
-     
- }
+    
  
  /*export*/ function getUserFly()
  {
         
-        
-
-
-
-
   
-  var stats= ["Черновик","Шаблон","На утверждении","Подтверждена","Отклонена","Отменена","Выполняется"];
-          
-  const flighthtml0 ='<li class="uav-list-item"><div class="uav-item-header">\
-  <span class="uav-item-status">';
-  const flighthtml1 ='</span>\
-  <button class="btn uav-btn-more" id="';
-  const flighthtml1_1='">Подробнее</button>\
-  </div>\
-  <div class="uav-item-body">';
- // <span class="uav-item-row uav-item-reg">123123123123ABBB</span>\
- const flighthtml2='<span class="uav-item-row uav-item-flight"><span class="uav-item-desc">Наименование</span>';
- const flighthtml3 ='</span>\
-  <span class="uav-item-row uav-item-date-start"><span class="uav-item-desc">Старт</span>';
-  const flighthtml3_2 ='</span>\
-  <span class="uav-item-row uav-item-date-start"><span class="uav-item-desc">Финиш</span>'; 
- const flighthtml4='</span>\
-                   </div>\
-                   <div class="uav-item-body" id="';
-  const flighthtml4_2='"></div>';
-  const flighthtml12_2='<input type="hidden" id="';
-  const flighthtml12_3='" value="';
-  const flighthtml12_4='"></input>';
-  const flighthtml13='</li>';
   
 // Нижняя граница периода полетов  
       var stt= new Date();
@@ -3148,8 +2944,8 @@ function createFlyVectors(id){
       
       apiUserFlight.then(function (response) {
           
-           makeListFlyghtPanel(response); // формирование панели полетов
-          });
+       makeListFlyghtPanel(response); // формирование панели полетов
+        });
 
 
       
@@ -3166,8 +2962,12 @@ function createFlyVectors(id){
                  
                 if(response.applications[i].application.start.date >= stDt)
                   if(response.applications[i].status.id >2) 
-                  
-                    panFlyght(response.applications[i]);
+                  {
+                   glb.push([response.applications[i].id,response.applications[i].track.type.toString()]) ; 
+                   tmzon=response.applications[i].application.start.timezone_type;
+                   let ellst= cardHtml.panFlyght(response.applications[i]);
+                   lst=lst+ellst;
+                  }
                  }
                  document.getElementById("uav-realtimelist").innerHTML=lst;
                  addFlyEvent();
@@ -3181,44 +2981,7 @@ function createFlyVectors(id){
               }
               
               
-              function  panFlyght(flyght)
-              {
               
-              
-              var  nm=flyght.track.name;
-                                      
-              var glob= flyght.id;       // glob - GUID полета
-              var kod=  flyght.status.id;   
-            //  if (kod==3 || kod==4)
-               glb.push([glob,flyght.track.type.toString()]) ;   // glb -  массив согласованных или на согласовании
-
-             // var obj=flyght.application.externalId;//ftfSet.features[i].getAttribute("objectid");
-              var sdat=flyght.application.start.date; //ftfSet.features[i].getAttribute("startdate");
-              var  fdat=flyght.application.finish.date;//ftfSet.features[i].getAttribute("finishdate");
-               
-              lst=lst+flighthtml0;
-              lst=lst+stats[kod-1];
-              lst=lst+flighthtml1;
-              lst=lst+glob;
-              lst=lst+flighthtml1_1;
-              lst=lst+flighthtml2;
-              lst=lst+nm;
-            /*  lst=lst+flighthtml3;
-              lst=lst+sdat;
-              lst=lst+flighthtml3_2;
-              lst=lst+fdat;*/      //$$$$$$$$$$$$$$$$$$$$                          
-              lst=lst+flighthtml4;
-              lst=lst+"R"+glob;
-              lst=lst+flighthtml4_2;
-   
-               lst=lst+flighthtml12_2;
-               lst=lst+"T"+glob;
-               lst=lstlst=lst+flighthtml12_3;
-               lst=lst+kod; 
-               lst=lst+flighthtml12_4;
-               
-               lst=lst+flighthtml13;
-            }
    
 
     }
@@ -3338,18 +3101,18 @@ function getCheckGeometry(rdd)
      
     
      
-     var buffer2 = GEOMETRYENGINE.geodesicBuffer(checkGeometry, 1000, "meters");
+    //var buffer2 = GEOMETRYENGINE.geodesicBuffer(checkGeometry, 1000, "meters");
     
      
        if (checkGeometry.type=="polyline")
                 {
    
-               checkInterFlyght(routeVecLayer,buffer,buffer2,flyZoneLayer,zoneLayer);           
+               checkInterFlyght(routeVecLayer,buffer,flyZoneLayer);           
    
                 }
        else { 
    
-               checkInterFlyght(zoneLayer,buffer,buffer2,flyZoneLayer,zoneLayer);           
+               checkInterFlyght(zoneLayer,buffer,flyZoneLayer);           
    
              }
               
@@ -3565,7 +3328,7 @@ window.clearInterval(interv);
              
                 var gg = new GRAPHIC({
                 geometry: inter,
-                symbol: selectSymbol.lineSymbolIntersect,
+                symbol: mySymbols.lineSymbolIntersect,
                 spatialReference : { wkid: 4326 }
                    });
                   let alt; 
@@ -3667,7 +3430,7 @@ window.clearInterval(interv);
                 {
                  var gg= new GRAPHIC({
                      geometry: inter[j],
-                     symbol: selectSymbol.fillSymbolIntersect,
+                     symbol: mySymbols.fillSymbolIntersect,
                      spatialReference : { wkid: 3857 }
                    });
                   gg. attributes = Attrs;
@@ -3681,7 +3444,7 @@ window.clearInterval(interv);
             
             gg = new GRAPHIC({
                 geometry: inter,
-                symbol: selectSymbol.fillSymbolIntersect,
+                symbol: mySymbols.fillSymbolIntersect,
                 spatialReference : { wkid: 3857 }
                    });
                    
@@ -3701,7 +3464,7 @@ window.clearInterval(interv);
 
     
 
-function checkInterFlyght(baseLayer,buff,buff2,checkFlyLayer,checkTemplLayer) {
+function checkInterFlyght(baseLayer,buff,checkFlyLayer) {
 //function checkInterZoneRoute(baseLayer,buff,buff2,checkFlyLayer,checkTemplLayer) {
 var sdt=timeSlider.values[0];
 var startDat= convertTime(sdt);
@@ -3763,7 +3526,7 @@ for (var k=0;k<featureSet.features.length;k++)
 }
 
 var edate=convertTime(edt)
-checkInterRouteProcess(buff,buff2,sdate,edate,checkFlyLayer,checkTemplLayer);
+ checkInterRouteProcess(buff,sdate,edate,checkFlyLayer);
 }  
 
 });
@@ -3772,7 +3535,7 @@ checkInterRouteProcess(buff,buff2,sdate,edate,checkFlyLayer,checkTemplLayer);
 
 
 
-function checkInterRouteProcess(buff,buff2,sdate,edate,checkFlyLayer,checkTemplLayer)
+function checkInterRouteProcess(buff,sdate,edate,checkFlyLayer)
     {
        //fdt=covertTime(new Date());
           
@@ -3827,8 +3590,7 @@ var wh="flyid <> '"+idFly+"' And status < 5 And sdate >= timestamp'"+ sdate+"' A
            }
             
            var inter = GEOMETRYENGINE.intersect(buff,bufcon);
-           //var nm="";
-           var owid=featureSet.features[m].getAttribute("ownerid");
+          
            var edt=new Date(featureSet.features[m].getAttribute("edate")).toLocaleString();
            var sdt=new Date(featureSet.features[m].getAttribute("sdate")).toLocaleString();
        
@@ -3837,7 +3599,7 @@ var wh="flyid <> '"+idFly+"' And status < 5 And sdate >= timestamp'"+ sdate+"' A
            let Att = {
             start  : sdt,
             finish : edt
-            //owner : getUserName(owid)
+          
            };
             if (inter instanceof Array) 
               {
@@ -3846,7 +3608,7 @@ var wh="flyid <> '"+idFly+"' And status < 5 And sdate >= timestamp'"+ sdate+"' A
                 {
                  var gg= new GRAPHIC({
                      geometry: inter[j],
-                     symbol: selectSymbol.fillSymbolIntersect,
+                     symbol: mySymbols.fillSymbolIntersect,
                      spatialReference : { wkid: 4326 }
                    });
                    gg. attributes = Att;
@@ -3861,23 +3623,15 @@ var wh="flyid <> '"+idFly+"' And status < 5 And sdate >= timestamp'"+ sdate+"' A
 
             gg = new GRAPHIC({
                 geometry: inter,
-                symbol: selectSymbol.fillSymbolIntersect,
+                symbol: mySymbols.fillSymbolIntersect,
                 spatialReference : { wkid: 4326 }
                    });
                   gg. attributes = Att;
              gg.popupTemplate=templatesPopup.templateBufferRoute;           
              bufferLayer.add(gg);       
 
+          }
          }
-
-
-
-
-          
-        
-       // });
-         }
-     //  });
         
         }
        }
@@ -3934,24 +3688,4 @@ function cancelFly() {
       
           }
     
-        
-    function modLayerRec(gld,modLayer,atrName,atrNameMod,val)
-  {
-
-    modLayer.queryFeatures({
-      where : atrName+" = '"+gld+"'",
-      returnGeometry: true,
-      returnZ : true,
-      returnM : true,
-        outFields: ["*"],
-      }).then(function(ftfSet) {
-         
-         ftfSet.features[0].setAttribute(atrNameMod,val);
-         param2={ updateFeatures: ftfSet.features};
-         updateLayer(modLayer,param2);
-
-      })
-
-
-  } 
-
+  

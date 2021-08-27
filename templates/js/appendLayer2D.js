@@ -14,38 +14,15 @@ function addSelectLayer(GraphicsLayer,webmap)
 
      function addLayers2D(FeatureLayer,webmap)
      {
-          var servicePath = "https://abr-gis-server.airchannel.net/airchannel/rest/services/Dev/VectorDevelop/FeatureServer/";
+         // var servicePath = "https://abr-gis-server.airchannel.net/airchannel/rest/services/Dev/VectorDevelop/FeatureServer/";
           
-          var sourceTrackRoute=servicePath+"1";
-          var sourceTrackZone=servicePath+"4";
-          var sourceFlyghtZone=servicePath+"5"; 
-          var sourceFlyghtRoute=servicePath+"2";
+          var sourceTrackRoute=webPaths.servicePath+"1";
+          var sourceTrackZone=webPaths.servicePath+"4";
+          var sourceFlyghtZone=webPaths.servicePath+"5"; 
+          var sourceFlyghtRoute=webPaths.servicePath+"2";
           
 
-          var      templateZoneFly = {
-        
-            title: "Полетные зоны",
-            returnGeometry : true,
-            content: [
-              {
-                type: "fields",
-                fieldInfos: [
-                  {
-                    fieldName: "sdate",
-                    label: "Старт"
-                  }
-                  ,
-                  {
-                    fieldName: "edate",
-                    label: "Финиш"
-                  }
-                ]
-              }
-            ]
-          };
-          
-               
-        
+         
             routeVecLayer = new FeatureLayer({
             url:     sourceTrackRoute, 
             
@@ -58,61 +35,23 @@ function addSelectLayer(GraphicsLayer,webmap)
                 });
     
 
-
-          lineSymbolTable = {
-            type: "simple-line", // autocasts as SimpleLineSymbol()
-            color: [0, 255, 0],
-            width: 2
-          };
-  
-           var lineRendererTable = {
-               type: "simple",
-               symbol: lineSymbolTable
-            };
-
              tableLayer = new FeatureLayer({
               url:    sourceTrackRoute,
               outFields: ["*"],
-              renderer :lineRendererTable,
+              renderer :myRenderers.lineRendererTable,
               listMode :"hide"
                 });
             
 
   //****************************************************************************************************** */              
-          fillSymbolSelectZone =
-         {
-           type: "simple-fill", 
-           color: [ 255,0, 197, 0.2 ],
-           style: "solid",
-           outline: {  // autocasts as new SimpleLineSymbol()
-                 color: [ 0,255, 0 ],
-                 width: 3
-                   }
-         };
-
-           var zoneRendererTable = {
-                    type: "simple",
-                    symbol: fillSymbolSelectZone
-                  };    
-
+    
             tableZoneLayer = new FeatureLayer({
             url:     sourceTrackZone,
             outFields: ["*"],
-            renderer:zoneRendererTable,
+            renderer: myRenderers.zoneRendererTable,
             listMode :"hide" });
     
     //****************************************************************************************************** */              
-           var fillSymbol = {
-            type: "simple-fill", // autocasts as SimpleLineSymbol()
-             color: [255, 0, 197,0.2],
-             width: 2
-            };
-
-          var zoneRenderer = {
-              type: "simple",
-              symbol: fillSymbol
-            };      
-            
             
 
           zoneLayer = new FeatureLayer({
@@ -120,20 +59,12 @@ function addSelectLayer(GraphicsLayer,webmap)
                outFields: ["*"],
                hasZ:true,
                returnZ: true,
-               renderer:zoneRenderer,
+               renderer:myRenderers.zoneRenderer,
                title : "Зоны полетов"
               });         
   //****************************************************************************************************** */                   
                
-         /* var selectSymbol.lineSymbol = {
-             type: "simple-line", // autocasts as SimpleLineSymbol()
-             color: [255, 0, 197],
-             width: 1
-            };*/
-          var lineRenderer = {
-             type: "simple",
-            symbol: selectSymbol.lineSymbolPigg
-           };
+       
           routeLayer = new FeatureLayer({
               url:         sourceTrackRoute,
               outFields: ["*"],
@@ -141,7 +72,7 @@ function addSelectLayer(GraphicsLayer,webmap)
               hasZ:true,
               returnM :true,
               returnZ: true,
-              renderer:lineRenderer,
+              renderer:myRenderers.lineRenderer,
               title : "Траектории"
                });
                
@@ -167,7 +98,7 @@ function addSelectLayer(GraphicsLayer,webmap)
                     title: "Зоны заявок",  
                     url: sourceFlyghtZone,
                     outFields: ["*"],
-                    renderer: selectSymbol.unicumRendererZone,
+                    renderer: myRenderers.unicumRendererZone,
                     popupTemplate :templatesPopup.templateZoneFly,
                     hasZ:true,
                     returnZ: true
