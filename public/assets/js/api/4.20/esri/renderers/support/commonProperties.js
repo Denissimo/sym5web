@@ -1,0 +1,5 @@
+// All material copyright ESRI, All Rights Reserved, unless otherwise specified.
+// See https://js.arcgis.com/4.20/esri/copyright.txt for details.
+//>>built
+define(["exports","../../symbols","../../symbols/support/jsonUtils","../../symbols/Symbol","../../symbols/PolygonSymbol3D"],function(c,a,b,d,e){const f={types:a.symbolTypesRenderer,json:{write:{writer:b.write},origins:{"web-scene":{types:a.symbolTypesRenderer3D,write:{writer:b.write}}}}};c.rendererBackgroundFillSymbolProperty={types:{base:d,key:"type",typeMap:{"simple-fill":a.symbolTypes.typeMap["simple-fill"],"picture-fill":a.symbolTypes.typeMap["picture-fill"],"polygon-3d":a.symbolTypes.typeMap["polygon-3d"]}},
+json:{write:{writer:b.write},origins:{"web-scene":{type:e,write:{writer:b.write}}}}};c.rendererSymbolProperty=f;Object.defineProperty(c,"__esModule",{value:!0})});

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Installing the ArcGIS API for JavaScript</title>
+    <link rel="stylesheet" type="text/css" href="https://unpkg.com/@esri/calcite-components/dist/calcite/calcite.css" />
+    <link rel="stylesheet" href="https://unpkg.com/@highlightjs/cdn-assets@10.7.2/styles/default.min.css" />
+    <style>
+      .wrapper {
+        margin: 100px 25px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrapper"><h1>Hosting the API locally</h1>
+<p>The recommended approach for accessing the ArcGIS API for JavaScript is the hosted version
+on the CDN (<a href="https://en.wikipedia.org/wiki/Content_delivery_network">Content Delivery Network</a>).</p>
+<pre><code class="language-html">&lt;link rel=&quot;stylesheet&quot; href=&quot;https://js.arcgis.com/4.20/esri/themes/light/main.css&quot;&gt;
+&lt;script src=&quot;https://js.arcgis.com/4.20/&quot;&gt;&lt;/script&gt;
+</code></pre>
+<p>However, there are
+instances where you might want to host a copy of the API locally on your own web server.
+If your web server is running the Windows® Operating system, read the
+document on <a href="./install-windows/index.html">installing the ArcGIS API for JavaScript on Windows</a>.
+If your web server is running a supported version of the Linux Operating system, read the
+document on <a href="./install-linux/index.html">installing the ArcGIS API for JavaScript on Linux</a>.
+For more information about the API read the
+<a href="https://developers.arcgis.com/javascript/latest/guide/get-api/index.html">Get the API</a> guide topic.</p>
+</div>
+
+    <script type="module" src="https://unpkg.com/@esri/calcite-components/dist/calcite/calcite.esm.js"></script>
+    <script nomodule="" src="https://unpkg.com/@esri/calcite-components/dist/calcite/calcite.js"></script>
+    <script src="https://unpkg.com/@highlightjs/cdn-assets@10.7.2/highlight.min.js"></script>
+    <script>
+      hljs.highlightAll();
+    </script>
+  </body>
+</html>

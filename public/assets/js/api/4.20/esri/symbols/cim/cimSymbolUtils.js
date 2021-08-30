@@ -1,0 +1,5 @@
+// All material copyright ESRI, All Rights Reserved, unless otherwise specified.
+// See https://js.arcgis.com/4.20/esri/copyright.txt for details.
+//>>built
+define("exports ../../chunks/_rollupPluginBabelHelpers ../../symbols ./cimAnalyzer ./ExpandedCIM ../WebStyleSymbol".split(" "),function(e,f,g,l,m,n){g=function(){var d=f._asyncToGenerator(function*(a,b,c){return Promise.all(a.map(p=>h(p,b,c)))});return function(a,b,c){return d.apply(this,arguments)}}();const k=function(){var d=f._asyncToGenerator(function*(a,b){return new m.ExpandedCIM(yield l.analyzeCIMSymbol(a.data,b),a.data,a.rendererKey,a.maxVVSize)});return function(a,b){return d.apply(this,
+arguments)}}(),h=function(){var d=f._asyncToGenerator(function*(a,b,c){return a?"cim"===a.type?k(a,b):"web-style"===a.type?(a={type:"cim",data:(yield n.fromJSON(a).fetchCIMSymbol(c)).data,rendererKey:a.rendererKey,maxVVSize:a.maxVVSize},k(a,b)):a:null});return function(a,b,c){return d.apply(this,arguments)}}();e.expandSymbol=h;e.expandSymbols=g;Object.defineProperty(e,"__esModule",{value:!0})});

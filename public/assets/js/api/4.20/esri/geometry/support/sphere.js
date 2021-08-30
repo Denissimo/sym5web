@@ -1,0 +1,5 @@
+// All material copyright ESRI, All Rights Reserved, unless otherwise specified.
+// See https://js.arcgis.com/4.20/esri/copyright.txt for details.
+//>>built
+define("exports ../../core/has ../../core/Logger ../../core/mathUtils ../../core/maybe ../../chunks/mat4 ../../chunks/vec3 ../../chunks/vec3f64 ../../chunks/vec4 ../../chunks/vec4f64 ./ray ./vector ./vectorStacks ../../chunks/sphere".split(" "),function(a,c,d,e,f,g,h,k,l,m,n,p,q,b){a.altitudeAt=b.altitudeAt;a.angleToSilhouette=b.angleToSilhouette;a.axisAt=b.axisAt;a.clear=b.clear;a.closestPoint=b.closestPoint;a.closestPointOnSilhouette=b.closestPointOnSilhouette;a.copy=b.copy;a.create=b.create;a.distanceToSilhouette=
+b.distanceToSilhouette;a.elevate=b.elevate;a.fromCenterAndRadius=b.fromCenterAndRadius;a.fromRadius=b.fromRadius;a.fromValues=b.fromValues;a.getCenter=b.getCenter;a.getRadius=b.getRadius;a.intersectRay=b.intersectRay;a.intersectRayClosestSilhouette=b.intersectRayClosestSilhouette;a.intersectsRay=b.intersectsRay;a.projectPoint=b.projectPoint;a.setAltitudeAt=b.setAltitudeAt;a.setExtent=b.setExtent;a.wrap=b.wrap;Object.defineProperty(a,"__esModule",{value:!0})});

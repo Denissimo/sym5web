@@ -1,0 +1,5 @@
+/*
+All material copyright ESRI, All Rights Reserved, unless otherwise specified.
+See https://js.arcgis.com/4.20/esri/copyright.txt for details.
+*/
+import{r as t,m as n,k as s}from"./mathUtils.js";import o from"../geometry/Point.js";import{g as r}from"./projectionEllipsoid.js";function e(t,o,r){return function(t,o,r,e,u){const a=s(r),i=s(u),c=s(o),h=s(e),m=a-i,d=c-h,l=Math.sin(m/2),M=Math.sin(d/2),f=2*n(Math.sqrt(l*l+Math.cos(a)*Math.cos(i)*M*M))*t;return Math.round(1e4*f)/1e4}(t,o.longitude,o.latitude,r.longitude,r.latitude)}function u(t,n,s){const u=n.spatialReference,a=r(u),i=new o(n.x,t.y,u),c=new o(s.x,t.y,u),h=new o(t.x,n.y,u),m=new o(t.x,s.y,u);return{lon:e(a.radius,i,c),lat:e(a.radius,h,m)}}function a(o,r,e){const u=r/e,a=s(o),i=Math.sin(u/2),c=Math.cos(a),h=2*n(Math.sqrt(i*i/(c*c)));return t(h)}function i(t,n){let s=t/15;return n||(s=Math.round(s)),s}function c(t,n){n||(n={hours:0,minutes:0,seconds:0}),n.hours=i(t[0],!0);const s=n.hours%1;n.hours-=s,n.minutes=60*s;const o=n.minutes%1;return n.minutes-=o,n.seconds=Math.round(60*o),n}export{u as a,a as g,i as l,c as p};

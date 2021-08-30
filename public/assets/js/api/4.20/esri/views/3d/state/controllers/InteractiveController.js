@@ -1,0 +1,6 @@
+// All material copyright ESRI, All Rights Reserved, unless otherwise specified.
+// See https://js.arcgis.com/4.20/esri/copyright.txt for details.
+//>>built
+define("exports ../../../../chunks/_rollupPluginBabelHelpers ../../../../chunks/tslib.es6 ../../../../core/accessorSupport/decorators/property ../../../../core/has ../../../../core/accessorSupport/ensureType ../../../../core/Logger ../../../../core/jsonMap ../../../../core/accessorSupport/decorators/subclass ./CameraController ../../webgl-engine/lib/Camera".split(" "),function(b,e,l,n,p,q,r,t,m,f,g){b.InteractiveController=function(h){function c(){var a=h.apply(this,arguments)||this;a.startCamera=
+new g;a.currentCamera=new g;return a}e._inheritsLoose(c,h);var d=c.prototype;d.stepController=function(a,k){k.copyViewFrom(this.currentCamera);this.currentCamera.copyFrom(k)};d.onControllerStart=function(a){this.state=f.State.Running;this.startCamera.copyFrom(a);this.currentCamera.copyFrom(a)};d.onControllerEnd=function(a){a.copyViewFrom(this.currentCamera)};e._createClass(c,[{key:"isInteractive",get:function(){return!0}}]);return c}(f.CameraController);b.InteractiveController=l.__decorate([m.subclass("esri.views.3d.state.controllers.InteractiveController")],
+b.InteractiveController);Object.defineProperty(b,"__esModule",{value:!0})});

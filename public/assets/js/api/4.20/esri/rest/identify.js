@@ -1,0 +1,5 @@
+// All material copyright ESRI, All Rights Reserved, unless otherwise specified.
+// See https://js.arcgis.com/4.20/esri/copyright.txt for details.
+//>>built
+define("exports ../chunks/_rollupPluginBabelHelpers ../request ../geometry/support/normalizeUtils ./utils ./support/IdentifyParameters ./support/IdentifyResult ../tasks/operations/identify".split(" "),function(h,k,l,m,f,n,p,q){function g(){g=k._asyncToGenerator(function*(a,b,d){b=r(b);const t=b.geometry?[b.geometry]:[],e=f.parseUrl(a);e.path+="/identify";return m.normalizeCentralMeridian(t).then(c=>{c=q.identifyToIdentifyRESTParameters(b,{geometry:c&&c[0]});c=f.encode({...e.query,f:"json",...c});
+c=f.asValidOptions(c,d);return l(e.path,c).then(u)})});return g.apply(this,arguments)}function u(a){a=a.data;a.results=a.results||[];const b={results:[]};b.results=a.results.map(d=>p.fromJSON(d));return b}function r(a){return a=n.from(a)}h.identify=function(a,b,d){return g.apply(this,arguments)};Object.defineProperty(h,"__esModule",{value:!0})});

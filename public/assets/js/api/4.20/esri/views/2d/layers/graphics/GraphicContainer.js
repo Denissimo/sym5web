@@ -1,0 +1,5 @@
+// All material copyright ESRI, All Rights Reserved, unless otherwise specified.
+// See https://js.arcgis.com/4.20/esri/copyright.txt for details.
+//>>built
+define(["../../../../chunks/_rollupPluginBabelHelpers","../../engine/webgl/enums","./BaseGraphicContainer"],function(g,e,h){return function(c){function d(){return c.apply(this,arguments)||this}g._inheritsLoose(d,c);var f=d.prototype;f.renderChildren=function(a){this.attributeView.bindTextures(a.context);this.children.some(b=>b.hasData)&&(c.prototype.renderChildren.call(this,a),a.drawPhase===e.WGLDrawPhase.MAP&&this._renderChildren(a),a.drawPhase===e.WGLDrawPhase.HIGHLIGHT&&this._renderHighlight(a))};
+f._renderHighlight=function(a){var {painter:b}=a;b=b.effects.highlight;b.bind(a);this._renderChildren(a,b.defines);b.draw(a);b.unbind()};return d}(h)});

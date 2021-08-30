@@ -1,5 +1,6 @@
     {% if use_arcgis %}
-        <link href="https://js.arcgis.com/4.20/esri/themes/light/main.css" rel="stylesheet">
+{#        <link href="https://js.arcgis.com/4.20/esri/themes/light/main.css" rel="stylesheet">#}
+        <link href="/assets/js/api/4.20/esri/css/main.css" rel="stylesheet">
     {% endif %}
     <link href="/assets/css/bootstrap.min.css" rel="stylesheet"/>
     <link href="/assets/css/app.css" rel="stylesheet"/>
@@ -21,7 +22,8 @@
 
     {% if use_arcgis %}
         {# ESRI #}
-        <script src="https://js.arcgis.com/4.20/"></script>
+{#        <script src="https://js.arcgis.com/4.20/"></script>#}
+        <script src="/assets/js/api/4.20/init.js"></script>
         <script src="/javascript/arcgis.js?route={{ route }}"></script>
         {% if route == 'AirSituation' %}
             {# <script src="/javascript/arcgis"></script> #}

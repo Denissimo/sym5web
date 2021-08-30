@@ -1,0 +1,6 @@
+// All material copyright ESRI, All Rights Reserved, unless otherwise specified.
+// See https://js.arcgis.com/4.20/esri/copyright.txt for details.
+//>>built
+define("exports ./decorators/accessibleHandler ./decorators/messageBundle ./decorators/renderable ./decorators/vmEvent ./jsxFactory ./widgetUtils".split(" "),function(a,d,e,f,g,h,b){a.accessibleHandler=d.accessibleHandler;a.messageBundle=e.messageBundle;a.renderable=f.renderable;a.vmEvent=g.vmEvent;a.tsx=h.tsx;a.additionalAllowedTags=b.additionalAllowedTags;a.classes=b.classes;a.cssTransition=b.cssTransition;a.discardNode=b.discardNode;a.getCalciteThemeClass=b.getCalciteThemeClass;a.getThemeName=
+b.getThemeName;a.isActivationKey=b.isActivationKey;a.isDarkTheme=b.isDarkTheme;a.isRTL=b.isRTL;a.keepMenuItemWithinView=b.keepMenuItemWithinView;a.renderingSanitizer=b.renderingSanitizer;a.safeAttrs=b.safeAttrs;a.storeNode=b.storeNode;a.hasDomNode=function(c){return c&&"function"===typeof c.postMixInProperties&&"function"===typeof c.buildRendering&&"function"===typeof c.postCreate&&"function"===typeof c.startup};a.isWidget=function(c){return c&&"function"===typeof c.render};Object.defineProperty(a,
+"__esModule",{value:!0})});

@@ -1,0 +1,5 @@
+// All material copyright ESRI, All Rights Reserved, unless otherwise specified.
+// See https://js.arcgis.com/4.20/esri/copyright.txt for details.
+//>>built
+define(["exports","../../chunks/_rollupPluginBabelHelpers","../../views/2d/engine/webgl/enums","../../views/2d/engine/webgl/materialKey/MaterialKey"],function(g,k,b,l){const m={marker:b.WGLGeometryType.MARKER,fill:b.WGLGeometryType.FILL,line:b.WGLGeometryType.LINE,text:b.WGLGeometryType.TEXT};b=function(){function f(d,a,n,p){const e={minScale:null==a?void 0:a.minScale,maxScale:null==a?void 0:a.maxScale};var h=e.minScale||e.maxScale?e.minScale+"-"+e.maxScale:"";this.layers=d;this.data=a;this.hash=
+this._createHash()+h;this.rendererKey=n;for(const c of d)c.materialKey=l.createMaterialKey(m[c.type],this.rendererKey,!1,!1),c.maxVVSize=p,c.scaleInfo=e,c.templateHash+=h}f.prototype._createHash=function(){let d="";for(const a of this.layers)d+=a.templateHash;return d};k._createClass(f,[{key:"type",get:function(){return"expanded-cim"}}]);return f}();g.ExpandedCIM=b;Object.defineProperty(g,"__esModule",{value:!0})});

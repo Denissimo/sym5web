@@ -1,0 +1,4 @@
+// All material copyright ESRI, All Rights Reserved, unless otherwise specified.
+// See https://js.arcgis.com/4.20/esri/copyright.txt for details.
+//>>built
+define(["exports","../../chunks/_rollupPluginBabelHelpers"],function(d,e){function c(){c=e._asyncToGenerator(function*(a,b){if("2d"===a.type)return a.hitTest(b);a=yield a.hitTest(b);const f=a.results[0];b=a.results.findIndex(g=>g.distance!==f.distance);-1!==b&&(a.results=a.results.slice(0,b));return a});return c.apply(this,arguments)}d.hitTestSelectSameDistance=function(a,b){return c.apply(this,arguments)};Object.defineProperty(d,"__esModule",{value:!0})});

@@ -1,0 +1,6 @@
+// All material copyright ESRI, All Rights Reserved, unless otherwise specified.
+// See https://js.arcgis.com/4.20/esri/copyright.txt for details.
+//>>built
+define(["exports","../../../../../chunks/_rollupPluginBabelHelpers","./VTLMaterial"],function(d,f,a){a=function(e){function b(g){return e.call(this,g)||this}f._inheritsLoose(b,e);var c=b.prototype;c.geometryInfo=function(){return b.GEOMETRY_LAYOUT};c.opacityInfo=function(){return null};c.attributes=function(){return b.ATTRIBUTES};c.attributesInfo=function(){return b.ATTRIBUTES_INFO};return b}(a.VTLMaterial);a.ATTRIBUTES="circle-radius circle-color circle-opacity circle-stroke-width circle-stroke-color circle-stroke-opacity circle-blur".split(" ");
+a.GEOMETRY_LAYOUT=[{name:"a_pos",count:2,type:5122,offset:0,stride:4,normalized:!1,divisor:0}];a.ATTRIBUTES_INFO={"circle-radius":{name:"radius",type:1},"circle-color":{name:"color",type:10},"circle-opacity":{name:"opacity",type:1,precisionFactor:100},"circle-stroke-width":{name:"stroke_width",type:1,precisionFactor:4},"circle-stroke-color":{name:"stroke_color",type:10},"circle-stroke-opacity":{name:"stroke_opacity",type:1,precisionFactor:100},"circle-blur":{name:"blur",type:1,precisionFactor:32}};
+d.VTLCircleMaterial=a;Object.defineProperty(d,"__esModule",{value:!0})});

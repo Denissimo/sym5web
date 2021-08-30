@@ -1,0 +1,6 @@
+// All material copyright ESRI, All Rights Reserved, unless otherwise specified.
+// See https://js.arcgis.com/4.20/esri/copyright.txt for details.
+//>>built
+define("../chunks/_rollupPluginBabelHelpers ../chunks/tslib.es6 ../request ../core/maybe ../core/MultiOriginJSONSupport ../core/urlUtils ../core/accessorSupport/decorators/property ../core/has ../core/accessorSupport/ensureType ../core/Logger ../core/jsonMap ../core/accessorSupport/decorators/subclass ./Layer".split(" "),function(h,d,k,l,b,m,n,t,u,v,w,p,q){b=function(e){function c(a){a=e.call(this,a)||this;a.serviceRoot="";a.type="voxel";return a}h._inheritsLoose(c,e);var f=c.prototype;f.load=function(a){a=
+this.loadFromFake(a);this.addResolvingPromise(a);return Promise.resolve(this)};f.loadFromFake=function(a){if(!this.url)return Promise.reject();const g={responseType:"array-buffer"};l.isSome(a)&&(g.signal=a.signal);return k(this.url,g).then(r=>{this.layerData=r;0<this.layerData.data.byteLength&&(this.serviceRoot=m.removeFile(this.url))})};return c}(b.MultiOriginJSONMixin(q));d.__decorate([n.property({json:{read:!1},readOnly:!0})],b.prototype,"type",void 0);return b=d.__decorate([p.subclass("esri.layers.VoxelLayer")],
+b)});

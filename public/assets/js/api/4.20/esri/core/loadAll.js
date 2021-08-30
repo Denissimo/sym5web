@@ -1,0 +1,5 @@
+// All material copyright ESRI, All Rights Reserved, unless otherwise specified.
+// See https://js.arcgis.com/4.20/esri/copyright.txt for details.
+//>>built
+define("exports ../chunks/_rollupPluginBabelHelpers ./asyncUtils ./Collection ./Loadable ./maybe".split(" "),function(d,f,m,r,t,u){function n(b,c){return g.apply(this,arguments)}function g(){g=f._asyncToGenerator(function*(b,c){yield b.load();return p(b,c)});return g.apply(this,arguments)}function p(b,c){return h.apply(this,arguments)}function h(){h=f._asyncToGenerator(function*(b,c){const q=[],l=(...k)=>{for(const a of k)u.isNone(a)||(Array.isArray(a)?l(...a):r.isCollection(a)?a.forEach(v=>l(v)):
+t.isLoadable(a)&&q.push(a))};c(l);let e=null;yield m.map(q,function(){var k=f._asyncToGenerator(function*(a){!1!==(yield m.result("loadAll"in a&&"function"===typeof a.loadAll?a.loadAll():a.load())).ok||e||(e=a)});return function(a){return k.apply(this,arguments)}}());if(e)throw e.loadError;return b});return h.apply(this,arguments)}d.default=n;d.loadAll=n;d.loadAllChildren=p;Object.defineProperty(d,"__esModule",{value:!0})});

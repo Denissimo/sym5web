@@ -1,0 +1,5 @@
+// All material copyright ESRI, All Rights Reserved, unless otherwise specified.
+// See https://js.arcgis.com/4.20/esri/copyright.txt for details.
+//>>built
+define("../../chunks/_rollupPluginBabelHelpers ../../chunks/tslib.es6 ../../Color ../../core/Accessor ../../core/accessorSupport/decorators/property ../../core/has ../../core/accessorSupport/ensureType ../../core/Logger ../../core/jsonMap ../../core/accessorSupport/decorators/subclass".split(" "),function(h,b,d,a,e,l,m,n,p,k){a=function(f){function g(){var c=f.apply(this,arguments)||this;c.color=new d([0,0,255,.7]);c.mode="continuous";return c}h._inheritsLoose(g,f);return g}(a);b.__decorate([e.property({type:d})],
+a.prototype,"color",void 0);b.__decorate([e.property()],a.prototype,"mode",void 0);return a=b.__decorate([k.subclass("esri.widgets.ShadowAccumulation.DurationOptions")],a)});

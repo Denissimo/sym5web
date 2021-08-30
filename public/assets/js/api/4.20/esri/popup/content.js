@@ -1,0 +1,4 @@
+// All material copyright ESRI, All Rights Reserved, unless otherwise specified.
+// See https://js.arcgis.com/4.20/esri/copyright.txt for details.
+//>>built
+define("exports ./content/AttachmentsContent ./content/Content ./content/CustomContent ./content/FieldsContent ./content/MediaContent ./content/TextContent".split(" "),function(a,b,c,g,d,e,f){const h={base:null,key:"type",typeMap:{attachment:b,media:e,text:f,field:d}};a.AttachmentsContent=b;a.BaseContent=c;a.CustomContent=g;a.FieldsContent=d;a.MediaContent=e;a.TextContent=f;a.isContent=function(k){return k instanceof c};a.persistableTypes=h;Object.defineProperty(a,"__esModule",{value:!0})});

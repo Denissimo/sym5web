@@ -1,0 +1,5 @@
+// All material copyright ESRI, All Rights Reserved, unless otherwise specified.
+// See https://js.arcgis.com/4.20/esri/copyright.txt for details.
+//>>built
+define("exports ../../chunks/_rollupPluginBabelHelpers ../../chunks/tslib.es6 ../../core/JSONSupport ../../core/accessorSupport/decorators/property ../../core/has ../../core/accessorSupport/ensureType ../../core/Logger ../../core/jsonMap ../../core/accessorSupport/decorators/subclass ../Lighting".split(" "),function(a,h,e,k,l,n,p,q,r,m,b){var c;a.SlideEnvironment=c=function(f){function d(){var g=f.apply(this,arguments)||this;g.lighting=new b;return g}h._inheritsLoose(d,f);d.prototype.clone=function(){return new c({lighting:b.prototype.clone.call(this.lighting)})};
+return d}(k.JSONSupport);e.__decorate([l.property({type:b,json:{write:!0}})],a.SlideEnvironment.prototype,"lighting",void 0);a.SlideEnvironment=c=e.__decorate([m.subclass("esri.webscene.Environment")],a.SlideEnvironment);Object.defineProperty(a,"__esModule",{value:!0})});

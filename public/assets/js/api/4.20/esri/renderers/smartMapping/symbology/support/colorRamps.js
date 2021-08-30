@@ -1,0 +1,4 @@
+// All material copyright ESRI, All Rights Reserved, unless otherwise specified.
+// See https://js.arcgis.com/4.20/esri/copyright.txt for details.
+//>>built
+define(["exports","../../../../core/deprecate","../../../../core/Logger","../../../../smartMapping/symbology/support/colorRamps"],function(a,d,c,b){c=c.getLogger("esri.renderers.smartMapping.symbology.support.colorRamps");d.deprecatedModule(c,"esri/renderers/smartMapping/symbology/support/colorRamps",{replacement:"esri/smartMapping/symbology/support/colorRamps"});a.all=b.all;a.byName=b.byName;a.byTag=b.byTag;a.names=b.names;Object.defineProperty(a,"__esModule",{value:!0})});

@@ -1,0 +1,5 @@
+// All material copyright ESRI, All Rights Reserved, unless otherwise specified.
+// See https://js.arcgis.com/4.20/esri/copyright.txt for details.
+//>>built
+define("exports ./_rollupPluginBabelHelpers ./tslib.es6 ../Color ../core/JSONSupport ../core/lang ../core/accessorSupport/decorators/property ../core/accessorSupport/ensureType ../core/has ../core/Logger ../core/jsonMap ../core/accessorSupport/decorators/subclass ../symbols/support/materialUtils".split(" "),function(a,h,b,k,c,l,m,q,r,t,u,n,p){var d;a.LineCallout3DBorder$2=d=function(f){function e(){var g=f.apply(this,arguments)||this;g.color=new k("white");return g}h._inheritsLoose(e,f);e.prototype.clone=
+function(){return new d({color:l.clone(this.color)})};return e}(c.JSONSupport);b.__decorate([m.property(p.colorAndTransparencyProperty)],a.LineCallout3DBorder$2.prototype,"color",void 0);a.LineCallout3DBorder$2=d=b.__decorate([n.subclass("esri.symbols.callouts.LineCallout3DBorder")],a.LineCallout3DBorder$2);b=a.LineCallout3DBorder$2;c=Object.freeze({__proto__:null,get LineCallout3DBorder(){return a.LineCallout3DBorder$2},"default":b});a.LineCallout3DBorder=c;a.LineCallout3DBorder$1=b});

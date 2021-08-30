@@ -1,0 +1,5 @@
+// All material copyright ESRI, All Rights Reserved, unless otherwise specified.
+// See https://js.arcgis.com/4.20/esri/copyright.txt for details.
+//>>built
+define("../../../chunks/_rollupPluginBabelHelpers ../../../chunks/tslib.es6 ../../../core/JSONSupport ../../../core/accessorSupport/decorators/property ../../../core/has ../../../core/accessorSupport/ensureType ../../../core/Logger ../../../core/jsonMap ../../../core/accessorSupport/decorators/subclass".split(" "),function(h,c,a,e,l,m,n,p,k){a=function(f){function d(){var b=f.apply(this,arguments)||this;b.affectsPixelSize=!1;return b}h._inheritsLoose(d,f);var g=d.prototype;g.forwardTransform=function(b){return b};
+g.inverseTransform=function(b){return b};return d}(a.JSONSupport);c.__decorate([e.property()],a.prototype,"affectsPixelSize",void 0);c.__decorate([e.property({json:{write:!0}})],a.prototype,"spatialReference",void 0);return a=c.__decorate([k.subclass("esri.layers.support.rasterTransforms.BaseRasterTransform")],a)});

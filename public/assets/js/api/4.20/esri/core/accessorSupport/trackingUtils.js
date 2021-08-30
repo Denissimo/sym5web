@@ -1,0 +1,6 @@
+// All material copyright ESRI, All Rights Reserved, unless otherwise specified.
+// See https://js.arcgis.com/4.20/esri/copyright.txt for details.
+//>>built
+define(["exports","./tracking","./tracking/SimpleTrackingTarget"],function(h,l,n){function p(d,c,b={runImmediately:!1}){function a(){if(e&&!m)if(k)f.includes(a)||f.unshift(a);else{var q=g;e.clear();m=k=!0;g=l.runTracked(e,d);k=m=!1;for(c(g,q);f.length;)f.pop()()}}let e=new n.SimpleTrackingTarget(a),g=null,m=!1;m=!0;g=l.runTracked(e,d);m=!1;b.runImmediately&&c(g,g);return{remove:function(){e&&(e.destroy(),g=e=null)}}}let k=!1;const f=[];h.autorun=function(d){function c(){if(b&&!a)if(k)f.includes(c)||
+f.unshift(c);else for(b.clear(),a=k=!0,l.runTracked(b,d),k=a=!1;f.length;)f.pop()()}let b=new n.SimpleTrackingTarget(c),a=!1;a=!0;l.runTracked(b,d);a=!1;return{remove:function(){b&&(b.destroy(),b=null)}}};h.reaction=p;h.reactionAsync=function(d,c){function b(){if(!a)return null;a.clear();return e=l.runTracked(a,d)}let a=new n.SimpleTrackingTarget(function(){c(e,b)}),e=null;b();return{remove:function(){a&&(a.destroy(),a=null);e=null}}};h.reactionInit=function(d,c){return p(d,c,{runImmediately:!0})};
+h.when=function(d,c){return p(()=>d(),b=>{b&&c()},{runImmediately:!0})};Object.defineProperty(h,"__esModule",{value:!0})});

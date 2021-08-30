@@ -1,0 +1,5 @@
+// All material copyright ESRI, All Rights Reserved, unless otherwise specified.
+// See https://js.arcgis.com/4.20/esri/copyright.txt for details.
+//>>built
+define(["exports","../../../../chunks/_rollupPluginBabelHelpers","../../../../core/screenUtils","../../state/controllers/RotateController","../../../input/InputHandler"],function(g,l,m,n,e){e=function(h){function f(b,c=!1){var a=h.call(this,!0)||this;a.view=b;a.invert=c;a.registerIncoming("vertical-two-finger-drag",d=>a.handleTwoFinger(d));return a}l._inheritsLoose(f,h);f.prototype.handleTwoFinger=function(b){var c,a,d;const k=m.createScreenPointArray(0,b.data.delta*(this.invert?-1:1));switch(b.data.action){case "begin":null==
+(c=this.cameraController)?void 0:c.end();this.cameraController=new n.RotateController({view:this.view,pivot:0});this.view.state.switchCameraController(this.cameraController);this.cameraController.begin(k);break;case "update":null==(a=this.cameraController)?void 0:a.update(k);break;case "end":null==(d=this.cameraController)?void 0:d.end(),this.cameraController=null}};return f}(e.InputHandler);g.TwoFingerTilt=e;Object.defineProperty(g,"__esModule",{value:!0})});

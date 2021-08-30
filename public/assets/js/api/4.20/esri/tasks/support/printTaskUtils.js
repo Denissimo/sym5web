@@ -1,0 +1,5 @@
+// All material copyright ESRI, All Rights Reserved, unless otherwise specified.
+// See https://js.arcgis.com/4.20/esri/copyright.txt for details.
+//>>built
+define(["exports","../../rest/support/printTaskUtils"],function(a,b){a.applyVisualVariables=b.applyVisualVariables;a.createMultipointLayer=b.createMultipointLayer;a.createPointLayer=b.createPointLayer;a.createPolygonLayer=b.createPolygonLayer;a.createPolylineLayer=b.createPolylineLayer;a.getContextBoundingBox=b.getContextBoundingBox;a.getVisibleLayerViews=b.getVisibleLayerViews;a.isBingMapsLayer=b.isBingMapsLayer;a.isCSVLayer=b.isCSVLayer;a.isFeatureLayer=b.isFeatureLayer;a.isGeoJSONLayer=b.isGeoJSONLayer;
+a.isGraphicsLayer=b.isGraphicsLayer;a.isGroupLayer=b.isGroupLayer;a.isImageryLayer=b.isImageryLayer;a.isKMLLayer=b.isKMLLayer;a.isMapImageLayer=b.isMapImageLayer;a.isMapNotesLayer=b.isMapNotesLayer;a.isOpenStreetMapLayer=b.isOpenStreetMapLayer;a.isStreamLayer=b.isStreamLayer;a.isTileLayer=b.isTileLayer;a.isVectorTileLayer=b.isVectorTileLayer;a.isWMSLayer=b.isWMSLayer;a.isWMTSLayer=b.isWMTSLayer;a.isWebTileLayer=b.isWebTileLayer;Object.defineProperty(a,"__esModule",{value:!0})});

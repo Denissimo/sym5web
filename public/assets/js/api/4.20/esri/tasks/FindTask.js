@@ -1,0 +1,5 @@
+// All material copyright ESRI, All Rights Reserved, unless otherwise specified.
+// See https://js.arcgis.com/4.20/esri/copyright.txt for details.
+//>>built
+define("../chunks/_rollupPluginBabelHelpers ../chunks/tslib.es6 ../core/accessorSupport/decorators/property ../core/has ../core/accessorSupport/ensureType ../core/Logger ../core/jsonMap ../core/accessorSupport/decorators/subclass ../rest/find ./Task".split(" "),function(g,c,e,b,n,p,q,h,k,l){b=function(f){function d(a){a=f.call(this,a)||this;a.gdbVersion=null;a.url=null;return a}g._inheritsLoose(d,f);d.prototype.execute=function(a,m){this.gdbVersion&&!a.gdbVersion&&(a.gdbVersion=this.gdbVersion);return k.find(this.url,
+a,m)};return d}(l);c.__decorate([e.property()],b.prototype,"gdbVersion",void 0);c.__decorate([e.property()],b.prototype,"url",void 0);return b=c.__decorate([h.subclass("esri.tasks.FindTask")],b)});

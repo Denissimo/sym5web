@@ -1,0 +1,6 @@
+// All material copyright ESRI, All Rights Reserved, unless otherwise specified.
+// See https://js.arcgis.com/4.20/esri/copyright.txt for details.
+//>>built
+define(["require","exports","./core/has","./core/urlUtils","./support/revision"],function(l,a,g,m,f){a.id=void 0;g("host-webworker")||(console.debug(`Using ArcGIS API for JavaScript ${"4.20"} [Date: ${f.buildDate}, Revision: ${f.commitHash.slice(0,8)}]`),(g("edge")||g("trident"))&&console.warn("Deprecated browser - see http://esriurl.com/oldbrowser"));a.buildDate=f.buildDate;a.revision=f.commitHash;a.addTokenParameter=function(c){const e=a.id&&a.id.findCredential(c);return e&&e.token?m.addQueryParameter(c,
+"token",e.token):c};a.setId=function(c){a.id=c};a.version="4.20";a.workerMessages={request(c,e){var h;const k=null==(h=c.options)?void 0:h.responseType;return(new Promise(function(d,b){l(["./request"],function(n){d(Object.freeze({__proto__:null,"default":n}))},b)})).then(({default:d})=>{const b=c.options||{};b.responseType="native"===k||"native-request-init"===k?"native-request-init":"array-buffer";b.signal=null==e?void 0:e.signal;return d(c.url,b)}).then(d=>{const b={data:d.data,ssl:d.ssl};return"native-request-init"===
+d.requestOptions.responseType?(delete b.data.signal,b):{result:b,transferList:[b.data]}})}};Object.defineProperty(a,"__esModule",{value:!0})});
