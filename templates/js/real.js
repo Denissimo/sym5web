@@ -3,6 +3,8 @@ var glids;
 var idRealDet;
 var linSymbol;
 function addReal(FeatureLayer,LabelClass,Geoprocessor,scene,isOwner){
+    let data =dataForSend();
+    //alert(data);
     glids=[];  
     if (isOwner)
        linSymbol =mySymbols.lineSymbolRoute;
@@ -451,7 +453,27 @@ function makeListRealFlyght(feats)
         {
 
            //alert(event.target.id);
-           let data =dataForSend();
+           let ev=event.target.id;
+           let pref=ev.substring(0,1);
+           let data=""; 
+           switch(pref) {
+            case 'C':  // if (x === 'value1')
+            data =dataForSend(20); //""
+              break;
+            case 'L' :
+              data =dataForSend(21); //""
+              break;
+            case 'V' : 
+            data =dataForSend(19);  //time 120
+            break;
+            case 'T' :
+              data =dataForSend(18); //turn 10
+              break;
+
+           }
+
+            data =dataForSend(20);
+           
            let params = { DATA : data  };
                
                   GEOPROCESSOR.submitJob(params).then(function (jobInfo) {
@@ -472,10 +494,10 @@ function makeListRealFlyght(feats)
 
         }
          
-         function dataForSend()
+         function dataForSend(com)
       {
 
-        let dt=new Float32Array([220,0,0,0,0,0,0]);
+        let dt=new Float32Array([0,0,0,0,0,0,0]);
         let  bths="";
         for (let i=0;i<dt.length;i++)
         {
@@ -491,18 +513,32 @@ function makeListRealFlyght(feats)
         let bytes=getInt16Bytes(176);
         let bth2=bytesToHexString(bytes);
         let bth2s=(bth2.toString()).replaceAll(',', ' ');
-        bths=bths+bth2s+" 00 00 ";
+        bths=bths+bth2s+" 00 00 00 ";
 
-        let trId=177;
+        let trId=1;
         bytes=getInt32Bytes(trId);
         let bth3=bytesToHexString(bytes);
-        let trIds=bth3[0]
+        let trIds=bth3[0];
 
         bytes=getInt32Bytes(33);
         let bth4=bytesToHexString(bytes);
-        let data="fe "+bth4[0]+" "+trIds+" 00 4c "+bths+"cc cc"
+        let data="fe "+bth4[0]+" "+trIds+" 00 00 4c "+bths+"cc cc";
 
-        dt=new Float32Array([0,0,0,0,0,0,0]);
+        //dt=new Float32Array([220,0,0,0,0,0,0]);
+        switch(com){
+          case 20: case 21 :
+            dt=new Float32Array([0,0,0,0,0,0,0]);
+            break;
+            case 18:
+              dt=new Float32Array([20,0,0,0,0,0,0]);
+             break;
+            case 19:
+               dt=new Float32Array([220,0,0,0,0,0,0]);
+                break;
+                
+        }
+
+        //dt=new Float32Array([0,0,0,0,0,0,0]);
         bths="";
         for (let i=0;i<dt.length;i++)
         {
@@ -512,11 +548,11 @@ function makeListRealFlyght(feats)
                   bths=bths+hex.substring(j,j+2)+" ";
                 } 
         }
-        bytes=getInt16Bytes(20);
+        bytes=getInt16Bytes(com);
         bth2=bytesToHexString(bytes);
         bth2s=(bth2.toString()).replaceAll(',', ' ');
-        bths=bths+bth2s+" 00 00 ";
-        data=data+" fe "+bth4[0]+" "+trIds+" 00 4c "+bths+"cc cc"
+        bths=bths+bth2s+" 00 00 00 ";
+        data=data+" fe "+bth4[0]+" "+trIds+" 00 00 4c "+bths+"cc cc"
         
         return data
 
