@@ -4,7 +4,7 @@ var scene;
 var token ;
 var apiUrl;
 var tmzon;
-
+var geop;
 var GEOPROCESSOR;
 var POLYLINE;
 var POLYGON;
@@ -125,7 +125,8 @@ require(
         user = JSON.parse('{{ user|json_encode() }}');
         route = '{{ route }}';
         layerConf=[];
-
+ 
+        GEOPROCESSOR = Geoprocessor;
         MULTIPOINT=Multipoint;
         POINT=Point;
         POLYGON=Polygon;
@@ -513,7 +514,7 @@ require(
 
             {
                 
-              addReal(FeatureLayer,LabelClass,Geoprocessor,scene,checkRoleRoute("ROLE_OWNER",roles));
+              addReal(FeatureLayer,LabelClass,scene,checkRoleRoute("ROLE_OWNER",roles));
               makeRealFlyght(realLayer);
               var realTitle=realLayer.title;
              

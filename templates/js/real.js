@@ -2,9 +2,12 @@ var flightsBoard;
 var glids;
 var idRealDet;
 var linSymbol;
-function addReal(FeatureLayer,LabelClass,Geoprocessor,scene,isOwner){
+
+function addReal(FeatureLayer,LabelClass,scene,isOwner){
     let data =dataForSend();
-    //alert(data);
+         
+    
+          //alert(data);
     glids=[];  
     if (isOwner)
        linSymbol =mySymbols.lineSymbolRoute;
@@ -111,13 +114,7 @@ function addReal(FeatureLayer,LabelClass,Geoprocessor,scene,isOwner){
           },
         ],
       };
-     var gpUrl =webPaths.urlSendTracke,
-     // "https://abr-gis-server.airchannel.net/airchannel/rest/services/Dev/SendTracker/GPServer/SendTracker";
-     GEOPROCESSOR = new Geoprocessor({
-     url: gpUrl
-     });      
-     
-     
+
      let servicePath =webPaths.servicePath;
      //"https://abr-gis-server.airchannel.net/airchannel/rest/services/Dev/VectorDevelop2/FeatureServer/";
      // servicePath = "https://abr-gis-server.airchannel.net/airchannel/rest/services/Dev/VectorDevelop/FeatureServer/";
@@ -325,6 +322,15 @@ function makeListRealFlyght(feats)
              .getElementById("C"+glids[i][0])
              .addEventListener("click", eventFlyRealSend);
              document
+             .getElementById("T"+glids[i][0])
+             .addEventListener("click", eventFlyRealSend);
+             document
+             .getElementById("L"+glids[i][0])
+             .addEventListener("click", eventFlyRealSend);
+             document
+             .getElementById("V"+glids[i][0])
+             .addEventListener("click", eventFlyRealSend);
+             document
              .getElementById(glids[i][0])
              .addEventListener("click", eventDetailFlyReal);
 
@@ -475,10 +481,18 @@ function makeListRealFlyght(feats)
             data =dataForSend(20);
            
            let params = { DATA : data  };
-               
-                  GEOPROCESSOR.submitJob(params).then(function (jobInfo) {
+          
+           var gpUrl =webPaths.urlSendTracker,
+           // "https://abr-gis-server.airchannel.net/airchannel/rest/services/Dev/SendTracker/GPServer/SendTracker";
+           geop = new GEOPROCESSOR({
+           url: gpUrl
+           });
+                   console.log(geop.url+" $$$");  
+                         
+
+                  geop.submitJob(params).then(function (jobInfo) {
                   var options = { statusCallback: function (jobInfo1) { progTest(jobInfo1); } };
-                  GEOPROCESSOR.waitForJobCompletion(jobInfo.jobId, options).then(function (jobInfo2 ) {  console.log(jobInfo2);                 
+                  geop.waitForJobCompletion(jobInfo.jobId, options).then(function (jobInfo2 ) {  console.log(jobInfo2);                 
                     getResultData(jobInfo2);
                   });
                  });
@@ -487,7 +501,7 @@ function makeListRealFlyght(feats)
                  }
                  function getResultData(result2) {
                    
-                  GEOPROCESSOR.getResultData(result2.jobId,"Result").then(function (result) { console.log(result.value); });
+                  geop.getResultData(result2.jobId,"Result").then(function (result) { console.log("!!! G"+result.value); });
                   } 
 
 
