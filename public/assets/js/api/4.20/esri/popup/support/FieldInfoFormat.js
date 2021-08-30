@@ -1,0 +1,6 @@
+// All material copyright ESRI, All Rights Reserved, unless otherwise specified.
+// See https://js.arcgis.com/4.20/esri/copyright.txt for details.
+//>>built
+define("../../chunks/_rollupPluginBabelHelpers ../../chunks/tslib.es6 ../../core/date ../../core/JSONSupport ../../core/accessorSupport/decorators/property ../../core/has ../../core/accessorSupport/ensureType ../../core/Logger ../../core/accessorSupport/decorators/enumeration ../../core/accessorSupport/decorators/subclass ../../intl/date ../../intl/number".split(" "),function(m,c,n,b,f,t,p,u,q,r,g,h){var d;b=d=function(k){function e(a){a=k.call(this,a)||this;a.dateFormat=null;a.digitSeparator=!1;
+a.places=null;return a}m._inheritsLoose(e,k);var l=e.prototype;l.clone=function(){return new d({dateFormat:this.dateFormat,digitSeparator:this.digitSeparator,places:this.places})};l.format=function(a){return this.dateFormat?g.formatDate(a,g.convertDateFormatToIntlOptions(this.dateFormat)):h.formatNumber(a,h.convertNumberFormatToIntlOptions(this))};return e}(b.JSONSupport);c.__decorate([q.enumeration(n.dictionary)],b.prototype,"dateFormat",void 0);c.__decorate([f.property({type:Boolean,json:{write:!0}})],
+b.prototype,"digitSeparator",void 0);c.__decorate([f.property({type:p.Integer,json:{write:!0}})],b.prototype,"places",void 0);return b=d=c.__decorate([r.subclass("esri.popup.support.FieldInfoFormat")],b)});

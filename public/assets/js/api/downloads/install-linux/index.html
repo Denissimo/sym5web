@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Installing the ArcGIS API for JavaScript</title>
+    <link rel="stylesheet" type="text/css" href="https://unpkg.com/@esri/calcite-components/dist/calcite/calcite.css" />
+    <link rel="stylesheet" href="https://unpkg.com/@highlightjs/cdn-assets@10.7.2/styles/default.min.css" />
+    <style>
+      .wrapper {
+        margin: 100px 25px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrapper"><h2>Installing the ArcGIS API for JavaScript library on Linux</h2>
+<p>The instructions below assume that you are installing the ArcGIS API for JavaScript library in the following location <code>https://www.example.com/javascript/api/4.20/</code> (<code>/var/www/html/javascript/api/4.20</code>) on an <a href="https://httpd.apache.org/">Apache HTTP Server</a>, where <a href="https://en.wikipedia.org/wiki/Fully_qualified_domain_name"><code>www.example.com</code></a> is the combination of the <a href="https://en.wikipedia.org/wiki/Fully_qualified_domain_name">fully qualified domain name</a> and <a href="https://en.wikipedia.org/wiki/Top-level_domain">top level domain</a> of your web site.</p>
+<p>If you are using a Windows operating system, please follow the link for instructions on
+<a href="../install-windows/index.html">deploying the library on Internet Information Services (IIS) for Windows® Server</a>.</p>
+<p>The ArcGIS API for JavaScript library can be copied in its entirety to your web server directory. After copying
+the files to your web server, you will need to edit some files to specify the <code>baseUrl</code>
+(<code>www.example.com/javascript/api/4.20/</code>) for the configuration.
+(<code>/var/www/html/javascript/api/4.20/</code>). Copy <code>/arcgis_js_v420_api/arcgis_js_api/javascript/4.20/</code> and all its contents from the ArcGIS API for JavaScript download to your web server.
+In this example the files are copied to: <code>/var/www/html/javascript/api/4.20/</code>.</p>
+<h2>Requirements</h2>
+<p>The default hosting configuration for both the ArcGIS API for JavaScript library and documentation is <code>HTTPS</code>.</p>
+<ul>
+<li><code>HTTPS</code> requires your web server to use a web server certificate.</li>
+<li><a href="https://developers.google.com/web/fundamentals/security/encrypt-in-transit/why-https">Google: Why HTTPS Matters</a></li>
+<li><a href="https://support.google.com/webmasters/answer/6073543">Google: Secure your site with HTTPS</a></li>
+<li><a href="#using-http">Ignore and use HTTP</a></li>
+</ul>
+<h2>Modify the Build (manually)</h2>
+<ol>
+<li>Open <code>/var/www/html/javascript/api/javascript/api/4.20/init.js</code> in a text editor and search for the text <code>[HOSTNAME_AND_PATH_TO_JSAPI]dojo</code>, and replace this text with <code>www.example.com/javascript/api/4.20/init.js</code>.</li>
+</ol>
+<h2>Modify the Build (script)</h2>
+<blockquote>
+<p><em>Note</em>: Scripting the update might be useful in a multi-machine deployment.
+Otherwise, it is not necessary.</p>
+</blockquote>
+<p>This section will modify the ArcGIS API for JavaScript library <code>[HOSTNAME_AND_PATH_TO_JSAPI]dojo</code> text
+with <code>www.example.com/javascript/api/4.20/init.js</code>.</p>
+<ol>
+<li>Node.js must be installed on the machine running the <strong>Example Node.js script</strong> (<code>update-library.js</code>).</li>
+<li>Create a file such as <code>update-library.js</code> in a local directory.</li>
+<li>Copy the contents of the example Node.js script (<code>update-library.js</code>) into the <code>update-library.js</code> file.</li>
+<li>Open a terminal window and change directory (<code>cd</code>) to the directory containing the <code>update-library.js</code> script.</li>
+<li>Verify <code>node --version</code> return the currently installed version of Node.js.</li>
+<li>Update the <code>localHost</code>, <code>apiDirectory</code>, and <code>jsapiDownloadLocation</code> script variables.</li>
+<li>The <code>apiDirectory</code> and <code>jsapiDownloadLocation</code> script variables will not need modified if using the same directories described in this documentation.</li>
+<li>Execute the <code>update-library.js</code> script using the command <code>node update-library.js</code>.</li>
+<li>Open <code>https://www.example.com/javascript/api/4.20/init.js</code> in a browser of your choice.</li>
+<li>Search for <code>baseUrl:&quot;</code> and verify <code>[HOSTNAME_AND_PATH_TO_JSAPI]dojo</code> has been replaced with the value of <code>localHost</code>.</li>
+</ol>
+<h3>Example Node.js script</h3>
+<p>The code sample below is written in JavaScript for <a href="https://nodejs.org/en/">Node.js</a> and will automate
+replacing the ArcGIS API for JavaScript library <code>[HOSTNAME_AND_PATH_TO_JSAPI]dojo</code> text
+with <code>www.example.com/javascript/api/4.20/init.js</code>.</p>
+<blockquote>
+<p><em>Note</em>: A script like <code>update-library.js</code> could be written in any scripting language that supports reading/writing files
+and some type of string substitution manipulation such as regular expressions.</p>
+</blockquote>
+<pre><code class="language-js">// --------------------------------------------------------------------
+// update-library.js
+//
+// Helper script to replace the ArcGIS API for JavaScript library
+// `[HOSTNAME_AND_PATH_TO_JSAPI]dojo` text with `www.example.com/javascript/api/4.20/init.js`.
+//
+// Note: requires node version 7.10.0 and npm version 4.2.0 or higher.
+// --------------------------------------------------------------------
+let fs                       = require(&quot;fs&quot;),
+    path                     = require(&quot;path&quot;),
+    util                     = require(&quot;util&quot;),
+    // --------------------------------------------------------------------
+    // hostname to replace js.arcgis.com in the library such as:
+    // www.example.com
+    // apiDirectory would be the virtual directory in the web server hosting
+    // the ArcGIS API for JavaScript library
+    // --------------------------------------------------------------------
+    localHost                = &quot;www.example.com&quot;,
+    apiDirectory             = &quot;javascript/api/4.20/init.js&quot;,
+    // --------------------------------------------------------------------
+    // path to the downloaded ArcGIS API for JavaScript library
+    // download archive contents arcgis_js_v420_api/arcgis_js_api/4.20/
+    // to Apache HTTP server root directory /var/www/html/javascript/api/4.20/
+    // --------------------------------------------------------------------
+    jsapiDownloadLocation    = path.join(&quot;/&quot;, &quot;var&quot;, &quot;www&quot;, &quot;html&quot;, &quot;javascript&quot;, &quot;api&quot;, &quot;4.20&quot;),
+    // --------------------------------------------------------------------
+    // Regular expression to match the template text
+    // [HOSTNAME_AND_PATH_TO_JSAPI] in
+    // baseUrl:&quot;https://[HOSTNAME_AND_PATH_TO_JSAPI]dojo&quot;
+    // --------------------------------------------------------------------
+    hostnameAndPathRegEx            = /\[HOSTNAME_AND_PATH_TO_JSAPI\]dojo/i,
+    // --------------------------------------------------------------------
+    // base url for the locally hosted ArcGIS API for JavaScript such as:
+    // www.example.com/javascript/api/4.20/
+    // --------------------------------------------------------------------
+    jsapiURLBaseLocal        = util.format(&quot;%s/%s&quot;, localHost, apiDirectory),
+    // --------------------------------------------------------------------
+    // Dojo file containing the CDN link to ArcGIS API for JavaScript
+    // /var/www/html/javascript/api/4.20/init.js
+    // --------------------------------------------------------------------
+    jsapiInitFile = path.join(jsapiDownloadLocation, &quot;init.js&quot;);
+
+// --------------------------------------------------------------------
+// 1) Read the ArcGIS API for JavaScript library files
+// 2) Replace the script src attribute for the ArcGIS API for JavaScript CDN
+// --------------------------------------------------------------------
+
+// --------------------------------------------------------------------
+// Read the init file contents from disk
+// --------------------------------------------------------------------
+console.log(&quot;library - reading %s&quot;, jsapiInitFile);
+let rawInitContent = fs.readFileSync(jsapiInitFile, &quot;utf-8&quot;);
+// --------------------------------------------------------------------
+// Replace the script src attribute for the ArcGIS API for JavaScript CDN
+// --------------------------------------------------------------------
+console.log(&quot;library - replacing script tag for %s&quot;, jsapiInitFile);
+let updatedInitContent = rawInitContent.replace(hostnameAndPathRegEx, jsapiURLBaseLocal);
+// --------------------------------------------------------------------
+// Save the init file contents to disk
+// --------------------------------------------------------------------
+console.log(&quot;library - saving %s&quot;, jsapiInitFile);
+fs.writeFileSync(jsapiInitFile, updatedInitContent, &quot;utf-8&quot;);
+</code></pre>
+<h2>Test the installation</h2>
+<p>Now you should be able to access the ArcGIS API for JavaScript library from your web server using the following URL:</p>
+<pre><code class="language-html">&lt;script src=&quot;https://www.example.com/javascript/api/4.20/init.js&quot;&gt;&lt;/script&gt;
+</code></pre>
+<p>Test your installation. You can use the following test code to validate your ArcGIS API for JavaScript library install.</p>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=utf-8&quot; /&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;initial-scale=1, maximum-scale=1,user-scalable=no&quot; /&gt;
+    &lt;title&gt;Test Map&lt;/title&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://www.example.com/javascript/api/4.20/esri/themes/light/main.css&quot; /&gt;
+    &lt;style&gt;
+      html,
+      body,
+      #viewDiv {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+      }
+    &lt;/style&gt;
+    &lt;script src=&quot;https://www.example.com/javascript/api/4.20/init.js&quot;&gt;&lt;/script&gt;
+    &lt;script&gt;
+      require([
+        &quot;esri/Basemap&quot;,
+        &quot;esri/layers/TileLayer&quot;,
+        &quot;esri/Map&quot;,
+        &quot;esri/views/MapView&quot;
+      ], function (Basemap, TileLayer, Map, MapView){
+        // --------------------------------------------------------------------
+        // If you do not have public internet access then use the Basemap class
+        // and point this URL to your own locally accessible cached service.
+        //
+        // Otherwise you can just use one of the named hosted ArcGIS services.
+        // https://services.arcgisonline.com/arcgis/rest/services/World_Street_Map/MapServer
+        // --------------------------------------------------------------------
+        const layer = new TileLayer({
+          url: &quot;https://www.example.com/arcgis/rest/services/Folder/Custom_Base_Map/MapServer&quot;
+        });
+        const customBasemap = new Basemap({
+          baseLayers: [layer],
+          title: &quot;Custom Basemap&quot;,
+          id: &quot;myBasemap&quot;
+        });
+        const myMap = new Map({
+          basemap: customBasemap
+        });
+        const view = new MapView({
+          center: [-111.87, 40.57], // long, lat
+          container: &quot;viewDiv&quot;,
+          map: myMap,
+          zoom: 6
+        });
+      });
+    &lt;/script&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;div id=&quot;viewDiv&quot;&gt;&lt;/div&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<h2>Installing Node.js</h2>
+<p>For assistance installing Node.js on Linux, see the <em>Installing Node.js topic</em> in the <strong>Linux: Hosting the ArcGIS API for JavaScript documentation</strong> help topic.</p>
+</div>
+
+    <script type="module" src="https://unpkg.com/@esri/calcite-components/dist/calcite/calcite.esm.js"></script>
+    <script nomodule="" src="https://unpkg.com/@esri/calcite-components/dist/calcite/calcite.js"></script>
+    <script src="https://unpkg.com/@highlightjs/cdn-assets@10.7.2/highlight.min.js"></script>
+    <script>
+      hljs.highlightAll();
+    </script>
+  </body>
+</html>

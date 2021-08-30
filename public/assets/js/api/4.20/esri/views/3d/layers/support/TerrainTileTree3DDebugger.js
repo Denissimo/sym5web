@@ -1,0 +1,6 @@
+// All material copyright ESRI, All Rights Reserved, unless otherwise specified.
+// See https://js.arcgis.com/4.20/esri/copyright.txt for details.
+//>>built
+define("exports ../../../../chunks/_rollupPluginBabelHelpers ../../../../chunks/tslib.es6 ../../../../geometry ../../../../core/watchUtils ../../../../core/accessorSupport/decorators/property ../../../../core/has ../../../../core/accessorSupport/ensureType ../../../../core/Logger ../../../../core/jsonMap ../../../../core/accessorSupport/decorators/subclass ../../../../geometry/support/aaBoundingRect ../../../support/TileTreeDebugger ../../../../geometry/Polygon".split(" "),function(b,f,g,p,h,q,r,
+t,u,v,k,l,m,n){b.TerrainTileTree3DDebugger=function(d){function c(a){a=d.call(this,a)||this;a.enablePolygons=!1;return a}f._inheritsLoose(c,d);var e=c.prototype;e.initialize=function(){h.init(this,"enabled",a=>this.view.basemapTerrain.renderPatchBorders=a)};e.getTiles=function(){return this.view.basemapTerrain.test.getRenderedTiles().map(a=>({...a,geometry:n.fromExtent(l.toExtent(a.extent,this.view.basemapTerrain.spatialReference))}))};return c}(m.TileTreeDebugger);b.TerrainTileTree3DDebugger=g.__decorate([k.subclass("esri.views.3d.layers.support.TerrainTileTree3DDebugger")],
+b.TerrainTileTree3DDebugger);Object.defineProperty(b,"__esModule",{value:!0})});

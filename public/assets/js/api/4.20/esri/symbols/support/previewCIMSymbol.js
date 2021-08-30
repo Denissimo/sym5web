@@ -1,0 +1,6 @@
+// All material copyright ESRI, All Rights Reserved, unless otherwise specified.
+// See https://js.arcgis.com/4.20/esri/copyright.txt for details.
+//>>built
+define(["exports","../../chunks/_rollupPluginBabelHelpers","../../core/screenUtils","../cim/CIMSymbolRasterizer","./cimSymbolUtils"],function(h,p,q,r,k){function f(){f=p._asyncToGenerator(function*(a,b={}){const {size:g,maxSize:l,node:m,opacity:n}=b,{feature:t,fieldMap:u,geometryType:v,style:w}=b.cimOptions||b;var c=k.getCIMSymbolSize(a),d=Math.min(null!=g?g:c,null!=l?l:q.px2pt(120));d!==c&&(a=a.clone(),k.scaleCIMSymbolTo(a,d,{preserveOutlineWidth:!0}));c=3;a&&a.data&&a.data.symbol&&"CIMPointSymbol"!==
+a.data.symbol.type&&(c=1);var e=yield x.rasterizeCIMSymbolAsync(a,t,u,v,{scaleFactor:c,style:w});a=document.createElement("canvas");a.width=e.imageData.width;a.height=e.imageData.height;a.getContext("2d").putImageData(e.imageData,0,0);e=a.width/c;c=a.height/c;if(null==g?0:null!=(null==b?void 0:b.scale)?null==b?0:b.scale:1)b=e/c,e=1>=b?Math.ceil(d*b):d,c=1>=b?d:Math.ceil(d/b);d=new Image(e,c);d.src=a.toDataURL();null!=n&&(d.style.opacity=`${n}`);m&&m.appendChild(d);return d});return f.apply(this,arguments)}
+const x=new r.CIMSymbolRasterizer(null,!0);h.previewCIMSymbol=function(a){return f.apply(this,arguments)};Object.defineProperty(h,"__esModule",{value:!0})});

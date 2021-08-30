@@ -1,0 +1,5 @@
+/*
+All material copyright ESRI, All Rights Reserved, unless otherwise specified.
+See https://js.arcgis.com/4.20/esri/copyright.txt for details.
+*/
+import{m as e}from"./handleUtils.js";const t=Symbol("widget"),n=new WeakMap;function r(e,t){const n=t.vnodeSelector;if(a(n)){const r=t.properties||{},a=r.key||n;return{vnodeSelector:"div",properties:{parentWidget:e,widgetConstructor:n,key:a,widgetProps:{...r,key:a},afterCreate:o,afterUpdate:i,afterRemoved:d},children:void 0,text:void 0,domNode:null}}const s=t.children;if(s)for(let t=0;t<s.length;++t)s[t]=r(e,s[t]);return t}function o(t,r,o,{parentWidget:i,widgetConstructor:a,widgetProps:s}){const c=new a({...s,container:t});n.set(t,c),null==c.afterCreate||c.afterCreate(c,t),i._internalHandles.add(e((()=>d(t))))}function i(e,t,r,{widgetProps:o}){const i=n.get(e);i&&(i.set(o),null==i.afterUpdate||i.afterUpdate(i,e))}function d(e){const t=n.get(e);t&&(t.destroy(),n.delete(e))}function a(e){return"function"==typeof e&&e[t]}export{t as W,a as i,r as p};

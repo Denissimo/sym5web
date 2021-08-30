@@ -1,0 +1,5 @@
+// All material copyright ESRI, All Rights Reserved, unless otherwise specified.
+// See https://js.arcgis.com/4.20/esri/copyright.txt for details.
+//>>built
+define("exports ../chunks/_rollupPluginBabelHelpers ../request ../core/maybe ../geometry/support/normalizeUtils ./utils ./support/ImageServiceIdentifyResult".split(" "),function(f,l,m,n,p,d,q){function e(){e=l._asyncToGenerator(function*(g,c,h){const k=d.parseUrl(g);return p.normalizeCentralMeridian(c.geometry?[c.geometry]:[]).then(a=>{var b=c.toJSON();a=a&&a[0];n.isSome(a)&&(b.geometry=JSON.stringify(a.toJSON()));b=d.encode({...k.query,f:"json",...b});b=d.asValidOptions(b,h);return m(k.path+"/identify",
+b)}).then(a=>q.fromJSON(a.data))});return e.apply(this,arguments)}f.imageServiceIdentify=function(g,c,h){return e.apply(this,arguments)};Object.defineProperty(f,"__esModule",{value:!0})});

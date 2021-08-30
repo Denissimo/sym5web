@@ -1,0 +1,4 @@
+// All material copyright ESRI, All Rights Reserved, unless otherwise specified.
+// See https://js.arcgis.com/4.20/esri/copyright.txt for details.
+//>>built
+define(["exports","../../../core/deprecate","../../../core/Logger","../../../smartMapping/renderers/relationship"],function(a,d,b,c){b=b.getLogger("esri.renderers.smartMapping.creators.relationship");d.deprecatedModule(b,"esri/renderers/smartMapping/creators/relationship",{replacement:"esri/smartMapping/renderers/relationship"});a.createRenderer=c.createRenderer;a.updateRenderer=c.updateRenderer;Object.defineProperty(a,"__esModule",{value:!0})});

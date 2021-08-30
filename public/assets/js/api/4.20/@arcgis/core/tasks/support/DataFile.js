@@ -1,0 +1,5 @@
+/*
+All material copyright ESRI, All Rights Reserved, unless otherwise specified.
+See https://js.arcgis.com/4.20/esri/copyright.txt for details.
+*/
+import{c as s}from"../../chunks/deprecate.js";import{L as r}from"../../chunks/Logger.js";import o from"../../rest/support/DataFile.js";export{default}from"../../rest/support/DataFile.js";import"../../core/lang.js";import"../../config.js";import"../../chunks/object.js";import"../../chunks/string.js";import"../../chunks/tslib.es6.js";import"../../chunks/JSONSupport.js";import"../../core/Accessor.js";import"../../core/accessorSupport/decorators/property.js";import"../../chunks/ensureType.js";import"../../chunks/metadata.js";import"../../chunks/handleUtils.js";import"../../chunks/ArrayPool.js";import"../../core/accessorSupport/decorators/subclass.js";import"../../chunks/Message.js";import"../../chunks/arrayUtils.js";import"../../core/scheduling.js";import"../../core/promiseUtils.js";import"../../core/Error.js";import"../../chunks/write.js";s(r.getLogger("esri.tasks.support.DataFile"),"esri.tasks.support.DataFile",{replacement:"esri.rest.support.DataFile",version:"4.20",warnOnce:!0});

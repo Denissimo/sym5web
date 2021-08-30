@@ -1,0 +1,6 @@
+// All material copyright ESRI, All Rights Reserved, unless otherwise specified.
+// See https://js.arcgis.com/4.20/esri/copyright.txt for details.
+//>>built
+define("exports ../../../../../Color ../../Manipulator3D ../../manipulatorUtils ../../editingTools/manipulatorUtils ../../../webgl-engine/lib/GeometryUtil ../../../webgl-engine/materials/RibbonLineMaterial".split(" "),function(e,g,k,l,m,n,p){function f(a,b,d){return{geometry:n.createSphereGeometry(a,32,32),material:l.createManipulatorMaterial(g.toUnitRGBA(b)),stateMask:d}}function h(a){const b=[];a.customColor1&&b.push(f(a.size,a.customColor1,16));a.customColor2&&b.push(f(a.size,a.customColor2,32));
+a.customColor3&&b.push(f(a.size,a.customColor3,64));a.color&&b.push(f(a.size,a.color));return b}e.createPolylineMaterial=function(a,b,d,c){return new p.RibbonLineMaterial({width:a,color:g.toUnitRGBA(b),stipplePattern:d,stippleOffColor:c&&[c.r,c.g,c.b,c.a],renderOccluded:4})};e.createSphereManipulator=function(a,b){const d=h(b);a=new k.Manipulator3D({view:a,renderObjects:d,elevationInfo:{mode:"absolute-height",offset:0}});m.disableDisplayOnGrab(a);for(const c in b)a[c]=b[c];return a};e.createSphereManipulatorRenderObjects=
+h;Object.defineProperty(e,"__esModule",{value:!0})});

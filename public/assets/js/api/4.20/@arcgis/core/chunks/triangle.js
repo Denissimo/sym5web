@@ -1,0 +1,5 @@
+/*
+All material copyright ESRI, All Rights Reserved, unless otherwise specified.
+See https://js.arcgis.com/4.20/esri/copyright.txt for details.
+*/
+import{O as t}from"./vectorStacks.js";import{d as n}from"./vec2.js";import{f as r,g as s,l as o,a as i,s as a,b as e}from"./mathUtils.js";import{c}from"./lineSegment.js";function f(t,n,o){const i=1e-5,{direction:a,origin:e}=n,{p0:c,p1:f,p2:u}=t,p=f[0]-c[0],m=f[1]-c[1],l=f[2]-c[2],j=u[0]-c[0],g=u[1]-c[1],b=u[2]-c[2],d=a[1]*b-g*a[2],h=a[2]*j-b*a[0],v=a[0]*g-j*a[1],w=p*d+m*h+l*v;if(w>-i&&w<i)return!1;const S=1/w,k=e[0]-c[0],q=e[1]-c[1],x=e[2]-c[2],M=S*(k*d+q*h+x*v);if(M<0||M>1)return!1;const O=q*l-m*x,U=x*p-l*k,y=k*m-p*q,z=S*(a[0]*O+a[1]*U+a[2]*y);if(z<0||M+z>1)return!1;if(o){r(o,a,S*(j*O+g*U+b*y)),s(o,e,o)}return!0}function u(t,r,s){const o=n(t,r),i=n(r,s),a=n(s,t),e=(o+i+a)/2,c=e*(e-o)*(e-i)*(e-a);return c<=0?0:Math.sqrt(c)}function p(t,n,r){return a(m,n,t),a(l,r,t),o(i(m,m,l))/2}new t(c),new t((()=>({p0:null,p1:null,p2:null})));const m=e(),l=e();export{u as a,p as b,f as i};

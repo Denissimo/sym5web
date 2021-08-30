@@ -1,0 +1,6 @@
+// All material copyright ESRI, All Rights Reserved, unless otherwise specified.
+// See https://js.arcgis.com/4.20/esri/copyright.txt for details.
+//>>built
+define("../../chunks/_rollupPluginBabelHelpers ../../chunks/tslib.es6 ../../core/JSONSupport ../../core/accessorSupport/decorators/property ../../core/has ../../core/accessorSupport/ensureType ../../core/Logger ../../core/jsonMap ../../core/accessorSupport/decorators/subclass ../../layers/support/fieldUtils".split(" "),function(e,b,a,f,q,r,t,u,m,n){var c;a=c=function(g){function d(){return g.apply(this,arguments)||this}e._inheritsLoose(d,g);var h=d.prototype;h.collectRequiredFields=function(){var p=
+e._asyncToGenerator(function*(k,l){return n.collectArcadeFieldNames(k,l,this.expression)});return function(k,l){return p.apply(this,arguments)}}();h.clone=function(){return new c({expression:this.expression,title:this.title})};return d}(a.JSONSupport);b.__decorate([f.property({type:String,json:{write:!0}})],a.prototype,"expression",void 0);b.__decorate([f.property({type:String,json:{write:!0}})],a.prototype,"title",void 0);return a=c=b.__decorate([m.subclass("esri.layers.support.FeatureExpressionInfo")],
+a)});

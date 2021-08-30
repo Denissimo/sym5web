@@ -1,0 +1,5 @@
+/*
+All material copyright ESRI, All Rights Reserved, unless otherwise specified.
+See https://js.arcgis.com/4.20/esri/copyright.txt for details.
+*/
+import{_ as s}from"./tslib.es6.js";import{whenFalseOnce as o}from"../core/watchUtils.js";import{property as e}from"../core/accessorSupport/decorators/property.js";import"../core/lang.js";import"./ensureType.js";import"./Logger.js";import{subclass as t}from"../core/accessorSupport/decorators/subclass.js";import{m as r,r as i}from"./heightModelInfoUtils.js";const a=a=>{let p=class extends a{constructor(){super(...arguments),this.slicePlaneEnabled=!1,this.supportsHeightUnitConversion=!1}postscript(s){super.postscript(s),r(this.layer)&&this.addResolvingPromise(this._validateHeightModelInfo())}async _validateHeightModelInfo(){const s=o(this.view.defaultsFromMap,"isHeightModelInfoSearching");this.handles.add(s),await s;const e=i(this.layer,this.view.heightModelInfo,this.supportsHeightUnitConversion);if(e)throw e}};return s([e()],p.prototype,"view",void 0),s([e()],p.prototype,"slicePlaneEnabled",void 0),p=s([t("esri.views.3d.layers.LayerView3D")],p),p};export{a as L};

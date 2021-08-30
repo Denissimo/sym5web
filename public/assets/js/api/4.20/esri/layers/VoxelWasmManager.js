@@ -1,0 +1,5 @@
+// All material copyright ESRI, All Rights Reserved, unless otherwise specified.
+// See https://js.arcgis.com/4.20/esri/copyright.txt for details.
+//>>built
+define(["./VoxelWasmPerScene"],function(e){return function(){function b(){this.view2WASM=new Map}b.getInstance=function(){b.instance||(b.instance=new b);return b.instance};var d=b.prototype;d.isUpdating=function(a,c){return this.view2WASM.has(a)?this.view2WASM.get(a).isUpdating(c):!1};d.addLayer=function(a,c){this.view2WASM.has(a)||this.view2WASM.set(a,new e(a));return this.view2WASM.get(a).addVoxelLayer(c)};d.removeLayer=function(a,c){this.view2WASM.has(a)&&1>this.view2WASM.get(a).removeVoxelLayer(c)&&
+this.view2WASM.delete(a)};d.setLayerEnabled=function(a,c,f){this.view2WASM.has(a)&&this.view2WASM.get(a).setEnabled(c,f)};return b}()});

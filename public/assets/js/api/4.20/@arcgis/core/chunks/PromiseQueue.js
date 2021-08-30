@@ -1,0 +1,5 @@
+/*
+All material copyright ESRI, All Rights Reserved, unless otherwise specified.
+See https://js.arcgis.com/4.20/esri/copyright.txt for details.
+*/
+import{isAborted as s,createAbortError as t,isPromise as e}from"../core/promiseUtils.js";class r{constructor(){this._tasks=new Array}get length(){return this._tasks.length}push(s,t,e){return new Promise(((r,c)=>this._tasks.push(new a(r,c,s,t,e))))}unshift(s,t,e){return new Promise(((r,c)=>this._tasks.unshift(new a(r,c,s,t,e))))}process(){if(0===this._tasks.length)return!1;const r=this._tasks.shift();try{const a=s(r.signal);if(a&&!r.abortCallback)r.reject(t());else{const s=a?r.abortCallback(t()):r.callback();e(s)?s.then(r.resolve,r.reject):r.resolve(s)}}catch(s){r.reject(s)}return!0}cancelAll(){const s=t();for(const t of this._tasks)if(t.abortCallback){const e=t.abortCallback(s);t.resolve(e)}else t.reject(s);this._tasks.length=0}}class a{constructor(s,t,e,r,a){this.resolve=s,this.reject=t,this.callback=e,this.signal=r,this.abortCallback=a}}export{r as P};

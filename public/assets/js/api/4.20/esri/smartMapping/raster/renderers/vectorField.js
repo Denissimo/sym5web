@@ -1,0 +1,5 @@
+// All material copyright ESRI, All Rights Reserved, unless otherwise specified.
+// See https://js.arcgis.com/4.20/esri/copyright.txt for details.
+//>>built
+define("exports ../../../chunks/_rollupPluginBabelHelpers ../../../core/Error ../../../core/maybe ../../../renderers/support/rasterRendererHelper ../support/utils".split(" "),function(e,f,g,h,k,l){function m(a){return c.apply(this,arguments)}function c(){c=f._asyncToGenerator(function*(a){return a=yield l.processRasterRendererParameters(a)});return c.apply(this,arguments)}function d(){d=f._asyncToGenerator(function*(a){a=yield m(a);const b=k.createVectorFieldRenderer(a.layer.rasterInfo);if(!h.isSome(b))throw new g("vector-field-renderer:not-supported",
+"Only vector data is supported");a.flowRepresentation&&(b.flowRepresentation=a.flowRepresentation);a.rotationType&&(b.rotationType=a.rotationType);a.style&&(b.style=a.style);return{renderer:b}});return d.apply(this,arguments)}e.createRenderer=function(a){return d.apply(this,arguments)};Object.defineProperty(e,"__esModule",{value:!0})});

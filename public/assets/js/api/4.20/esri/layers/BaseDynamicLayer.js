@@ -1,0 +1,6 @@
+// All material copyright ESRI, All Rights Reserved, unless otherwise specified.
+// See https://js.arcgis.com/4.20/esri/copyright.txt for details.
+//>>built
+define("../chunks/_rollupPluginBabelHelpers ../chunks/tslib.es6 ../request ../core/Error ../core/accessorSupport/decorators/property ../core/has ../core/accessorSupport/ensureType ../core/Logger ../core/jsonMap ../core/accessorSupport/decorators/subclass ./Layer ./mixins/BlendLayer ./mixins/RefreshableLayer ./mixins/ScaleRangeLayer".split(" "),function(n,e,h,p,k,b,y,z,A,q,r,t,u,v){b=function(l){function f(){var a=l.apply(this,arguments)||this;a.type="base-dynamic";return a}n._inheritsLoose(f,l);var m=
+f.prototype;m.getImageUrl=function(){throw new p("basedynamiclayer:getImageUrl-not-implemented","getImageUrl() is not implemented");};m.fetchImage=function(a,w,x,c){a=this.getImageUrl(a,w,x);const g={responseType:"image",signal:c&&c.signal};c&&c.timestamp&&(g.query={_ts:c.timestamp});return"string"===typeof a?h(a,g).then(d=>d.data):a.then(d=>h(d,g)).then(d=>d.data)};return f}(t.BlendLayer(v.ScaleRangeLayer(u.RefreshableLayer(r))));e.__decorate([k.property({readOnly:!0,value:"base-dynamic"})],b.prototype,
+"type",void 0);e.__decorate([k.property({type:["show","hide"]})],b.prototype,"listMode",void 0);return b=e.__decorate([q.subclass("esri.layers.BaseDynamicLayer")],b)});

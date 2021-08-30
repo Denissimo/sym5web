@@ -1,0 +1,6 @@
+// All material copyright ESRI, All Rights Reserved, unless otherwise specified.
+// See https://js.arcgis.com/4.20/esri/copyright.txt for details.
+//>>built
+define("../../../chunks/_rollupPluginBabelHelpers ../../../chunks/tslib.es6 ../../../core/accessorSupport/decorators/property ../../../core/has ../../../core/accessorSupport/ensureType ../../../core/Logger ../../../core/jsonMap ../../../core/accessorSupport/decorators/subclass ../engine/webgl/GroupContainer ./LayerView2D ../../layers/GroupLayerView".split(" "),function(g,h,c,p,q,r,t,k,l,m,n){c=function(e){function d(){var b=e.apply(this,arguments)||this;b.container=new l.GroupContainer;return b}g._inheritsLoose(d,
+e);var a=d.prototype;a.attach=function(){this._updateStageChildren();this.handles.add(this.layerViews.on("after-changes",()=>this._updateStageChildren()),"grouplayerview2d")};a.detach=function(){this.handles.remove("grouplayerview2d");this.container.removeAllChildren()};a.hitTest=function(b,f){return null};a.update=function(b){};a.moveStart=function(){};a.viewChange=function(){};a.moveEnd=function(){};a._updateStageChildren=function(){this.container.removeAllChildren();this.layerViews.forEach((b,
+f)=>this.container.addChildAt(b.container,f))};return d}(m.LayerView2DMixin(n));return c=h.__decorate([k.subclass("esri.views.2d.layers.GroupLayerView2D")],c)});

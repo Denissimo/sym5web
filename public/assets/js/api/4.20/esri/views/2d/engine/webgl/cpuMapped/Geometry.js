@@ -1,0 +1,5 @@
+// All material copyright ESRI, All Rights Reserved, unless otherwise specified.
+// See https://js.arcgis.com/4.20/esri/copyright.txt for details.
+//>>built
+define(["exports","../../../../../core/has"],function(f,g){g=function(){function h(a,b){this._buffers=[];this.geometryType=a;this._stage=b}var d=h.prototype;d.destroy=function(){this._buffers.forEach(a=>a.release())};d.insert=function(a,b){if(b.records.byteLength){"update"===a&&this._buffers.forEach(c=>c.free(b));var e={done:!1,offset:0,vertexData:b};this._buffers.forEach(c=>c.insert(e));for(a=1E3;!e.done&&--a;){const c=this._stage.pools.bufferData.acquire(b,this.geometryType,e.offset);c.insert(e);
+this._buffers.push(c)}}};d.remove=function(a){this._buffers.forEach(b=>b.freeIds(a))};d.upload=function(a){this._buffers.forEach(b=>b.upload(a))};d.forEachCommand=function(a){this._buffers.forEach(b=>b.displayList.forEach(a))};return h}();f.Geometry=g;Object.defineProperty(f,"__esModule",{value:!0})});

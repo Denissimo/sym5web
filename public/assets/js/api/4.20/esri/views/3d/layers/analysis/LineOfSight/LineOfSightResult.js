@@ -1,0 +1,6 @@
+// All material copyright ESRI, All Rights Reserved, unless otherwise specified.
+// See https://js.arcgis.com/4.20/esri/copyright.txt for details.
+//>>built
+define("exports ../../../../../chunks/_rollupPluginBabelHelpers ../../../../../chunks/tslib.es6 ../../../../../core/Accessor ../../../../../core/accessorSupport/decorators/property ../../../../../core/has ../../../../../core/accessorSupport/ensureType ../../../../../core/Logger ../../../../../core/jsonMap ../../../../../core/accessorSupport/decorators/subclass".split(" "),function(a,f,b,g,c,l,m,n,p,h){a.LineOfSightResult=function(d){function e(k){return d.call(this,k)||this}f._inheritsLoose(e,d);
+return e}(g);b.__decorate([c.property()],a.LineOfSightResult.prototype,"target",void 0);b.__decorate([c.property()],a.LineOfSightResult.prototype,"intersectedGraphic",void 0);b.__decorate([c.property()],a.LineOfSightResult.prototype,"intersectedLocation",void 0);b.__decorate([c.property()],a.LineOfSightResult.prototype,"visible",void 0);a.LineOfSightResult=b.__decorate([h.subclass("esri.views.3d.layers.analysis.LineOfSight.LineOfSightResult")],a.LineOfSightResult);Object.defineProperty(a,"__esModule",
+{value:!0})});

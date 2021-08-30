@@ -1,0 +1,5 @@
+// All material copyright ESRI, All Rights Reserved, unless otherwise specified.
+// See https://js.arcgis.com/4.20/esri/copyright.txt for details.
+//>>built
+define(["exports","../../chunks/_rollupPluginBabelHelpers","../../request","../utils","./support/TraceResult"],function(k,l,m,g,n){function h(){h=l._asyncToGenerator(function*(c,d,e){c=g.parseUrl(c);var f=d.toJSON();f.traceLocations=JSON.stringify(d.traceLocations);f=g.encode({...c.query,...f,f:"json"});e=g.asValidOptions(f,e);return m(`${c.path}/trace`,e).then(a=>{var b=d.outSpatialReference;({data:a}=a);a?(a=n.fromJSON(a.traceResults),a.aggregatedGeometry&&b&&(a.aggregatedGeometry.line&&(a.aggregatedGeometry.line.spatialReference=
+b.clone()),a.aggregatedGeometry.multipoint&&(a.aggregatedGeometry.multipoint.spatialReference=b.clone()),a.aggregatedGeometry.polygon&&(a.aggregatedGeometry.polygon.spatialReference=b.clone())),b=a):b=null;return b})});return h.apply(this,arguments)}k.trace=function(c,d,e){return h.apply(this,arguments)};Object.defineProperty(k,"__esModule",{value:!0})});

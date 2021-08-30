@@ -1,0 +1,6 @@
+// All material copyright ESRI, All Rights Reserved, unless otherwise specified.
+// See https://js.arcgis.com/4.20/esri/copyright.txt for details.
+//>>built
+define(["exports","../../../chunks/_rollupPluginBabelHelpers","../../../core/maybe","../../../layers/support/fieldUtils"],function(g,q,h,l){function k(){k=q._asyncToGenerator(function*(a,c=a.popupTemplate){if(!h.isSome(c))return[];const m=yield c.getRequiredFields(a.fieldsIndex);({lastEditInfoEnabled:c}=c);const {objectIdField:e,typeIdField:n,globalIdField:f,relationships:p}=a;if(m.includes("*"))return["*"];c=c?yield l.getFeatureEditFields(a):[];const b=l.fixFields(a.fieldsIndex,[...m,...c]);n&&b.push(n);
+b&&e&&a.fieldsIndex.has(e)&&-1===b.indexOf(e)&&b.push(e);b&&f&&a.fieldsIndex.has(f)&&-1===b.indexOf(f)&&b.push(f);p&&p.forEach(d=>{({keyField:d}=d);b&&d&&a.fieldsIndex.has(d)&&-1===b.indexOf(d)&&b.push(d)});return b});return k.apply(this,arguments)}g.getFetchPopupTemplate=function(a,c){return a.popupTemplate?a.popupTemplate:h.isSome(c)&&c.defaultPopupTemplateEnabled&&h.isSome(a.defaultPopupTemplate)?a.defaultPopupTemplate:null};g.getRequiredFields=function(a){return k.apply(this,arguments)};Object.defineProperty(g,
+"__esModule",{value:!0})});

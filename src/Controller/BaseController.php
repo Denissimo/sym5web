@@ -61,12 +61,14 @@ class BaseController extends AbstractController
         try {
             $session = $this->requestStack->getSession();
             $userData = $session->get($userdataSessionName);
-            if ($userData) {
+            $token = $request->cookies->get($tokenCookieName);
+
+            if ($userData && $token) {
                 $this->user = new User($userData->user);
 
                 return $this;
             }
-            $token = $request->cookies->get($tokenCookieName);
+
             if ($token) {
                 $userData = $this->client->sendJson(
                     '/my/userdata',

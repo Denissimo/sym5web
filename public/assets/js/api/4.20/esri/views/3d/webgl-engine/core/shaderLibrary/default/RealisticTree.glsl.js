@@ -1,0 +1,5 @@
+// All material copyright ESRI, All Rights Reserved, unless otherwise specified.
+// See https://js.arcgis.com/4.20/esri/copyright.txt for details.
+//>>built
+define("exports ../ForwardLinearDepth.glsl ../Offset.glsl ../Slice.glsl ../Transform.glsl ../attributes/InstancedDoublePrecision.glsl ../attributes/NormalAttribute.glsl ../attributes/PositionAttribute.glsl ../attributes/SymbolColor.glsl ../attributes/TextureCoordinateAttribute.glsl ../attributes/VertexColor.glsl ../attributes/VerticalOffset.glsl ./DefaultMaterialAuxiliaryPasses.glsl ../output/ReadLinearDepth.glsl ../shading/EvaluateAmbientOcclusion.glsl ../shading/EvaluateSceneLighting.glsl ../shading/MultipassTerrainTest.glsl ../shading/PhysicallyBasedRendering.glsl ../shading/PhysicallyBasedRenderingParameters.glsl ../shading/ReadShadowMap.glsl ../shading/VisualVariables.glsl ../util/AlphaDiscard.glsl ../util/MixExternalColor.glsl ../../shaderModules/interfaces ../../shaderModules/ShaderBuilder ../../../../../../chunks/RealisticTree.glsl".split(" "),
+function(a,c,d,e,f,g,h,k,l,m,n,p,q,r,t,u,v,w,x,y,z,A,B,C,D,b){a.build=b.build;Object.defineProperty(a,"__esModule",{value:!0})});

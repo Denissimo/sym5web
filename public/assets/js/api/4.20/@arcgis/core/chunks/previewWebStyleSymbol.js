@@ -1,0 +1,5 @@
+/*
+All material copyright ESRI, All Rights Reserved, unless otherwise specified.
+See https://js.arcgis.com/4.20/esri/copyright.txt for details.
+*/
+import t from"../request.js";import{a as i}from"./screenUtils.js";import"../config.js";import"../core/lang.js";import"./object.js";import"../kernel.js";import"../core/urlUtils.js";import"../core/Error.js";import"./Logger.js";import"./string.js";import"./Message.js";import"../core/promiseUtils.js";function e(e,r,o){const s=e.thumbnail&&e.thumbnail.url;return s?t(s,{responseType:"image"}).then((t=>{const e=function(t,e){const r=!/\\.svg$/i.test(t.src)&&e&&e.disableUpsampling,o=Math.max(t.width,t.height);let s=e&&null!=e.maxSize?i(e.maxSize):120;r&&(s=Math.min(o,s));const n=Math.min(s,e&&null!=e.size?i(e.size):o);if(n!==o){const i=0!==t.width&&0!==t.height?t.width/t.height:1;i>=1?(t.width=n,t.height=n/i):(t.width=n*i,t.height=n)}return t}(t.data,o);return o&&o.node?(o.node.appendChild(e),o.node):e})):e.fetchSymbol().then((t=>r(t,o)))}export{e as previewWebStyleSymbol};

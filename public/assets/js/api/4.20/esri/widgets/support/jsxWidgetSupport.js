@@ -1,0 +1,5 @@
+// All material copyright ESRI, All Rights Reserved, unless otherwise specified.
+// See https://js.arcgis.com/4.20/esri/copyright.txt for details.
+//>>built
+define(["exports","../../core/handleUtils"],function(e,m){function g(b,a){var d=a.vnodeSelector;if(h(d)){a=a.properties||{};var c=a.key||d;return{vnodeSelector:"div",properties:{parentWidget:b,widgetConstructor:d,key:c,widgetProps:{...a,key:c},afterCreate:n,afterUpdate:p,afterRemoved:k},children:void 0,text:void 0,domNode:null}}if(d=a.children)for(c=0;c<d.length;++c)d[c]=g(b,d[c]);return a}function n(b,a,d,{parentWidget:c,widgetConstructor:q,widgetProps:r}){a=new q({...r,container:b});f.set(b,a);
+null==a.afterCreate?void 0:a.afterCreate(a,b);c._internalHandles.add(m.makeHandle(()=>k(b)))}function p(b,a,d,{widgetProps:c}){if(a=f.get(b))a.set(c),null==a.afterUpdate?void 0:a.afterUpdate(a,b)}function k(b){const a=f.get(b);a&&(a.destroy(),f.delete(b))}function h(b){return"function"===typeof b&&b[l]}const l=Symbol("widget"),f=new WeakMap;e.WIDGET_SYMBOL=l;e.isWidgetConstructor=h;e.processWidgets=g;Object.defineProperty(e,"__esModule",{value:!0})});

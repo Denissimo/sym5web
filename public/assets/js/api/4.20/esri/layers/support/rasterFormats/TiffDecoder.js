@@ -1,0 +1,4 @@
+// All material copyright ESRI, All Rights Reserved, unless otherwise specified.
+// See https://js.arcgis.com/4.20/esri/copyright.txt for details.
+//>>built
+define("exports ../rasterDatasets/byteStreamUtils ../../../chunks/Jpg ../../../chunks/TiffDecoder ./Lzw ./TiffTags ./utils ../../../chunks/Zlib".split(" "),function(a,c,d,b,e,f,g,h){a.decode=b.decode;a.decodeTileOrStrip=b.decodeTileOrStrip;a.getImageInfo=b.getImageInfo;a.isBSQConfig=b.isBSQConfig;a.parseFieldValues=b.parseFieldValues;a.parseHeader=b.parseHeader;a.parseIFD=b.parseIFD;a.parseSignature=b.parseSignature;Object.defineProperty(a,"__esModule",{value:!0})});

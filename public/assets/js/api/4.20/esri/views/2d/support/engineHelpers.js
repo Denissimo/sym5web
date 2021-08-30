@@ -1,0 +1,6 @@
+// All material copyright ESRI, All Rights Reserved, unless otherwise specified.
+// See https://js.arcgis.com/4.20/esri/copyright.txt for details.
+//>>built
+define("exports ../../../chunks/_rollupPluginBabelHelpers ../../../core/screenUtils ../engine/webgl/alignmentUtils ../engine/webgl/definitions ../engine/webgl/mesh/templates/shapingUtils ../engine/webgl/util/BidiText".split(" "),function(f,k,c,g,h,l,m){function e(){e=k._asyncToGenerator(function*(a,d,b){const n=g.getXAnchorDirection("center"),p=g.getYAnchorDirection("middle");b=d.textureManager.rasterizeItem(a.toJSON(),window.devicePixelRatio||1,null,b);[,d]=m.bidiText(a.text);b=(yield b).glyphMosaicItems;
+return l.shapeGlyphs(b,d,{angle:a.angle||0,xOffset:c.pt2px(a.xoffset||0),yOffset:c.pt2px(a.yoffset||0),lineHeight:h.MAGIC_LABEL_LINE_HEIGHT*Math.max(.25,Math.min(a.lineHeight,4)),maxLineWidth:Math.max(32,Math.min(c.pt2px(a.lineWidth),512)),decoration:a.font.decoration,scale:Math.min(Math.round(c.pt2px(a.font.size)),127)/h.GLYPH_SIZE,hAlign:n,vAlign:p,isCIM:!1}).boundsT});return e.apply(this,arguments)}f.getTextBounds=function(a,d,b){return e.apply(this,arguments)};Object.defineProperty(f,"__esModule",
+{value:!0})});

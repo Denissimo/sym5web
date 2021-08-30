@@ -1,0 +1,5 @@
+// All material copyright ESRI, All Rights Reserved, unless otherwise specified.
+// See https://js.arcgis.com/4.20/esri/copyright.txt for details.
+//>>built
+define(["exports","../../../../chunks/_rollupPluginBabelHelpers","./Camera"],function(d,e,g){let f=function(){function b(c){this.rctx=c;this.camera=null;this.lastFrameCamera=new g;this.slot=this.pass=0;this.highlightDepthTexture=null;this.renderOccludedMask=13;this.hasOccludees=!1}b.prototype.resetRenderOccludedMask=function(){this.renderOccludedMask=13};e._createClass(b,[{key:"isHighlightPass",get:function(){return 5===this.pass}}]);return b}(),p=function(b){function c(a,h,k,l,m,n){a=b.call(this,
+a)||this;a.offscreenRenderingHelper=h;a.scenelightingData=k;a.shadowMap=l;a.ssaoHelper=m;a.sliceHelper=n;return a}e._inheritsLoose(c,b);return c}(f);d.OverlayRenderContext=f;d.RenderContext=p;Object.defineProperty(d,"__esModule",{value:!0})});

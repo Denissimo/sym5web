@@ -1,0 +1,6 @@
+// All material copyright ESRI, All Rights Reserved, unless otherwise specified.
+// See https://js.arcgis.com/4.20/esri/copyright.txt for details.
+//>>built
+define(["exports","../Polyline","../SpatialReference","./jsonUtils"],function(b,c,d,k){function g(a){return k.isPolygon(a)?a.rings:a.paths}const f={102100:{maxX:2.0037508342788905E7,minX:-2.0037508342788905E7,plus180Line:new c({paths:[[[2.0037508342788905E7,-2.0037508342788905E7],[2.0037508342788905E7,2.0037508342788905E7]]],spatialReference:d.WebMercator}),minus180Line:new c({paths:[[[-2.0037508342788905E7,-2.0037508342788905E7],[-2.0037508342788905E7,2.0037508342788905E7]]],spatialReference:d.WebMercator})},
+4326:{maxX:180,minX:-180,plus180Line:new c({paths:[[[180,-180],[180,180]]],spatialReference:d.WGS84}),minus180Line:new c({paths:[[[-180,-180],[-180,180]]],spatialReference:d.WGS84})}};b.cutParams=f;b.getGeometryParts=g;b.getSpatialReferenceMinMaxX=function(a){a=(null==a?0:a.isWebMercator)?102100:4326;return[f[a].minX,f[a].maxX]};b.offsetMagnitude=function(a,e){return Math.ceil((a-e)/(2*e))};b.updatePolyGeometry=function(a,e){const l=g(a);for(const m of l)for(const h of m)h[0]+=e;return a};Object.defineProperty(b,
+"__esModule",{value:!0})});

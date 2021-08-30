@@ -1,0 +1,5 @@
+// All material copyright ESRI, All Rights Reserved, unless otherwise specified.
+// See https://js.arcgis.com/4.20/esri/copyright.txt for details.
+//>>built
+define(["../../../../chunks/_rollupPluginBabelHelpers","../../engine/FeatureContainer"],function(f,h){return function(g){function c(a){return g.call(this,a)||this}f._inheritsLoose(c,g);var d=c.prototype;d.onTileData=function(a,e){a.patch(e);this.contains(a)||this.addChild(a);this.requestRender()};d.onTileError=function(a){a.clear();this.contains(a)||this.addChild(a)};d._renderChildren=function(a,e){for(const b of this.children)b.isReady&&b.hasData&&(b.commit(a),a.context.setStencilFunction(514,b.stencilRef,
+255),b._displayList.replay(a,b,e))};f._createClass(c,[{key:"hasLabels",get:function(){return!1}}]);return c}(h.FeatureContainer)});
