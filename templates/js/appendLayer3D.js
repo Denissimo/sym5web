@@ -2,7 +2,7 @@ var dronLayer;
 
 var webDronActive;
 //var markerRendererPunkts
-function addLayers3D(FeatureLayer,scene)
+function addLayers3D(scene)
 {
     
  // let servicePath =
@@ -13,7 +13,7 @@ function addLayers3D(FeatureLayer,scene)
   
   
 
-  zoneLayer = new FeatureLayer({
+  zoneLayer = new FEATURELAYER({
       url: sourceFlyghtZone,
       outFields: ["*"],
       hasZ: true,
@@ -29,7 +29,7 @@ function addLayers3D(FeatureLayer,scene)
 
   
   
-   routeLayer = new FeatureLayer({
+   routeLayer = new FEATURELAYER({
       url: sourceFlyghtRoute,
       title: "Траектория полета",
     
@@ -44,7 +44,7 @@ function addLayers3D(FeatureLayer,scene)
   scene.layers.add(routeLayer);
 
   //**************************************************************************************************************************************************** */
-   zoneLayerTen = new FeatureLayer({
+   zoneLayerTen = new FEATURELAYER({
     
     url: sourceFlyghtZone,
     outFields: ["*"],
@@ -71,7 +71,7 @@ function addLayers3D(FeatureLayer,scene)
  
 
 
-  flyZoneLayer = new FeatureLayer({
+  flyZoneLayer = new FEATURELAYER({
     title: "Зоны заявок",  
     url: sourceFlyghtZone,
     outFields: ["*"],

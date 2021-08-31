@@ -2,7 +2,12 @@ var flightsBoard;
 var glids;
 var idRealDet;
 var linSymbol;
-function addReal(FeatureLayer,LabelClass,Geoprocessor,scene,isOwner){
+
+function addReal(scene,isOwner){
+    let data =dataForSend();
+         
+    
+          //alert(data);
     glids=[];  
     if (isOwner)
        linSymbol =mySymbols.lineSymbolRoute;
@@ -53,7 +58,7 @@ function addReal(FeatureLayer,LabelClass,Geoprocessor,scene,isOwner){
 
 
 
-    const realLabelClass = new LabelClass({
+    const realLabelClass = new LABELCLASS({
         labelExpressionInfo: {
           expression:
             //"$feature.boardNumber+TextFormatting.NewLine +"
@@ -62,7 +67,7 @@ function addReal(FeatureLayer,LabelClass,Geoprocessor,scene,isOwner){
          symbol: mySymbols.labelTextSymbol3D 
         
       });
-      const realLabelClass2d = new LabelClass({
+      const realLabelClass2d = new LABELCLASS ({
         labelExpressionInfo: {
           expression:
             //"$feature.boardNumber+TextFormatting.NewLine +"
@@ -71,51 +76,8 @@ function addReal(FeatureLayer,LabelClass,Geoprocessor,scene,isOwner){
              symbol:mySymbols.labelTextSymbol
         
       });
-      var templateReal = {
-        // autocasts as new PopupTemplate()
-        title: "{serial}",
-        content: [
-          {
-            // It is also possible to set the fieldInfos outside of the content
-            // directly in the popupTemplate. If no fieldInfos is specifically set
-            // in the content, it defaults to whatever may be set within the popupTemplate.
-            type: "fields",
-            fieldInfos: [
-              {
-                fieldName: "Altitude",
-                label: "Высота",
-                format: {
-                  places: 0,
-                  digitSeparator: true,
-                },
-              },
-              {
-                fieldName: "Speed",
-                label: "Скорость",
-                format: {
-                  places: 0,
-                  digitSeparator: true,
-                },
-              },
-              {
-                fieldName: "Heading",
-                label: "Курс",
-                format: {
-                  places: 0,
-                  digitSeparator: true,
-                },
-              },
-            ],
-          },
-        ],
-      };
-     var gpUrl =webPaths.urlSendTracke,
-     // "https://abr-gis-server.airchannel.net/airchannel/rest/services/Dev/SendTracker/GPServer/SendTracker";
-     GEOPROCESSOR = new Geoprocessor({
-     url: gpUrl
-     });      
      
-     
+
      let servicePath =webPaths.servicePath;
      //"https://abr-gis-server.airchannel.net/airchannel/rest/services/Dev/VectorDevelop2/FeatureServer/";
      // servicePath = "https://abr-gis-server.airchannel.net/airchannel/rest/services/Dev/VectorDevelop/FeatureServer/";
@@ -127,7 +89,7 @@ function addReal(FeatureLayer,LabelClass,Geoprocessor,scene,isOwner){
       //servicePath = "https://abr-gis-server.airchannel.net/airchannel/rest/services/Dev/VectorDevelop/FeatureServer/";
       sourceFlyghtZone = servicePath + "5";
 
-      realAllLayer =new FeatureLayer({
+      realAllLayer =new FEATURELAYER({
       //  url:"https://abr-gis-server.airchannel.net/airchannel/rest/services/Hosted/AllFlightReal/FeatureServer/0",
         url: webPaths.urlRealAll,         //"https://abr-gis-server.airchannel.net/airchannel/rest/services/Hosted/realFlights/FeatureServer/0",
         popupTemplate: templatesPopup.templateReal,
@@ -135,7 +97,7 @@ function addReal(FeatureLayer,LabelClass,Geoprocessor,scene,isOwner){
 
         renderer: myRenderers.realMarkerRenderer
       }); 
-    realLayer= new FeatureLayer({
+    realLayer= new FEATURELAYER({
      //  url: "https://abr-gis-server.airchannel.net/airchannel/rest/services/Hosted/TruckLastBJTime/FeatureServer",
        url:  webPaths.urlRealLast,  //   "https://abr-gis-server.airchannel.net/airchannel/rest/services/Hosted/LastBortEvent/FeatureServer/0",
        popupTemplate: templatesPopup.templateReal,
@@ -148,7 +110,7 @@ function addReal(FeatureLayer,LabelClass,Geoprocessor,scene,isOwner){
       }
       else
       {
-        realAllLayer =new FeatureLayer({
+        realAllLayer =new FEATURELAYER({
           //url:"https://abr-gis-server.airchannel.net/airchannel/rest/services/Hosted/AllFlightReal/FeatureServer/0",
           url: webPaths.urlRealAll,//   "https://abr-gis-server.airchannel.net/airchannel/rest/services/Hosted/realFlights/FeatureServer/0",
           //labelingInfo: [realLabelClass],
@@ -159,7 +121,7 @@ function addReal(FeatureLayer,LabelClass,Geoprocessor,scene,isOwner){
              },
           renderer:myRenderers.realMarkerRenderer
         });
-        realLayer= new FeatureLayer({
+        realLayer= new FEATURELAYER({
            //url: "https://abr-gis-server.airchannel.net/airchannel/rest/services/Hosted/TruckLastBJTime/FeatureServer",
            url:  webPaths.urlRealLast,// "https://abr-gis-server.airchannel.net/airchannel/rest/services/Hosted/LastBortEvent/FeatureServer/0",
            popupTemplate: templatesPopup.templateReal,
@@ -176,7 +138,7 @@ function addReal(FeatureLayer,LabelClass,Geoprocessor,scene,isOwner){
    realAllLayer.definitionExpression=buildDefinitionQueryReal();      
    scene.layers.add(realLayer);
    realLayer.definitionExpression=buildDefinitionQueryReal(true);
-   flyZoneLayer = new FeatureLayer({
+   flyZoneLayer = new FEATURELAYER({
     title: "Зона текущего полета",  
     url: sourceFlyghtZone,
     outFields: ["*"],
@@ -200,7 +162,7 @@ function addReal(FeatureLayer,LabelClass,Geoprocessor,scene,isOwner){
 
 
 
-function refreshRealLayer(FeatureLayer,scene,tit,isOwner)
+function refreshRealLayer()
 {  var lays=[];
   
 
@@ -243,7 +205,7 @@ function refreshRealLayer(FeatureLayer,scene,tit,isOwner)
    var newRealLayer;
    if (isOwner)  
     {
-      newRealLayer=new FeatureLayer({
+      newRealLayer=new FEATURELAYER({
       url:url,
       popupTemplate:templateReal,
       title : title,
@@ -255,7 +217,7 @@ function refreshRealLayer(FeatureLayer,scene,tit,isOwner)
    else
    {
     
-    newRealLayer=new FeatureLayer({
+    newRealLayer=new FEATURELAYER({
     url:url,
     popupTemplate:templateReal,
     title : title,
@@ -321,6 +283,15 @@ function makeListRealFlyght(feats)
           {
              document
              .getElementById("C"+glids[i][0])
+             .addEventListener("click", eventFlyRealSend);
+             document
+             .getElementById("T"+glids[i][0])
+             .addEventListener("click", eventFlyRealSend);
+             document
+             .getElementById("L"+glids[i][0])
+             .addEventListener("click", eventFlyRealSend);
+             document
+             .getElementById("V"+glids[i][0])
              .addEventListener("click", eventFlyRealSend);
              document
              .getElementById(glids[i][0])
@@ -451,12 +422,40 @@ function makeListRealFlyght(feats)
         {
 
            //alert(event.target.id);
-           let data =dataForSend();
+           let ev=event.target.id;
+           let pref=ev.substring(0,1);
+           let data=""; 
+           switch(pref) {
+            case 'C':  // if (x === 'value1')
+            data =dataForSend(20); //""
+              break;
+            case 'L' :
+              data =dataForSend(21); //""
+              break;
+            case 'V' : 
+            data =dataForSend(19);  //time 120
+            break;
+            case 'T' :
+              data =dataForSend(18); //turn 10
+              break;
+
+           }
+
+            data =dataForSend(20);
+           
            let params = { DATA : data  };
-               
-                  GEOPROCESSOR.submitJob(params).then(function (jobInfo) {
+          
+           var gpUrl =webPaths.urlSendTracker,
+           // "https://abr-gis-server.airchannel.net/airchannel/rest/services/Dev/SendTracker/GPServer/SendTracker";
+           geop = new GEOPROCESSOR({
+           url: gpUrl
+           });g
+                   console.log(geop.url+" $$$");  
+                         
+
+                  geop.submitJob(params).then(function (jobInfo) {
                   var options = { statusCallback: function (jobInfo1) { progTest(jobInfo1); } };
-                  GEOPROCESSOR.waitForJobCompletion(jobInfo.jobId, options).then(function (jobInfo2 ) {  console.log(jobInfo2);                 
+                  geop.waitForJobCompletion(jobInfo.jobId, options).then(function (jobInfo2 ) {  console.log(jobInfo2);                 
                     getResultData(jobInfo2);
                   });
                  });
@@ -465,17 +464,17 @@ function makeListRealFlyght(feats)
                  }
                  function getResultData(result2) {
                    
-                  GEOPROCESSOR.getResultData(result2.jobId,"Result").then(function (result) { console.log(result.value); });
+                  geop.getResultData(result2.jobId,"Result").then(function (result) { console.log("!!! G"+result.value); });
                   } 
 
 
 
         }
          
-         function dataForSend()
+         function dataForSend(com)
       {
 
-        let dt=new Float32Array([220,0,0,0,0,0,0]);
+        let dt=new Float32Array([0,0,0,0,0,0,0]);
         let  bths="";
         for (let i=0;i<dt.length;i++)
         {
@@ -491,18 +490,32 @@ function makeListRealFlyght(feats)
         let bytes=getInt16Bytes(176);
         let bth2=bytesToHexString(bytes);
         let bth2s=(bth2.toString()).replaceAll(',', ' ');
-        bths=bths+bth2s+" 00 00 ";
+        bths=bths+bth2s+" 00 00 00 ";
 
-        let trId=177;
+        let trId=1;
         bytes=getInt32Bytes(trId);
         let bth3=bytesToHexString(bytes);
-        let trIds=bth3[0]
+        let trIds=bth3[0];
 
         bytes=getInt32Bytes(33);
         let bth4=bytesToHexString(bytes);
-        let data="fe "+bth4[0]+" "+trIds+" 00 4c "+bths+"cc cc"
+        let data="fe "+bth4[0]+" "+trIds+" 00 00 4c "+bths+"cc cc";
 
-        dt=new Float32Array([0,0,0,0,0,0,0]);
+        //dt=new Float32Array([220,0,0,0,0,0,0]);
+        switch(com){
+          case 20: case 21 :
+            dt=new Float32Array([0,0,0,0,0,0,0]);
+            break;
+            case 18:
+              dt=new Float32Array([20,0,0,0,0,0,0]);
+             break;
+            case 19:
+               dt=new Float32Array([220,0,0,0,0,0,0]);
+                break;
+                
+        }
+
+        //dt=new Float32Array([0,0,0,0,0,0,0]);
         bths="";
         for (let i=0;i<dt.length;i++)
         {
@@ -512,11 +525,11 @@ function makeListRealFlyght(feats)
                   bths=bths+hex.substring(j,j+2)+" ";
                 } 
         }
-        bytes=getInt16Bytes(20);
+        bytes=getInt16Bytes(com);
         bth2=bytesToHexString(bytes);
         bth2s=(bth2.toString()).replaceAll(',', ' ');
-        bths=bths+bth2s+" 00 00 ";
-        data=data+" fe "+bth4[0]+" "+trIds+" 00 4c "+bths+"cc cc"
+        bths=bths+bth2s+" 00 00 00 ";
+        data=data+" fe "+bth4[0]+" "+trIds+" 00 00 4c "+bths+"cc cc"
         
         return data
 

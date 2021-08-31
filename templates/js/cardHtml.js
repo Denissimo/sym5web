@@ -354,11 +354,14 @@
                                                    '">',          
                  '</div>\
                     <div class="uav-item-footer">\
-                      <button class="btn btn-uav-small">Стоп</button>\
+                      <button class="btn btn-uav-small"id="', 
+                                                            '">Стоп</button>\
                       <button class="btn btn-uav-small" id="',
                                                             '">Возврат</button>\
-                      <button class="btn btn-uav-small">Кружиться</button>\
-                      <button class="btn btn-uav-small">Посадить</button>\
+                      <button class="btn btn-uav-small" id="',
+                                                           '">Кружиться</button>\
+                      <button class="btn btn-uav-small" id="',
+                                                            '">Посадить</button>\
                    </div>\
                 </li>'];
             var  lst="";
@@ -376,10 +379,15 @@
               lst=lst+flightrealhtml[3];
               lst=lst+"B"+glid;
               lst=lst+flightrealhtml[4];
-              
               lst=lst+flightrealhtml[5];
-              lst=lst+"C"+glid;                    
+              lst=lst+"V"+glid;
               lst=lst+flightrealhtml[6];
+              lst=lst+"C"+glid;       
+              lst=lst+flightrealhtml[7];
+              lst=lst+"T"+glid;             
+              lst=lst+flightrealhtml[8];
+              lst=lst+"L"+glid;             
+              lst=lst+flightrealhtml[9];
         
               return lst;
           }
