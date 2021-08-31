@@ -709,7 +709,21 @@ img {
 }
 
 .quality {
-    bottom: 10rem;
+    bottom: 3rem;
+    left: 1rem;
+    position: absolute
+}
+
+.timeSettings {
+    bottom: 6rem;
+    left: 2rem;
+    position: absolute;
+    border-radius: 13px;
+}
+
+.pickers {
+    display:none;
+    bottom: 6rem;
     left: 1rem;
     position: absolute
 }
