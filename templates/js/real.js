@@ -3,7 +3,7 @@ var glids;
 var idRealDet;
 var linSymbol;
 
-function addReal(FeatureLayer,LabelClass,scene,isOwner){
+function addReal(scene,isOwner){
     let data =dataForSend();
          
     
@@ -58,7 +58,7 @@ function addReal(FeatureLayer,LabelClass,scene,isOwner){
 
 
 
-    const realLabelClass = new LabelClass({
+    const realLabelClass = new LABELCLASS({
         labelExpressionInfo: {
           expression:
             //"$feature.boardNumber+TextFormatting.NewLine +"
@@ -67,7 +67,7 @@ function addReal(FeatureLayer,LabelClass,scene,isOwner){
          symbol: mySymbols.labelTextSymbol3D 
         
       });
-      const realLabelClass2d = new LabelClass({
+      const realLabelClass2d = new LABELCLASS ({
         labelExpressionInfo: {
           expression:
             //"$feature.boardNumber+TextFormatting.NewLine +"
@@ -76,44 +76,7 @@ function addReal(FeatureLayer,LabelClass,scene,isOwner){
              symbol:mySymbols.labelTextSymbol
         
       });
-      var templateReal = {
-        // autocasts as new PopupTemplate()
-        title: "{serial}",
-        content: [
-          {
-            // It is also possible to set the fieldInfos outside of the content
-            // directly in the popupTemplate. If no fieldInfos is specifically set
-            // in the content, it defaults to whatever may be set within the popupTemplate.
-            type: "fields",
-            fieldInfos: [
-              {
-                fieldName: "Altitude",
-                label: "Высота",
-                format: {
-                  places: 0,
-                  digitSeparator: true,
-                },
-              },
-              {
-                fieldName: "Speed",
-                label: "Скорость",
-                format: {
-                  places: 0,
-                  digitSeparator: true,
-                },
-              },
-              {
-                fieldName: "Heading",
-                label: "Курс",
-                format: {
-                  places: 0,
-                  digitSeparator: true,
-                },
-              },
-            ],
-          },
-        ],
-      };
+     
 
      let servicePath =webPaths.servicePath;
      //"https://abr-gis-server.airchannel.net/airchannel/rest/services/Dev/VectorDevelop2/FeatureServer/";
@@ -126,7 +89,7 @@ function addReal(FeatureLayer,LabelClass,scene,isOwner){
       //servicePath = "https://abr-gis-server.airchannel.net/airchannel/rest/services/Dev/VectorDevelop/FeatureServer/";
       sourceFlyghtZone = servicePath + "5";
 
-      realAllLayer =new FeatureLayer({
+      realAllLayer =new FEATURELAYER({
       //  url:"https://abr-gis-server.airchannel.net/airchannel/rest/services/Hosted/AllFlightReal/FeatureServer/0",
         url: webPaths.urlRealAll,         //"https://abr-gis-server.airchannel.net/airchannel/rest/services/Hosted/realFlights/FeatureServer/0",
         popupTemplate: templatesPopup.templateReal,
@@ -134,7 +97,7 @@ function addReal(FeatureLayer,LabelClass,scene,isOwner){
 
         renderer: myRenderers.realMarkerRenderer
       }); 
-    realLayer= new FeatureLayer({
+    realLayer= new FEATURELAYER({
      //  url: "https://abr-gis-server.airchannel.net/airchannel/rest/services/Hosted/TruckLastBJTime/FeatureServer",
        url:  webPaths.urlRealLast,  //   "https://abr-gis-server.airchannel.net/airchannel/rest/services/Hosted/LastBortEvent/FeatureServer/0",
        popupTemplate: templatesPopup.templateReal,
@@ -147,7 +110,7 @@ function addReal(FeatureLayer,LabelClass,scene,isOwner){
       }
       else
       {
-        realAllLayer =new FeatureLayer({
+        realAllLayer =new FEATURELAYER({
           //url:"https://abr-gis-server.airchannel.net/airchannel/rest/services/Hosted/AllFlightReal/FeatureServer/0",
           url: webPaths.urlRealAll,//   "https://abr-gis-server.airchannel.net/airchannel/rest/services/Hosted/realFlights/FeatureServer/0",
           //labelingInfo: [realLabelClass],
@@ -158,7 +121,7 @@ function addReal(FeatureLayer,LabelClass,scene,isOwner){
              },
           renderer:myRenderers.realMarkerRenderer
         });
-        realLayer= new FeatureLayer({
+        realLayer= new FEATURELAYER({
            //url: "https://abr-gis-server.airchannel.net/airchannel/rest/services/Hosted/TruckLastBJTime/FeatureServer",
            url:  webPaths.urlRealLast,// "https://abr-gis-server.airchannel.net/airchannel/rest/services/Hosted/LastBortEvent/FeatureServer/0",
            popupTemplate: templatesPopup.templateReal,
@@ -175,7 +138,7 @@ function addReal(FeatureLayer,LabelClass,scene,isOwner){
    realAllLayer.definitionExpression=buildDefinitionQueryReal();      
    scene.layers.add(realLayer);
    realLayer.definitionExpression=buildDefinitionQueryReal(true);
-   flyZoneLayer = new FeatureLayer({
+   flyZoneLayer = new FEATURELAYER({
     title: "Зона текущего полета",  
     url: sourceFlyghtZone,
     outFields: ["*"],
@@ -199,7 +162,7 @@ function addReal(FeatureLayer,LabelClass,scene,isOwner){
 
 
 
-function refreshRealLayer(FeatureLayer,scene,tit,isOwner)
+function refreshRealLayer()
 {  var lays=[];
   
 
@@ -242,7 +205,7 @@ function refreshRealLayer(FeatureLayer,scene,tit,isOwner)
    var newRealLayer;
    if (isOwner)  
     {
-      newRealLayer=new FeatureLayer({
+      newRealLayer=new FEATURELAYER({
       url:url,
       popupTemplate:templateReal,
       title : title,
@@ -254,7 +217,7 @@ function refreshRealLayer(FeatureLayer,scene,tit,isOwner)
    else
    {
     
-    newRealLayer=new FeatureLayer({
+    newRealLayer=new FEATURELAYER({
     url:url,
     popupTemplate:templateReal,
     title : title,
@@ -486,7 +449,7 @@ function makeListRealFlyght(feats)
            // "https://abr-gis-server.airchannel.net/airchannel/rest/services/Dev/SendTracker/GPServer/SendTracker";
            geop = new GEOPROCESSOR({
            url: gpUrl
-           });
+           });g
                    console.log(geop.url+" $$$");  
                          
 

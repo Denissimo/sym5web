@@ -12,7 +12,7 @@ function addSelectLayer(GraphicsLayer,webmap)
         return selectLayer;
        }
 
-     function addLayers2D(FeatureLayer,webmap)
+     function addLayers2D(webmap)
      {
          // var servicePath = "https://abr-gis-server.airchannel.net/airchannel/rest/services/Dev/VectorDevelop/FeatureServer/";
           
@@ -23,7 +23,7 @@ function addSelectLayer(GraphicsLayer,webmap)
           
 
          
-            routeVecLayer = new FeatureLayer({
+            routeVecLayer = new FEATURELAYER({
             url:     sourceTrackRoute, 
             
             outFields: ["*"],
@@ -35,7 +35,7 @@ function addSelectLayer(GraphicsLayer,webmap)
                 });
     
 
-             tableLayer = new FeatureLayer({
+             tableLayer = new FEATURELAYER({
               url:    sourceTrackRoute,
               outFields: ["*"],
               renderer :myRenderers.lineRendererTable,
@@ -45,7 +45,7 @@ function addSelectLayer(GraphicsLayer,webmap)
 
   //****************************************************************************************************** */              
     
-            tableZoneLayer = new FeatureLayer({
+            tableZoneLayer = new FEATURELAYER({
             url:     sourceTrackZone,
             outFields: ["*"],
             renderer: myRenderers.zoneRendererTable,
@@ -54,7 +54,7 @@ function addSelectLayer(GraphicsLayer,webmap)
     //****************************************************************************************************** */              
             
 
-          zoneLayer = new FeatureLayer({
+          zoneLayer = new FEATURELAYER({
                url:     sourceTrackZone,
                outFields: ["*"],
                hasZ:true,
@@ -65,7 +65,7 @@ function addSelectLayer(GraphicsLayer,webmap)
   //****************************************************************************************************** */                   
                
        
-          routeLayer = new FeatureLayer({
+          routeLayer = new FEATURELAYER({
               url:         sourceTrackRoute,
               outFields: ["*"],
               hasM:true,
@@ -80,7 +80,7 @@ function addSelectLayer(GraphicsLayer,webmap)
        if( route ==="Flights")
        { 
         
-            flyVecLayer = new FeatureLayer({
+            flyVecLayer = new FEATURELAYER({
             url: sourceFlyghtRoute,
             outFields: ["*"],
             hasM:true,
@@ -90,11 +90,11 @@ function addSelectLayer(GraphicsLayer,webmap)
             });
                     
                     
-                  }  
+        }  
                   
                  
                 
-                  flyZoneLayer = new FeatureLayer({
+                  flyZoneLayer = new FEATURELAYER({
                     title: "Зоны заявок",  
                     url: sourceFlyghtZone,
                     outFields: ["*"],

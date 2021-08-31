@@ -18,7 +18,8 @@ var GEOMETRYENGINE;
 var QUERY;
 var FEATUREFILTER;
 var GRAPHICSLAYER;
-var LABELCLASS
+var LABELCLASS;
+var FEATURELAYER;
 
 var flyType;
 var timeSlider;
@@ -140,7 +141,8 @@ require(
         PROJECTION=projection;
         FEATUREFILTER=FeatureFilter;
         GRAPHICSLAYER = GraphicsLayer;
-        LABELCLASS=LabelClass;  
+        LABELCLASS=LabelClass; 
+        FEATURELAYER=FeatureLayer; 
         console.log(route);
         console.log(roles);
         console.log(user); 
@@ -360,7 +362,7 @@ require(
               
          if(route==="Flights" ||route==="Tracks"  )
          {
-            addLayers2D(FeatureLayer,scene);   
+            addLayers2D(scene);   
             layerManual = new GraphicsLayer({listMode:"hide"});
          }
          if( route==="Tracks" ) 
@@ -514,11 +516,11 @@ require(
 
             {
                 
-              addReal(FeatureLayer,LabelClass,scene,checkRoleRoute("ROLE_OWNER",roles));
+              addReal(scene,checkRoleRoute("ROLE_OWNER",roles));
               makeRealFlyght(realLayer);
               var realTitle=realLayer.title;
              
-              window.setInterval(refreshRealLayer, 2000,FeatureLayer,scene,realTitle,checkRoleRoute("ROLE_OWNER",roles));
+              window.setInterval(refreshRealLayer, 2000);
               
             }
             else
@@ -529,7 +531,7 @@ require(
              
             if(route==="Flights")
              { 
-              addLayers3D(FeatureLayer,scene)
+              addLayers3D(scene)
               document.getElementById("optionsDiv").hidden=true; 
               setFlightSidebar();
              }
@@ -552,7 +554,7 @@ require(
         //******************************************************** выгрузка слоев ограничивающих полеты */
         scene.when(function(){
             if(checkRoleRoute("ROLE_OWNER",roles) && route==="Flights")
-             getLayersByTitle(FeatureLayer,scene.allLayers,["Опасные зоны","Запретные зоны","Зоны с ограничениями"],layerConf);
+             getLayersByTitle(scene.allLayers,["Опасные зоны","Запретные зоны","Зоны с ограничениями"],layerConf);
            
              
           }, function(error){
@@ -562,7 +564,7 @@ require(
           if(checkRoleRoute("ROLE_OPERATOR",roles))
             map.when(function(){
                if(checkRoleRoute("ROLE_OPERATOR",roles) && route==="Flights")
-                 getLayersByTitle(FeatureLayer,map.allLayers,["Опасные зоны","Запретные зоны","Зоны с ограничениями"],layerConf);
+                 getLayersByTitle(map.allLayers,["Опасные зоны","Запретные зоны","Зоны с ограничениями"],layerConf);
            
           }, function(error){
             
@@ -624,7 +626,7 @@ require(
     }
 
    
-    function getLayersByTitle(FeatureLayer,lays,titles,layerConflict)
+    function getLayersByTitle(lays,titles,layerConflict)
     {
         
         for (let i=0;i<lays.length;i++ )
@@ -647,7 +649,7 @@ require(
            lay.when(function(){
                
           if (lay.type==="map-image")
-               getLayersByTitle(FeatureLayer,lay.allSublayers,titles,layerConflict);    
+               getLayersByTitle(lay.allSublayers,titles,layerConflict);    
             
            });
 
