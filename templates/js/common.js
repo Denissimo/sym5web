@@ -520,7 +520,7 @@ require(
               makeRealFlyght(realLayer);
               var realTitle=realLayer.title;
              
-              window.setInterval(refreshRealLayer, 2000);
+              window.setInterval(refreshRealLayer, 3000);
               
             }
             else
