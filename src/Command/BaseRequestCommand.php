@@ -3,16 +3,23 @@
 namespace App\Command;
 
 use App\Service\Client;
+use App\Service\ClientAuth;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Output\OutputInterface;
+use Throwable;
 
 class BaseRequestCommand extends Command
 {
     protected static $defaultName = 'base:command';
 
+    /**
+     * @var Client
+     */
     protected $client;
+
+    /**
+     * @var ClientAuth
+     */
+    protected $clientAuth;
 
     protected function configure()
     {
@@ -27,11 +34,12 @@ class BaseRequestCommand extends Command
      *
      * @param Client $client
      */
-    public function __construct(Client $client)
+    public function __construct(Client $client, ClientAuth $clientAuth)
     {
         parent::__construct(null);
 
         $this->client = $client;
+        $this->clientAuth = $clientAuth;
     }
 
     protected function requestAuthorized(
@@ -52,5 +60,32 @@ class BaseRequestCommand extends Command
                 )
             ]
         );
+    }
+
+    /**
+     * @param $username
+     * @param $password
+     *
+     * @return string
+     *
+     * @throws Throwable
+     */
+    protected function authorize(
+        $username,
+        $password
+    ) :string
+    {
+        $result = $this->clientAuth->sendJson(
+            '/api/login_check',
+            json_encode(
+                [
+                    'username' => $username,
+                    'password' => $password
+                ]
+            ),
+            'POST'
+        );
+
+        return $result->token;
     }
 }
