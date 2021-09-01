@@ -16,6 +16,8 @@ function setFlightSidebar()
  var els=document.getElementsByClassName("sidebar-title");
  els[0].innerText="Заявки на полеты";
  
+  
+           
             document
            .getElementById("check3dFlight")
            .addEventListener("click", checkFlight); 
@@ -27,7 +29,7 @@ function setFlightSidebar()
            .addEventListener("click", resetFlight);
 
             document.getElementById("refreshFlights3d") 
-            .addEventListener("click",getUserFly);
+            .addEventListener("click",getUserFl);
 
             document
             .getElementById("unappFlight")
@@ -41,18 +43,22 @@ function setFlightSidebar()
 }
 function checkFlight(){getCheckGeometry(idFly);}
 
-function getUserFly()
+
+
+function getUserFly(d=new Date(),d2=new Date())
  {
-   
-  
+     let d3=new Date();
+     console.log(d2);
+     console.log(d);
 // Нижняя граница периода полетов  
       var stt= new Date();
                  
       var stDt=convertTime(stt);
-
-      let d=new Date();
-      let d2=new Date();
-      d2.setDate(d2.getDate() + 30);
+      
+     // let d=new Date();
+     // let d2=new Date();
+      if(d3.getTime()-d3.getTime(),1000)
+           d2.setDate(d2.getDate() + 30);
       let m1=String(d.getMonth() + 1).padStart(2, '0');
       let day1 = String(d.getDate()).padStart(2, '0');
       let m2=String(d2.getMonth() + 1).padStart(2, '0');

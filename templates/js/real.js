@@ -458,7 +458,8 @@ function makeListRealFlyght(feats)
 
            }
 
-            data =dataForSend(20);
+           // data =dataForSend(400);
+            alert(data);
            
            let params = { DATA : data  };
           
@@ -466,7 +467,7 @@ function makeListRealFlyght(feats)
            // "https://abr-gis-server.airchannel.net/airchannel/rest/services/Dev/SendTracker/GPServer/SendTracker";
            geop = new GEOPROCESSOR({
            url: gpUrl
-           });g
+           });
                    console.log(geop.url+" $$$");  
                          
 
@@ -529,7 +530,8 @@ function makeListRealFlyght(feats)
             case 19:
                dt=new Float32Array([220,0,0,0,0,0,0]);
                 break;
-                
+           case 400:    
+           dt=new Float32Array([0,0,0,0,0,0,0]); 
         }
 
         //dt=new Float32Array([0,0,0,0,0,0,0]);

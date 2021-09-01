@@ -80,7 +80,7 @@ function setFlightSidebar()
            .getElementById("resetFlight")
            .addEventListener("click",resetFly);
            document.getElementById("refreshFlights") 
-            .addEventListener("click", getUserFly);
+            .addEventListener("click", getUserFl);
       
       idRoute= $.cookie("idRoute");
       
@@ -2930,13 +2930,13 @@ function createFlyVectors(id){
   
     
  
- /*export*/ function getUserFly()
+ /*export*/ function getUserFly(stt=new Date(),ett=new Date())
  {
         
   
   
 // Нижняя граница периода полетов  
-      var stt= new Date();
+     // var stt= new Date();
                  
       var stDt=convertTime(stt);
       var     lst="";
@@ -2944,12 +2944,9 @@ function createFlyVectors(id){
       
       apiUserFlight.then(function (response) {
           
-       makeListFlyghtPanel(response); // формирование панели полетов
-        });
-
-
+       makeListFlyghtPanel(response); // формирование пане
       
-       
+      });   
 // Выбор задействованных маршрутных шаблонов и формирование массива имен 
        
         
@@ -2957,7 +2954,7 @@ function createFlyVectors(id){
            
               function makeListFlyghtPanel(response)
               {
-               
+               emptyArray(glb);
                for (let i=0;i<response.applications.length;i++) {   
                  
                 if(response.applications[i].application.start.date >= stDt)
@@ -2984,10 +2981,10 @@ function createFlyVectors(id){
               
    
 
-    }
+    
 //**************************************************   Cytring Conflict   */
 
-
+  }
 /********************************** Check******************************************************************************************* */
   /*export*/  function myCheckFlight()
   {

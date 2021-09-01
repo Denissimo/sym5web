@@ -515,7 +515,10 @@ require(
         if(route==="AirSituation")
 
             {
-                
+              /*
+              els=document.getElementById("timeSett");
+              els.hidden=true;*/
+              bgExpandTime.visible=false ; 
               addReal(scene,checkRoleRoute("ROLE_OWNER",roles));
               makeRealFlyght(realLayer);
               var realTitle=realLayer.title;
@@ -524,7 +527,10 @@ require(
               
             }
             else
+            {
+            
              setTimeSliderWatch();
+            }
              
         if(checkRoleRoute("ROLE_OPERATOR",roles))
         {
@@ -690,10 +696,42 @@ require(
           var st=st2.replace("T", " ");
           return st;
          }
-   
+function changeDataStart()
+{
+ var start= document
+  .getElementById("date_start").value;
+
+  startD=new Date(start).getTime();
+  startD1=new Date().getTime();
+
+
+  var startTime= document
+  .getElementById("time_start").value;
+  startTs=startTime.split(":");
+  startTm=3600000*parseInt(startTs[0])+60000*(startTs[1]);
+  if (startD+startTm<startD1)
+   {
+     alert("Начало диапазона предшествует текущему моменту . Изменение игнорируется");
+
+   }
+   else 
+   {
+      sm=new Date(startD+startTm-tmzon*3600000);
+      fm=timeSlider.fullTimeExtent.end;
+      setTimeSliderBase(sm,fm);
+      getUserFly(sm,new Date(fm));
+   }
+
+ 
+
+}   
          function setTimeSliderWatch()
 {
      
+  document
+   .getElementById("date_start")
+   .addEventListener("change", changeDataStart);   
+
      timeSlider.watch("timeExtent", function () { 
        flyZoneLayer.definitionExpression=buildDefinitionQueryFly();
        
@@ -893,8 +931,9 @@ require(
               apiModFlight= apiData(apiUrl, "/application/"+flid, token, 'PUT', dat);
         
               apiModFlight.then(function (response) {
-                   
-                   getUserFly(); // формирование панели полетов
+                   let sm=timeSlider.fullTimeExtent.start;
+                   let fm=timeSlider.fullTimeExtent.end;
+                   getUserFly(new Date(sm),new Date(fm)); // формирование панели полетов
                    if (isNew)
                    {
                    
@@ -904,5 +943,29 @@ require(
        
    } 
    
-             
-            
+   function setTimeSliderBase(tm,fm)
+   {
+     
+  
+    let st0=new Date(tm); 
+    let st1=new Date(tm);
+    
+     timeSlider.values=[st0];
+     st2=new Date(fm);
+     st2.setSeconds(st2.getSeconds()+10) 
+    
+     timeExtent = ({
+     start: st1,
+     end:  st2
+   });
+   
+
+   timeSlider.fullTimeExtent=timeExtent;
+ 
+    
+   } 
+ function getUserFl()
+{
+  getUserFly(new Date(timeSlider.fullTimeExtent.start),new Date(new Date(timeSlider.fullTimeExtent.end)));
+
+}         
