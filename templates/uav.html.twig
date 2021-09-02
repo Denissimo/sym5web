@@ -13,7 +13,11 @@
             <div class="row">
                 <div class="page-title">
                     <h2 class="title">
-                        Реестр БВС
+                        {% if user.role('ROLE_OWNER') %}
+                            Мои БВС
+                        {% else %}
+                            Реестр БВС
+                        {% endif %}
                     </h2>
                     <button class="btn btn-green" data-bs-toggle="modal" id="addAircraftBtn" data-bs-target="#modalUav">
                         Добавить БВС
@@ -200,7 +204,8 @@
     </div>
 
     {% block modals %}
-        {% include('components/modals.html.twig') %}
+        {% set engineTypes = aircrafts.aircrafts|first.engineTypes %}
+        {% include 'components/modals.html.twig' with engineTypes %}
     {% endblock %}
 
 
