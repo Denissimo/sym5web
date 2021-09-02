@@ -39,7 +39,7 @@ function setFlightSidebar()
            .addEventListener("click",emulFlight);
             
               
-           getUserFly();
+           getUserFly(d=new Date(timeSlider.fullTimeExtent.start),d2=new Date(timeSlider.fullTimeExtent.end));
 }
 function checkFlight(){getCheckGeometry(idFly);}
 
@@ -819,6 +819,7 @@ function emulFlight()
           }
     
         timeSlider.fullTimeExtent=timeExtent;
+       
         timeSlider.playRate=250;
         timeSlider.loop=true;
          

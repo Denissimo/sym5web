@@ -100,7 +100,7 @@ function setFlightSidebar()
         queryRoad(null,idRoute) ;     
       }
       
-       getUserFly();
+       getUserFly(d=new Date(timeSlider.fullTimeExtent.start),d2=new Date(timeSlider.fullTimeExtent.end));
 }
 
 

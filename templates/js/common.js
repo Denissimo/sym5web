@@ -341,12 +341,34 @@ require(
           let vl=$.cookie("timeVal");
           if (vl!=null) 
           {
+            let vs=$.cookie("timeStart");
+            let ve=$.cookie("timeEnd");
             let vd=   new Date();
+            let vds=   new Date();
+            let vde=   new Date();
+            if(vs!=null)
+            {
+              
+               vds.setTime(vs);
+               document
+              .getElementById("date_start").value = new Date(vds);
+              console.log((new Date(vds))+" $$$");
+           
+               vde.setTime(ve);
+               timeExtent = ({
+                start: vds,
+                 end:  vde
+                         });
+
+               timeSlider.fullTimeExtent=timeExtent;        
+                        }    
                vd.setTime(vl);
                         
             if (vl>=timeSlider.fullTimeExtent.start.getTime() && vl <=timeSlider.fullTimeExtent.end.getTime() )
-           
+             
              timeSlider.values=[vd];
+             
+            // console.log(timeSlider.fullTimeExtent.start+" $$$");
           }
          }  
 
@@ -696,31 +718,49 @@ require(
           var st=st2.replace("T", " ");
           return st;
          }
-function changeDataStart()
+function changeDateTime()
 {
  var start= document
   .getElementById("date_start").value;
 
-  startD=new Date(start).getTime();
-  startD1=new Date().getTime();
+  let startD=new Date(start).getTime();
+  let startD1=new Date().getTime();
 
-
-  var startTime= document
+  
+  let startTime= document
   .getElementById("time_start").value;
-  startTs=startTime.split(":");
-  startTm=3600000*parseInt(startTs[0])+60000*(startTs[1]);
+  let startTs=startTime.split(":");
+  let startTm=3600000*parseInt(startTs[0])+60000*(startTs[1]);
   if (startD+startTm<startD1)
    {
-     alert("Начало диапазона предшествует текущему моменту . Изменение игнорируется");
+    startD=startD1;
+    startTm=tmzon*3600000;
+   }
 
-   }
-   else 
-   {
+    var finish= document
+    .getElementById("date_finish").value;
+  
+    let finD=new Date(finish).getTime();
+    
+  
+    
+
+    let finishTime= document
+    .getElementById("time_finish").value;
+    let finTs=finishTime.split(":");
+    let finTm=3600000*parseInt(finTs[0])+60000*(finTs[1]);
+    if (startD+startTm -finD-finTm>=-3600000*24)
+    {
+      finD=startD+3600000*24;
+      finTm=tmzon*3600000;
+       
+    } 
+     console.log(finD)       
       sm=new Date(startD+startTm-tmzon*3600000);
-      fm=timeSlider.fullTimeExtent.end;
+      fm=new Date(finD+finTm-tmzon*3600000);;
       setTimeSliderBase(sm,fm);
-      getUserFly(sm,new Date(fm));
-   }
+      getUserFly(sm,fm);
+   
 
  
 
@@ -730,13 +770,30 @@ function changeDataStart()
      
   document
    .getElementById("date_start")
-   .addEventListener("change", changeDataStart);   
-
+   .addEventListener("change", changeDateTime);   
+   document
+   .getElementById("time_start")
+   .addEventListener("change", changeDateTime);   
+   document
+   .getElementById("date_finish")
+   .addEventListener("change", changeDateTime);   
+   document
+   .getElementById("time_finish")
+   .addEventListener("change", changeDateTime);   
+   document
+   .getElementById("date_choose")
+   .addEventListener("change", changeDateTime);   
+   document
+   .getElementById("time_choose")
+   .addEventListener("change", changeDateTime); 
+   
      timeSlider.watch("timeExtent", function () { 
        flyZoneLayer.definitionExpression=buildDefinitionQueryFly();
        
        
        $.cookie("timeVal",timeSlider.values[0].getTime());
+       $.cookie("timeStart",timeSlider.fullTimeExtent.start.getTime());
+       $.cookie("timeEnd",timeSlider.fullTimeExtent.end.getTime());
        if (checkRoleRoute("ROLE_OPERATOR",roles))  
        { 
         if (idFly!="")
@@ -880,6 +937,7 @@ function changeDataStart()
                
                
                timeSlider.fullTimeExtent = timeExtent;
+             
                timeSlider.values= [d,d1];
                timeSlider.mode = "instant"; // не интервал
                timeSlider.timeVisible=true;
@@ -959,9 +1017,9 @@ function changeDataStart()
      end:  st2
    });
    
-
+   
    timeSlider.fullTimeExtent=timeExtent;
- 
+
     
    } 
  function getUserFl()
