@@ -18,27 +18,27 @@
                             <div class="input-group">
                                 <label for="date_start" class="col-form-label col-4">Начало диапазона&nbsp;</label>
 {#                                <div class="input-group-text"><i class="fa fa-calendar-o" aria-hidden="true"></i></div>#}
-                                <input type="date" class="form-control" id="date_start">
+                                <input type="date" class="form-control" id="date_start" value="{{ 'now'|date('Y-m-d') }}">
 {#                                <div class="input-group-text"><i class="fa fa-clock-o" aria-hidden="true"></i></div>#}
-                                <input type="time" class="form-control" id="time_start" value="08:00">
+                                <input type="time" class="form-control" id="time_start" value="{{ 'now'|date('H:i') }}">
                             </div>
                         </div>
                         <div class="row mb-3">
                             <div class="input-group">
                                 <label for="date_choose" class="col-form-label col-4">Выбранная точка&nbsp;</label>
 {#                                <div class="input-group-text"><i class="fa fa-calendar-o" aria-hidden="true"></i></div>#}
-                                <input type="date" class="form-control" id="date_choose">
+                                <input type="date" class="form-control" id="date_choose" value="{{ 'now'|date('Y-m-d') }}">
 {#                                <div class="input-group-text"><i class="fa fa-clock-o" aria-hidden="true"></i></div>#}
-                                <input type="time" class="form-control" id="time_choose" value="08:00">
+                                <input type="time" class="form-control" id="time_choose" value="{{ 'now'|date('H:i') }}">
                             </div>
                         </div>
                         <div class="row mb-3">
                             <div class="input-group">
                                 <label for="date_finish" class="col-form-label col-4">Конец диапазона&nbsp;</label>
 {#                                <div class="input-group-text"><i class="fa fa-calendar-o" aria-hidden="true"></i></div>#}
-                                <input type="date" class="form-control" id="date_finish">
+                                <input type="date" class="form-control" id="date_finish" value="{{ 'now'|date_modify("+1 day")|date('Y-m-d') }}">
 {#                                <div class="input-group-text"><i class="fa fa-clock-o" aria-hidden="true"></i></div>#}
-                                <input type="time" class="form-control" id="time_finish" value="08:00">
+                                <input type="time" class="form-control" id="time_finish" value="{{ 'now'|date('H:i') }}">
                             </div>
                         </div>
                     </div>
