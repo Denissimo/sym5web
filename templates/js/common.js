@@ -718,47 +718,74 @@ require(
           var st=st2.replace("T", " ");
           return st;
          }
-function changeDateTime()
+
+function changeStartDate()
 {
- var start= document
+  var start= document
   .getElementById("date_start").value;
-
   let startD=new Date(start).getTime();
-  let startD1=new Date().getTime();
-
-  
   let startTime= document
   .getElementById("time_start").value;
   let startTs=startTime.split(":");
   let startTm=3600000*parseInt(startTs[0])+60000*(startTs[1]);
-  if (startD+startTm<startD1)
-   {
-    startD=startD1;
-    startTm=tmzon*3600000;
-   }
 
-    var finish= document
-    .getElementById("date_finish").value;
+  changeDateTime(startD+startTm,(new Date(timeSlider.fullTimeExtent.end)).getTime(),(new Date(timeSlider.values[0])).getTime());
   
-    let finD=new Date(finish).getTime();
-    
-  
-    
+   
+}
+         
+function changeFinishDate()
+{
+  var finish= document
+  .getElementById("date_finish").value;
+  let finishD=new Date(finish).getTime();
+  let finishTime= document
+  .getElementById("time_finish").value;
+  let finishTs=finishTime.split(":");
+  let finishTm=3600000*parseInt(finishTs[0])+60000*(finishTs[1]);
 
-    let finishTime= document
-    .getElementById("time_finish").value;
-    let finTs=finishTime.split(":");
-    let finTm=3600000*parseInt(finTs[0])+60000*(finTs[1]);
-    if (startD+startTm -finD-finTm>=-3600000*24)
-    {
-      finD=startD+3600000*24;
-      finTm=tmzon*3600000;
+  changeDateTime((new Date(timeSlider.fullTimeExtent.start)).getTime(),finishD+finishTm,(new Date(timeSlider.values[0])).getTime())
+
+}
+
+function changeChooseDate()
+{
+  var choose= document
+  .getElementById("date_choose").value;
+  let chooseD=new Date(choose).getTime();
+  let chooseTime= document
+  .getElementById("time_choose").value;
+  let chooseTs=chooseTime.split(":");
+  let chooseTm=3600000*parseInt(chooseTs[0])+60000*(chooseTs[1]);
+
+  changeDateTime((new Date(timeSlider.fullTimeExtent.start)).getTime(),(new Date(timeSlider.fullTimeExtent.end)).getTime(),chooseD+chooseTm)
+
+}
+
+function changeDateTime(startD,finishD,chooseD)
+{
+ 
+  let startD1=new Date().getTime();
+
+ 
+  if (startD<startD1)
+       sm=new Date(startD1); 
+  else
+      sm=new Date(startD);
+
+   
+    if (sm.getTime()-finishD>=-3600000*24)
+        fm=new Date(sm.getTime()+3600000*24);
+    else
+        fm=new Date(finishD);
+
+    if (chooseD<sm) chooseD=sm.getTime()+100000;
+    if (chooseD>fm) chooseD=fm.getTime()-100000;
        
-    } 
-     console.log(finD)       
-      sm=new Date(startD+startTm-tmzon*3600000);
-      fm=new Date(finD+finTm-tmzon*3600000);;
-      setTimeSliderBase(sm,fm);
+     let tm=new Date(chooseD);
+            
+      
+      setTimeSliderBase(sm,fm,tm);
       getUserFly(sm,fm);
    
 
@@ -770,22 +797,22 @@ function changeDateTime()
      
   document
    .getElementById("date_start")
-   .addEventListener("change", changeDateTime);   
+   .addEventListener("change", changeStartDate);   
    document
    .getElementById("time_start")
-   .addEventListener("change", changeDateTime);   
+   .addEventListener("change", changeStartDate);   
    document
    .getElementById("date_finish")
-   .addEventListener("change", changeDateTime);   
+   .addEventListener("change", changeFinishDate);   
    document
    .getElementById("time_finish")
-   .addEventListener("change", changeDateTime);   
+   .addEventListener("change", changeFinishDate);   
    document
    .getElementById("date_choose")
-   .addEventListener("change", changeDateTime);   
+   .addEventListener("change", changeChooseDate);   
    document
    .getElementById("time_choose")
-   .addEventListener("change", changeDateTime); 
+   .addEventListener("change", changeChooseDate); 
    
      timeSlider.watch("timeExtent", function () { 
        flyZoneLayer.definitionExpression=buildDefinitionQueryFly();
@@ -1001,15 +1028,15 @@ function changeDateTime()
        
    } 
    
-   function setTimeSliderBase(tm,fm)
+   function setTimeSliderBase(tm,fm,sm)
    {
      
   
-    let st0=new Date(tm); 
-    let st1=new Date(tm);
+    let st0=new Date(sm.getTime()-tmzon*3600000); 
+    let st1=new Date(tm.getTime()-tmzon*3600000);
     
      timeSlider.values=[st0];
-     st2=new Date(fm);
+     st2=new Date(fm.getTime()-tmzon*3600000);
      st2.setSeconds(st2.getSeconds()+10) 
     
      timeExtent = ({
