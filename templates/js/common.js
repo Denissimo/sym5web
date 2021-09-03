@@ -341,12 +341,34 @@ require(
           let vl=$.cookie("timeVal");
           if (vl!=null) 
           {
+            let vs=$.cookie("timeStart");
+            let ve=$.cookie("timeEnd");
             let vd=   new Date();
+            let vds=   new Date();
+            let vde=   new Date();
+            if(vs!=null)
+            {
+              
+               vds.setTime(vs);
+               document
+              .getElementById("date_start").value = new Date(vds);
+              console.log((new Date(vds))+" $$$");
+           
+               vde.setTime(ve);
+               timeExtent = ({
+                start: vds,
+                 end:  vde
+                         });
+
+               timeSlider.fullTimeExtent=timeExtent;        
+                        }    
                vd.setTime(vl);
                         
             if (vl>=timeSlider.fullTimeExtent.start.getTime() && vl <=timeSlider.fullTimeExtent.end.getTime() )
-           
+             
              timeSlider.values=[vd];
+             
+            // console.log(timeSlider.fullTimeExtent.start+" $$$");
           }
          }  
 
@@ -515,16 +537,22 @@ require(
         if(route==="AirSituation")
 
             {
-                
+              /*
+              els=document.getElementById("timeSett");
+              els.hidden=true;*/
+              bgExpandTime.visible=false ; 
               addReal(scene,checkRoleRoute("ROLE_OWNER",roles));
               makeRealFlyght(realLayer);
               var realTitle=realLayer.title;
              
-              window.setInterval(refreshRealLayer, 2000);
+              window.setInterval(refreshRealLayer, 3000);
               
             }
             else
+            {
+            
              setTimeSliderWatch();
+            }
              
         if(checkRoleRoute("ROLE_OPERATOR",roles))
         {
@@ -690,15 +718,109 @@ require(
           var st=st2.replace("T", " ");
           return st;
          }
+
+function changeStartDate()
+{
+  var start= document
+  .getElementById("date_start").value;
+  let startD=new Date(start).getTime();
+  let startTime= document
+  .getElementById("time_start").value;
+  let startTs=startTime.split(":");
+  let startTm=3600000*parseInt(startTs[0])+60000*(startTs[1]);
+
+  changeDateTime(startD+startTm,(new Date(timeSlider.fullTimeExtent.end)).getTime(),(new Date(timeSlider.values[0])).getTime());
+  
    
+}
+         
+function changeFinishDate()
+{
+  var finish= document
+  .getElementById("date_finish").value;
+  let finishD=new Date(finish).getTime();
+  let finishTime= document
+  .getElementById("time_finish").value;
+  let finishTs=finishTime.split(":");
+  let finishTm=3600000*parseInt(finishTs[0])+60000*(finishTs[1]);
+
+  changeDateTime((new Date(timeSlider.fullTimeExtent.start)).getTime(),finishD+finishTm,(new Date(timeSlider.values[0])).getTime())
+
+}
+
+function changeChooseDate()
+{
+  var choose= document
+  .getElementById("date_choose").value;
+  let chooseD=new Date(choose).getTime();
+  let chooseTime= document
+  .getElementById("time_choose").value;
+  let chooseTs=chooseTime.split(":");
+  let chooseTm=3600000*parseInt(chooseTs[0])+60000*(chooseTs[1]);
+
+  changeDateTime((new Date(timeSlider.fullTimeExtent.start)).getTime(),(new Date(timeSlider.fullTimeExtent.end)).getTime(),chooseD+chooseTm)
+
+}
+
+function changeDateTime(startD,finishD,chooseD)
+{
+ 
+  let startD1=new Date().getTime();
+
+ 
+  if (startD<startD1)
+       sm=new Date(startD1); 
+  else
+      sm=new Date(startD);
+
+   
+    if (sm.getTime()-finishD>=-3600000*24)
+        fm=new Date(sm.getTime()+3600000*24);
+    else
+        fm=new Date(finishD);
+
+    if (chooseD<sm) chooseD=sm.getTime()+100000;
+    if (chooseD>fm) chooseD=fm.getTime()-100000;
+       
+     let tm=new Date(chooseD);
+            
+      
+      setTimeSliderBase(sm,fm,tm);
+      getUserFly(sm,fm);
+   
+
+ 
+
+}   
          function setTimeSliderWatch()
 {
      
+  document
+   .getElementById("date_start")
+   .addEventListener("change", changeStartDate);   
+   document
+   .getElementById("time_start")
+   .addEventListener("change", changeStartDate);   
+   document
+   .getElementById("date_finish")
+   .addEventListener("change", changeFinishDate);   
+   document
+   .getElementById("time_finish")
+   .addEventListener("change", changeFinishDate);   
+   document
+   .getElementById("date_choose")
+   .addEventListener("change", changeChooseDate);   
+   document
+   .getElementById("time_choose")
+   .addEventListener("change", changeChooseDate); 
+   
      timeSlider.watch("timeExtent", function () { 
        flyZoneLayer.definitionExpression=buildDefinitionQueryFly();
        
        
        $.cookie("timeVal",timeSlider.values[0].getTime());
+       $.cookie("timeStart",timeSlider.fullTimeExtent.start.getTime());
+       $.cookie("timeEnd",timeSlider.fullTimeExtent.end.getTime());
        if (checkRoleRoute("ROLE_OPERATOR",roles))  
        { 
         if (idFly!="")
@@ -842,6 +964,7 @@ require(
                
                
                timeSlider.fullTimeExtent = timeExtent;
+             
                timeSlider.values= [d,d1];
                timeSlider.mode = "instant"; // не интервал
                timeSlider.timeVisible=true;
@@ -893,8 +1016,9 @@ require(
               apiModFlight= apiData(apiUrl, "/application/"+flid, token, 'PUT', dat);
         
               apiModFlight.then(function (response) {
-                   
-                   getUserFly(); // формирование панели полетов
+                   let sm=timeSlider.fullTimeExtent.start;
+                   let fm=timeSlider.fullTimeExtent.end;
+                   getUserFly(new Date(sm),new Date(fm)); // формирование панели полетов
                    if (isNew)
                    {
                    
@@ -904,5 +1028,29 @@ require(
        
    } 
    
-             
-            
+   function setTimeSliderBase(tm,fm,sm)
+   {
+     
+  
+    let st0=new Date(sm.getTime()-tmzon*3600000); 
+    let st1=new Date(tm.getTime()-tmzon*3600000);
+    
+     timeSlider.values=[st0];
+     st2=new Date(fm.getTime()-tmzon*3600000);
+     st2.setSeconds(st2.getSeconds()+10) 
+    
+     timeExtent = ({
+     start: st1,
+     end:  st2
+   });
+   
+   
+   timeSlider.fullTimeExtent=timeExtent;
+
+    
+   } 
+ function getUserFl()
+{
+  getUserFly(new Date(timeSlider.fullTimeExtent.start),new Date(new Date(timeSlider.fullTimeExtent.end)));
+
+}         

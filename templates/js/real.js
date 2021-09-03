@@ -1,5 +1,6 @@
 var flightsBoard;
-var glids;
+var glids=[];
+var oldGlids=[];
 var idRealDet;
 var linSymbol;
 
@@ -8,7 +9,7 @@ function addReal(scene,isOwner){
          
     
           //alert(data);
-    glids=[];  
+    emptyArray(glids);  
     if (isOwner)
        linSymbol =mySymbols.lineSymbolRoute;
     else   
@@ -167,11 +168,27 @@ function refreshRealLayer()
   
 
   realPath();
+  console.log(glids.length+"   !!");
   for (var i=0;i<glids.length;i++)
   {
+
       // realPath();
       if(glids[i][1]!= null)
       {
+      var flag=false;  
+      for(let j=0;j<oldGlids.length;j++)
+      {
+
+       if(oldGlids[j][1]==glids[i][1]&&oldGlids[j].length>2)
+       if (document.getElementById("S"+glids[i][1])!=null)
+        {
+             document.getElementById("S"+glids[i][1]).innerText=oldGlids[j][2];
+             flag=true; break;
+        }
+      } 
+      if(flag) 
+          continue;   
+      console.log("!!");    
       apiAircraft= apiData(apiUrl, "/aircraft/"+glids[i][1], token);
       apiAircraft.then(function (response) {
        
@@ -256,7 +273,7 @@ function makeListRealFlyght(feats)
          {
             
           var lst="";
-          var oldGlids=[];
+            emptyArray(oldGlids);
 
            copyArray(glids,oldGlids); 
            emptyArray(glids);
@@ -441,7 +458,8 @@ function makeListRealFlyght(feats)
 
            }
 
-            data =dataForSend(20);
+           // data =dataForSend(400);
+            alert(data);
            
            let params = { DATA : data  };
           
@@ -449,7 +467,7 @@ function makeListRealFlyght(feats)
            // "https://abr-gis-server.airchannel.net/airchannel/rest/services/Dev/SendTracker/GPServer/SendTracker";
            geop = new GEOPROCESSOR({
            url: gpUrl
-           });g
+           });
                    console.log(geop.url+" $$$");  
                          
 
@@ -512,7 +530,8 @@ function makeListRealFlyght(feats)
             case 19:
                dt=new Float32Array([220,0,0,0,0,0,0]);
                 break;
-                
+           case 400:    
+           dt=new Float32Array([0,0,0,0,0,0,0]); 
         }
 
         //dt=new Float32Array([0,0,0,0,0,0,0]);
@@ -646,13 +665,15 @@ function makeListRealFlyght(feats)
        let names=[];
        let dt0;
        let pth=[];
-    
+       let bpla="";
+       
        for (let i=0;i<feats.length;i++)
        {
          if (name=="")
          {
            name="unknow"; 
            let el=getFlyhtByBoard(feats[i].getAttribute("bplaid"),feats[i].getAttribute("CreateTime"));
+           bpla=feats[i].getAttribute("bplaid");
            if(el!=null)
             {
              name=el[0].id;
@@ -670,9 +691,10 @@ function makeListRealFlyght(feats)
          else
           { 
             let nameNew="unknow";
+            let bplanew=feats[i].getAttribute("bplaid");
             let el=getFlyhtByBoard(feats[i].getAttribute("bplaid"),feats[i].getAttribute("CreateTime"));
             if(el!=null) nameNew=el[0].id;
-            if (name==nameNew)
+            if (name==nameNew && bpla==bplanew)
               {
                z=feats[i].getAttribute("Altitude");  
                dt=feats[i].getAttribute("CreateTime")/1000 -dt0;
@@ -683,6 +705,7 @@ function makeListRealFlyght(feats)
             { 
              //let el=getFlyhtByBoard(feats[i].getAttribute("BoardNumber"),feats[i].getAttribute("CreateTime"));
                name=nameNew;
+               bpla=bplanew;
                zon=null;
                if (el!=null) 
                   zon=el[1];
@@ -738,7 +761,7 @@ function makeListRealFlyght(feats)
      
      function getFlyhtByBoard(bid,btime){
          
-     
+           try{
               for (let i=0;i<flightsBoard.length;i++)
               { 
                 tmz=flightsBoard[i][0].application.start.timezone_type;
@@ -752,6 +775,8 @@ function makeListRealFlyght(feats)
                    return flightsBoard[i];
                   }
               }
+            }
+            catch{return null;}
               return null;
      
      }
