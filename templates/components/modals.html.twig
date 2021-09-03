@@ -237,22 +237,22 @@
                                     <div class="col-md-12">
                                         <div class="form-row">
                                             <div class="form-input">
-                                                {{  dump(engineTypes) }}
-{#                                                {% for engineType in aircraft.engineTypes %}#}
+{#                                                {{  dump(aircrafts) }}#}
+{#                                                {{  dump(engineTypes) }}#}
+                                                {% for engineType in engineTypes %}
 {#                                                    {% set fieldId = "engine_aircraft_" ~ aircraft.id ~ "_type_" ~ engineType.id %}#}
-{#                                                    <div class="row">#}
-{#                                                        <div class="col-6 offset-2">#}
-{#                                                            <label for="{{ fieldId }}" class="col-form-label">{{ engineType.name }}</label>#}
-{#                                                        </div>#}
-{#                                                        <div class="col-2">#}
-{#                                                            <input type="number" id="{{ fieldId }}" class="form-control engines_number aircraft_engine_{{ aircraft.id }}"#}
-{#                                                                   data-aircraft-id="{{ aircraft.id }}"#}
-{#                                                                   data-enginetype-id="{{ engineType.id }}"#}
-{#                                                                   data-enginecomplect-id="{{ engineType.complectId }}"#}
-{#                                                                   value="{{ engineType.number }}">#}
-{#                                                        </div>#}
-{#                                                    </div>#}
-{#                                                {% endfor %}#}
+                                                    <div class="row">
+                                                        <div class="col-6 offset-2">
+                                                            <label for="engine_type_{{ engineType.id }}" class="col-form-label">{{ engineType.name }}</label>
+                                                        </div>
+                                                        <div class="col-2">
+                                                            <input type="number" name="engine_type_{{ engineType.id }}" id="engine_type_{{ engineType.id }}"
+                                                                   class="form-control engines_number"
+                                                                   data-enginetype-id="{{ engineType.id }}"
+                                                                   data-enginecomplect-id="0" value="0">
+                                                        </div>
+                                                    </div>
+                                                {% endfor %}
                                             </div>
                                         </div>
                                     </div>

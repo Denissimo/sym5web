@@ -299,13 +299,12 @@ $(document).ready(function () {
     });
 
     $(".btn-aircraft-edit").click(function (event) {
-        aircraftActionMode = $(this).attr('data-aircraft-id');
-        var trId = '#tr_' + $(this).attr('data-aircraft-id');
+        var aircraftId = $(this).attr('data-aircraft-id');
+        aircraftActionMode = aircraftId;
+        var trId = '#tr_' + aircraftId;
         aircraftActionDoneRu = ' изменено';
         aircraftActionMethod = 'PUT';
-        // console.log($(trId).attr('data-aircraft'));
-        // console.log(trId);
-        aircraft = JSON.parse($(trId).attr('data-aircraft'));
+        var aircraft = JSON.parse($(trId).attr('data-aircraft'));
 
         console.log(aircraft.channels);
         $('#form-uav input').each(
@@ -327,9 +326,18 @@ $(document).ready(function () {
             $('#channel_' + index).prop("checked", true);
             // console.log('#channel_' + index);
         });
-        // console.log('Date');
-        // console.log(parseDate(aircraft.insuranceEnd));
-        // console.log(strToDate(aircraft.insuranceStart).toLocaleDateString("ru-RU"));
+        console.log(aircraft.aircraftEngineComplects);
+        $('.engines_number').val(0);
+        $('.engines_number').attr('data-enginecomplect-id', 0);
+        $.each(aircraft.aircraftEngineComplects, function () {
+             // var engineTypeId = $(this).attr('data-enginetype-id');
+             var engineTypeId = this.aircraftEngine.id;
+             var engineNumber = this.number;
+             var engineComplectId = this.id;
+             var inputId = "#engine_type_" + engineTypeId;
+             $(inputId).attr('data-enginecomplect-id', engineComplectId);
+             $(inputId).val(engineNumber);
+        });
         $("#registrationDate").val(parseDate(aircraft.registrationDate));
         $("#deregistrationDate").val(parseDate(aircraft.deregistrationDate));
         $("#insuranceStart").val(parseDate(aircraft.insuranceStart));
@@ -360,77 +368,77 @@ $(document).ready(function () {
         console.log($(this).attr('id'));
     });
 
-    $(".form-engine").submit(function (event) {
-        console.log('Engine submit');
-        event.preventDefault();
-        aircraftId = $(this).attr('data-aircraft-id');
-        inputClass = '.aircraft_engine_' + aircraftId;
-        console.log(inputClass);
-        engines = [];
-        // $(inputClass).hide();
-        $.each($(inputClass), function () {
-            aircraftId = $(this).attr('data-aircraft-id');
-            engineTypeId = $(this).attr('data-enginetype-id');
-            complectId = $(this).attr('data-enginecomplect-id');
-            number = $(this).val() || 0;
-            engines.push(
-                {
-                    "id": engineTypeId,
-                    "complectId": complectId,
-                    "number": number
-                }
-            );
-            // console.log("aircraftId:" + aircraftId + " engineTypeId:" + engineTypeId + " complectId:" + complectId + " number:" + number);
-        });
-        var token = $.cookie(tokenCookieName);
-        var settings = {
-            url: apiUrl + "/aircraft_engine/" + aircraftId,
-            method: 'PUT',
-            timeout: 0,
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: "Bearer " + token,
-            },
-
-            data: JSON.stringify(
-                {
-                    "aircraftId": aircraftId,
-                    "engineType": engines
-                }
-            ),
-
-            success: function (response) {
-                $(".form-engine").modal("hide");
-
-
-                $('.footer-alert').html(
-                    '<div class="alert alert-success alert-dismissible fade show" role="alert">\n' +
-                    'Двигатели успешно изменениы\n' +
-                    '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>\n' +
-                    '</div>'
-                );
-
-                setTimeout(function () {
-                    $(location).prop("href", '/uav');
-                }, 500);
-            },
-
-            error: function (response) {
-                console.log(response);
-                // console.log(response.responseJSON);
-                $('.alert_place').html(
-                    '<div class="alert alert-danger alert-dismissible fade show" role="alert">\n' +
-                    response.responseJSON.message + '\n' +
-                    '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>\n' +
-                    '</div>'
-                );
-            },
-        };
-        $.ajax(settings).done(function (response) {
-            console.log(response);
-            return response;
-        });
-    });
+    // $(".form-engine").submit(function (event) {
+    //     console.log('Engine submit');
+    //     event.preventDefault();
+    //     aircraftId = $(this).attr('data-aircraft-id');
+    //     inputClass = '.aircraft_engine_' + aircraftId;
+    //     console.log(inputClass);
+    //     engines = [];
+    //     // $(inputClass).hide();
+    //     $.each($(inputClass), function () {
+    //         aircraftId = $(this).attr('data-aircraft-id');
+    //         engineTypeId = $(this).attr('data-enginetype-id');
+    //         complectId = $(this).attr('data-enginecomplect-id');
+    //         number = $(this).val() || 0;
+    //         engines.push(
+    //             {
+    //                 "id": engineTypeId,
+    //                 "complectId": complectId,
+    //                 "number": number
+    //             }
+    //         );
+    //         // console.log("aircraftId:" + aircraftId + " engineTypeId:" + engineTypeId + " complectId:" + complectId + " number:" + number);
+    //     });
+    //     var token = $.cookie(tokenCookieName);
+    //     var settings = {
+    //         url: apiUrl + "/aircraft_engine/" + aircraftId,
+    //         method: 'PUT',
+    //         timeout: 0,
+    //         headers: {
+    //             "Content-Type": "application/json",
+    //             Authorization: "Bearer " + token,
+    //         },
+    //
+    //         data: JSON.stringify(
+    //             {
+    //                 "aircraftId": aircraftId,
+    //                 "engineType": engines
+    //             }
+    //         ),
+    //
+    //         success: function (response) {
+    //             $(".form-engine").modal("hide");
+    //
+    //
+    //             $('.footer-alert').html(
+    //                 '<div class="alert alert-success alert-dismissible fade show" role="alert">\n' +
+    //                 'Двигатели успешно изменениы\n' +
+    //                 '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>\n' +
+    //                 '</div>'
+    //             );
+    //
+    //             setTimeout(function () {
+    //                 $(location).prop("href", '/uav');
+    //             }, 500);
+    //         },
+    //
+    //         error: function (response) {
+    //             console.log(response);
+    //             // console.log(response.responseJSON);
+    //             $('.alert_place').html(
+    //                 '<div class="alert alert-danger alert-dismissible fade show" role="alert">\n' +
+    //                 response.responseJSON.message + '\n' +
+    //                 '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>\n' +
+    //                 '</div>'
+    //             );
+    //         },
+    //     };
+    //     $.ajax(settings).done(function (response) {
+    //         console.log(response);
+    //         return response;
+    //     });
+    // });
 
     $("#form-uav").submit(function (event) {
         // console.log('add UAV submit');
