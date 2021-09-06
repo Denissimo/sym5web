@@ -296,6 +296,13 @@ $(document).ready(function () {
         aircraftActionDoneRu = ' добавлено';
         aircraftActionMethod = 'POST';
         // console.log(aircraftActionMode);
+        $('#form-uav input').each(
+            function () {
+                $(this).val('');
+                $(this).prop("checked", false);
+            }
+        );
+        $('.engines_number').attr('data-enginecomplect-id', 0);
     });
 
     $(".btn-aircraft-edit").click(function (event) {
@@ -326,14 +333,14 @@ $(document).ready(function () {
             $('#channel_' + index).prop("checked", true);
             // console.log('#channel_' + index);
         });
-        console.log(aircraft.aircraftEngineComplects);
+        console.log(aircraft.engineTypes);
         $('.engines_number').val(0);
         $('.engines_number').attr('data-enginecomplect-id', 0);
-        $.each(aircraft.aircraftEngineComplects, function () {
+        $.each(aircraft.engineTypes, function () {
              // var engineTypeId = $(this).attr('data-enginetype-id');
-             var engineTypeId = this.aircraftEngine.id;
+             var engineTypeId = this.id;
              var engineNumber = this.number;
-             var engineComplectId = this.id;
+             var engineComplectId = this.complectId;
              var inputId = "#engine_type_" + engineTypeId;
              $(inputId).attr('data-enginecomplect-id', engineComplectId);
              $(inputId).val(engineNumber);
@@ -478,6 +485,15 @@ $(document).ready(function () {
                 }
             }
         );
+        var engineTypes = [];
+        $('.engines_number').each(function( index ) {
+            let engineType = {     // объект
+                id: $(this).attr('data-enginetype-id'),
+                complectId: $(this).attr('data-enginecomplect-id'),
+                number: $(this).val()
+            };
+            engineTypes.push(engineType);
+        });
         // console.log($('#registrationDate').val());
         var token = $.cookie(tokenCookieName);
         // console.log(token);
@@ -498,6 +514,7 @@ $(document).ready(function () {
                     "category": $('#category').val(),
                     "mass": $('#mass').val(),
                     "engine": $('#engine').val(),
+                    "engineTypes": engineTypes,
                     "registrationStatus": $('#registrationStatus').val(),
                     "aircraft": {
                         "isCatapultStart": $('#isCatapultStart').prop('checked'),
