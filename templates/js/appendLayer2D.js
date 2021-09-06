@@ -115,12 +115,24 @@ function addSelectLayer(GraphicsLayer,webmap)
                    tableLayer.definitionExpression="ownerid = '"+user.id.toString()+"'";
                      console.log(tableLayer.definitionExpression);
                      tableZoneLayer.definitionExpression="ownerid = '"+user.id.toString()+"'";
-                     
+                  if (route!="Archive")
+                  {   
                      webmap.add(routeLayer);
                      webmap.add(zoneLayer);
                                           
                      webmap.layers.add(tableZoneLayer)
                      webmap.layers.add(tableLayer)
-                     
+                  }  
+                  else
+                  {
+                  realAllLayer =new FEATURELAYER({
+                    //  url:"https://abr-gis-server.airchannel.net/airchannel/rest/services/Hosted/AllFlightReal/FeatureServer/0",
+                      url: webPaths.urlRealAll,         //"https://abr-gis-server.airchannel.net/airchannel/rest/services/Hosted/realFlights/FeatureServer/0",
+                      popupTemplate: templatesPopup.templateReal,
+                     // labelingInfo: [realLabelClass2d],
+              
+                      renderer: myRenderers.realMarkerRenderer
+                    }); 
+                  }
     
      }

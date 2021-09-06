@@ -16,7 +16,11 @@ function setFlightSidebar()
  var els=document.getElementsByClassName("sidebar-title");
  els[0].innerText="Заявки на полеты";
  
-  
+ if( route==="Archive" )
+ {
+   getUserFly(new Date(timeSlider.values[0]),new Date(timeSlider.values[1]));
+ }
+ else{
            
             document
            .getElementById("check3dFlight")
@@ -39,7 +43,8 @@ function setFlightSidebar()
            .addEventListener("click",emulFlight);
             
               
-           getUserFly(d=new Date(timeSlider.fullTimeExtent.start),d2=new Date(timeSlider.fullTimeExtent.end));
+           getUserFly(new Date(timeSlider.fullTimeExtent.start),new Date(timeSlider.fullTimeExtent.end));
+ }
 }
 function checkFlight(){getCheckGeometry(idFly);}
 
@@ -68,6 +73,7 @@ function getUserFly(d=new Date(),d2=new Date())
       enda=(d2.getFullYear()).toString()+m2+day2+"000000"; 
 
       var     lst="";
+      console.log(stara+"  "+enda);
       apiIntervalFlights= apiData(apiUrl, "/application/interval/"+stara+"/"+enda, token);
       
       apiIntervalFlights.then(function (response) {
@@ -88,7 +94,7 @@ function getUserFly(d=new Date(),d2=new Date())
                emptyArray(glb);                
                
                for (let i=0;i<response.applications.length;i++) {   
-                if(response.applications[i].application.start.date >= stDt)
+                if(response.applications[i].application.start.date >= stDt || route==="Archive")
                     if(response.applications[i].status.id >2) 
                     {
                          glb.push([response.applications[i].id,response.applications[i].track.type.toString()]) ; 
@@ -133,9 +139,18 @@ function getUserFly(d=new Date(),d2=new Date())
       
         dt=response.application.start.date;
         dt=new Date(dt);
-        timeSlider.stop();
-        initTimeSlider();
-        timeSlider.values=[dt];
+        if(route!="Archive")
+          {
+            timeSlider.stop();
+            initTimeSlider();
+    
+            timeSlider.values=[dt]; 
+          }
+          
+        else
+          realPath(response.application.start.date,response.application.finish.date);    
+
+        
       
         typeFly=response.track.type;
         $.cookie("typeRoute",typeFly);
@@ -242,7 +257,7 @@ function getUserFly(d=new Date(),d2=new Date())
      function buttonEnabled(reg)
      {
 
-      
+       try{
        document.getElementById("check3dFlight").disabled=reg;
        
        document.getElementById("appFlight").disabled=reg;
@@ -250,7 +265,8 @@ function getUserFly(d=new Date(),d2=new Date())
        document.getElementById("resetFlight3d").disabled=reg;
       
        document.getElementById("emulFlight").disabled=reg;
-       
+       }
+       catch{}
       
            
       }

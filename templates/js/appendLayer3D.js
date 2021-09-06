@@ -41,7 +41,7 @@ function addLayers3D(scene)
      // popupTemplate:templateRoute
     
   });
-  scene.layers.add(routeLayer);
+  
 
   //**************************************************************************************************************************************************** */
    zoneLayerTen = new FEATURELAYER({
@@ -56,7 +56,7 @@ function addLayers3D(scene)
       mode: "on-the-ground"
     }, definitionExpression : " objectid < 0"
   });
-  scene.layers.add(zoneLayerTen);
+  
   
   
   //***************************************************************************** */
@@ -113,6 +113,23 @@ function addLayers3D(scene)
 
   });
   
+ if(route!="Archive"){
+  scene.layers.add(routeLayer);
+  scene.layers.add(zoneLayerTen);
   scene.layers.add(dronLayer);
+
+ }
+  else
+  {
+  realAllLayer =new FEATURELAYER({
+    //  url:"https://abr-gis-server.airchannel.net/airchannel/rest/services/Hosted/AllFlightReal/FeatureServer/0",
+      url: webPaths.urlRealAll,         //"https://abr-gis-server.airchannel.net/airchannel/rest/services/Hosted/realFlights/FeatureServer/0",
+      popupTemplate: templatesPopup.templateReal,
+     // labelingInfo: [realLabelClass2d],
+
+      renderer: myRenderers.realMarkerRenderer
+    }); 
+  }
+
   
 }

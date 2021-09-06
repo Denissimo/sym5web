@@ -11,9 +11,9 @@ function addReal(scene,isOwner){
           //alert(data);
     emptyArray(glids);  
     if (isOwner)
-       linSymbol =mySymbols.lineSymbolRoute;
+     linSymbol =mySymbols.lineSymbolPigg;
     else   
-    linSymbol =mySymbols.lineSymbolPigg;
+     linSymbol =mySymbols.lineSymbolRoute;
     var stt= new Date();
      stt.setTime(stt.getTime()-800000000);            
     var stDt=convertTime(stt);
@@ -599,7 +599,17 @@ function makeListRealFlyght(feats)
 
       }                          
 
-     
+    function buildDefinitionQueryArchiv(st,et)
+      {
+      let stt= new Date(st); 
+      let ett= new Date(et);
+      let startDt=convertTime(stt);//st;
+      let endDt=convertTime(ett);//et
+    
+      let defQuery ="CreateTime >= timestamp'"+ startDt+"' And CreateTime <= timestamp'"+endDt+ "'";
+      console.log(defQuery)
+      return defQuery;
+      }
      function buildDefinitionQueryReal(reg=false)/*timeSlider)*/ {   // показывать точки полетов в суточном интервале от установленной даты
     
       let et=timeSlider.timeExtent.end.getTime();
@@ -633,16 +643,21 @@ function makeListRealFlyght(feats)
      defExp="flyid = "+paths[i][1]+"'";
      return defExp;
      }
-     function realPath()
+     function realPath(str=null,fns=null)
      {
-       realAllLayer.definitionExpression=buildDefinitionQueryReal();
-       realAllLayer.queryFeatures({ where : buildDefinitionQueryReal(),
+       wh=buildDefinitionQueryReal();
+       if(str!=null)
+
+        wh=buildDefinitionQueryArchiv(str,fns)
+       
+       realAllLayer.definitionExpression=wh;
+       realAllLayer.queryFeatures({ where : wh,
        returnGeometry: true,
        returnZ : true,
        orderByFields : ["bplaid","objectid"],
        outFields: ["bplaid","serial","objectid","Altitude","CreateTime"]}).then(function(featureSet) {
     
-         
+         console.log(featureSet.features.length+"  ????")    
          makeGeometryRealFlyght(featureSet.features);
         ;
          
@@ -719,7 +734,7 @@ function makeListRealFlyght(feats)
                     });
                 let gg= new GRAPHIC({
                    geometry : lin,
-                   symbol : linSymbol//mySymbols.lineSymbolPigg
+                   symbol : linSymbol
                   });
                 bufferLayer.add(gg);
                 if (zon!=null)
@@ -746,7 +761,7 @@ function makeListRealFlyght(feats)
       });
        gg= new GRAPHIC({
         geometry : lin,
-        symbol : linSymbol//mySymbols.lineSymbolPigg
+        symbol : linSymbol
        });
            bufferLayer.add(gg);
            if (zon!=null)
