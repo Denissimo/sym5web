@@ -13,7 +13,11 @@
             <div class="row">
                 <div class="page-title">
                     <h2 class="title">
-                        Реестр БВС
+                        {% if user.role('ROLE_OWNER') %}
+                            Мои БВС
+                        {% else %}
+                            Реестр БВС
+                        {% endif %}
                     </h2>
                     <button class="btn btn-green" data-bs-toggle="modal" id="addAircraftBtn" data-bs-target="#modalUav">
                         Добавить БВС
@@ -128,19 +132,19 @@
                                             <button data-bs-toggle="modal" data-bs-target="#modalUav"
                                                     class="btn btn-small btn-outline btn-aircraft-edit"
                                                     id="btn-edit_{{ aircraft.id }}" data-aircraft-id="{{ aircraft.id }}"
-                                                    ><i class="fa fa-edit" aria-hidden="true"></i>
+                                                    ><i class="fa fa-cogs" aria-hidden="true"></i>
                                             </button>
 {#                                        </td>#}
 {#                                        <td>#}
-                                            <button data-bs-toggle="modal" data-bs-target="#modalEngineComplect_{{ aircraft.id }}"
-                                                    class="btn btn-small btn-outline btn-aircraft-edit" data-aircraft-id="{{ aircraft.id }}"
-                                                    id="btn-engine_edit_{{ aircraft.id }}" ><i class="fa fa-cogs" aria-hidden="true"></i>
-                                            </button>
+{#                                            <button data-bs-toggle="modal" data-bs-target="#modalEngineComplect_{{ aircraft.id }}"#}
+{#                                                    class="btn btn-small btn-outline btn-aircraft-edit" data-aircraft-id="{{ aircraft.id }}"#}
+{#                                                    id="btn-engine_edit_{{ aircraft.id }}" ><i class="fa fa-cogs" aria-hidden="true"></i>#}
+{#                                            </button>#}
                                         </td>
                                     </tr>
                                     {% set aircraftData = {'aircraft': aircraft} %}
 {#                                    {{ dump(aircraftData.aircraft.id) }}#}
-                                    {% include 'components/engine_complects.html.twig' with aircraftData %}
+{#                                    {% include 'components/engine_complects.html.twig' with aircraftData %}#}
                                 {% endfor %}
 
                                 </tbody>
@@ -200,7 +204,8 @@
     </div>
 
     {% block modals %}
-        {% include('components/modals.html.twig') %}
+        {% set engineTypes = aircrafts.aircrafts|first.engineTypes %}
+        {% include 'components/modals.html.twig' with engineTypes %}
     {% endblock %}
 
 

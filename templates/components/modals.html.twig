@@ -24,6 +24,11 @@
                             </button>
                         </li>
                         <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="engines-tab" data-bs-toggle="tab" data-bs-target="#engines"
+                                    type="button" role="tab" aria-controls="engines" aria-selected="false">Двигатели
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
                             <button class="nav-link" id="registration-tab" data-bs-toggle="tab" data-bs-target="#registration"
                                     type="button" role="tab" aria-controls="registration" aria-selected="false">Регистрация и страховка
                             </button>
@@ -221,6 +226,37 @@
 {#                                {% block modals %}#}
 {#                                    {% include('components/engine_complects.html.twig') %}#}
 {#                                {% endblock %}#}
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="engines" role="tabpanel" aria-labelledby="engines-tab">
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <h6 class="form-title">
+                                        Двигатели
+                                    </h6>
+                                    <div class="col-md-12">
+                                        <div class="form-row">
+                                            <div class="form-input">
+{#                                                {{  dump(aircrafts) }}#}
+{#                                                {{  dump(engineTypes) }}#}
+                                                {% for engineType in engineTypes %}
+{#                                                    {% set fieldId = "engine_aircraft_" ~ aircraft.id ~ "_type_" ~ engineType.id %}#}
+                                                    <div class="row">
+                                                        <div class="col-6 offset-2">
+                                                            <label for="engine_type_{{ engineType.id }}" class="col-form-label">{{ engineType.name }}</label>
+                                                        </div>
+                                                        <div class="col-2">
+                                                            <input type="number" name="engine_type_{{ engineType.id }}" id="engine_type_{{ engineType.id }}"
+                                                                   class="form-control engines_number"
+                                                                   data-enginetype-id="{{ engineType.id }}"
+                                                                   data-enginecomplect-id="0" value="0">
+                                                        </div>
+                                                    </div>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="tab-pane fade" id="registration" role="tabpanel" aria-labelledby="registration-tab">
