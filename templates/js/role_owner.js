@@ -2260,7 +2260,7 @@ function removeSelectSeg(rid,numb){
       if(route!="Archive")
           timeSlider.values=[dt];
       else
-        realPath(response.application.start.date,response.application.finish.date);    
+        realPath(true,response.application.start.date,response.application.finish.date);    
       typeFly=response.track.type;
       $.cookie("typeRoute",typeFly);
       let oldFly=idFly;

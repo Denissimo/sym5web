@@ -2,18 +2,17 @@ var flightsBoard;
 var glids=[];
 var oldGlids=[];
 var idRealDet;
-var linSymbol;
+
+
 
 function addReal(scene,isOwner){
     let data =dataForSend();
-         
-    
-          //alert(data);
+
     emptyArray(glids);  
-    if (isOwner)
-     linSymbol =mySymbols.lineSymbolPigg;
-    else   
-     linSymbol =mySymbols.lineSymbolRoute;
+    //if (isOwner)
+   //  linSymbol =mySymbols.lineSymbolPigg;
+   // else   
+   //  linSymbol =mySymbols.lineSymbolRoute;
     var stt= new Date();
      stt.setTime(stt.getTime()-800000000);            
     var stDt=convertTime(stt);
@@ -156,23 +155,23 @@ function addReal(scene,isOwner){
       flyZoneLayer.definitionExpression="objectid <0" ;
       bufferLayer.title="Текущие полеты";
       
-  // scene.layers.add(flyZoneLayer);
+  
     
-  // window.setInterval(realPath, 2000);   
+  
 }  
 
 
 
-function refreshRealLayer()
+function refreshRealLayer(isOwner)
 {  var lays=[];
   
-
-  realPath();
+  
+  realPath(isOwner);
   console.log(glids.length+"   !!");
   for (var i=0;i<glids.length;i++)
   {
 
-      // realPath();
+    
       if(glids[i][1]!= null)
       {
       var flag=false;  
@@ -643,12 +642,12 @@ function makeListRealFlyght(feats)
      defExp="flyid = "+paths[i][1]+"'";
      return defExp;
      }
-     function realPath(str=null,fns=null)
+     function realPath(isOwner,str=null,fns=null)
      {
        wh=buildDefinitionQueryReal();
        if(str!=null)
 
-        wh=buildDefinitionQueryArchiv(str,fns)
+         wh=buildDefinitionQueryArchiv(str,fns)
        
        realAllLayer.definitionExpression=wh;
        realAllLayer.queryFeatures({ where : wh,
@@ -658,7 +657,7 @@ function makeListRealFlyght(feats)
        outFields: ["bplaid","serial","objectid","Altitude","CreateTime"]}).then(function(featureSet) {
     
          console.log(featureSet.features.length+"  ????")    
-         makeGeometryRealFlyght(featureSet.features);
+         makeGeometryRealFlyght(isOwner,featureSet.features);
         ;
          
         });;
@@ -668,9 +667,10 @@ function makeListRealFlyght(feats)
      
      }
      
-     function makeGeometryRealFlyght(feats)
+     function makeGeometryRealFlyght(isOwner,feats)
      {
-       
+       let linSymbol=mySymbols.lineSymbolRoute;
+       if (isOwner) linsymbol=   mySymbols.lineSymbolPigg;
        bufferLayer.graphics.removeAll();
        //realLayer.graphics.removeAll();  
        if(feats.length==null) return;

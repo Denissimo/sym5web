@@ -28,7 +28,7 @@ var view;
 var zoneLayerTen;
 var flyZoneLayer;
 var flyVecLayer;
-var linSymbol;
+//var linSymbol;
 
 var layerConf;
 
@@ -576,8 +576,6 @@ require(
 
 
 
-
-         
        
         if(route==="AirSituation")
 
@@ -588,9 +586,9 @@ require(
               bgExpandTime.visible=false ; 
               addReal(scene,checkRoleRoute("ROLE_OWNER",roles));
               makeRealFlyght(realLayer);
-              var realTitle=realLayer.title;
+         
              
-              window.setInterval(refreshRealLayer, 3000);
+              window.setInterval(refreshRealLayer, 3000,checkRoleRoute("ROLE_OWNER",roles));
               
             }
             else

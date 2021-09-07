@@ -212,9 +212,9 @@ static fillSymbolZone = {     //fillSymbol
         material: {
           color: [255, 0, 197], //,0.5]
         },
-        width: 50, // the width in m
-        height: 50, // the height in m
-        cap: "square", //"round"
+        width: 1, // the width in m
+        height: 1, // the height in m
+        cap: "round", //"round"
       },
     ],
   };
