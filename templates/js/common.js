@@ -28,6 +28,7 @@ var view;
 var zoneLayerTen;
 var flyZoneLayer;
 var flyVecLayer;
+//var linSymbol;
 
 var layerConf;
 
@@ -311,7 +312,8 @@ require(
 
         // Remove copyrights at bottom
         view.ui.remove("attribution");
-
+        let tmd="time-window";
+        if (route!="Archive") tmd="instant"
         let d=new Date();    
         let d2=new Date();  d2.setDate(d2.getDate() + 20); // 10 дней предыдущих 20 последующих
         let  d1=new Date(); d1.setDate(d1.getDate() + 1);
@@ -324,7 +326,7 @@ require(
            container: document.createElement("div"),
            fullTimeExtent : timeExtent,
            values: [d,d1],
-           mode : "instant", // не интервал
+           mode : tmd, // не интервал
            timeVisible:true,
           
            stops: {
@@ -350,9 +352,9 @@ require(
             {
               
                vds.setTime(vs);
-               document
-              .getElementById("date_start").value = new Date(vds);
-              console.log((new Date(vds))+" $$$");
+          //     document
+          //    .getElementById("date_start").value = new Date(vds);
+          //    console.log((new Date(vds))+" $$$");
            
                vde.setTime(ve);
                timeExtent = ({
@@ -370,6 +372,41 @@ require(
              
             // console.log(timeSlider.fullTimeExtent.start+" $$$");
           }
+         }
+         else if (route==="Archive")
+         {
+          let vds=   new Date();
+          vds=new Date(vds.setTime(vds.getTime()-1000*3600*24*365));
+          let vds1=   new Date();
+          vds1=new Date(vds1.setTime(vds1.getTime()-1000*3600*24*30));
+          let vde=   new Date(); 
+          let vArchBeg=$.cookie("timeValArchBeg");
+          let vArchEnd=$.cookie("timeValArchEnd");
+          timeExtent = ({
+            start: vds,
+             end:  vde
+                     });
+
+                stps=    {
+                      interval: {
+                        value: 1,
+                        unit: "days"
+                      }
+                    }          
+           timeSlider.fullTimeExtent=timeExtent;
+           timeSlider.values=[vds1,vde];
+          if(vArchBeg!=null)
+            {
+               let vab=new Date();
+               let vae=new Date();
+               vab=vab.setTime(vArchBeg);
+               vae=vae.setTime(vArchEnd);
+              timeSlider.values=[vab,vae];        
+             }
+                  
+              
+
+            
          }  
 
 
@@ -382,7 +419,7 @@ require(
               // Add the Compass widget to the top left corner of the view
             view.ui.add(compassWidget, "top-left");
               
-         if(route==="Flights" ||route==="Tracks"  )
+         if(route==="Flights" ||route==="Tracks" || route==="Archive"  )
          {
             addLayers2D(scene);   
             layerManual = new GraphicsLayer({listMode:"hide"});
@@ -418,6 +455,14 @@ require(
 
             setFlightSidebar()
         }
+
+        else if( route==="Archive" )
+        {
+
+          setFlightSidebar();
+
+        }
+
     }  
 
 
@@ -507,7 +552,7 @@ require(
     else    if(checkRoleRoute("ROLE_OPERATOR",roles) )
     {
      
-      if(route==="AirSituation"){  bufferLayer = new GraphicsLayer({
+      if(route==="AirSituation" || route==="Archive" ){  bufferLayer = new GraphicsLayer({
         listMode:"hide",
         hasZ :true,
         elevationInfo: {
@@ -531,8 +576,6 @@ require(
 
 
 
-
-         
        
         if(route==="AirSituation")
 
@@ -543,9 +586,9 @@ require(
               bgExpandTime.visible=false ; 
               addReal(scene,checkRoleRoute("ROLE_OWNER",roles));
               makeRealFlyght(realLayer);
-              var realTitle=realLayer.title;
+         
              
-              window.setInterval(refreshRealLayer, 3000);
+              window.setInterval(refreshRealLayer, 3000,checkRoleRoute("ROLE_OWNER",roles));
               
             }
             else
@@ -557,12 +600,18 @@ require(
         if(checkRoleRoute("ROLE_OPERATOR",roles))
         {
              
-            if(route==="Flights")
+            if(route==="Flights" ||route==="Archive")
              { 
-              addLayers3D(scene)
+              addLayers3D(scene);
+              try{
               document.getElementById("optionsDiv").hidden=true; 
+              }
+              catch{}
               setFlightSidebar();
              }
+            
+             
+
         }
         else if(checkRoleRoute("ROLE_OWNER",roles))
 
@@ -817,10 +866,19 @@ function changeDateTime(startD,finishD,chooseD)
      timeSlider.watch("timeExtent", function () { 
        flyZoneLayer.definitionExpression=buildDefinitionQueryFly();
        
-       
-       $.cookie("timeVal",timeSlider.values[0].getTime());
-       $.cookie("timeStart",timeSlider.fullTimeExtent.start.getTime());
-       $.cookie("timeEnd",timeSlider.fullTimeExtent.end.getTime());
+       if(route!="Archive")
+       {
+        $.cookie("timeVal",timeSlider.values[0].getTime());
+        $.cookie("timeStart",timeSlider.fullTimeExtent.start.getTime());
+        $.cookie("timeEnd",timeSlider.fullTimeExtent.end.getTime());
+       }
+       else
+       {
+        $.cookie("timeValArchBeg",timeSlider.values[0].getTime());
+        $.cookie("timeValArchEnd",timeSlider.values[1].getTime());
+        console.log("*************");
+        getUserFly(new Date(timeSlider.values[0].getTime()),new Date(timeSlider.values[1].getTime()));
+       }
        if (checkRoleRoute("ROLE_OPERATOR",roles))  
        { 
         if (idFly!="")

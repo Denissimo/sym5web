@@ -66,7 +66,13 @@ function setFlightSidebar()
 
  var els=document.getElementsByClassName("sidebar-title");
  els[0].innerText="Заявки на полеты";
- 
+ if( route==="Archive" )
+ {
+   getUserFly(new Date(timeSlider.values[0]),new Date(timeSlider.values[1]));
+ }
+else 
+{
+
             document
            .getElementById("checkFlight")
            .addEventListener("click", myCheckFlight); 
@@ -100,7 +106,8 @@ function setFlightSidebar()
         queryRoad(null,idRoute) ;     
       }
       
-       getUserFly(d=new Date(timeSlider.fullTimeExtent.start),d2=new Date(timeSlider.fullTimeExtent.end));
+       getUserFly(new Date(timeSlider.fullTimeExtent.start),new Date(timeSlider.fullTimeExtent.end));
+    }
 }
 
 
@@ -2250,7 +2257,10 @@ function removeSelectSeg(rid,numb){
       
       let dt=response.application.start.date;
       dt=new Date(dt);
-      timeSlider.values=[dt];
+      if(route!="Archive")
+          timeSlider.values=[dt];
+      else
+        realPath(true,response.application.start.date,response.application.finish.date);    
       typeFly=response.track.type;
       $.cookie("typeRoute",typeFly);
       let oldFly=idFly;
@@ -2290,6 +2300,7 @@ function removeSelectSeg(rid,numb){
       
       let kod=document.getElementById("T"+gld).value;
 
+      try{
       if(kod==5 || kod==4)
         document.getElementById("resetFlight").disabled=true;
       else 
@@ -2305,6 +2316,8 @@ function removeSelectSeg(rid,numb){
       }
       document.getElementById("createFlight").disabled=reg;      
       document.getElementById("checkFlight").disabled=reg;      
+    }
+    catch{};
 
     });         
        
@@ -2930,7 +2943,7 @@ function createFlyVectors(id){
   
     
  
- /*export*/ function getUserFly(stt=new Date(),ett=new Date())
+ /*export*/ function  getUserFly(stt=new Date(),ett=new Date())
  {
         
   

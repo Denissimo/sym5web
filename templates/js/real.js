@@ -2,18 +2,17 @@ var flightsBoard;
 var glids=[];
 var oldGlids=[];
 var idRealDet;
-var linSymbol;
+
+
 
 function addReal(scene,isOwner){
     let data =dataForSend();
-         
-    
-          //alert(data);
+
     emptyArray(glids);  
-    if (isOwner)
-       linSymbol =mySymbols.lineSymbolRoute;
-    else   
-    linSymbol =mySymbols.lineSymbolPigg;
+    //if (isOwner)
+   //  linSymbol =mySymbols.lineSymbolPigg;
+   // else   
+   //  linSymbol =mySymbols.lineSymbolRoute;
     var stt= new Date();
      stt.setTime(stt.getTime()-800000000);            
     var stDt=convertTime(stt);
@@ -156,23 +155,23 @@ function addReal(scene,isOwner){
       flyZoneLayer.definitionExpression="objectid <0" ;
       bufferLayer.title="Текущие полеты";
       
-  // scene.layers.add(flyZoneLayer);
+  
     
-  // window.setInterval(realPath, 2000);   
+  
 }  
 
 
 
-function refreshRealLayer()
+function refreshRealLayer(isOwner)
 {  var lays=[];
   
-
-  realPath();
+  
+  realPath(isOwner);
   console.log(glids.length+"   !!");
   for (var i=0;i<glids.length;i++)
   {
 
-      // realPath();
+    
       if(glids[i][1]!= null)
       {
       var flag=false;  
@@ -599,7 +598,17 @@ function makeListRealFlyght(feats)
 
       }                          
 
-     
+    function buildDefinitionQueryArchiv(st,et)
+      {
+      let stt= new Date(st); 
+      let ett= new Date(et);
+      let startDt=convertTime(stt);//st;
+      let endDt=convertTime(ett);//et
+    
+      let defQuery ="CreateTime >= timestamp'"+ startDt+"' And CreateTime <= timestamp'"+endDt+ "'";
+      console.log(defQuery)
+      return defQuery;
+      }
      function buildDefinitionQueryReal(reg=false)/*timeSlider)*/ {   // показывать точки полетов в суточном интервале от установленной даты
     
       let et=timeSlider.timeExtent.end.getTime();
@@ -633,17 +642,22 @@ function makeListRealFlyght(feats)
      defExp="flyid = "+paths[i][1]+"'";
      return defExp;
      }
-     function realPath()
+     function realPath(isOwner,str=null,fns=null)
      {
-       realAllLayer.definitionExpression=buildDefinitionQueryReal();
-       realAllLayer.queryFeatures({ where : buildDefinitionQueryReal(),
+       wh=buildDefinitionQueryReal();
+       if(str!=null)
+
+         wh=buildDefinitionQueryArchiv(str,fns)
+       
+       realAllLayer.definitionExpression=wh;
+       realAllLayer.queryFeatures({ where : wh,
        returnGeometry: true,
        returnZ : true,
        orderByFields : ["bplaid","objectid"],
        outFields: ["bplaid","serial","objectid","Altitude","CreateTime"]}).then(function(featureSet) {
     
-         
-         makeGeometryRealFlyght(featureSet.features);
+         console.log(featureSet.features.length+"  ????")    
+         makeGeometryRealFlyght(isOwner,featureSet.features);
         ;
          
         });;
@@ -653,9 +667,10 @@ function makeListRealFlyght(feats)
      
      }
      
-     function makeGeometryRealFlyght(feats)
+     function makeGeometryRealFlyght(isOwner,feats)
      {
-       
+       let linSymbol=mySymbols.lineSymbolRoute;
+       if (isOwner) linsymbol=   mySymbols.lineSymbolPigg;
        bufferLayer.graphics.removeAll();
        //realLayer.graphics.removeAll();  
        if(feats.length==null) return;
@@ -719,7 +734,7 @@ function makeListRealFlyght(feats)
                     });
                 let gg= new GRAPHIC({
                    geometry : lin,
-                   symbol : linSymbol//mySymbols.lineSymbolPigg
+                   symbol : linSymbol
                   });
                 bufferLayer.add(gg);
                 if (zon!=null)
@@ -746,7 +761,7 @@ function makeListRealFlyght(feats)
       });
        gg= new GRAPHIC({
         geometry : lin,
-        symbol : linSymbol//mySymbols.lineSymbolPigg
+        symbol : linSymbol
        });
            bufferLayer.add(gg);
            if (zon!=null)
