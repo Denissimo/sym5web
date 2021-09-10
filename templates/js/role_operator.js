@@ -18,6 +18,7 @@ function setFlightSidebar()
  
  if( route==="Archive" )
  {
+   console.log(new Date(timeSlider.values[1]));
    getUserFly(new Date(timeSlider.values[0]),new Date(timeSlider.values[1]));
  }
  else{
@@ -62,7 +63,7 @@ function getUserFly(d=new Date(),d2=new Date())
       
      // let d=new Date();
      // let d2=new Date();
-      if(d3.getTime()-d3.getTime(),1000)
+      if(d3.getTime()-d2.getTime()<10)
            d2.setDate(d2.getDate() + 30);
       let m1=String(d.getMonth() + 1).padStart(2, '0');
       let day1 = String(d.getDate()).padStart(2, '0');
@@ -92,7 +93,7 @@ function getUserFly(d=new Date(),d2=new Date())
               function makeListFlyghtPanel(response)
               {
                emptyArray(glb);                
-               
+               console.log(response.applications.length)
                for (let i=0;i<response.applications.length;i++) {   
                 if(response.applications[i].application.start.date >= stDt || route==="Archive")
                     if(response.applications[i].status.id >2) 
