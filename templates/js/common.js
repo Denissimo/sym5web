@@ -777,7 +777,7 @@ function changeStartDate()
   .getElementById("time_start").value;
   let startTs=startTime.split(":");
   let startTm=3600000*parseInt(startTs[0])+60000*(startTs[1]);
-
+  
   changeDateTime(startD+startTm,(new Date(timeSlider.fullTimeExtent.end)).getTime(),(new Date(timeSlider.values[0])).getTime());
   
    
@@ -813,7 +813,8 @@ function changeChooseDate()
 
 function changeDateTime(startD,finishD,chooseD)
 {
- 
+ if(route!="Archive")
+ {
   let startD1=new Date().getTime();
 
  
@@ -836,7 +837,29 @@ function changeDateTime(startD,finishD,chooseD)
       
       setTimeSliderBase(sm,fm,tm);
       getUserFly(sm,fm);
-   
+ }
+ else{
+  //alert(new Date(startD)+" ? "+Date(finishD));
+  let endD1=new Date().getTime();
+  let  fm=new Date();
+  if(finishD<=endD1) 
+      fm=new Date(finishD);
+   let sm=new Date(startD); 
+   if (sm.getTime()-finishD>=-3600000*24)  
+      sm=new Date(fm.getTime()-3600000*24*7);
+
+    if (chooseD<sm) chooseD=sm.getTime()+100000;
+    if (chooseD>fm) chooseD=fm.getTime()-100000;
+       
+     let tm=new Date(chooseD);
+    // alert(sm+" ! "+fm);
+     timeSlider.values=[sm,fm];
+
+     getUserFly(sm,fm);
+     
+
+
+ } 
 
  
 
@@ -876,7 +899,7 @@ function changeDateTime(startD,finishD,chooseD)
        {
         $.cookie("timeValArchBeg",timeSlider.values[0].getTime());
         $.cookie("timeValArchEnd",timeSlider.values[1].getTime());
-        console.log("*************");
+        //console.log("*************");
         getUserFly(new Date(timeSlider.values[0].getTime()),new Date(timeSlider.values[1].getTime()));
        }
        if (checkRoleRoute("ROLE_OPERATOR",roles))  
