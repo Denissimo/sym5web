@@ -990,8 +990,19 @@ function changeExtent (geom)
       apiNewTrack= apiData(apiUrl, "/track/add", token, 'POST', dt);
       
       apiNewTrack.then(function (response) {
-        
+        try{
         functVect(response.id);
+        }
+        catch{
+        
+           apiDelTrack= apiData(apiUrl, "/track/"+response.id, token, 'DELETE');
+           apiDelTrack.then(function (response1) {
+               
+                      idRoute=""; 
+                      alert("Маршрут не сформировался , повторите попытку");
+                 });
+          ;
+        }
     });
 
   }
@@ -1732,7 +1743,8 @@ function mySaveRoute(event)
                      delRoute(routeVecLayer);
                 else         
                     delRoute(zoneLayer);
-                      idRoute="";  getUserRoute(idRoute);
+                      idRoute=""; 
+                      getUserRoute(idRoute);
                  });
     
         }

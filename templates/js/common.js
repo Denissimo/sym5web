@@ -899,7 +899,7 @@ function changeDateTime(startD,finishD,chooseD)
        {
         $.cookie("timeValArchBeg",timeSlider.values[0].getTime());
         $.cookie("timeValArchEnd",timeSlider.values[1].getTime());
-        console.log("*************");
+        //console.log("*************");
         getUserFly(new Date(timeSlider.values[0].getTime()),new Date(timeSlider.values[1].getTime()));
        }
        if (checkRoleRoute("ROLE_OPERATOR",roles))  

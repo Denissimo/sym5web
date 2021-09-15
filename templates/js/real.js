@@ -167,7 +167,7 @@ function refreshRealLayer(isOwner)
   
   
   realPath(isOwner);
-  console.log(glids.length+"   !!");
+ // console.log(glids.length+"   !!");
   for (var i=0;i<glids.length;i++)
   {
 
@@ -187,7 +187,7 @@ function refreshRealLayer(isOwner)
       } 
       if(flag) 
           continue;   
-      console.log("!!");    
+      //console.log("!!");    
       apiAircraft= apiData(apiUrl, "/aircraft/"+glids[i][1], token);
       apiAircraft.then(function (response) {
        
@@ -656,7 +656,7 @@ function makeListRealFlyght(feats)
        orderByFields : ["bplaid","objectid"],
        outFields: ["bplaid","serial","objectid","Altitude","CreateTime"]}).then(function(featureSet) {
     
-         console.log(featureSet.features.length+"  ????")    
+        // console.log(featureSet.features.length+"  ????")    
          makeGeometryRealFlyght(isOwner,featureSet.features);
         ;
          
