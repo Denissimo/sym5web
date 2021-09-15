@@ -129,11 +129,13 @@
                                             <span class="badge badge-danger">{{ registrationName }}</span>
                                         </td>
                                         <td>
+                                            {% if user.role('ROLE_OWNER') %}
                                             <button data-bs-toggle="modal" data-bs-target="#modalUav"
                                                     class="btn btn-small btn-outline btn-aircraft-edit"
                                                     id="btn-edit_{{ aircraft.id }}" data-aircraft-id="{{ aircraft.id }}"
                                                     ><i class="fa fa-cogs" aria-hidden="true"></i>
                                             </button>
+                                            {% endif %}
 {#                                        </td>#}
 {#                                        <td>#}
 {#                                            <button data-bs-toggle="modal" data-bs-target="#modalEngineComplect_{{ aircraft.id }}"#}
