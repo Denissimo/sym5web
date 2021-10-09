@@ -42,6 +42,39 @@ $(document).ready(function () {
         return true;
     }
 
+    $("#logout").click(function (event) {
+        $.removeCookie(tokenCookieName, {path: '/'});
+        console.log(tokenCookieName);
+        var url = "/login";
+        $(location).prop("href", url);
+    });
+
+    function loadAircraftRegistrations(aircraftId) {
+                var settings = {
+                    url: authUrl + "/aircraft_registration_list/" + aircraftId,
+                    method: "GET",
+                    timeout: 0,
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    success: function (response) {
+                        console.log('success');
+                    },
+                    error: function (response) {
+                        console.log('error before');
+                        console.log(response);
+                        console.log('error after');
+//                        $(".form-alert").addClass("alert-danger");
+//                        $(".alert-message").html("Ошибка входа. Проверьте введенные данные.");
+                    },
+                };
+
+                $.ajax(settings).done(function (response) {
+                    $.cookie(tokenCookieName, response.token, {expires: 10 / 24, path: '/'});
+                    console.log(response);
+                });
+    }
+
     $("#form-login").submit(function (event) {
         var settings = {
             url: authUrl + "/api/login_check",
@@ -323,6 +356,26 @@ $(document).ready(function () {
                 }
             }
         );
+        console.log(aircraft.aircraftRegistrations);
+        var registrations;
+        if (aircraft.aircraftRegistrations == null) {
+            registrations = 'Нет заявок на регистрацию'
+        } else {
+            registrations = '<table class="table table-striped"><tr><th>ID</th><th>Статус</th><th>Номер</th><th>Дата</th><th>Пояснение</th></tr>';
+                $.each(aircraft.aircraftRegistrations, function () {
+                     // var engineTypeId = $(this).attr('data-enginetype-id');
+                     var registrationRow = '<tr><td>' + this.id
+                     + '</td><td>' + this.status.name
+                     + '</td><td>' + this.aircraftRegistration.externalId
+                     + '</td><td>' + this.updatedAt.date.slice(0, 10)
+                     + '</td><td>' + this.aircraftRegistration.comment
+                     + '</td></tr>'
+                     registrations += registrationRow;
+                });
+                registrations += '</table>';
+        }
+        $('#registrations').html(registrations);
+//        console.log(aircraft.id);
         $("#engine option[value=" + aircraft.engine.id + "]").attr("selected", "selected");
         $("#category option[value=" + aircraft.category.id + "]").attr("selected", "selected");
         $("#registrationStatus option[value=" + aircraft.registrationStatus.id + "]").attr("selected", "selected");
@@ -593,6 +646,4 @@ $(document).ready(function () {
 
         return date;
     }
-
-
 });
