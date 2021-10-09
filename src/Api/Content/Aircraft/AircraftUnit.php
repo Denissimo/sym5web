@@ -7,6 +7,7 @@ use App\Api\Content\AircraftClassificator\AircraftEngineComplectUnit;
 use App\Api\Content\AircraftClassificator\AircraftEngineTypeUnit;
 use App\Api\Content\AircraftClassificator\AircraftEngineUnit;
 use App\Api\Content\AircraftClassificator\AircraftMassUnit;
+use App\Api\Content\AircraftClassificator\AircraftRegistrationUnit;
 use App\Api\Content\Document\UserDocument;
 use DateTimeInterface;
 use stdClass;
@@ -165,6 +166,7 @@ class AircraftUnit
      * @var AircraftEngineComplectUnit[]
      */
     public $aircraftEngineComplects;
+
     /**
      * @var AircraftMassUnit
      */
@@ -174,6 +176,11 @@ class AircraftUnit
      * @var int|null
      */
     public $registrationStatus;
+
+    /**
+     * @var AircraftRegistrationUnit[]
+     */
+    public $aircraftRegistrations;
 
     /**
      * AircraftUnit constructor.
@@ -227,6 +234,11 @@ class AircraftUnit
                 $this->aircraftEngineComplects[$engineComplect->id] = new AircraftEngineComplectUnit($engineComplect);
             }
         }
+//        if (is_array($aircraft->aircraftRegistrations)) {
+            foreach ($aircraft->aircraftRegistrations as $index => $aircraftRegistration) {
+                $this->aircraftRegistrations[$index] = new AircraftRegistrationUnit($aircraftRegistration);
+            }
+//        }
     }
 
     /**
