@@ -22,6 +22,10 @@ signup:
 #   path: /index
 #   controller: App\Controller\ContentController::buildIndex
 
+reg.apply.add:
+  path: /regapply/{aircraft_id)
+  controller: App\Controller\ContentController::buildRegApplyAdd
+
 uav:
   path: /uav
   controller: App\Controller\ContentController::buildUav

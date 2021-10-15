@@ -75,6 +75,27 @@ class ContentController extends BaseController
             'use_arcgis' => true
         ]);
     }
+    public function buildRegApplyAdd(
+        Request $request,
+        Client $client,
+        string $tokenCookieName,
+        string $userdataSessionName
+    )
+    {
+        $time = $this->logInfo('buildUavPaginated Start: %d', [
+            'source' => 'front'
+        ]);
+        $this->loadUserData($request, $tokenCookieName, $userdataSessionName);
+        if ($this->responseCode != Response::HTTP_OK) {
+            return $this->redirectToRoute('login');
+        }
+
+        return $this->render('reg_apply_add.html.twig', [
+            'user' => $this->user,
+            'route' => 'UAV',
+            'use_arcgis' => false
+        ]);
+    }
 
     public function buildUav(Request $request, Client $client, string $tokenCookieName, string $userdataSessionName)
     {
