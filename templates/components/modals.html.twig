@@ -15,12 +15,15 @@
                     <ul class="nav nav-tabs" id="myTab" role="tablist">
                         <li class="nav-item" role="presentation">
                             <button class="nav-link active" id="basic-tab" data-bs-toggle="tab" data-bs-target="#basic"
-                                    type="button" role="tab" aria-controls="basic" aria-selected="true">Основные сведения
+                                    type="button" role="tab" aria-controls="basic" aria-selected="true">Основные
+                                сведения
                             </button>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="construction-tab" data-bs-toggle="tab" data-bs-target="#construction"
-                                    type="button" role="tab" aria-controls="construction" aria-selected="false">Конструкция
+                            <button class="nav-link" id="construction-tab" data-bs-toggle="tab"
+                                    data-bs-target="#construction"
+                                    type="button" role="tab" aria-controls="construction" aria-selected="false">
+                                Конструкция
                             </button>
                         </li>
                         <li class="nav-item" role="presentation">
@@ -29,8 +32,10 @@
                             </button>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="registration-tab" data-bs-toggle="tab" data-bs-target="#registration"
-                                    type="button" role="tab" aria-controls="registration" aria-selected="false">Регистрация и страховка
+                            <button class="nav-link" id="registration-tab" data-bs-toggle="tab"
+                                    data-bs-target="#registration"
+                                    type="button" role="tab" aria-controls="registration" aria-selected="false">
+                                Регистрация и страховка
                             </button>
                         </li>
                     </ul>
@@ -54,7 +59,8 @@
                                         <div class="form-row">
                                             <div class="form-input">
                                                 <label class="input-label" for="manufacturer">Изготовитель БВС</label>
-                                                <input type="text" class="form-control" id="manufacturer" name="manufacturer"
+                                                <input type="text" class="form-control" id="manufacturer"
+                                                       name="manufacturer"
                                                        placeholder="Cобственная сборка">
                                                 {# <p class="form-desc">Для самостоятельно собранных БВС, указывается «собственная сборка»</p> #}
                                             </div>
@@ -77,7 +83,8 @@
                                         <div class="form-row">
                                             <div class="form-input">
                                                 <label class="input-label" for="category">Катекгория</label>
-                                                <select class="form-select" aria-label="Выберите тип" id="category" name="category">
+                                                <select class="form-select" aria-label="Выберите тип" id="category"
+                                                        name="category">
                                                     {% for category in category %}
                                                         <option value="{{ category.id }}">{{ category.name }}</option>
                                                     {% endfor %}
@@ -89,7 +96,8 @@
                                     <div class="col-md-3">
                                         <div class="form-row">
                                             <div class="form-input">
-                                                <label class="input-label" for="takeoffMass">Макс. взлетная масса, кг *</label>
+                                                <label class="input-label" for="takeoffMass">Макс. взлетная масса, кг
+                                                    *</label>
                                                 <input type="text" class="form-control" id="takeoffMass"
                                                        name="takeoffMass" required>
                                             </div>
@@ -135,10 +143,13 @@
                                     <div class="col-md-3">
                                         <div class="form-row">
                                             <div class="form-input">
-                                                <label class="input-label" for="controlSystem">Система управления</label>
-                                                <select class="form-select" aria-label="Выберите систему" id="controlSystem" name="controlSystem">
+                                                <label class="input-label" for="controlSystem">Система
+                                                    управления</label>
+                                                <select class="form-select" aria-label="Выберите систему"
+                                                        id="controlSystem" name="controlSystem">
                                                     <option class="controlSystemOption" value="1">Программная</option>
-                                                    <option class="controlSystemOption" value="2">Радиокомандная</option>
+                                                    <option class="controlSystemOption" value="2">Радиокомандная
+                                                    </option>
                                                     <option class="controlSystemOption" value="3">Гибридная</option>
                                                 </select>
                                             </div>
@@ -168,7 +179,8 @@
                                         <div class="form-row">
                                             <div class="form-input">
                                                 <label class="input-label" for="responderType">Тип ответчика</label>
-                                                <input type="text" class="form-control" id="responderType" name="responderType">
+                                                <input type="text" class="form-control" id="responderType"
+                                                       name="responderType">
                                             </div>
                                         </div>
                                     </div>
@@ -205,12 +217,14 @@
                                             <div class="form-check form-switch">
                                                 <input class="form-check-input" type="checkbox" id="isVerticalStart"
                                                        name="isVerticalStart">
-                                                <label class="form-check-label" for="isVerticalStart">Вертикальный взлёт</label>
+                                                <label class="form-check-label" for="isVerticalStart">Вертикальный
+                                                    взлёт</label>
                                             </div>
                                             <div class="form-check form-switch">
                                                 <input class="form-check-input" type="checkbox" id="isCatapultStart"
                                                        name="isCatapultStart">
-                                                <label class="form-check-label" for="isCatapultStart">Катапультный старт</label>
+                                                <label class="form-check-label" for="isCatapultStart">Катапультный
+                                                    старт</label>
                                             </div>
                                             <div class="form-check form-switch">
                                                 <input class="form-check-input" type="checkbox" id="isParachuteLanding"
@@ -223,9 +237,9 @@
 
 
                                 </div>
-{#                                {% block modals %}#}
-{#                                    {% include('components/engine_complects.html.twig') %}#}
-{#                                {% endblock %}#}
+                                {# {% block modals %} #}
+                                {# {% include('components/engine_complects.html.twig') %} #}
+                                {# {% endblock %} #}
                             </div>
                         </div>
                         <div class="tab-pane fade" id="engines" role="tabpanel" aria-labelledby="engines-tab">
@@ -237,16 +251,18 @@
                                     <div class="col-md-12">
                                         <div class="form-row">
                                             <div class="form-input">
-{#                                                {{  dump(aircrafts) }}#}
-{#                                                {{  dump(engineTypes) }}#}
+                                                {# {{  dump(aircrafts) }} #}
+                                                {# {{  dump(engineTypes) }} #}
                                                 {% for engineType in engineTypes %}
-{#                                                    {% set fieldId = "engine_aircraft_" ~ aircraft.id ~ "_type_" ~ engineType.id %}#}
+                                                    {# {% set fieldId = "engine_aircraft_" ~ aircraft.id ~ "_type_" ~ engineType.id %} #}
                                                     <div class="row">
                                                         <div class="col-6 offset-2">
-                                                            <label for="engine_type_{{ engineType.id }}" class="col-form-label">{{ engineType.name }}</label>
+                                                            <label for="engine_type_{{ engineType.id }}"
+                                                                   class="col-form-label">{{ engineType.name }}</label>
                                                         </div>
                                                         <div class="col-2">
-                                                            <input type="number" name="engine_type_{{ engineType.id }}" id="engine_type_{{ engineType.id }}"
+                                                            <input type="number" name="engine_type_{{ engineType.id }}"
+                                                                   id="engine_type_{{ engineType.id }}"
                                                                    class="form-control engines_number"
                                                                    data-enginetype-id="{{ engineType.id }}"
                                                                    data-enginecomplect-id="0" value="0">
@@ -261,6 +277,14 @@
                         </div>
                         <div class="tab-pane fade" id="registration" role="tabpanel" aria-labelledby="registration-tab">
                             <div class="container-fluid">
+                                {% if user.role('ROLE_OWNER') %}
+                                <div class="row">
+                                        <a id="aircraft_add_reg_btn" href="#">
+                                            <div class="col-6 offset-3 mt-3">Создать заявку на регистрацию</div>
+                                        </a>
+                                </div>
+                                {% endif %}
+
                                 <div class="row">
                                     <h6 class="form-title">
                                         Заявки на регистрацию
@@ -285,9 +309,11 @@
                                     <div class="col-md-4">
                                         <div class="form-row">
                                             <div class="form-input">
-                                                <label class="input-label" for="registrationStatus">Статус регистрации</label>
+                                                <label class="input-label" for="registrationStatus">Статус
+                                                    регистрации</label>
 
-                                                <select class="form-select" aria-label="registrationStatus" id="registrationStatus" name="registrationStatus">>
+                                                <select class="form-select" aria-label="registrationStatus"
+                                                        id="registrationStatus" name="registrationStatus">>
                                                     {% for status in statuses %}
                                                         <option value="{{ status.id }}">{{ status.name }}</option>
                                                     {% endfor %}
@@ -299,31 +325,35 @@
                                     <div class="col-md-4">
                                         <div class="form-row">
                                             <div class="form-input">
-                                                <label class="input-label" for="registrationNumber">Регистрационный номер</label>
+                                                <label class="input-label" for="registrationNumber">Регистрационный
+                                                    номер</label>
                                                 <input type="text" class="form-control" id="registrationNumber"
                                                        name="registrationNumber">
                                             </div>
                                         </div>
                                     </div>
 
-                                    {#                            <div class="col-md-4">#}
-                                    {#                                <div class="form-row">#}
-                                    {#                                    <div class="form-input">#}
-                                    {#                                        <span class="input-label">Загрузить уведомление</span>#}
-                                    {#                                        <input type="file" name="file" id="uavNotice" class="uploadfile"/>#}
-                                    {#                                        <label for="uavNotice" class="uploadfile-notice-text">Выберите файл</label>#}
-                                    {#                                    </div>#}
-                                    {#                                </div>#}
-                                    {#                            </div>#}
+                                    {# <div class="col-md-4"> #}
+                                    {# <div class="form-row"> #}
+                                    {# <div class="form-input"> #}
+                                    {# <span class="input-label">Загрузить уведомление</span> #}
+                                    {# <input type="file" name="file" id="uavNotice" class="uploadfile"/> #}
+                                    {# <label for="uavNotice" class="uploadfile-notice-text">Выберите файл</label> #}
+                                    {# </div> #}
+                                    {# </div> #}
+                                    {# </div> #}
 
                                 </div>
                                 <div class="row">
                                     <div class="col-md-3">
                                         <div class="form-row">
                                             <div class="form-input">
-                                                <label class="input-label" for="registrationDate">Дата регистрации</label>
-                                                <input type="date" class="form-control datepicker" data-date-format="yyyy-mm-dd"
-                                                       id="registrationDate" name="registrationDate" placeholder="2020-04-27">
+                                                <label class="input-label" for="registrationDate">Дата
+                                                    регистрации</label>
+                                                <input type="date" class="form-control datepicker"
+                                                       data-date-format="yyyy-mm-dd"
+                                                       id="registrationDate" name="registrationDate"
+                                                       placeholder="2020-04-27">
                                             </div>
                                         </div>
                                     </div>
@@ -332,7 +362,8 @@
                                             <div class="form-input">
                                                 <label class="input-label" for="deregistrationDate">Дата снятия с
                                                     регистрации</label>
-                                                <input type="date" class="form-control datepicker" data-date-format="yyyy-mm-dd"
+                                                <input type="date" class="form-control datepicker"
+                                                       data-date-format="yyyy-mm-dd"
                                                        id="deregistrationDate" name="deregistrationDate"
                                                        placeholder="2020-04-27">
                                             </div>
@@ -357,7 +388,8 @@
                                     <div class="col-md-3">
                                         <div class="form-row">
                                             <div class="form-input">
-                                                <label class="input-label" for="insuranceCompany">Страховая компания</label>
+                                                <label class="input-label" for="insuranceCompany">Страховая
+                                                    компания</label>
                                                 <input type="text" class="form-control" id="insuranceCompany"
                                                        name="insuranceCompany">
                                             </div>
@@ -366,7 +398,8 @@
                                     <div class="col-md-3">
                                         <div class="form-row">
                                             <div class="form-input">
-                                                <label class="input-label" for="insurancePolicyNumber">Номер полиса</label>
+                                                <label class="input-label" for="insurancePolicyNumber">Номер
+                                                    полиса</label>
                                                 <input type="text" class="form-control" id="insurancePolicyNumber"
                                                        name="insurancePolicyNumber">
                                             </div>
@@ -375,17 +408,22 @@
                                     <div class="col-md-3">
                                         <div class="form-row">
                                             <div class="form-input">
-                                                <label class="input-label" for="insuranceStart">Дата начала страховки</label>
-                                                <input type="date" class="form-control datepicker" data-date-format="yyyy-mm-dd"
-                                                       id="insuranceStart" name="insuranceStart" placeholder="2020-04-27">
+                                                <label class="input-label" for="insuranceStart">Дата начала
+                                                    страховки</label>
+                                                <input type="date" class="form-control datepicker"
+                                                       data-date-format="yyyy-mm-dd"
+                                                       id="insuranceStart" name="insuranceStart"
+                                                       placeholder="2020-04-27">
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-row">
                                             <div class="form-input">
-                                                <label class="input-label" for="insuranceEnd">Дата окончания страховки</label>
-                                                <input type="date" class="form-control datepicker" data-date-format="yyyy-mm-dd"
+                                                <label class="input-label" for="insuranceEnd">Дата окончания
+                                                    страховки</label>
+                                                <input type="date" class="form-control datepicker"
+                                                       data-date-format="yyyy-mm-dd"
                                                        id="insuranceEnd" name="insuranceEnd" placeholder="2020-04-27">
                                             </div>
                                         </div>
@@ -398,32 +436,30 @@
                     <div class="container-fluid">
 
 
+                        {# <div class="row"> #}
+
+                        {# <div class="col-md-6"> #}
+                        {# <div class="form-row"> #}
+                        {# <div class="form-input"> #}
+                        {# <span class="input-label">Технический паспорт</span> #}
+                        {# <input type="file" name="file" id="uavPassport" class="uploadfile"/> #}
+                        {# <label for="uavPassport" class="uploadfile-passport-text">Выберите файл</label> #}
+                        {# </div> #}
+                        {# </div> #}
+                        {# </div> #}
+
+                        {# <div class="col-md-6"> #}
+                        {# <div class="form-row"> #}
+                        {# <div class="form-input"> #}
+                        {# <span class="input-label">Фото БВС</span> #}
+                        {# <input type="file" name="file" id="uavPhoto" class="uploadfile"/> #}
+                        {# <label for="uavPhoto" class="uploadfile-photo-text">Выберите файл</label> #}
+                        {# </div> #}
+                        {# </div> #}
+                        {# </div> #}
 
 
-{#                        <div class="row">#}
-
-                            {# <div class="col-md-6"> #}
-                            {# <div class="form-row"> #}
-                            {# <div class="form-input"> #}
-                            {# <span class="input-label">Технический паспорт</span> #}
-                            {# <input type="file" name="file" id="uavPassport" class="uploadfile"/> #}
-                            {# <label for="uavPassport" class="uploadfile-passport-text">Выберите файл</label> #}
-                            {# </div> #}
-                            {# </div> #}
-                            {# </div> #}
-
-                            {# <div class="col-md-6"> #}
-                            {# <div class="form-row"> #}
-                            {# <div class="form-input"> #}
-                            {# <span class="input-label">Фото БВС</span> #}
-                            {# <input type="file" name="file" id="uavPhoto" class="uploadfile"/> #}
-                            {# <label for="uavPhoto" class="uploadfile-photo-text">Выберите файл</label> #}
-                            {# </div> #}
-                            {# </div> #}
-                            {# </div> #}
-
-
-{#                        </div>#}
+                        {# </div> #}
 
                         <div class="row">
                             <div class="col-md-12 alert_place">
@@ -442,4 +478,4 @@
         </div>
     </div>
 </div>
-{#</div>#}
+{# </div> #}
