@@ -79,19 +79,25 @@ class ContentController extends BaseController
         Request $request,
         Client $client,
         string $tokenCookieName,
-        string $userdataSessionName
+        string $userdataSessionName,
+        string $aircraftId
     )
     {
-        $time = $this->logInfo('buildUavPaginated Start: %d', [
-            'source' => 'front'
-        ]);
         $this->loadUserData($request, $tokenCookieName, $userdataSessionName);
         if ($this->responseCode != Response::HTTP_OK) {
             return $this->redirectToRoute('login');
         }
 
+
+        $registrationTypes = $this->requestUnauthorized(
+            $client,
+            '/aircraft_registration_types/'
+        );
+
         return $this->render('reg_apply_add.html.twig', [
             'user' => $this->user,
+            'aircraftId' => $aircraftId,
+            'registrationTypes' => $registrationTypes->registrationTypes,
             'route' => 'UAV',
             'use_arcgis' => false
         ]);
@@ -265,6 +271,25 @@ class ContentController extends BaseController
         $this->logInfo('buildFormJs Finish: %d', [
             'source' => 'front'
         ], $time);
+
+        return $response;
+    }
+
+    public function buildRegApplyJs(
+        Request $request,
+        string $tokenCookieName,
+        string $apiUrl,
+        string $authUrl
+    )
+    {
+        $response = $this->render('js/reg_apply.html.twig', [
+            'api_url' => $apiUrl,
+            'auth_url' => $authUrl,
+            'token_cookie_name' => $tokenCookieName,
+            'use_arcgis' => false
+        ]);
+
+        $response->headers->set('Content-Type', 'text/plain');
 
         return $response;
     }

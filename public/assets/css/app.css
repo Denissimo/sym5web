@@ -115,7 +115,7 @@
 }
 
 .card .card-header {
-    background-color: transparent;
+    /*background-color: transparent;*/
     border-bottom: 0
 }
 
@@ -134,7 +134,7 @@
 }
 
 .card .card-footer {
-    background-color: transparent;
+    /*background-color: transparent;*/
     border-top: 0
 }
 

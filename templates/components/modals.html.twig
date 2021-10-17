@@ -277,13 +277,13 @@
                         </div>
                         <div class="tab-pane fade" id="registration" role="tabpanel" aria-labelledby="registration-tab">
                             <div class="container-fluid">
+                                {% if user.role('ROLE_OWNER') %}
                                 <div class="row">
-                                    <div class="col-3">
-                                        <a href="{{ path('reg.apply.add') }}">
-                                            <button class="btn btn-info">Создать заявку на регистрацию</button>
+                                        <a id="aircraft_add_reg_btn" href="#">
+                                            <div class="col-6 offset-3 mt-3">Создать заявку на регистрацию</div>
                                         </a>
-                                    </div>
                                 </div>
+                                {% endif %}
 
                                 <div class="row">
                                     <h6 class="form-title">

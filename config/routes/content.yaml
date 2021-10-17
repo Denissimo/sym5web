@@ -23,7 +23,7 @@ signup:
 #   controller: App\Controller\ContentController::buildIndex
 
 reg.apply.add:
-  path: /regapply/{aircraft_id)
+  path: /regapply/{aircraftId}
   controller: App\Controller\ContentController::buildRegApplyAdd
 
 uav:
@@ -41,6 +41,10 @@ profile:
 form_js:
   path: /javascript/forms.js
   controller: App\Controller\ContentController::buildFormJs
+
+reg_apply:
+  path: /javascript/reg_apply.js
+  controller: App\Controller\ContentController::buildRegApplyJs
 
 #content:
 #  path: /{route}

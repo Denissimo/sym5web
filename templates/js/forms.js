@@ -374,6 +374,7 @@ $(document).ready(function () {
                 });
                 registrations += '</table>';
         }
+        $('#aircraft_add_reg_btn').attr('href', '/regapply/' + aircraft.id);
         $('#registrations').html(registrations);
 //        console.log(aircraft.id);
         $("#engine option[value=" + aircraft.engine.id + "]").attr("selected", "selected");
