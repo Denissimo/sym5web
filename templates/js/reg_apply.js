@@ -20,8 +20,9 @@ console.log('reg-apply-js');
                 aircraftRegistration: {
                     aircraft: $("#aircraftId").val(),
                     comment: $("#comment").val(),
-                    typeLabel: $("#registrationType").val()
+
                 },
+                typeLabel: $("#registrationType").val()
             }),
 
             success: function (response) {
