@@ -252,15 +252,16 @@ function refreshRealLayer(isOwner)
 }
 function makeRealFlyght(realLayer)
        {
-        
+        let whh=buildDefinitionQueryReal(true);
+        console.log(whh+" ???");
         realLayer.queryFeatures({
-          where : buildDefinitionQueryReal(true),
+          where : whh,
           
           returnGeometry: true,
-          outFields: ["serial","ownerid","globalid","bplaid"],
+          outFields: ["serial","ownerid","globalid","bplaid","CreateTime","EndTime"],
         })
         .then(function(featureSet) {
-     
+         console.log(featureSet.features.length);   
           makeListRealFlyght(featureSet.features);
 
          });
@@ -606,7 +607,7 @@ function makeListRealFlyght(feats)
       let endDt=convertTime(ett);//et
     
       let defQuery ="CreateTime >= timestamp'"+ startDt+"' And CreateTime <= timestamp'"+endDt+ "'";
-      console.log(defQuery)
+      console.log(defQuery+" !!!!")
       return defQuery;
       }
      function buildDefinitionQueryReal(reg=false)/*timeSlider)*/ {   // показывать точки полетов в суточном интервале от установленной даты
@@ -617,12 +618,14 @@ function makeListRealFlyght(feats)
       let stt= new Date(st); 
          stt.setTime(ett.getTime()-1800000)
       if(reg)
-          stt.setTime(ett.getTime()-36000)
+          stt.setTime(ett.getTime()-360000)
       
       let startDt=convertTime(stt);//st;
       let endDt=convertTime(ett);//et
     
+      //let defQuery ="CreateTime >= timestamp'"+ startDt+"'";
       let defQuery ="CreateTime >= timestamp'"+ startDt+"' And EndTime >= timestamp'"+endDt+ "'";
+    
      return defQuery;
    }
    
@@ -645,10 +648,11 @@ function makeListRealFlyght(feats)
      function realPath(isOwner,str=null,fns=null)
      {
        wh=buildDefinitionQueryReal();
+       
        if(str!=null)
 
          wh=buildDefinitionQueryArchiv(str,fns)
-       
+       console.log(wh+" !!!!");
        realAllLayer.definitionExpression=wh;
        realAllLayer.queryFeatures({ where : wh,
        returnGeometry: true,
