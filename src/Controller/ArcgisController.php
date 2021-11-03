@@ -44,7 +44,7 @@ class ArcgisController extends BaseController
         ]);
     }
 
-    public function buildTracks(Request $request, string $tokenCookieName, string $userdataSessionName)
+    public function buildTracks(Request $request, Client $client, string $tokenCookieName, string $userdataSessionName)
     {
         $this->loadUserData($request, $tokenCookieName, $userdataSessionName);
         if ($this->responseCode != Response::HTTP_OK) {
@@ -55,9 +55,19 @@ class ArcgisController extends BaseController
             return $this->redirectToRoute('index');
         }
 
+        $myAircraftList = $this->requestAuthorized(
+            $request,
+            $client,
+            $tokenCookieName,
+            '/my/list/aircrafts'
+        );
+
+        $aircraftList = new AircraftList($myAircraftList);
+
         return $this->render('tracks.html.twig', [
             'user' => $this->user,
             'route' => 'Tracks',
+            'aircraftList' => $aircraftList->getAircrafts(),
             'use_arcgis' => true
         ]);
     }

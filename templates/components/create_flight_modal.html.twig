@@ -1,0 +1,25 @@
+<!-- Modal -->
+<div class="modal fade" id="createFlightModalCard" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">Создание заявки</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<label for="aircraftChoice" class="form-label">Выберите БВС из списка</label>
+				<select id="aircraftChoice" class="form-select" size="{{ aircraftList|length }}" name="aircraftId" style="height: 200px">
+					{% set aircrftSelected = " selected" %}
+					{% for id, aircraft in aircraftList %}
+						<option{{ aircrftSelected }} value="{{ id }}">{{ aircraft.type ~ " " ~ aircraft.serialNumber ~ " " ~ aircraft.registrationNumber }}</option>
+						{% set aircrftSelected = "" %}
+					{% endfor %}
+				</select>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+				<button type="button" id="createFlight" class="btn btn-green">Создать заявку</button>
+			</div>
+		</div>
+	</div>
+</div>
