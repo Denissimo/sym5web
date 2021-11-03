@@ -426,8 +426,10 @@ require(
          }
          if( route==="Tracks" ) 
          {
-         
-         setTrackSidebar();   
+
+         setTrackSidebar();
+
+         setTrackFlightSidebar();
          
         // Sketch widget
         const sketch = new Sketch({

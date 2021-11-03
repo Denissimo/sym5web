@@ -60,6 +60,41 @@ view.on("click" ,function(event){
 }
 
 
+function setTrackFlightSidebar()
+{
+    var els=document.getElementsByClassName("sidebar-title");
+    els[0].innerText="Заявки на полеты";
+    if( route==="Archive" )
+    {
+        getUserFly(new Date(timeSlider.values[0]),new Date(timeSlider.values[1]));
+    }
+    else
+    {
+        document
+            .getElementById("createFlight")
+            .addEventListener("click", makeNewFlight);
+
+        idRoute= $.cookie("idRoute");
+
+        if(idRoute==null) idRoute="";
+        if (idRoute=="")
+        {
+            tableLayer.definitionExpression="objectid < 0";
+            tableZoneLayer.definitionExpression="objectid < 0";
+
+            document.getElementById("createFlight").disabled=true;
+        }
+        else
+        {
+            tableLayer.definitionExpression="routeid = '"+idRoute+"'";
+            tableZoneLayer.definitionExpression="routeid = '"+idRoute+"'";
+            document.getElementById("createFlight").disabled=false;
+            queryRoad(null,idRoute) ;
+        }
+
+        getUserFly(new Date(timeSlider.fullTimeExtent.start),new Date(timeSlider.fullTimeExtent.end));
+    }
+}
 
 function setFlightSidebar()
 {
